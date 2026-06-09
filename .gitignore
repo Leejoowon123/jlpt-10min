@@ -1,0 +1,48 @@
+# ── Dependencies ──────────────────────────────────────────────
+node_modules/
+jspm_packages/
+
+# ── 로그 ──────────────────────────────────────────────────────
+*.log
+.npm-err.log
+.npm-out.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ── 패키지 lock (선택) — 팀 정책상 보존하려면 이 줄을 지운다 ─
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ── Claude Code 로컬 설정 ────────────────────────────────────
+.claude/
+.aider*
+
+# ── OS / 에디터 ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*~
+
+# ── 빌드/캐시 ────────────────────────────────────────────────
+dist/
+build/
+.cache/
+.parcel-cache/
+.tmp/
+coverage/
+
+# ── 환경/시크릿 ──────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── 임시 / 테스트 ────────────────────────────────────────────
+_find_missing.mjs
+*.tmp
+*.bak
+.scratch/
