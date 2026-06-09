@@ -2,6 +2,33 @@
 
 N5~N2 JLPT 학습 흐름을 무료로 구현한 모바일 우선 SPA. 빌드 도구·외부 API·결제 모듈 모두 없음.
 
+## 브랜치 운영 / GitHub Pages 배포
+
+| 브랜치 | 역할 |
+| --- | --- |
+| **`main`** | **GitHub Pages 배포 소스**. 모든 변경은 PR 또는 직접 push 모두 `.github/workflows/qa.yml` 의 smoke+qa 통과가 강제됨. |
+| `N4` 등 | 개발 브랜치. 자유롭게 작업 → PR 로 main 에 머지. |
+
+### PR 전 로컬 체크 (필수)
+```bash
+npm install            # jsdom 최초 1회
+node smoke.mjs         # 데이터 무결성 + 후리가나 커버율
+node qa.mjs            # jsdom UI 회귀 (594+ 시나리오)
+```
+둘 다 통과해야 PR 가능. CI 가 동일 명령을 자동 재실행한다 — 로컬에서 깨지면 PR 도 빨간 X.
+
+### CI 워크플로 (`.github/workflows/qa.yml`)
+| 트리거 | 동작 |
+| --- | --- |
+| `pull_request` → `main` | smoke + qa 실행, PR 페이지에 ✓/✗ 표시 |
+| `push` → `main` | 머지/직접 push 직후 회귀 차단 |
+| `workflow_dispatch` | Actions 탭에서 수동 실행 가능 |
+- Node 22, ubuntu-latest, 10분 타임아웃.
+- `concurrency` 로 같은 ref 의 진행 중 워크플로 자동 취소.
+- `permissions: contents: read` — 토큰 권한 최소화.
+
+GitHub Pages 배포 설정은 그대로 (main 브랜치). 워크플로는 배포에 개입하지 않는다 — QA 게이트 역할만.
+
 ## 실행 방법
 
 ES Module 을 쓰므로 `file://` 직접 열기는 동작하지 않습니다 (CORS). 어떤 정적 서버든 OK.
