@@ -1,4 +1,13 @@
 {
+  "name": "jlpt-10min",
+  "private": true,
   "type": "module",
-  "private": true
+  "scripts": {
+    "smoke": "node smoke.mjs",
+    "qa": "node qa.mjs",
+    "test": "node smoke.mjs && node qa.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
 }

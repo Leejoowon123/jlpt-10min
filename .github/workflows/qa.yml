@@ -1,0 +1,55 @@
+name: QA (smoke + qa)
+
+# main 브랜치를 GitHub Pages 배포 소스로 사용하기 때문에,
+# main 으로 들어가는 모든 변경(직접 push / PR 머지)이 통과해야 한다.
+#
+# - pull_request → main : PR 체크 (빨간 X / 초록 ✓ 가 PR 페이지에 뜸).
+# - push → main         : 머지 직후 / 직접 push 직후 회귀 차단.
+# - workflow_dispatch   : 필요 시 액션 탭에서 수동 실행.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# 같은 ref 의 진행 중 워크플로는 취소해서 큐를 절약.
+concurrency:
+  group: qa-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    name: smoke + qa
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # package-lock.json 은 .gitignore 에 들어 있으므로 npm ci 대신 npm install 사용.
+      # devDependencies(jsdom) 만 설치하면 충분 — 실제 앱 코드는 의존성 없음.
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Syntax check (node --check)
+        run: |
+          for f in $(find js -name "*.js"); do
+            node --check "$f" || { echo "syntax fail: $f"; exit 1; }
+          done
+
+      - name: Run smoke
+        run: node smoke.mjs
+
+      - name: Run qa
+        run: node qa.mjs
