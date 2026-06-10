@@ -1,0 +1,175 @@
+# Firebase 로그인 + 최소 행동 로그 (테스트 단계)
+
+## 현재 상태
+
+- **테스트 브랜치에서 Firebase 연결 검증용** — Realtime Database 는 테스트 모드 rules.
+- 운영(main 머지) 전에 반드시 아래 운영 rules 초안으로 교체할 것.
+- 로그인 없이도 앱의 **모든 기능** 사용 가능 — 강제 로그인 없음.
+
+## 구성
+
+| 파일 | 역할 |
+| --- | --- |
+| `js/firebaseConfig.js` | 웹 config (placeholder — Console 값으로 채움). `isFirebaseConfigured()` |
+| `js/firebaseClient.js` | lazy CDN ESM import. 실패 시 null — 앱 기능 유지 |
+| `js/authService.js` | Email/Password 가입·로그인·로그아웃. 비밀번호 저장 금지 |
+| `js/actionLogger.js` | 최소 행동 로그. fire-and-forget, 빈도 제한 |
+
+## 기록하는 것 (이벤트 화이트리스트)
+
+`app_open`(하루 1회) · `login_success` · `logout` · `study_start` ·
+`story_open` · `story_complete` · `vocab_card_answered` · `grammar_answered` ·
+`conversation_start` · `firebase_test`
+
+이 외 타입은 `logAction` 이 거부한다.
+
+## 기록하지 않는 것
+
+- **비밀번호** (어디에도 저장 안 함 — Firebase SDK 세션만)
+- **이메일 원문** (actionLogs 에는 uid/anon id 만)
+- **STT 음성/인식 텍스트 원문**
+- **학습 답변 원문** (correct true/false 만)
+- **학습 데이터 전체** (진도 동기화 아님 — localStorage 진도와 완전 분리)
+- meta 는 itemType/itemId/storyId/correct/method 만, 문자열 64자 제한
+
+## DB 구조 (라운드 20 — 활동 노드 분리)
+
+```
+actionLogs/{YYYY-MM-DD}/{eventId}
+  { type, at(ms), userKey, userType: 'signed-in'|'anonymous', level, route, meta }
+
+userActivity/{uid}              ← 로그인 사용자만
+  { firstSeenAt, lastSeenAt, lastEventType, signedIn: true }
+
+anonymousActivity/{anonKey}     ← 비로그인 사용자 (분리 — rules 와 일치)
+  { firstSeenAt, lastSeenAt, lastEventType, signedIn: false }
+```
+
+- `userKey`: 로그인 시 Firebase uid, 비로그인 시 localStorage 의
+  `jlpt10min:anonId` (무작위 문자열 — 개인정보 아님).
+- `eventId`: timestamp(base36) + random suffix.
+
+## 실제 브라우저 + Firebase Console 확인 절차 (수동 QA)
+
+1. `js/firebaseConfig.js` 의 `databaseURL` 이 **Console → Realtime Database 상단 URL 과 일치**하는지 확인 (리전별로 다름 — 다르면 조용히 실패).
+2. Authentication → Settings → **Authorized domains** 에 배포 도메인 추가
+   (`<user>.github.io`, 로컬 테스트는 `localhost` 기본 포함).
+3. GitHub Pages(테스트 브랜치 배포) 또는 `python -m http.server` 로 앱 접속.
+4. ⚙ 설정 → 계정 — 상태 배지가 "Firebase 연결 준비됨" 인지 확인
+   ("초기화 실패" 면 config/네트워크 점검).
+5. **회원가입** (테스트 계정) → 배지 "로그인됨" + 이메일 표시.
+6. **로그아웃** → 폼 복귀. **로그인** 재시도 → 성공.
+7. (라운드 21 — 로그 테스트 버튼은 제거됨) 대신 학습 행동을 1회 수행한 뒤
+   Console 에서 actionLogs 기록을 직접 확인. 개발자는 브라우저 콘솔에서
+   `import('./js/actionLogger.js').then(m => m._sendTestLogForTest().then(console.log))` 로도 확인 가능.
+8. 이야기 열기 / 학습 시작 / 단어 카드 1문제 답변.
+9. Firebase Console → Realtime Database 에서 확인:
+   - `actionLogs/{오늘 날짜}` — firebase_test / story_open / study_start / vocab_card_answered / login_success
+   - `userActivity/{uid}` (로그인 행동) / `anonymousActivity/{anonKey}` (비로그인 행동)
+10. **로그 내용 점검**: 이메일/비밀번호/답변 원문이 어디에도 없는지 — userKey 는 uid 또는 anon_ 문자열만.
+
+## 무료 범위 보호
+
+- `app_open` — 하루 1회 (`jlpt10min:appOpenLogged` localStorage marker).
+- 같은 (type + 대상) 이벤트 — `ACTION_LOG_MIN_INTERVAL_MS = 3000` 내 중복 차단.
+- answer 로그는 vocab/grammar 만 (영역 샘플 한정).
+- Firebase 미설정/실패 시 즉시 noop — 호출 비용 0.
+
+## 운영 rules 초안 (main 머지 전 교체 — 라운드 20 보강판)
+
+```json
+{
+  "rules": {
+    "actionLogs": {
+      "$date": {
+        "$eventId": {
+          ".read": false,
+          ".write": "newData.exists()",
+          ".validate": "newData.hasChildren(['type','at','userKey','userType'])"
+        }
+      }
+    },
+    "userActivity": {
+      "$userKey": {
+        ".read": false,
+        ".write": "auth != null && auth.uid === $userKey",
+        ".validate": "newData.hasChildren(['lastSeenAt','lastEventType','signedIn'])"
+      }
+    },
+    "anonymousActivity": {
+      "$anonKey": {
+        ".read": false,
+        ".write": "newData.exists()",
+        ".validate": "newData.hasChildren(['lastSeenAt','lastEventType','signedIn'])"
+      }
+    },
+    ".read": false,
+    ".write": false
+  }
+}
+```
+
+설명:
+- `actionLogs` — 쓰기는 허용하되 `.validate` 로 필수 필드 스키마 강제, 삭제 불가(`newData.exists()`), 읽기 전면 차단.
+- `userActivity` — **로그인한 본인(uid 일치)만** 쓰기 가능. 익명 위장 쓰기 차단.
+- `anonymousActivity` — 비로그인 로그용. 스키마 검증만 (익명 특성상 본인 확인 불가).
+- 루트 기본 `.read/.write: false` — 위 노드 외 전부 차단.
+
+### payload ↔ rules 일치 확인 (라운드 21 점검 완료)
+
+| 노드 | rules `.validate` 필수 | 코드 payload | 일치 |
+| --- | --- | --- | --- |
+| actionLogs | type, at, userKey, userType | type, at, userKey, userType, level, route, meta | ✅ (필수 4종 항상 포함) |
+| userActivity | lastSeenAt, lastEventType, signedIn | firstSeenAt, lastSeenAt, lastEventType, signedIn | ✅ |
+| anonymousActivity | lastSeenAt, lastEventType, signedIn | firstSeenAt, lastSeenAt, lastEventType, signedIn | ✅ |
+
+`meta`/`route` 를 rules 필수로 요구하지 않는 이유:
+- RTDB 는 **빈 객체(`meta: {}`)를 저장 시 제거**한다 — app_open/login_success/logout 처럼
+  meta 가 빈 이벤트는 `hasChildren(['meta'])` 검증에 걸려 거부된다. 따라서 meta 는 비필수.
+- `route` 도 빈 문자열일 수 있어 필수로 강제하지 않는다 (빈 문자열 자체는 저장됨).
+즉 **rules 가 코드 payload 를 거부하는 케이스 없음** — qa mock + 수동 절차로 재확인.
+
+## Firebase Console 에서 rules 적용 위치
+
+```
+Firebase Console (console.firebase.google.com)
+→ 프로젝트(jlpt-10min) 선택
+→ 좌측 Build → Realtime Database
+→ 상단 "Rules" 탭
+→ 위 운영 rules JSON 붙여넣기
+→ "Publish(게시)" 클릭
+```
+
+⚠ 주의:
+- **Firestore Rules 가 아니라 Realtime Database Rules** — 좌측 메뉴에서 Firestore 와 혼동 금지.
+- 테스트 모드 rules(전체 open / 30일 만료형) 그대로 **main 배포 금지**.
+- main merge 전 Publish 필수 — Publish 즉시 반영, 배포 절차 별도 없음.
+
+한계 (명시):
+- **클라이언트 전용 정적 앱에서는 익명 write 남용을 완전히 막기 어렵다** —
+  actionLogs/anonymousActivity 는 스키마만 맞으면 누구나 쓸 수 있다.
+- 운영 전 **App Check**(reCAPTCHA v3/Enterprise) 적용을 검토 — config 만으로의
+  대량 봇 쓰기를 차단하는 현실적 수단.
+- 더 강한 방어가 필요하면 Cloud Functions 경유 기록(서버 검증)으로 이전.
+
+## main 병합 전 체크리스트 (라운드 21 최종판)
+
+- [ ] Realtime Database → Rules 에 위 운영 rules 적용 (위치: 위 "Console 에서 rules 적용 위치")
+- [ ] **Publish 완료** (테스트 모드 rules 로 main 배포 금지)
+- [ ] Authorized domains 에 GitHub Pages 도메인(`<user>.github.io`) 등록
+- [ ] `databaseURL` 이 Console 의 Realtime Database URL 과 일치
+- [ ] 테스트 브랜치에서 로그인/로그아웃 확인
+- [ ] 테스트 브랜치에서 학습/스토리 행동 로그가 actionLogs 에 기록되는지 확인
+- [ ] 로그에 이메일/비밀번호/답변 원문이 없는지 확인
+- [ ] **로그 테스트 버튼이 UI 에서 제거됐는지 확인** (라운드 21 — smoke 가 자동 검증)
+- [ ] `node smoke.mjs` + `node qa.mjs` 통과
+- [ ] App Check 적용 여부 결정 (남용 방어 — 선택)
+- [ ] 테스트 중 쌓인 actionLogs 정리 (선택)
+- [ ] PR merge
+
+## public GitHub 주의사항
+
+- **Firebase Web config 는 public 가능** — apiKey 는 식별자이지 비밀키가 아니다.
+- **절대 커밋 금지**: service account JSON, Admin SDK private key, 서버 비밀키.
+- Realtime Database rules 가 전체 open(`.read/.write: true`) 상태로 운영되면 위험 —
+  현재는 테스트 브랜치 검증용이며, main 머지 전 위 운영 rules 로 교체한다.

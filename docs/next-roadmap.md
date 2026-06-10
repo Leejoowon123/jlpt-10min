@@ -141,6 +141,22 @@ N5 1차 임계치 패턴 재사용:
 - 외부 API / LLM / 사전 / 크롤러 미사용. TTS 만 브라우저 무료 API.
 - 시험/퀴즈로 변질시키지 않음 — 읽기 전용.
 
+### 7b. 콘텐츠 데이터 로딩 경량화 (라운드 16 — 설계 + 최소 구현 완료)
+
+상세: [data-loading-plan.md](./data-loading-plan.md)
+
+- ✅ `js/dataLoader.js` — JSON fetch 우선 + JS fallback + 메모리 캐시. 9개 영역 × N5~N2.
+- ✅ `data/n4/stories.json` — 첫 샘플. smoke 가 JS 원본과 동기화(drift) 검증.
+- ✅ smoke 데이터 용량 리포트 (`=== 데이터 용량 리포트 ===`).
+- ✅ (라운드 17) `js/contentRepository.js` — 동기 getter + async preload compatibility layer.
+  storyView 전면 전환 + study 카드 lookup 전환. N4 stories JSON 이 실제 화면에 연결됨 (qa[124] 검증).
+- ✅ (라운드 18) 스토리 본문 3단 구조 (ja/romaji/ko inline) + 테마 (system/light/dark)
+  + compact player + 이미지 자산 구조 (assets/ + asset-licenses.md + coverImage 샘플 3).
+- ⏳ 다음: ① N4 신규 콘텐츠 JSON-first 작성 (bodyRomaji 필수) → ② N5 vocab/sentenceBank JSON 이전
+  → ③ PWA service worker JSON 캐시 → ④ JS data 파일 compatibility wrapper 축소
+  → ⑤ 외부 무료 이미지 수동 선정 라운드 (asset-licenses.md 체크리스트 기반).
+- PWA service worker 도입 시: 앱 shell cache-first, `data/**/*.json` stale-while-revalidate.
+
 ### 8. 모바일 앱 전환 검토
 
 웹 PWA 대 네이티브 (React Native / Capacitor / Tauri Mobile) 비교.
@@ -169,3 +185,21 @@ N5 1차 임계치 패턴 재사용:
 **현재 상태에서 추천 다음 작업**:
 - **2. 실제 브라우저 QA** — 한자 카드 + 가나 표 + 발음 듣기까지 시각/체감 확인.
 - 그 후 **N5 한자 50 → 100자** 또는 **3. N5 대량2차 콘텐츠** 중 선택.
+
+
+## (이관) 구 README 의 남은 TODO 목록
+
+
+- [ ] 콘텐츠 확장 (특히 N3/N2 단어/문법/독해/청해)
+- [ ] JMdict/KANJIDIC2 등 공개 라이선스 데이터 임포트 스크립트
+- [ ] `getVoices()` 가 영구 지연 로드되는 브라우저용 보강 (이벤트 기반 재감지)
+- [ ] 사용자 직접 단어/문장 추가 UI
+- [ ] 한자(부수·필순) 카드 (모델 확장 필요)
+- [ ] 청해 다이얼로그 2인 음성 분리
+- [ ] 통계 대시보드 (주간 정답률, 영역별 분포)
+- [ ] PWA(매니페스트 + 서비스워커, 오프라인)
+- [ ] 데이터 export/import (JSON 백업)
+- [ ] `FailureNote.reason` / `FavoriteItem.memo` 입력 UI (필드만 존재)
+- [ ] i18n (현재 UI 라벨 한국어 하드코딩)
+- [ ] 구버전 비단어 favorites 클리어용 storage 마이그레이션 (현재는 UI/큐에서 단순 숨김)
+

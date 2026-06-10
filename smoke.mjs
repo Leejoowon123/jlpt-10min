@@ -1555,10 +1555,8 @@ ok('storage 직접 검사', _store.getState().settings.storyHideCompleted === tr
 _state3.setStoryHideCompleted(false);
 
 // CSS — 모바일 안전 보강
-ok('styles.css: .has-story-player padding-bottom ≥ 220px',
-   /\.has-story-player\s*\{[^}]*padding-bottom:\s*220px/.test(cssSrc) ||
-   /\.has-story-player\s*\{[^}]*padding-bottom:\s*180px/.test(cssSrc));
-// (기존 180 + 라운드 12 220 둘 다 허용)
+ok('styles.css: .has-story-player padding-bottom 존재 (라운드 18 compact: 120px)',
+   /\.has-story-player\s*\{[^}]*padding-bottom:\s*120px/.test(cssSrc));
 ok('styles.css: .story-player .btn nowrap',
    /\.story-player .btn[\s\S]{0,40}white-space:\s*nowrap/.test(cssSrc));
 ok('styles.css: .story-hl-panel overflow 처리',
@@ -1592,6 +1590,374 @@ ok('study.js: METHODS.grammar 에 compare 포함',
    /grammar:\s*\[[^\]]*['"]compare['"][^\]]*\]/.test(studyJsSrc));
 ok('study.js: applyMethod 가 compare 시 navigate("compare")',
    /currentMethod\s*===\s*['"]compare['"][\s\S]*navigate\(['"]compare['"]/.test(studyJsSrc));
+
+// ── 라운드 16: dataLoader + 데이터 용량 리포트 ───────────────────────────
+const _fs = await import('node:fs');
+
+// 1) 용량 리포트 — JS data vs JSON data
+console.log('\n=== 데이터 용량 리포트 ===');
+let jsTotal = 0;
+const jsDataDir = new URL('./js/data/', import.meta.url);
+for (const f of _fs.readdirSync(jsDataDir)) {
+  if (!f.endsWith('.js')) continue;
+  const size = _fs.statSync(new URL(f, jsDataDir)).size;
+  jsTotal += size;
+}
+console.log(`  js/data/*.js (정적 import — 초기 파싱 대상): ${(jsTotal/1024).toFixed(0)} KB`);
+let jsonTotal = 0, jsonFiles = 0;
+const dataDir = new URL('./data/', import.meta.url);
+if (_fs.existsSync(dataDir)) {
+  for (const lvl of _fs.readdirSync(dataDir)) {
+    const lvlDir = new URL(`${lvl}/`, dataDir);
+    if (!_fs.statSync(lvlDir).isDirectory()) continue;
+    for (const f of _fs.readdirSync(lvlDir)) {
+      if (!f.endsWith('.json')) continue;
+      const size = _fs.statSync(new URL(f, lvlDir)).size;
+      jsonTotal += size; jsonFiles++;
+      console.log(`  data/${lvl}/${f}: ${(size/1024).toFixed(1)} KB (lazy fetch 대상)`);
+    }
+  }
+}
+console.log(`  JSON 합계: ${(jsonTotal/1024).toFixed(0)} KB (${jsonFiles}개 파일)`);
+console.log(`  레벨별 item count: vocab N5=${vocab.filter(v=>v.level==='N5').length}/N4=${vocab.filter(v=>v.level==='N4').length},` +
+  ` grammar N5=${grammar.filter(g=>g.level==='N5').length}/N4=${grammar.filter(g=>g.level==='N4').length},` +
+  ` stories N5=${stories.filter(s=>s.level==='N5').length}/N4=${stories.filter(s=>s.level==='N4').length}`);
+
+// 2) dataLoader 단위 검증
+const dl = await import('./js/dataLoader.js');
+dl.clearDataCache();
+// fallback 경로 (Node — fetch 없음)
+const _dlStories = await dl.loadStories('N4');
+ok('dataLoader: fallback 경로 N4 stories 로드',
+   Array.isArray(_dlStories) && _dlStories.length >= 6,
+   `count=${_dlStories.length}`);
+const _dlVocab = await dl.loadVocab('N5');
+ok('dataLoader: fallback 경로 N5 vocab 로드 (스키마 동일)',
+   _dlVocab.length === vocab.filter(v=>v.level==='N5').length &&
+   typeof _dlVocab[0].word === 'string');
+// fetch 경로 — 가짜 fetch 주입으로 실제 JSON 파일 검증
+dl.clearDataCache();
+dl._setFetchForTest(async (path) => {
+  const url = new URL(path, import.meta.url);
+  if (!_fs.existsSync(url)) return { ok: false };
+  return { ok: true, json: async () => JSON.parse(_fs.readFileSync(url, 'utf8')) };
+});
+const _dlJsonStories = await dl.loadStories('N4');
+ok('dataLoader: fetch 경로 — data/n4/stories.json 로드',
+   _dlJsonStories.length === stories.filter(s=>s.level==='N4').length);
+ok('dataLoader: JSON 스키마 == JS 스키마 (id 일치)',
+   _dlJsonStories.every((s,i) => s.id === stories.filter(x=>x.level==='N4')[i].id));
+// JSON 부재 영역 → 자동 JS fallback
+const _dlKanji = await dl.loadKanji('N4');
+ok('dataLoader: JSON 부재 시 JS fallback (N4 kanji)',
+   _dlKanji.length >= 100);
+// 캐시 — 같은 Promise 반환
+ok('dataLoader: 메모리 캐시 (동일 참조)',
+   (await dl.loadStories('N4')) === _dlJsonStories);
+// invalid 검증
+let _threw = false;
+try { dl.loadLevelData('N9', 'vocab'); } catch { _threw = true; }
+ok('dataLoader: invalid level throw', _threw);
+_threw = false;
+try { dl.loadLevelData('N5', 'unknown'); } catch { _threw = true; }
+ok('dataLoader: invalid type throw', _threw);
+dl._resetFetchForTest();
+dl.clearDataCache();
+
+// 2b) contentRepository — 동기 getter + preload 교체 검증 (라운드 17)
+const repo = await import('./js/contentRepository.js');
+repo.resetRepositoryForTest();
+// 동기 getter — preload 전에는 JS base
+ok('repository: getStories("N4") 동기 배열',
+   Array.isArray(repo.getStories('N4')) && repo.getStories('N4').length >= 6);
+ok('repository: getVocab("N5") == JS 원본 수',
+   repo.getVocab('N5').length === vocab.filter(v=>v.level==='N5').length);
+ok('repository: getAllItems("stories") 전 레벨 병합',
+   repo.getAllItems('stories').length === stories.length);
+// findItem / findVocab / findGrammar
+ok('repository: findVocab 기존 id', repo.findVocab('v_n5_1')?.word === '待つ');
+ok('repository: findGrammar 기존 id', repo.findGrammar('g_n4_5')?.pattern.includes('ことがある'));
+ok('repository: findItem 미존재 id → null', repo.findItem('vocab', 'v_none') === null);
+// invalid 방어
+let _rThrew = false;
+try { repo.getItems('unknown', 'N5'); } catch { _rThrew = true; }
+ok('repository: invalid type throw', _rThrew);
+_rThrew = false;
+try { repo.getItems('vocab', 'N9'); } catch { _rThrew = true; }
+ok('repository: invalid level throw', _rThrew);
+// preload — 가짜 fetch 로 JSON 우선 경로 (marker 로 교체 확인)
+repo.resetRepositoryForTest();
+dl._setFetchForTest(async (path) => {
+  if (path === 'data/n4/stories.json') {
+    const real = JSON.parse(_fs.readFileSync(new URL('./data/n4/stories.json', import.meta.url), 'utf8'));
+    real[0] = { ...real[0], titleKo: real[0].titleKo + ' (JSON)' };  // marker
+    return { ok: true, json: async () => real };
+  }
+  return { ok: false };  // 나머지 영역 → JS fallback
+});
+ok('repository: preload 전 isRepositoryLevelLoaded false',
+   repo.isRepositoryLevelLoaded('N4') === false);
+await repo.preloadRepositoryLevel('N4');
+ok('repository: preload 후 isRepositoryLevelLoaded true',
+   repo.isRepositoryLevelLoaded('N4') === true);
+ok('repository: preload 후 N4 stories 가 JSON 데이터 (marker 확인)',
+   repo.getStories('N4')[0].titleKo.endsWith('(JSON)'));
+ok('repository: JSON 부재 영역(N4 vocab)은 JS fallback 으로 교체',
+   repo.getVocab('N4').length === vocab.filter(v=>v.level==='N4').length);
+ok('repository: preload 후 findItem 도 JSON 데이터 반영',
+   repo.findStory(repo.getStories('N4')[0].id)?.titleKo.endsWith('(JSON)'));
+// fetch 전부 실패해도 동작 (fallback)
+repo.resetRepositoryForTest();
+dl._setFetchForTest(async () => { throw new Error('network down'); });
+await repo.preloadRepositoryLevel('N4');
+ok('repository: fetch 전부 실패 시에도 getStories 동작 (JS fallback)',
+   repo.getStories('N4').length >= 6);
+// reset
+dl._resetFetchForTest();
+repo.resetRepositoryForTest();
+ok('repository: reset 후 loadedLevels 비움',
+   repo.isRepositoryLevelLoaded('N4') === false);
+
+// 2c) storyView 가 ../data/stories.js 직접 import 를 끊었는지 정적 검사
+const storyViewSrc2 = _fs.readFileSync(new URL('./js/views/storyView.js', import.meta.url), 'utf8');
+ok('storyView: ../data/stories.js 직접 import 제거',
+   !/from\s+['"]\.\.\/data\/stories\.js['"]/.test(storyViewSrc2));
+ok('storyView: ../data/vocab.js 직접 import 제거',
+   !/from\s+['"]\.\.\/data\/vocab\.js['"]/.test(storyViewSrc2));
+ok('storyView: contentRepository import 사용',
+   /from\s+['"]\.\.\/contentRepository\.js['"]/.test(storyViewSrc2));
+ok('storyView: warmRepository (preload) 호출',
+   /preloadRepositoryLevel\(/.test(storyViewSrc2));
+// study.js — 카드 lookup repository 전환
+const studySrc3 = _fs.readFileSync(new URL('./js/views/study.js', import.meta.url), 'utf8');
+ok('study.js: repoFindItem 으로 card lookup',
+   /repoFindItem\(['"]vocab['"]/.test(studySrc3) && /repoFindItem\(['"]grammar['"]/.test(studySrc3));
+
+// ── 라운드 18: bodyRomaji / 테마 / romaji·해석 설정 / coverImage / compact player ──
+// bodyRomaji — 전 스토리 필수
+for (const s of stories) {
+  ok(`stories[${s.id}]: bodyRomaji 배열`, Array.isArray(s.bodyRomaji));
+  ok(`stories[${s.id}]: bodyRomaji 길이 == bodyJa`,
+     s.bodyRomaji?.length === s.bodyJa.length,
+     `romaji=${s.bodyRomaji?.length} ja=${s.bodyJa.length}`);
+  ok(`stories[${s.id}]: bodyRomaji non-empty`,
+     (s.bodyRomaji || []).every(r => typeof r === 'string' && r.trim().length > 0));
+}
+
+// 설정 기본값
+_store.resetAll();
+const _defS18 = _store.getState().settings;
+ok('settings.storyRomajiEnabled 기본 true',       _defS18.storyRomajiEnabled === true);
+ok('settings.storyTranslationEnabled 기본 true',  _defS18.storyTranslationEnabled === true);
+ok('settings.themeMode 기본 system',              _defS18.themeMode === 'system');
+// state API
+ok('getStoryRomajiEnabled 기본 true',      _state.getStoryRomajiEnabled() === true);
+ok('getStoryTranslationEnabled 기본 true', _state.getStoryTranslationEnabled() === true);
+ok('getThemeMode 기본 system',             _state.getThemeMode() === 'system');
+_state.setStoryRomajiEnabled(false);
+ok('setStoryRomajiEnabled(false)',         _state.getStoryRomajiEnabled() === false);
+_state.setStoryTranslationEnabled(false);
+ok('setStoryTranslationEnabled(false)',    _state.getStoryTranslationEnabled() === false);
+_state.setThemeMode('light');
+ok('setThemeMode(light)',                  _state.getThemeMode() === 'light');
+_state.setThemeMode('dark');
+ok('setThemeMode(dark)',                   _state.getThemeMode() === 'dark');
+_state.setThemeMode('weird');
+ok('themeMode invalid → system fallback',  _state.getThemeMode() === 'system');
+_store.resetAll();
+
+// theme.js — resolveThemeMode (Node: matchMedia 없음 → dark 기본)
+const themeMod = await import('./js/theme.js');
+ok('theme: resolveThemeMode("light") === light', themeMod.resolveThemeMode('light') === 'light');
+ok('theme: resolveThemeMode("dark") === dark',   themeMod.resolveThemeMode('dark') === 'dark');
+ok('theme: system(no matchMedia) → dark',        themeMod.resolveThemeMode('system') === 'dark');
+
+// storyView — romaji/해석 렌더 경로 + compact player 정적 검사
+const svSrc18 = _fs.readFileSync(new URL('./js/views/storyView.js', import.meta.url), 'utf8');
+ok('storyView: .story-romaji 렌더 경로',    /story-romaji/.test(svSrc18));
+ok('storyView: .story-ko-inline 렌더 경로', /story-ko-inline/.test(svSrc18));
+ok('storyView: getStoryRomajiEnabled 사용', /getStoryRomajiEnabled/.test(svSrc18));
+ok('storyView: getStoryTranslationEnabled 사용', /getStoryTranslationEnabled/.test(svSrc18));
+ok('storyView: compact controls row (storyControlsRow)', /storyControlsRow/.test(svSrc18));
+ok('storyView: 이전/재생/다음 같은 row (storyPrev/PlayAll/Next 동일 컨테이너)',
+   /story-player-main[\s\S]{0,400}storyPrev[\s\S]{0,200}storyPlayAll[\s\S]{0,200}storyNext/.test(svSrc18));
+ok('storyView: 속도 chip 이 compact row 안',
+   /storyControlsRow[\s\S]{0,900}data-rate/.test(svSrc18));
+ok('storyView: coverImage 렌더 (story-cover)', /story-cover/.test(svSrc18));
+
+// CSS — 테마 변수/셀렉터 + compact padding
+const css18 = _fs.readFileSync(new URL('./styles.css', import.meta.url), 'utf8');
+ok('CSS: [data-theme="light"] 셀렉터', /\[data-theme="light"\]/.test(css18));
+ok('CSS: [data-theme="dark"] 셀렉터',  /\[data-theme="dark"\]/.test(css18));
+ok('CSS: --bar-bg 변수',               /--bar-bg:/.test(css18));
+ok('CSS: .story-romaji 스타일',        /\.story-romaji\s*\{/.test(css18));
+ok('CSS: .story-ko-inline 스타일',     /\.story-ko-inline\s*\{/.test(css18));
+ok('CSS: has-story-player padding 120px (compact)',
+   /\.has-story-player\s*\{?\s*padding-bottom:\s*120px/.test(css18) ||
+   /has-story-player \{ padding-bottom: 120px/.test(css18));
+ok('CSS: .player-btn 스타일',          /\.player-btn\s*\{/.test(css18));
+ok('CSS: .story-cover 스타일',         /\.story-cover\s*\{/.test(css18));
+
+// index.html — 노플래시 인라인 테마 스크립트
+const idx18 = _fs.readFileSync(new URL('./index.html', import.meta.url), 'utf8');
+ok('index.html: 인라인 테마 스크립트 (dataset.theme)',
+   /dataset\.theme/.test(idx18) && /prefers-color-scheme/.test(idx18));
+
+// coverImage — 스키마 + 파일 존재 + 라이선스 기록
+const licenseDoc = _fs.readFileSync(new URL('./docs/asset-licenses.md', import.meta.url), 'utf8');
+let coverCount = 0;
+for (const s of stories) {
+  if (!s.coverImage) continue;
+  coverCount++;
+  ok(`stories[${s.id}]: coverImage.src/altKo/licenseId 존재`,
+     typeof s.coverImage.src === 'string' && s.coverImage.src.length > 0 &&
+     typeof s.coverImage.altKo === 'string' && s.coverImage.altKo.length > 0 &&
+     typeof s.coverImage.licenseId === 'string' && s.coverImage.licenseId.length > 0);
+  ok(`stories[${s.id}]: coverImage 파일 존재 (${s.coverImage.src})`,
+     _fs.existsSync(new URL('./' + s.coverImage.src, import.meta.url)));
+  ok(`stories[${s.id}]: 라이선스 문서에 ${s.coverImage.licenseId} 기록`,
+     licenseDoc.includes(s.coverImage.licenseId));
+}
+ok('coverImage 샘플 2~3개 적용', coverCount >= 2 && coverCount <= 4, `count=${coverCount}`);
+
+// ── 라운드 19: Firebase auth + actionLogger ──────────────────────────────
+ok('firebaseConfig.js 존재',
+   _fs.existsSync(new URL('./js/firebaseConfig.js', import.meta.url)));
+const authSvc = await import('./js/authService.js');
+for (const fn of ['initAuth','observeAuth','getCurrentUser','signUpWithEmail','signInWithEmail','logout','authAvailable']) {
+  ok(`authService: ${fn} export`, typeof authSvc[fn] === 'function');
+}
+const logger = await import('./js/actionLogger.js');
+for (const fn of ['logAction','getAnonymousVisitorId']) {
+  ok(`actionLogger: ${fn} export`, typeof logger[fn] === 'function');
+}
+ok('actionLogger: ACTION_LOG_MIN_INTERVAL_MS === 3000',
+   logger.ACTION_LOG_MIN_INTERVAL_MS === 3000);
+ok('actionLogger: APP_OPEN_LOG_ONCE_PER_DAY === true',
+   logger.APP_OPEN_LOG_ONCE_PER_DAY === true);
+const loggerSrc = _fs.readFileSync(new URL('./js/actionLogger.js', import.meta.url), 'utf8');
+ok('actionLogger: actionLogs/ 경로 문자열', /actionLogs\//.test(loggerSrc));
+ok('actionLogger: userActivity/ 경로 문자열', /userActivity\//.test(loggerSrc));
+ok('actionLogger: logAction 전체 try/catch 격리',
+   /export function logAction[\s\S]*?try \{[\s\S]*?\} catch \{/.test(loggerSrc));
+ok('actionLogger: write fire-and-forget (.catch)',
+   /write\([\s\S]*?\)\.catch\(\(\) => \{\}\)/.test(loggerSrc));
+// 금지 패턴 — 차단/동기화/Google 로그인 미구현 확인
+const fbAll = [loggerSrc,
+  _fs.readFileSync(new URL('./js/authService.js', import.meta.url), 'utf8'),
+  _fs.readFileSync(new URL('./js/firebaseClient.js', import.meta.url), 'utf8')].join('\n');
+ok('금지: registrationOpen/maxUsers/accessBlock 코드 없음',
+   !/registrationOpen|maxUsers|accessBlock/.test(fbAll));
+ok('금지: syncService/progress sync 코드 없음',
+   !/syncService|syncProgress|progressSync/.test(fbAll));
+ok('금지: Google 로그인 API 없음',
+   !/GoogleAuthProvider|signInWithPopup|signInWithRedirect/.test(fbAll));
+ok('금지: 비밀번호 localStorage 저장 없음',
+   !/localStorage[\s\S]{0,40}password/i.test(fbAll));
+// logAction 단위 — mock writer 로 기록/스로틀/하루1회 검증
+logger._setWriterForTest(async () => {});
+logger._resetThrottleForTest();
+const _logWrites = [];
+logger._setWriterForTest(async (path, value) => { _logWrites.push({ path, value }); });
+logger.logAction('study_start', { itemType: 'vocab', method: 'image' });
+await new Promise(r => setTimeout(r, 10));
+ok('logAction: actionLogs + 활동 노드 2건 기록 (비로그인 → anonymousActivity)',
+   _logWrites.length === 2 &&
+   _logWrites.some(w => w.path.startsWith('actionLogs/')) &&
+   _logWrites.some(w => w.path.startsWith('anonymousActivity/')),
+   `writes=${_logWrites.map(w=>w.path).join(',')}`);
+ok('logAction: userType anonymous (비로그인)',
+   _logWrites.find(w => w.path.startsWith('actionLogs/'))?.value.userType === 'anonymous');
+// 스로틀 — 같은 이벤트 즉시 재호출은 무시
+logger.logAction('study_start', { itemType: 'vocab', method: 'image' });
+await new Promise(r => setTimeout(r, 10));
+ok('logAction: 3초 내 중복 차단', _logWrites.length === 2);
+// 허용 외 타입 거부
+logger.logAction('click_everything', {});
+await new Promise(r => setTimeout(r, 10));
+ok('logAction: 화이트리스트 외 타입 거부', _logWrites.length === 2);
+// meta sanitize — 원문 텍스트 키 제거
+logger._resetThrottleForTest();
+logger.logAction('story_open', { storyId: 'story_n5_001', answerText: '原文', sttText: 'x' });
+await new Promise(r => setTimeout(r, 10));
+const _storyEv = _logWrites.find(w => w.value?.type === 'story_open');
+ok('logAction: meta 화이트리스트 외 키 제거 (answerText/sttText)',
+   _storyEv && !('answerText' in _storyEv.value.meta) && !('sttText' in _storyEv.value.meta));
+logger._resetWriterForTest();
+logger._resetThrottleForTest();
+
+// ── 라운드 20: public repo 보안 정적 검증 + 실연결 준비 ───────────────────
+const fbCfgSrc = _fs.readFileSync(new URL('./js/firebaseConfig.js', import.meta.url), 'utf8');
+// Admin SDK / service account 흔적 금지 — 전체 js 디렉터리 스캔
+let secViolations = [];
+function scanDir(dirUrl) {
+  for (const f of _fs.readdirSync(dirUrl)) {
+    const u = new URL(f + (f.includes('.') ? '' : '/'), dirUrl);
+    if (_fs.statSync(u).isDirectory()) { scanDir(new URL(f + '/', dirUrl)); continue; }
+    if (!f.endsWith('.js') && !f.endsWith('.json') && !f.endsWith('.html')) continue;
+    const src = _fs.readFileSync(u, 'utf8');
+    if (/PRIVATE KEY|private_key|client_email|service[-_]account/i.test(src)) {
+      secViolations.push(`${f}`);
+    }
+  }
+}
+scanDir(new URL('./js/', import.meta.url));
+scanDir(new URL('./data/', import.meta.url));
+ok('보안: PRIVATE KEY / service account / client_email 패턴 없음',
+   secViolations.length === 0, `found in: ${secViolations.join(',')}`);
+ok('보안: firebaseConfig 에 Admin SDK 필드 없음',
+   !/private_key|client_email|token_uri|auth_provider/.test(fbCfgSrc));
+ok('보안: password localStorage 저장 패턴 없음 (전체 재확인)',
+   !/localStorage[\s\S]{0,60}(password|비밀번호)/i.test(
+     _fs.readFileSync(new URL('./js/views/settings.js', import.meta.url), 'utf8')));
+// meta 화이트리스트에 email/password/text 키 없음
+ok('보안: sanitizeMeta 화이트리스트에 email/password/text 원문 키 없음',
+   !/['"](email|password|answerText|sttText|userText)['"]/.test(
+     loggerSrc.match(/function sanitizeMeta[\s\S]*?\n\}/)?.[0] || ''));
+// config 실제 값 입력 확인 + databaseURL 존재
+const fbCfg = await import('./js/firebaseConfig.js');
+ok('firebaseConfig: 실제 config 입력됨 (isFirebaseConfigured true)',
+   fbCfg.isFirebaseConfigured() === true);
+ok('firebaseConfig: databaseURL 존재',
+   typeof fbCfg.firebaseConfig.databaseURL === 'string' &&
+   fbCfg.firebaseConfig.databaseURL.startsWith('https://'));
+// 테스트 전용 export + anonymousActivity 분리 (라운드 21: 공개 sendTestLog 제거)
+ok('actionLogger: _sendTestLogForTest (테스트 전용) export',
+   typeof logger._sendTestLogForTest === 'function');
+ok('actionLogger: 공개 sendTestLog 제거됨', logger.sendTestLog === undefined);
+ok('actionLogger: anonymousActivity/ 경로 분리', /anonymousActivity\//.test(loggerSrc));
+// firebaseClient 상태 추적
+const fbCl = await import('./js/firebaseClient.js');
+ok('firebaseClient: getInitStatus export', typeof fbCl.getInitStatus === 'function');
+// settings — 상태 배지 유지 + 테스트 버튼/문구 제거 (라운드 21)
+const settingsSrc20 = _fs.readFileSync(new URL('./js/views/settings.js', import.meta.url), 'utf8');
+ok('settings: fbStatusBadge 마크업 유지', /fbStatusBadge/.test(settingsSrc20));
+ok('settings: fbTestBtn 제거됨', !/id="fbTestBtn"/.test(settingsSrc20));
+ok('settings: "로그 테스트" 버튼 텍스트 제거됨',
+   !/>로그 테스트</.test(settingsSrc20));
+ok('settings: Console 확인 테스트 문구 제거됨 (Console > actionLogs 안내)',
+   !/Console > Realtime Database > actionLogs/.test(settingsSrc20));
+ok('settings: _sendTestLogForTest 를 UI 에서 미사용',
+   !/_sendTestLogForTest/.test(settingsSrc20));
+// 운영 rules 초안이 문서에 보강되었는지
+const fbDoc20 = _fs.readFileSync(new URL('./docs/firebase-logging.md', import.meta.url), 'utf8');
+ok('firebase-logging.md: .validate rules 초안 포함', /\.validate/.test(fbDoc20));
+ok('firebase-logging.md: anonymousActivity rules 포함', /anonymousActivity/.test(fbDoc20));
+ok('firebase-logging.md: App Check 언급', /App Check/.test(fbDoc20));
+// 라운드 21 — Console rules 적용 위치 + main 병합 체크리스트 + payload 일치 노트
+ok('firebase-logging.md: Realtime Database → Rules 위치 설명',
+   /Realtime Database[\s\S]{0,80}Rules/.test(fbDoc20) && /Publish/.test(fbDoc20));
+ok('firebase-logging.md: main 병합 전 체크리스트 존재',
+   /main 머지 전 체크리스트|main 병합 전 체크리스트/.test(fbDoc20));
+ok('firebase-logging.md: payload↔rules 일치 노트 (meta 비필수 이유)',
+   /meta[\s\S]{0,120}(비필수|요구하지 않)/.test(fbDoc20));
+
+// 3) data/n4/stories.json 이 JS 원본과 동기화되어 있는지 (drift 방지)
+const _jsonRaw = JSON.parse(_fs.readFileSync(new URL('./data/n4/stories.json', import.meta.url), 'utf8'));
+ok('data/n4/stories.json — JS 원본과 항목 수 일치',
+   _jsonRaw.length === stories.filter(s=>s.level==='N4').length);
+ok('data/n4/stories.json — sourceType 모두 original',
+   _jsonRaw.every(s => s.sourceType === 'original'));
 
 if (errs.length) {
   console.log('\nERRORS:');

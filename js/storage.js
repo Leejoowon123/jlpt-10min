@@ -29,6 +29,9 @@ const defaultState = () => ({
     vocabImageWarmupEnabled: true,// 이미지 카드 단계형 학습 (기본 ON)
     vocabRecallSeconds: 3,        // recall 카운트다운 (3 | 5 | 7)
     storyHideCompleted: false,    // 이야기/단편 목록에서 완료한 항목 숨김 (기본 OFF)
+    storyRomajiEnabled: true,     // 스토리 본문 로마자 줄 표시 (기본 ON)
+    storyTranslationEnabled: true,// 스토리 본문 한국어 해석 줄 표시 (기본 ON)
+    themeMode: 'system',          // 'system' | 'light' | 'dark'
   },
 });
 
