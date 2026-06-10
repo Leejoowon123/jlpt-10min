@@ -30,6 +30,10 @@ import { recordResult } from '../srs.js';
 import { escape, showToast } from '../ui.js';
 import { navigate } from '../router.js';
 import { peekStudyReturnRoute, consumeStudyReturnRoute, clearStudyReturnRoute } from '../studyReturn.js';
+// 단일 항목 lookup 은 repository 경유 (라운드 17 — preload 후 JSON 데이터 사용).
+// 목록 필터링(TYPES.data)은 다음 라운드에서 전환.
+import { findItem as repoFindItem } from '../contentRepository.js';
+import { logAction } from '../actionLogger.js';
 
 const TYPES = {
   vocab:     { label:'단어', data: vocab },
@@ -196,9 +200,9 @@ export function renderStudy({ screen, params }) {
 
 /** 스토리 등 외부 화면에서 특정 항목으로 점프할 때 search 를 채워 browse 로 안내. */
 function setFocusFromId(type, id) {
-  // 같은 단어/문법 검색어로 prefill — 정확 id 매칭 우선.
-  const data = TYPES[type]?.data || [];
-  const item = data.find(x => x.id === id);
+  // repository lookup — kana 등 repository 미관리 타입은 null 반환되어 무시.
+  let item = null;
+  try { item = repoFindItem(type, id); } catch { item = null; }
   if (!item) return;
   const key = type === 'vocab' ? (item.word || '') :
               type === 'grammar' ? (item.pattern || '') :
@@ -325,6 +329,9 @@ function applyMethod(screen) {
   const isCard = (currentMethod === 'card');
   if (!isCard) clearStudyReturnRoute();
 
+  // 학습 시작 행동 로그 — 실패해도 학습 흐름에 영향 없음 (fire-and-forget).
+  logAction('study_start', { itemType: currentType, method: currentMethod });
+
   if (currentType === 'vocab') {
     if (currentMethod === 'image')   return startSession('image', 'filtered');
     if (currentMethod === 'example') return startSession('example', 'filtered');
@@ -346,7 +353,7 @@ function applyMethod(screen) {
 // 없는/잘못된 id 는 browse 로 안전 fallback.
 function startSingleVocabCard(screen) {
   const id = pendingFocusId;
-  const v  = id && vocab.find(x => x.id === id);
+  const v  = id && repoFindItem('vocab', id);
   if (!v) {
     showToast('단어를 찾을 수 없어 찾아보기로 이동합니다');
     currentMethod = 'browse';
@@ -359,7 +366,7 @@ function startSingleVocabCard(screen) {
 
 function startSingleGrammar(screen) {
   const id = pendingFocusId;
-  const g  = id && grammar.find(x => x.id === id);
+  const g  = id && repoFindItem('grammar', id);
   if (!g) {
     showToast('문법을 찾을 수 없어 찾아보기로 이동합니다');
     currentMethod = 'browse';

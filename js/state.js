@@ -188,6 +188,40 @@ export function setStoryHideCompleted(v) {
   return next;
 }
 
+/** 스토리 본문 로마자 줄 표시 — 미설정/구버전은 true(ON). */
+export function getStoryRomajiEnabled() {
+  const v = getState().settings?.storyRomajiEnabled;
+  return v !== false;
+}
+export function setStoryRomajiEnabled(enabled) {
+  const next = !!enabled;
+  update(s => { s.settings = s.settings || {}; s.settings.storyRomajiEnabled = next; });
+  return next;
+}
+
+/** 스토리 본문 한국어 해석 줄 표시 — 미설정/구버전은 true(ON). */
+export function getStoryTranslationEnabled() {
+  const v = getState().settings?.storyTranslationEnabled;
+  return v !== false;
+}
+export function setStoryTranslationEnabled(enabled) {
+  const next = !!enabled;
+  update(s => { s.settings = s.settings || {}; s.settings.storyTranslationEnabled = next; });
+  return next;
+}
+
+/** 테마 모드 — 'system' | 'light' | 'dark'. invalid/미설정은 'system'. */
+const THEME_MODES = ['system', 'light', 'dark'];
+export function getThemeMode() {
+  const v = getState().settings?.themeMode;
+  return THEME_MODES.includes(v) ? v : 'system';
+}
+export function setThemeMode(mode) {
+  const next = THEME_MODES.includes(mode) ? mode : 'system';
+  update(s => { s.settings = s.settings || {}; s.settings.themeMode = next; });
+  return next;
+}
+
 /** 스토리 진입 시 호출 — lastOpenedAt 갱신. */
 export function noteStoryOpened(storyId) {
   update(s => {

@@ -34,6 +34,11 @@ export const stories = [
       [{ text: '朝ご飯', reading: 'あさごはん' }],
       [{ text: '八時', reading: 'はちじ' }, { text: '家', reading: 'いえ' }, { text: '出て', reading: 'でて' }, { text: '学校', reading: 'がっこう' }, { text: '行きます', reading: 'いきます' }],
     ],
+    bodyRomaji: [
+      'watashi wa mainichi shichi-ji ni okimasu.',
+      'asagohan wa pan to koohii desu.',
+      'hachi-ji ni ie o dete gakkou e ikimasu.',
+    ],
     bodyKo: [
       '나는 매일 일곱 시에 일어납니다.',
       '아침밥은 빵과 커피입니다.',
@@ -78,6 +83,11 @@ export const stories = [
       [{ text: '町', reading: 'まち' }, { text: '公園', reading: 'こうえん' }, { text: '新しい', reading: 'あたらしい' }, { text: '花', reading: 'はな' }, { text: '咲きました', reading: 'さきました' }],
       [{ text: '色', reading: 'いろ' }, { text: '赤', reading: 'あか' }, { text: '白', reading: 'しろ' }, { text: '子供', reading: 'こども' }, { text: '見て', reading: 'みて' }, { text: '喜びました', reading: 'よろこびました' }],
       [{ text: '公園', reading: 'こうえん' }, { text: '朝', reading: 'あさ' }, { text: '六時', reading: 'ろくじ' }, { text: '夜', reading: 'よる' }, { text: '八時', reading: 'はちじ' }, { text: '開いて', reading: 'あいて' }],
+    ],
+    bodyRomaji: [
+      'machi no kouen ni atarashii hana ga sakimashita.',
+      'iro wa aka to shiro desu. kodomo-tachi wa hana o mite yorokobimashita.',
+      'kouen wa asa roku-ji kara yoru hachi-ji made aite imasu.',
     ],
     bodyKo: [
       '동네 공원에 새로운 꽃이 피었습니다.',
@@ -126,6 +136,13 @@ export const stories = [
       [{ text: '夕方', reading: 'ゆうがた' }, { text: '家', reading: 'いえ' }, { text: '帰る', reading: 'かえる' }, { text: '時', reading: 'とき' }, { text: '空', reading: 'そら' }, { text: '色', reading: 'いろ' }],
       [{ text: '今日', reading: 'きょう' }, { text: '一日', reading: 'いちにち' }],
     ],
+    bodyRomaji: [
+      'nichiyoubi no asa, watashi wa tomodachi to kouen e ikimashita.',
+      'sora wa aokute, kaze wa yasashikatta desu.',
+      'watashi-tachi wa ki no shita de ocha o nominagara, takusan hanashimashita.',
+      'yuugata, ie e kaeru toki, sora wa pinku-iro ni natte imashita.',
+      'kyou wa totemo ii ichinichi deshita.',
+    ],
     bodyKo: [
       '일요일 아침, 나는 친구와 공원에 갔습니다.',
       '하늘은 푸르고, 바람은 부드러웠습니다.',
@@ -162,6 +179,11 @@ export const stories = [
     tags: ['생활', '봄', '친구'],
     estimatedMinutes: 4,
     sourceType: 'original',
+    coverImage: {
+      src: 'assets/images/stories/cafe-friends.svg',
+      altKo: '공원에서 차를 마시는 친구들',
+      licenseId: 'asset_cafe_friends',
+    },
   },
 
   // ─── 라운드 13 확장 ────────────────────────────────────────────────────
@@ -183,6 +205,12 @@ export const stories = [
       [{ text: '傘', reading: 'かさ' }, { text: '入れて', reading: 'いれて' }, { text: '家', reading: 'いえ' }, { text: '出ました', reading: 'でました' }],
       [{ text: '駅', reading: 'えき' }, { text: '会いました', reading: 'あいました' }],
       [{ text: '電車', reading: 'でんしゃ' }, { text: '乗って', reading: 'のって' }],
+    ],
+    bodyRomaji: [
+      'kyou wa asa kara ame deshita.',
+      'watashi wa kaban ni kasa o irete, ie o demashita.',
+      'eki de tomodachi ni aimashita.',
+      'futari de densha ni notte, gakkou e ikimashita.',
     ],
     bodyKo: [
       '오늘은 아침부터 비가 왔습니다.',
@@ -214,6 +242,11 @@ export const stories = [
     tags: ['생활', '아침', '비', '학교'],
     estimatedMinutes: 2,
     sourceType: 'original',
+    coverImage: {
+      src: 'assets/images/stories/rain-morning.svg',
+      altKo: '비 오는 아침의 길',
+      licenseId: 'asset_rain_morning',
+    },
   },
 
   {
@@ -234,6 +267,12 @@ export const stories = [
       [{ text: '野菜', reading: 'やさい' }, { text: '魚', reading: 'さかな' }, { text: '買いました', reading: 'かいました' }],
       [{ text: '安い', reading: 'やすい' }],
       [{ text: '家', reading: 'いえ' }],
+    ],
+    bodyRomaji: [
+      'doyoubi no gogo, haha to suupaa e ikimashita.',
+      'haha wa yasai to sakana o kaimashita.',
+      'watashi wa yasui ocha to pan o kaimashita.',
+      'ie de minna de ryouri o tsukurimashita.',
     ],
     bodyKo: [
       '토요일 오후, 어머니와 슈퍼에 갔습니다.',
@@ -287,6 +326,12 @@ export const stories = [
       [{ text: '人', reading: 'ひと' }, { text: '笑いました', reading: 'わらいました' }],
       [{ text: '少し', reading: 'すこし' }],
     ],
+    bodyRomaji: [
+      'getsuyoubi no asa, eki de shiranai hito ga michi o kikimashita.',
+      'watashi wa chizu o mite, yukkuri oshiemashita.',
+      '"arigatou" to itte, sono hito wa waraimashita.',
+      'sukoshi genki ni narimashita.',
+    ],
     bodyKo: [
       '월요일 아침, 역에서 모르는 사람이 길을 물었습니다.',
       '나는 지도를 보고 천천히 가르쳐 주었습니다.',
@@ -317,6 +362,11 @@ export const stories = [
     tags: ['생활', '뉴스', '도움', '역'],
     estimatedMinutes: 2,
     sourceType: 'original',
+    coverImage: {
+      src: 'assets/images/stories/station-map.svg',
+      altKo: '역과 지도',
+      licenseId: 'asset_station_map',
+    },
   },
 
   {
@@ -339,6 +389,13 @@ export const stories = [
       [{ text: '誰', reading: 'だれ' }, { text: '書いた', reading: 'かいた' }, { text: '分かりません', reading: 'わかりません' }],
       [{ text: '心', reading: 'こころ' }, { text: '温かく', reading: 'あたたかく' }],
       [{ text: '日', reading: 'ひ' }, { text: '空', reading: 'そら' }, { text: '青く', reading: 'あおく' }, { text: '見えました', reading: 'みえました' }],
+    ],
+    bodyRomaji: [
+      'aru hi, tsukue no ue ni chiisai tegami ga arimashita.',
+      '"arigatou" to kaite arimashita.',
+      'watashi wa dare ga kaita no ka wakarimasen deshita.',
+      'demo, kokoro ga totemo atatakaku narimashita.',
+      'sono hi, sora ga aoku miemashita.',
     ],
     bodyKo: [
       '어느 날, 책상 위에 작은 편지가 있었습니다.',
@@ -396,6 +453,13 @@ export const stories = [
       [{ text: '答える', reading: 'こたえる' }, { text: '答えると', reading: 'こたえると' }, { text: '係', reading: 'かかり' }, { text: '人', reading: 'ひと' }, { text: '傘', reading: 'かさ' }, { text: '持って', reading: 'もって' }],
       [{ text: '本当', reading: 'ほんとう' }],
     ],
+    bodyRomaji: [
+      'ame no hi, watashi wa basu no naka de kasa o nakushimashita.',
+      'tsugi no hi, basu-gaisha ni denwa o shimashita.',
+      '"kurokute chiisai kasa desu ka" to kikaremashita.',
+      '"hai" to kotaeru to, kakari no hito wa kasa o motte kimashita.',
+      'hontou ni arigatou gozaimashita.',
+    ],
     bodyKo: [
       '비 오는 날, 나는 버스 안에서 우산을 잃어버렸습니다.',
       '다음 날, 버스 회사에 전화를 했습니다.',
@@ -452,6 +516,13 @@ export const stories = [
       [{text:'昼休み',reading:'ひるやすみ'},{text:'同僚',reading:'どうりょう'},{text:'少し',reading:'すこし'},{text:'話せて',reading:'はなせて'},{text:'安心',reading:'あんしん'}],
       [{text:'明日',reading:'あした'},{text:'頑張ろう',reading:'がんばろう'},{text:'思います',reading:'おもいます'}],
     ],
+    bodyRomaji:[
+      'senshuu kara atarashii kaisha de hataraki-hajimemashita.',
+      'shonichi wa totemo kinchou shimashita ga, minasan ga yasashiku oshiete kuremashita.',
+      'buchou ni shoukai shite morai, jibun no seki made annai saremashita.',
+      'hiruyasumi ni douryou to ranchi e iki, sukoshi hanasete anshin shimashita.',
+      'ashita kara mo ganbarou to omoimasu.',
+    ],
     bodyKo:[
       '지난주부터 새 회사에서 일하기 시작했습니다.',
       '첫날은 매우 긴장했지만, 모두가 친절히 가르쳐 주었습니다.',
@@ -495,6 +566,13 @@ export const stories = [
       [{text:'医者',reading:'いしゃ'},{text:'風邪',reading:'かぜ'},{text:'三日',reading:'みっか'},{text:'休んで',reading:'やすんで'},{text:'言いました',reading:'いいました'}],
       [{text:'薬',reading:'くすり'},{text:'家',reading:'いえ'},{text:'寝ました',reading:'ねました'}],
     ],
+    bodyRomaji:[
+      'kinou kara netsu ga atte, atama mo itakatta desu.',
+      'kesa, chikaku no byouin e ikimashita.',
+      'uketsuke de hokenshou o misete, shibaraku machimashita.',
+      'isha ga "kaze desu ne. mikka yasunde kudasai" to iimashita.',
+      'kusuri o moratte, ie de nemashita.',
+    ],
     bodyKo:[
       '어제부터 열이 있고 머리도 아팠습니다.',
       '오늘 아침, 근처 병원에 갔습니다.',
@@ -536,6 +614,12 @@ export const stories = [
       [{text:'事故',reading:'じこ'},{text:'減らす',reading:'へらす'}],
       [{text:'駅員',reading:'えきいん'},{text:'安全',reading:'あんぜん'},{text:'協力',reading:'きょうりょく'},{text:'話して',reading:'はなして'}],
     ],
+    bodyRomaji:[
+      'raigetsu kara eki de atarashii ruuru ga hajimarimasu.',
+      'esukareetaa de wa arukanaide kudasai. ryougawa ni tachimasu.',
+      'kore wa jiko o herasu tame no ruuru desu.',
+      'ekiin wa "minasan no anzen no tame ni kyouryoku shite kudasai" to hanashite imasu.',
+    ],
     bodyKo:[
       '다음 달부터 역에서 새 규칙이 시작됩니다.',
       '에스컬레이터에서는 걷지 말아 주세요. 양쪽에 섭니다.',
@@ -576,6 +660,13 @@ export const stories = [
       [{text:'今',reading:'いま'},{text:'古い',reading:'ふるい'},{text:'家具',reading:'かぐ'},{text:'全部',reading:'ぜんぶ'},{text:'売ったり',reading:'うったり'},{text:'捨てたり',reading:'すてたり'}],
       [{text:'新しい',reading:'あたらしい'},{text:'部屋',reading:'へや'},{text:'小さい',reading:'ちいさい'},{text:'駅',reading:'えき'},{text:'近くて',reading:'ちかくて'},{text:'便利',reading:'べんり'}],
       [{text:'楽しみ',reading:'たのしみ'}],
+    ],
+    bodyRomaji:[
+      'raigetsu, eki no chikaku ni hikkosu koto ni narimashita.',
+      'tomodachi ga tetsudatte kureru node, totemo tasukarimasu.',
+      'ima, furui kagu o zenbu uttari, sutetari shite imasu.',
+      'atarashii heya wa ima yori chiisai desu ga, eki ni chikakute benri desu.',
+      'tanoshimi ni shite imasu.',
     ],
     bodyKo:[
       '다음 달, 역 근처로 이사하게 되었습니다.',
@@ -620,6 +711,14 @@ export const stories = [
       [{text:'呼ぼう',reading:'よぼう'},{text:'思いました',reading:'おもいました'},{text:'料金',reading:'りょうきん'},{text:'高すぎ',reading:'たかすぎ'}],
       [{text:'結局',reading:'けっきょく'},{text:'温かい',reading:'あたたかい'},{text:'お茶',reading:'おちゃ'},{text:'買って',reading:'かって'},{text:'歩いて',reading:'あるいて'},{text:'帰り',reading:'かえり'}],
       [{text:'長い',reading:'ながい'},{text:'夜',reading:'よる'},{text:'静かな',reading:'しずかな'},{text:'道',reading:'みち'},{text:'気持ちよかった',reading:'きもちよかった'}],
+    ],
+    bodyRomaji:[
+      'kaisha no zangyou ga owatta no wa yoru juu-ji deshita.',
+      'eki made isoida keredo, saigo no basu wa mou dete shimaimashita.',
+      'ame ga sukoshi futte ite, samukatta desu.',
+      'takushii o yobou ka to omoimashita ga, ryoukin ga takasugimasu.',
+      'kekkyoku, konbini de atatakai ocha o katte, yukkuri aruite kaerimashita.',
+      'nagai yoru deshita ga, shizuka na michi wa sukoshi kimochi yokatta desu.',
     ],
     bodyKo:[
       '회사 야근이 끝난 것은 밤 10시였습니다.',
@@ -667,6 +766,14 @@ export const stories = [
       [{text:'読み終わった',reading:'よみおわった'},{text:'急に',reading:'きゅうに'},{text:'祖母',reading:'そぼ'},{text:'会いたく',reading:'あいたく'}],
       [{text:'電話',reading:'でんわ'},{text:'喜んで',reading:'よろこんで'}],
       [{text:'今度',reading:'こんど'},{text:'週末',reading:'しゅうまつ'},{text:'家',reading:'いえ'},{text:'行く',reading:'いく'}],
+    ],
+    bodyRomaji:[
+      'tsukue no hikidashi ni furui tegami o mitsukemashita.',
+      'sobo ga watashi ni okutte kureta mono deshita.',
+      '"genki ni shite imasu ka. tama ni wa asobi ni kite kudasai" to kaite arimashita.',
+      'yomiowatta toki, kyuu ni sobo ni aitaku narimashita.',
+      'denwa o kaketara, sobo wa totemo yorokonde kuremashita.',
+      'kondo no shuumatsu, sobo no ie ni iku koto ni shimashita.',
     ],
     bodyKo:[
       '책상 서랍에서 오래된 편지를 발견했습니다.',

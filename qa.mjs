@@ -1894,21 +1894,24 @@ console.log('\n[73] 이야기 본문 — 후리가나 ruby + 해석 탭');
   const body = screen.querySelector('#storyBody');
   ok('73: #storyBody 존재', !!body);
   ok('73: ruby 렌더 (한자 어휘 매칭)', !!body?.querySelector('ruby'));
-  // 기본 탭은 이야기 — 한국어 번역 전체가 본문에 보이면 안 됨.
-  const koInBody = body?.textContent || '';
-  ok('73: 이야기 탭에 한국어 전체 번역 부재',
-     !koInBody.includes('나는 매일 일곱 시에 일어납니다'));
+  // 라운드 18 — 한국어 해석은 본문 줄 아래 기본 표시 (.story-ko-inline).
+  ok('73: 이야기 탭에 한국어 해석 inline 표시 (기본 ON)',
+     !!body?.querySelector('.story-ko-inline') &&
+     body.textContent.includes('나는 매일 일곱 시에 일어납니다'));
+  // 로마자 줄도 기본 표시
+  ok('73: 로마자 줄 표시 (기본 ON)',
+     !!body?.querySelector('.story-romaji') &&
+     body.textContent.includes('watashi wa mainichi'));
   // 문단별 단일 재생 버튼
   ok('73: data-line-play 버튼 존재',
      screen.querySelectorAll('[data-line-play]').length >= 1);
-  // 해석 탭 클릭 → 한국어 등장
+  // 전체 해석 보조 탭도 동작
   screen.querySelector('#storyTabs [data-tab="ko"]').click();
-  ok('73: 해석 탭 클릭 후 한국어 노출',
+  ok('73: 전체 해석 탭 정상',
      screen.querySelector('#storyKoTab')?.textContent.includes('나는 매일 일곱 시에 일어납니다'));
-  // 이야기 탭으로 복귀
   screen.querySelector('#storyTabs [data-tab="story"]').click();
-  ok('73: 이야기 탭 복귀 후 한국어 다시 부재',
-     !screen.querySelector('#storyBody')?.textContent.includes('나는 매일 일곱 시에 일어납니다'));
+  ok('73: 이야기 탭 복귀 정상',
+     !!screen.querySelector('#storyBody .story-ja'));
 }
 
 console.log('\n[74] 후리가나 OFF — 이야기 본문 ruby 미렌더');
@@ -2009,11 +2012,11 @@ console.log('\n[78] 전체 재생 버튼 클릭 → 첫 문단 active + playingM
   ok('78: activeIndex === 0', st.activeIndex === 0);
   const activeLine = screen.querySelector('.story-line.active');
   ok('78: 첫 문단 .active', activeLine?.dataset.idx === '0');
-  // 상태 라벨 "재생 중"
-  ok('78: #storyState "재생 중"',
-     screen.querySelector('#storyState')?.textContent.includes('재생 중'));
-  // 위치 표시 "1 / N"
-  ok('78: #storyPos "1 / N"',
+  // 상태 라벨 — compact 라벨 "재생"
+  ok('78: #storyState "재생"',
+     screen.querySelector('#storyState')?.textContent.includes('재생'));
+  // 위치 표시 "1/N" (compact)
+  ok('78: #storyPos "1/N"',
      /^1\s*\/\s*\d+$/.test(screen.querySelector('#storyPos')?.textContent || ''));
   stopStoryAudio();
 }
@@ -2802,6 +2805,497 @@ console.log('\n[123] N5 회귀 — N5 이미지 카드 + 스토리 플레이어 
      !!s2.querySelector('#storyBody ruby'));
   ok('123: N5 inline highlight 유지',
      s2.querySelectorAll('.story-inline-hl').length >= 3);
+}
+
+// ── 라운드 17: contentRepository — JSON 경유 렌더 + fallback ───────────────
+const repo = await import('./js/contentRepository.js');
+const dlForQa = await import('./js/dataLoader.js');
+const { readFileSync: _rfs } = await import('node:fs');
+
+console.log('\n[124] N4 story 목록 — repository JSON 데이터로 렌더');
+{
+  bootstrap();
+  repo.resetRepositoryForTest();
+  // 가짜 fetch — N4 stories.json 에 marker title 주입
+  dlForQa._setFetchForTest(async (path) => {
+    if (path === 'data/n4/stories.json') {
+      try {
+        const real = JSON.parse(_rfs(new URL('./data/n4/stories.json', import.meta.url), 'utf8'));
+        real[0] = { ...real[0], titleKo: real[0].titleKo + '·JSON검증' };
+        return { ok: true, json: async () => real };
+      } catch {
+        return { ok: false };
+      }
+    }
+    return { ok: false };
+  });
+  await repo.preloadRepositoryLevel('N4');
+  const screen = shell();
+  renderStories({ screen, params: [] });
+  // N4 필터로 전환
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N4').click();
+  ok('124: N4 story 목록 렌더 (≥4 rows)',
+     screen.querySelectorAll('#storyList .row').length >= 4);
+  ok('124: JSON marker 가 목록에 표시 — repository 가 JSON 데이터 사용',
+     screen.textContent.includes('·JSON검증'),
+     `text 일부=${screen.textContent.slice(0, 80)}`);
+  // detail 진입도 JSON 데이터
+  const screen2 = shell();
+  renderStoryDetail({ screen: screen2, params: ['story_n4_001'] });
+  ok('124: detail 도 JSON marker 표시',
+     screen2.textContent.includes('·JSON검증') ||
+     document.getElementById('topTitle').textContent.includes('·JSON검증'));
+  // 후리가나/하이라이트/TTS 는 기존처럼
+  ok('124: detail ruby 유지', !!screen2.querySelector('#storyBody ruby'));
+  ok('124: detail inline highlight 유지',
+     screen2.querySelectorAll('.story-inline-hl').length >= 3);
+  ok('124: detail 문단 듣기 버튼 유지',
+     screen2.querySelectorAll('[data-line-play]').length >= 1);
+  dlForQa._resetFetchForTest();
+  repo.resetRepositoryForTest();
+}
+
+console.log('\n[125] JSON fetch 실패 시뮬레이션 — fallback 으로 화면 생존');
+{
+  bootstrap();
+  repo.resetRepositoryForTest();
+  dlForQa._setFetchForTest(async () => { throw new Error('network down'); });
+  await repo.preloadRepositoryLevel('N4');   // 전부 실패 → JS fallback 교체
+  const screen = shell();
+  renderStories({ screen, params: [] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N4').click();
+  ok('125: fetch 실패에도 N4 목록 렌더 (JS fallback)',
+     screen.querySelectorAll('#storyList .row').length >= 4);
+  const screen2 = shell();
+  renderStoryDetail({ screen: screen2, params: ['story_n4_005'] });
+  ok('125: detail 도 정상 (최後のバス)',
+     screen2.textContent.includes('最後のバス') ||
+     document.getElementById('topTitle').textContent.includes('마지막 버스'));
+  dlForQa._resetFetchForTest();
+  repo.resetRepositoryForTest();
+}
+
+console.log('\n[126] repository 전환 후 기존 회귀 — N5 story/study/복귀');
+{
+  bootstrap();
+  repo.resetRepositoryForTest();
+  // preload 없이 (JS base 만으로) 모든 기존 동선 정상
+  let screen = shell();
+  renderStories({ screen, params: [] });
+  // 직전 시나리오에서 레벨 필터가 N4 로 남아 있을 수 있어 N5 chip 명시 클릭
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N5')?.click();
+  ok('126: N5 이야기 목록 ≥ 5',
+     screen.querySelectorAll('#storyList .row').length >= 5);
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_001'] });
+  ok('126: N5 detail ruby', !!screen.querySelector('#storyBody ruby'));
+  // study card 진입 (repoFindItem 경유)
+  state.setVocabWarmupEnabled(false);
+  screen = shell();
+  renderStudy({ screen, params: ['vocab', 'card', 'v_n5_1'] });
+  ok('126: study vocab card 정상 (repoFindItem)',
+     screen.querySelectorAll('.choice').length === 4);
+  // invalid id fallback 도 유지
+  screen = shell();
+  renderStudy({ screen, params: ['vocab', 'card', 'v_invalid'] });
+  ok('126: invalid id → browse fallback 유지',
+     !!screen.querySelector('#studyListSection'));
+  // focusId prefill (repository 경유)
+  screen = shell();
+  renderStudy({ screen, params: ['vocab', 'browse', 'v_n5_51'] });
+  ok('126: focusId 검색 prefill 유지 (起きる)',
+     screen.querySelector('#searchInput')?.value === '起きる');
+}
+
+// ── 라운드 18: 테마 / romaji·해석 토글 / compact player / cover ────────────
+const { getStoryRomajiEnabled, setStoryRomajiEnabled,
+        getStoryTranslationEnabled, setStoryTranslationEnabled,
+        getThemeMode, setThemeMode } = await import('./js/state.js');
+const { applyTheme } = await import('./js/theme.js');
+
+console.log('\n[127] 설정 화면 — 테마/로마자/해석 컨트롤');
+{
+  bootstrap();
+  const screen = shell();
+  renderSettings({ screen });
+  ok('127: #themeSeg 존재', !!screen.querySelector('#themeSeg'));
+  ok('127: 시스템/라이트/다크 3개',
+     screen.querySelectorAll('#themeSeg [data-theme-mode]').length === 3);
+  ok('127: 기본 system active',
+     screen.querySelector('#themeSeg .active')?.dataset.themeMode === 'system');
+  ok('127: #romajiToggle 존재 (기본 ON)',
+     screen.querySelector('#romajiToggle')?.checked === true);
+  ok('127: #translationToggle 존재 (기본 ON)',
+     screen.querySelector('#translationToggle')?.checked === true);
+  // 라이트 클릭 → document data-theme
+  screen.querySelector('#themeSeg [data-theme-mode="light"]').click();
+  ok('127: 라이트 선택 → getThemeMode light', getThemeMode() === 'light');
+  ok('127: document data-theme=light',
+     document.documentElement.dataset.theme === 'light');
+  // 다크 클릭
+  screen.querySelector('#themeSeg [data-theme-mode="dark"]').click();
+  ok('127: 다크 선택 → data-theme=dark',
+     document.documentElement.dataset.theme === 'dark');
+  // system 클릭 → 저장값 system (해석값은 환경에 따라 light/dark)
+  screen.querySelector('#themeSeg [data-theme-mode="system"]').click();
+  ok('127: system 선택 → 저장값 system', getThemeMode() === 'system');
+  setThemeMode('system');
+}
+
+console.log('\n[128] story detail — romaji + 한국어 해석 inline 표시/토글');
+{
+  bootstrap();
+  setStoryRomajiEnabled(true);
+  setStoryTranslationEnabled(true);
+  let screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_001'] });
+  ok('128: .story-romaji 표시',
+     screen.querySelectorAll('#storyBody .story-romaji').length >= 3);
+  ok('128: romaji 내용 (watashi wa)',
+     screen.querySelector('.story-romaji')?.textContent.includes('watashi wa'));
+  ok('128: .story-ko-inline 문장 아래 표시',
+     screen.querySelectorAll('#storyBody .story-ko-inline').length >= 3);
+  // 같은 story-line 안에 ja → romaji → ko 순서
+  const firstLine = screen.querySelector('.story-line');
+  const children = Array.from(firstLine.children).map(el => el.className.split(' ')[0]);
+  ok('128: line 구조 ja→romaji→ko 순서',
+     children.indexOf('story-ja') < children.indexOf('story-romaji') &&
+     children.indexOf('story-romaji') < children.indexOf('story-ko-inline'),
+     `children=${children.join(',')}`);
+  // romaji OFF
+  setStoryRomajiEnabled(false);
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_001'] });
+  ok('128: romaji OFF → .story-romaji 부재',
+     screen.querySelectorAll('.story-romaji').length === 0);
+  ok('128: 해석은 여전히 표시',
+     screen.querySelectorAll('.story-ko-inline').length >= 3);
+  // 해석 OFF
+  setStoryTranslationEnabled(false);
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_001'] });
+  ok('128: 해석 OFF → .story-ko-inline 부재',
+     screen.querySelectorAll('.story-ko-inline').length === 0);
+  // 다시 ON → 복원
+  setStoryRomajiEnabled(true);
+  setStoryTranslationEnabled(true);
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_001'] });
+  ok('128: 다시 ON → romaji+해석 복원',
+     screen.querySelectorAll('.story-romaji').length >= 3 &&
+     screen.querySelectorAll('.story-ko-inline').length >= 3);
+}
+
+console.log('\n[129] compact player — 컨트롤 같은 row + 속도 포함');
+{
+  bootstrap();
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_001'] });
+  const row = screen.querySelector('#storyControlsRow');
+  ok('129: #storyControlsRow 존재', !!row);
+  // 이전/재생/다음이 같은 row 안
+  ok('129: prev/play/next 같은 row',
+     !!row?.querySelector('#storyPrev') && !!row?.querySelector('#storyPlayAll') && !!row?.querySelector('#storyNext'));
+  // 속도 chip 도 같은 row
+  ok('129: 속도 chip 같은 row',
+     row?.querySelectorAll('[data-rate]').length === 3);
+  // 위치/상태 표시
+  ok('129: 위치 1/N (compact)', /^\d+\/\d+$/.test(row?.querySelector('#storyPos')?.textContent || ''));
+  ok('129: 상태 "정지" (짧은 라벨)', row?.querySelector('#storyState')?.textContent === '정지');
+  // 재생 버튼은 ▶ 아이콘만
+  ok('129: 재생 버튼 compact (▶)',
+     (row?.querySelector('#storyPlayAll')?.textContent || '').trim() === '▶');
+}
+
+console.log('\n[130] story cover — coverImage 렌더 + fallback');
+{
+  bootstrap();
+  let screen = shell();
+  renderStories({ screen, params: [] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N5')?.click();
+  // coverImage 있는 row (story_n5_004) → 썸네일
+  const rowWithCover = screen.querySelector('.row[data-story-id="story_n5_004"]');
+  ok('130: cover 있는 row 에 .story-cover-thumb',
+     !!rowWithCover?.querySelector('.story-cover-thumb'));
+  // coverImage 없는 row (story_n5_001) → 썸네일 없음 (fallback = 텍스트만)
+  const rowNoCover = screen.querySelector('.row[data-story-id="story_n5_001"]');
+  ok('130: cover 없는 row 는 썸네일 없음 (fallback)',
+     !rowNoCover?.querySelector('.story-cover-thumb'));
+  // detail — cover 표시
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_004'] });
+  const cover = screen.querySelector('.story-cover');
+  ok('130: detail 상단 .story-cover 표시', !!cover);
+  ok('130: alt 텍스트', (cover?.getAttribute('alt') || '').length > 0);
+  // cover 없는 detail → 이미지 없음
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_001'] });
+  ok('130: cover 없는 detail 은 이미지 없음', !screen.querySelector('.story-cover'));
+}
+
+console.log('\n[131] 테마 전환 후 story 화면 유지 (회귀)');
+{
+  bootstrap();
+  applyTheme('light');
+  let screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_004'] });
+  ok('131: 라이트 모드 — storyBody/플레이어 정상',
+     !!screen.querySelector('#storyBody ruby') && !!screen.querySelector('#storyPlayer'));
+  applyTheme('dark');
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_004'] });
+  ok('131: 다크 모드 — storyBody/플레이어 정상',
+     !!screen.querySelector('#storyBody ruby') && !!screen.querySelector('#storyPlayer'));
+  ok('131: romaji/해석/하이라이트 모두 유지',
+     screen.querySelectorAll('.story-romaji').length >= 3 &&
+     screen.querySelectorAll('.story-ko-inline').length >= 3 &&
+     screen.querySelectorAll('.story-inline-hl').length >= 3);
+  setThemeMode('system');
+}
+
+// ── 라운드 19: Firebase auth + actionLogger (mock) ─────────────────────────
+const authSvc = await import('./js/authService.js');
+const logger = await import('./js/actionLogger.js');
+
+function mockAuthImpl() {
+  let user = null;
+  return {
+    signUp: async (email, pw) => {
+      if (pw.length < 6) { const e = new Error('weak'); e.code = 'auth/weak-password'; throw e; }
+      user = { uid: 'uid_' + email.split('@')[0], email };
+      return user;
+    },
+    signIn: async (email, pw) => {
+      if (pw !== 'correct123') { const e = new Error('bad'); e.code = 'auth/invalid-credential'; throw e; }
+      user = { uid: 'uid_' + email.split('@')[0], email };
+      return user;
+    },
+    signOut: async () => { user = null; },
+    observe: (cb) => { cb(user); },
+  };
+}
+
+console.log('\n[132] 계정 섹션 — 비로그인 폼 + mock 가입/로그인/로그아웃');
+{
+  bootstrap();
+  authSvc._resetAuthImplForTest();
+  authSvc._setAuthImplForTest(mockAuthImpl());
+  const logWrites = [];
+  logger._setWriterForTest(async (path, value) => { logWrites.push({ path, value }); });
+  logger._resetThrottleForTest();
+
+  const screen = shell();
+  renderSettings({ screen });
+  // 비로그인 — 폼 렌더
+  ok('132: #accountSection 존재', !!screen.querySelector('#accountSection'));
+  ok('132: 이메일/비밀번호 입력 + 로그인/회원가입 버튼',
+     !!screen.querySelector('#authEmail') && !!screen.querySelector('#authPassword') &&
+     !!screen.querySelector('#loginBtn') && !!screen.querySelector('#signupBtn'));
+  // 회원가입 mock 성공
+  screen.querySelector('#authEmail').value = 'tester@example.com';
+  screen.querySelector('#authPassword').value = 'correct123';
+  screen.querySelector('#signupBtn').click();
+  await new Promise(r => setTimeout(r, 20));
+  ok('132: 가입 후 로그인 상태 표시',
+     screen.querySelector('#accountBody')?.textContent.includes('tester@example.com'));
+  ok('132: getCurrentUser uid', authSvc.getCurrentUser()?.uid === 'uid_tester');
+  // login_success 로그 호출됨
+  ok('132: login_success 로그 기록',
+     logWrites.some(w => w.value?.type === 'login_success'));
+  ok('132: 로그 userType signed-in',
+     logWrites.find(w => w.value?.type === 'login_success')?.value.userType === 'signed-in');
+  ok('132: 로그에 이메일 원문 없음',
+     !JSON.stringify(logWrites).includes('tester@example.com'));
+  // 로그아웃
+  screen.querySelector('#logoutBtn').click();
+  await new Promise(r => setTimeout(r, 20));
+  ok('132: 로그아웃 후 폼 복귀', !!screen.querySelector('#loginBtn'));
+  ok('132: logout 로그 기록',
+     logWrites.some(w => w.value?.type === 'logout'));
+  logger._resetWriterForTest();
+  authSvc._resetAuthImplForTest();
+}
+
+console.log('\n[133] 로그인 실패 — 에러 메시지 표시 + 앱 생존');
+{
+  bootstrap();
+  authSvc._setAuthImplForTest(mockAuthImpl());
+  const screen = shell();
+  renderSettings({ screen });
+  screen.querySelector('#authEmail').value = 'tester@example.com';
+  screen.querySelector('#authPassword').value = 'wrongpw';
+  screen.querySelector('#loginBtn').click();
+  await new Promise(r => setTimeout(r, 20));
+  ok('133: 실패 메시지 표시',
+     (screen.querySelector('#authError')?.textContent || '').includes('올바르지 않'));
+  ok('133: 여전히 비로그인 — getCurrentUser null',
+     authSvc.getCurrentUser() === null);
+  authSvc._resetAuthImplForTest();
+}
+
+console.log('\n[134] 비로그인 상태 앱 사용 + anonymous 로그');
+{
+  bootstrap();
+  authSvc._resetAuthImplForTest();
+  const logWrites = [];
+  logger._setWriterForTest(async (path, value) => { logWrites.push({ path, value }); });
+  logger._resetThrottleForTest();
+  // 비로그인으로 학습/스토리 정상 동작
+  state.setVocabWarmupEnabled(false);
+  let screen = shell();
+  renderStudy({ screen, params: ['vocab', 'card', 'v_n5_1'] });
+  ok('134: 비로그인 학습 카드 정상', screen.querySelectorAll('.choice').length === 4);
+  ok('134: study_start 로그 (anonymous)',
+     logWrites.some(w => w.value?.type === 'study_start' && w.value.userType === 'anonymous'));
+  // vocab 답변 로그
+  screen.querySelectorAll('.choice')[0].click();
+  await new Promise(r => setTimeout(r, 10));
+  ok('134: vocab_card_answered 로그',
+     logWrites.some(w => w.value?.type === 'vocab_card_answered' &&
+                         typeof w.value.meta.correct === 'boolean'));
+  // story_open / story_complete
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_001'] });
+  await new Promise(r => setTimeout(r, 10));
+  ok('134: story_open 로그',
+     logWrites.some(w => w.value?.type === 'story_open' && w.value.meta.storyId === 'story_n5_001'));
+  screen.querySelector('#storyMarkDoneBtn').click();
+  await new Promise(r => setTimeout(r, 10));
+  ok('134: story_complete 로그',
+     logWrites.some(w => w.value?.type === 'story_complete'));
+  // anon id 가 일관됨
+  const anonKeys = new Set(logWrites.filter(w => w.path.startsWith('actionLogs/')).map(w => w.value.userKey));
+  ok('134: anonymous userKey 일관', anonKeys.size === 1 &&
+     [...anonKeys][0].startsWith('anon_'));
+  logger._resetWriterForTest();
+}
+
+console.log('\n[135] app_open 하루 1회 + write 실패 시 앱 생존');
+{
+  bootstrap();
+  const logWrites = [];
+  logger._setWriterForTest(async (path, value) => { logWrites.push({ path, value }); });
+  logger._resetThrottleForTest();
+  logger.logAction('app_open');
+  await new Promise(r => setTimeout(r, 10));
+  const after1 = logWrites.filter(w => w.value?.type === 'app_open').length;
+  logger.logAction('app_open');   // 같은 날 재호출
+  await new Promise(r => setTimeout(r, 10));
+  const after2 = logWrites.filter(w => w.value?.type === 'app_open').length;
+  ok('135: app_open 하루 1회', after1 === 1 && after2 === 1);
+  // write 가 throw 해도 화면/기능 생존
+  logger._setWriterForTest(async () => { throw new Error('firebase down'); });
+  logger._resetThrottleForTest();
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_004'] });   // story_open 로그 시도 → 실패
+  await new Promise(r => setTimeout(r, 10));
+  ok('135: write 실패에도 story detail 정상',
+     !!screen.querySelector('#storyBody ruby'));
+  // markStudiedToday 등 학습 기록도 영향 없음
+  state.setVocabWarmupEnabled(false);
+  const screen2 = shell();
+  renderStudy({ screen: screen2, params: ['vocab', 'card', 'v_n5_2'] });
+  screen2.querySelectorAll('.choice')[0].click();
+  ok('135: write 실패에도 학습 기록(recordSessionItem) 정상',
+     state.todaySessionStats().total >= 1);
+  logger._resetWriterForTest();
+  logger._resetThrottleForTest();
+}
+
+console.log('\n[136] Firebase config 입력됨 — 계정 폼 + 상태 배지 (라운드 20)');
+{
+  bootstrap();
+  authSvc._resetAuthImplForTest();   // mock 해제 — 실제 config 는 채워져 있음
+  const screen = shell();
+  renderSettings({ screen });
+  // config 가 실제 값이므로 로그인 폼이 렌더됨
+  ok('136: 로그인 폼 렌더 (config 입력됨)',
+     !!screen.querySelector('#loginBtn') && !!screen.querySelector('#authEmail'));
+  ok('136: 상태 배지 존재', !!screen.querySelector('#fbStatusBadge'));
+  // 기존 설정 컨트롤 모두 정상 (회귀)
+  ok('136: 기존 설정 컨트롤 유지',
+     !!screen.querySelector('#furiToggle') && !!screen.querySelector('#themeSeg'));
+}
+
+// ── 라운드 20: firebase_test 버튼 + 상태 배지 ──────────────────────────────
+const fbClient = await import('./js/firebaseClient.js');
+
+console.log('\n[137] 로그 테스트 버튼 제거 (라운드 21) — UI 부재 + 배지/계정 UI 유지');
+{
+  bootstrap();
+  authSvc._resetAuthImplForTest();
+  const screen = shell();
+  renderSettings({ screen });
+  // 테스트 전용 UI 가 배포 화면에 없음
+  ok('137: #fbTestBtn 부재', !screen.querySelector('#fbTestBtn'));
+  ok('137: #fbTestMsg 부재', !screen.querySelector('#fbTestMsg'));
+  ok('137: "로그 테스트" 텍스트 부재',
+     !screen.querySelector('#accountSection')?.textContent.includes('로그 테스트'));
+  // 상태 배지 + 로그인/회원가입 UI 는 유지
+  ok('137: 상태 배지 유지', !!screen.querySelector('#fbStatusBadge'));
+  ok('137: 로그인/회원가입 UI 유지',
+     !!screen.querySelector('#loginBtn') && !!screen.querySelector('#signupBtn'));
+  // 테스트 전용 export 는 mock 으로 여전히 동작 (qa 내부 검증용)
+  const logWrites = [];
+  logger._setWriterForTest(async (path, value) => { logWrites.push({ path, value }); });
+  const r = await logger._sendTestLogForTest();
+  ok('137: _sendTestLogForTest (테스트 전용) 동작', r.ok === true &&
+     logWrites.some(w => w.value?.type === 'firebase_test'));
+  logger._resetWriterForTest();
+}
+
+console.log('\n[138] 일반 logAction 실패 — 사용자에게 메시지 없이 앱 유지');
+{
+  bootstrap();
+  authSvc._resetAuthImplForTest();
+  logger._setWriterForTest(async () => { throw new Error('rules denied'); });
+  logger._resetThrottleForTest();
+  // story_open 로그 실패 — 화면 정상 + 에러 UI 없음
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n5_001'] });
+  await new Promise(r => setTimeout(r, 20));
+  ok('138: 로그 실패에도 story 화면 정상', !!screen.querySelector('#storyBody ruby'));
+  ok('138: 로그 실패 메시지가 사용자 UI 에 없음',
+     !screen.textContent.includes('실패') && !screen.textContent.includes('Firebase'));
+  logger._resetWriterForTest();
+  logger._resetThrottleForTest();
+}
+
+console.log('\n[139] 초기화 실패 상태 배지 + 로그 payload 보안');
+{
+  bootstrap();
+  authSvc._resetAuthImplForTest();
+  fbClient._setInitStatusForTest('failed');
+  let screen = shell();
+  renderSettings({ screen });
+  ok('139: 초기화 실패 배지',
+     screen.querySelector('#fbStatusBadge')?.dataset.status === 'init-failed');
+  fbClient._setInitStatusForTest('ok');
+  screen = shell();
+  renderSettings({ screen });
+  ok('139: 연결 준비됨 배지',
+     screen.querySelector('#fbStatusBadge')?.dataset.status === 'ready');
+  fbClient._setInitStatusForTest('unknown');
+  // payload 보안 — 로그인 후 모든 로그에 email/password 미포함
+  authSvc._setAuthImplForTest(mockAuthImpl());
+  const logWrites = [];
+  logger._setWriterForTest(async (path, value) => { logWrites.push({ path, value }); });
+  logger._resetThrottleForTest();
+  screen = shell();
+  renderSettings({ screen });
+  screen.querySelector('#authEmail').value = 'sec-check@example.com';
+  screen.querySelector('#authPassword').value = 'correct123';
+  screen.querySelector('#loginBtn').click();
+  await new Promise(r => setTimeout(r, 30));
+  logger.logAction('story_open', { storyId: 'story_n5_001' });
+  await new Promise(r => setTimeout(r, 10));
+  const allJson = JSON.stringify(logWrites);
+  ok('139: 로그에 이메일 원문 없음', !allJson.includes('sec-check@example.com'));
+  ok('139: 로그에 비밀번호 없음',     !allJson.includes('correct123'));
+  ok('139: 로그인 후 userActivity/ 경로 사용 (signed-in)',
+     logWrites.some(w => w.path.startsWith('userActivity/uid_')));
+  logger._resetWriterForTest();
+  authSvc._resetAuthImplForTest();
 }
 
 if (errs.length) {

@@ -8,6 +8,7 @@ import { recordResult } from '../srs.js';
 import { toggleFavorite, isFavorite, recordSessionItem, markStudiedToday } from '../state.js';
 import { showToast } from '../ui.js';
 import { renderJa } from '../furigana.js';
+import { logAction } from '../actionLogger.js';
 
 /**
  * @param {HTMLElement} root
@@ -184,6 +185,10 @@ export function renderQuestion(root, item, cb) {
 
     // 영속화
     recordResult(item.itemId, item.itemType, correct);
+    // 행동 로그 — 이번 라운드는 grammar 만 (무료 범위 보호: 영역별 샘플 한정).
+    if (item.itemType === 'grammar') {
+      logAction('grammar_answered', { itemType: 'grammar', itemId: item.itemId, correct });
+    }
     recordSessionItem(item.itemType, item.itemId, correct);
     // 실제로 답을 제출했을 때만 학습 기록을 인정한다 (단순 화면 진입은 무시).
     // markStudiedToday 자체가 같은 날 호출 시 idempotent.

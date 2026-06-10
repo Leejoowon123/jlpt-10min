@@ -16,9 +16,12 @@
 //   - 후리가나 ON/OFF 는 renderJa 가 자동 적용.
 //   - 라우트 이동/뒤로/다른 story 진입 시 stopStoryAudio 호출 — 타이머·TTS 모두 정리.
 
-import { stories, getStoriesForListing, getNovelsForListing, findStory } from '../data/stories.js';
-import { vocab } from '../data/vocab.js';
-import { grammar } from '../data/grammar.js';
+// 데이터 접근은 contentRepository 경유 (라운드 17) — 직접 ../data/*.js import 금지.
+// preloadRepositoryLevel 완료 후에는 data/<level>/stories.json 데이터가 사용된다.
+import {
+  getAllItems, findItem, findVocab, findGrammar,
+  preloadRepositoryLevel, isRepositoryLevelLoaded,
+} from '../contentRepository.js';
 import { getState } from '../storage.js';
 import { speak, stopSpeaking } from '../tts.js';
 import { renderJa } from '../furigana.js';
@@ -29,8 +32,10 @@ import {
   getStoryProgress, setStoryLastIndex, markStoryCompleted, noteStoryOpened,
   getFuriganaEnabled,
   getStoryHideCompleted, setStoryHideCompleted,
+  getStoryRomajiEnabled, getStoryTranslationEnabled,
 } from '../state.js';
 import { setStudyReturnRoute } from '../studyReturn.js';
+import { logAction } from '../actionLogger.js';
 
 const LEVELS = ['ALL', 'N5', 'N4', 'N3', 'N2'];
 
@@ -156,6 +161,27 @@ function defaultLevel() {
   return getState().userProgress.targetLevel || 'N5';
 }
 
+// ── repository 기반 데이터 헬퍼 ──────────────────────────────────────────
+// 동기 getter — 시작 직후엔 JS 정적 데이터, preload 후엔 JSON 데이터.
+function getStoriesForListing() {
+  return getAllItems('stories').filter(s => s.type === 'daily_story' || s.type === 'news_style');
+}
+function getNovelsForListing() {
+  return getAllItems('stories').filter(s => s.type === 'short_story');
+}
+function findStory(id) {
+  return findItem('stories', id);
+}
+
+// 목표 레벨의 JSON 을 백그라운드 preload — 실패해도 무시 (JS fallback 이 이미 화면에 있음).
+// 데이터가 JSON 으로 교체되어도 스키마가 동일하므로 재렌더 불필요.
+function warmRepository() {
+  const lvl = defaultLevel();
+  if (!isRepositoryLevelLoaded(lvl)) {
+    preloadRepositoryLevel(lvl).catch(() => {});
+  }
+}
+
 function typeLabel(t) {
   return t === 'daily_story' ? '생활 이야기'
        : t === 'news_style'  ? '뉴스 스타일'
@@ -167,6 +193,7 @@ function typeLabel(t) {
 export function renderStories({ screen, params }) {
   document.getElementById('topTitle').textContent = '이야기';
   stopStoryAudio();
+  warmRepository();
   if (params && params[0]) return drawDetail(screen, params[0]);
   drawList(screen, 'stories', getStoriesForListing());
 }
@@ -174,12 +201,14 @@ export function renderStories({ screen, params }) {
 export function renderNovels({ screen, params }) {
   document.getElementById('topTitle').textContent = '단편 소설';
   stopStoryAudio();
+  warmRepository();
   if (params && params[0]) return drawDetail(screen, params[0]);
   drawList(screen, 'novels', getNovelsForListing());
 }
 
 export function renderStoryDetail({ screen, params }) {
   stopStoryAudio();
+  warmRepository();
   drawDetail(screen, params[0]);
 }
 
@@ -279,7 +308,14 @@ function drawList(screen, key, allItems) {
         : '';
       row.classList.toggle('done', isDone);
       row.dataset.completed = isDone ? '1' : '0';
+      // coverImage 가 있으면 썸네일, 없으면 기존 텍스트만 (fallback).
+      const thumb = s.coverImage?.src
+        ? `<img class="story-cover-thumb" src="${escape(s.coverImage.src)}"
+               alt="${escape(s.coverImage.altKo || '')}"
+               onerror="this.style.display='none'">`
+        : '';
       row.innerHTML = `
+        ${thumb}
         <div class="main">
           <div class="t">
             <span class="badge">${escape(s.level)}</span>
@@ -316,6 +352,8 @@ function drawDetail(screen, id) {
       ? Math.min(prog.lastIndex, (s.bodyJa || []).length - 1) : -1;
     // 진입 기록
     noteStoryOpened(s.id);
+    // 행동 로그 — 같은 story 단기 중복은 actionLogger 가 차단.
+    logAction('story_open', { storyId: s.id });
   }
   activeStory = s;
   screen.innerHTML = '';
@@ -339,7 +377,13 @@ function drawDetail(screen, id) {
   const header = document.createElement('div');
   header.className = 'card';
   header.style.padding = '12px 14px';
+  const coverHtml = s.coverImage?.src
+    ? `<img class="story-cover" src="${escape(s.coverImage.src)}"
+           alt="${escape(s.coverImage.altKo || '')}"
+           onerror="this.style.display='none'">`
+    : '';
   header.innerHTML = `
+    ${coverHtml}
     <h2 style="margin:0;font-size:16px">${escape(s.titleJa)}</h2>
     <p class="muted" style="margin:4px 0 0;font-size:12px">${escape(s.titleKo)} · ${s.level} · 약 ${s.estimatedMinutes}분 · ${escape(typeLabel(s.type))}</p>
     <p class="muted" style="margin:6px 0 0;font-size:11px">${escape(s.summaryKo)}</p>
@@ -354,9 +398,11 @@ function drawDetail(screen, id) {
   `;
   screen.appendChild(header);
   header.querySelector('#storyMarkDoneBtn').addEventListener('click', () => {
-    const cur = getStoryProgress(s.id);
-    markStoryCompleted(s.id, !cur.completed);
-    showToast(cur.completed ? '완료 취소' : '학습 완료로 표시');
+    // getStoryProgress 는 live 객체를 반환하므로 mutate 전에 boolean 을 캡처해야 한다.
+    const wasCompleted = !!getStoryProgress(s.id).completed;
+    markStoryCompleted(s.id, !wasCompleted);
+    if (!wasCompleted) logAction('story_complete', { storyId: s.id });
+    showToast(wasCompleted ? '완료 취소' : '학습 완료로 표시');
     drawDetail(screen, s.id);
   });
 
@@ -364,9 +410,10 @@ function drawDetail(screen, id) {
   const tabs = document.createElement('div');
   tabs.className = 'filters story-tabs';
   tabs.id = 'storyTabs';
+  // 해석은 본문 줄 아래 기본 표시되므로 'ko' 탭은 "전체 해석" 보조 탭으로 축소.
   const TAB_LIST = [
     ['story', '이야기'], ['vocab', '핵심 단어'],
-    ['grammar', '문법'], ['ko', '해석'],
+    ['grammar', '문법'], ['ko', '전체 해석'],
   ];
   for (const [k, label] of TAB_LIST) {
     const b = document.createElement('button');
@@ -411,6 +458,10 @@ function paintStoryTab(container, s) {
   const paragraphs = s.bodyJa || [];
   const readings   = s.bodyReadings || [];
   const highlights = s.bodyHighlights || [];
+  const romaji     = s.bodyRomaji || [];
+  const koLines    = s.bodyKo || [];
+  const showRomaji = getStoryRomajiEnabled();
+  const showKo     = getStoryTranslationEnabled();
 
   paragraphs.forEach((para, idx) => {
     const line = document.createElement('div');
@@ -423,6 +474,22 @@ function paintStoryTab(container, s) {
     // 본문 안 직접 하이라이트 (긴 매칭 우선 + 후리가나 통합)
     ja.innerHTML = renderStoryLineWithHighlights(para, readings[idx] || [], highlights[idx] || [], idx);
     line.appendChild(ja);
+
+    // 로마자 줄 — 설정 ON + 데이터 존재 시
+    if (showRomaji && romaji[idx]) {
+      const rm = document.createElement('p');
+      rm.className = 'story-romaji';
+      rm.textContent = romaji[idx];
+      line.appendChild(rm);
+    }
+
+    // 한국어 해석 줄 — 일본어 바로 아래 기본 표시 (설정으로 OFF 가능)
+    if (showKo && koLines[idx]) {
+      const ko = document.createElement('p');
+      ko.className = 'story-ko-inline';
+      ko.textContent = koLines[idx];
+      line.appendChild(ko);
+    }
 
     // 문단별 단일 재생 버튼
     const ctrl = document.createElement('div');
@@ -517,7 +584,7 @@ function paintVocabTab(container, s) {
   list.className = 'list';
   list.id = 'storyKeyVocabList';
   for (const id of ids) {
-    const v = vocab.find(x => x.id === id);
+    const v = findVocab(id);
     if (!v) continue;
     const row = document.createElement('div');
     row.className = 'row';
@@ -559,7 +626,7 @@ function paintGrammarTab(container, s) {
   list.className = 'list';
   list.id = 'storyKeyGrammarList';
   for (const id of ids) {
-    const g = grammar.find(x => x.id === id);
+    const g = findGrammar(id);
     if (!g) continue;
     const row = document.createElement('div');
     row.className = 'row';
@@ -618,26 +685,22 @@ function drawBottomPlayer(screen, s) {
   const player = document.createElement('div');
   player.id = 'storyPlayer';
   player.className = 'story-player';
+  // compact — 이전/재생/다음/위치/속도를 한 줄(좁은 폭은 자연 줄바꿈)로.
   player.innerHTML = `
-    <div class="story-player-row">
-      <button class="btn ghost small" id="storyPrev" aria-label="이전 문단" title="이전 문단">⏮</button>
-      <button class="btn primary"     id="storyPlayAll"
-              aria-label="전체 이야기 듣기" title="전체 이야기 듣기">
-        ▶ 전체 이야기 듣기
-      </button>
-      <button class="btn ghost small" id="storyNext" aria-label="다음 문단" title="다음 문단">⏭</button>
-    </div>
-    <div class="story-player-row" style="justify-content:space-between">
-      <span class="story-player-pos muted" id="storyPos">${cur} / ${total}</span>
+    <div class="story-player-row story-player-main" id="storyControlsRow">
+      <button class="player-btn" id="storyPrev" aria-label="이전 문단" title="이전 문단">⏮</button>
+      <button class="player-btn primary" id="storyPlayAll"
+              aria-label="전체 이야기 듣기" title="전체 이야기 듣기">▶</button>
+      <button class="player-btn" id="storyNext" aria-label="다음 문단" title="다음 문단">⏭</button>
+      <span class="story-player-pos muted" id="storyPos">${cur}/${total}</span>
       <span class="story-player-state muted" id="storyState">정지</span>
+      <span class="story-player-rates" id="storyRateRow">
+        ${STORY_RATE_ALLOWED.map(r => `
+          <button class="chip${r === storyRate ? ' active' : ''}" data-rate="${r}" type="button">${r}x</button>
+        `).join('')}
+      </span>
     </div>
-    <div class="story-player-row" id="storyRateRow">
-      <span class="muted" style="font-size:11px">속도</span>
-      ${STORY_RATE_ALLOWED.map(r => `
-        <button class="chip${r === storyRate ? ' active' : ''}" data-rate="${r}" type="button">${r}x</button>
-      `).join('')}
-    </div>
-    <p class="muted tts-hint" id="storyTtsHint" style="font-size:11px;margin:4px 0 0;min-height:1em"></p>
+    <p class="muted tts-hint" id="storyTtsHint" style="font-size:10px;margin:2px 0 0;min-height:0"></p>
   `;
   screen.appendChild(player);
 
@@ -696,14 +759,17 @@ function updatePlayerUi() {
   const pos   = document.getElementById('storyPos');
   const state = document.getElementById('storyState');
   const play  = document.getElementById('storyPlayAll');
-  if (pos)   pos.textContent = `${cur} / ${total}`;
+  if (pos)   pos.textContent = `${cur}/${total}`;
+  // 상태 텍스트는 짧게 — compact 폭 유지.
   if (state) state.textContent =
-    playingMode === 'sequence' ? '재생 중' :
-    playingMode === 'single'   ? '문단 재생 중' : '정지';
+    playingMode === 'sequence' ? '재생' :
+    playingMode === 'single'   ? '문단' : '정지';
   if (play) {
-    play.textContent = playingMode === 'sequence' ? '⏸ 일시정지' : '▶ 전체 이야기 듣기';
+    play.textContent = playingMode === 'sequence' ? '⏸' : '▶';
     play.setAttribute('aria-label',
       playingMode === 'sequence' ? '전체 이야기 일시정지' : '전체 이야기 듣기');
+    play.setAttribute('title',
+      playingMode === 'sequence' ? '일시정지' : '전체 이야기 듣기');
   }
 }
 

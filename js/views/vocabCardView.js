@@ -27,6 +27,7 @@ import { toggleFavorite, isFavorite, recordSessionItem, markStudiedToday,
 import { showToast } from '../ui.js';
 import { speak, stopSpeaking } from '../tts.js';
 import { renderJa } from '../furigana.js';
+import { logAction } from '../actionLogger.js';
 
 /** recall 단계 카운트다운 기본 초 — 사용자가 3/5/7 중 선택. 상수는 문서/테스트용. */
 export const RECALL_SECONDS = 3;
@@ -420,6 +421,8 @@ export function renderVocabCard(root, item, cb) {
     recordResult(item.itemId, 'vocab', correct);
     recordSessionItem('vocab', item.itemId, correct);
     markStudiedToday();
+    // 행동 로그 (fire-and-forget) — 실패해도 위 학습 기록에 영향 없음.
+    logAction('vocab_card_answered', { itemType: 'vocab', itemId: item.itemId, correct });
     try { cb?.onAnswered?.({ correct, itemType: 'vocab', itemId: item.itemId }); }
     catch (e) { console.warn('onAnswered threw', e); }
 
