@@ -375,7 +375,7 @@ export const conversationTopics = [
   {
     id:'conv_n4_hospital_symptom', level:'N4', titleKo:'병원에서 증상 설명',
     situationTags:['병원','건강','증상'],
-    requiredVocabIds:['v_n4_148','v_n4_149','v_n4_147','v_n4_150','v_n4_38'],
+    requiredVocabIds:['v_n4_148','v_n4_149','v_n4_147','v_n5_230','v_n4_38'],
     requiredGrammarIds:['g_n4_17','g_n4_3','g_n5_5'],
     starterQuestions:[
       { ja:'今日はどうしましたか。', ko:'오늘은 어떻게 오셨습니까?',
@@ -419,7 +419,7 @@ export const conversationTopics = [
   {
     id:'conv_n4_travel_plan', level:'N4', titleKo:'여행 계획',
     situationTags:['여행','계획','경험'],
-    requiredVocabIds:['v_n4_119','v_n4_120','v_n4_124','v_n4_35','v_n4_106'],
+    requiredVocabIds:['v_n5_109','v_n5_164','v_n4_124','v_n4_35','v_n4_106'],
     requiredGrammarIds:['g_n4_5','g_n4_7','g_n4_19','g_n5_12'],
     starterQuestions:[
       { ja:'休みにどこかへ行ったことがありますか。', ko:'휴가에 어딘가 간 적이 있습니까?',
@@ -441,7 +441,7 @@ export const conversationTopics = [
   {
     id:'conv_n4_shopping_exchange', level:'N4', titleKo:'쇼핑·교환 문의',
     situationTags:['쇼핑','교환','문의'],
-    requiredVocabIds:['v_n4_74','v_n4_66','v_n4_53','v_n4_67','v_n4_70'],
+    requiredVocabIds:['v_n4_74','v_n5_179','v_n4_53','v_n4_67','v_n4_70'],
     requiredGrammarIds:['g_n5_13','g_n4_17','g_n4_29'],
     starterQuestions:[
       { ja:'この商品を交換してもらえますか。', ko:'이 상품을 교환해 주실 수 있을까요?',
@@ -463,7 +463,7 @@ export const conversationTopics = [
   {
     id:'conv_n4_hobby_experience', level:'N4', titleKo:'취미와 경험 이야기',
     situationTags:['취미','경험','자기소개'],
-    requiredVocabIds:['v_n4_106','v_n4_107','v_n4_108','v_n4_103','v_n4_189'],
+    requiredVocabIds:['v_n4_106','v_n4_107','v_n4_108','v_n4_103','v_n5_247'],
     requiredGrammarIds:['g_n4_5','g_n4_6','g_n4_40'],
     starterQuestions:[
       { ja:'趣味は何ですか。', ko:'취미는 무엇입니까?',
@@ -480,5 +480,93 @@ export const conversationTopics = [
         ] },
     ],
     repairHints:[{ issue:'nominalize', ko:'동사 명사화는 「〜のが/〜のは」.', exampleJa:'歌うのが好きです。' }],
+  },
+
+  // ─── N4 완성 C (라운드 27) — 신규 토픽 2 ────────────────────────────
+  {
+    id:'conv_n4_restaurant_reserve', level:'N4', titleKo:'레스토랑 예약',
+    situationTags:['예약','식당','전화'],
+    requiredVocabIds:['v_n4_35','v_n4_319','v_n4_320','v_n4_620','v_n4_307'],
+    requiredGrammarIds:['g_n4_61','g_n4_37','g_n4_51'],
+    starterQuestions:[
+      { ja:'金曜日の七時に予約したいのですが。', ko:'금요일 7시에 예약하고 싶은데요.',
+        expectedPatterns:['〜たいのですが'],
+        sampleAnswers:[
+          { ja:'何名様ですか。', ko:'몇 분이십니까?' },
+          { ja:'四人でお願いします。', ko:'네 명 부탁합니다.' },
+        ] },
+      { ja:'席が空いているかどうか、教えていただけませんか。', ko:'자리가 비어 있는지 알려 주시지 않겠습니까?',
+        expectedPatterns:['〜かどうか','〜ていただけませんか'],
+        sampleAnswers:[
+          { ja:'七時は満席ですが、八時なら空いています。', ko:'7시는 만석이지만 8시라면 비어 있습니다.' },
+          { ja:'はい、ご予約できます。', ko:'네, 예약하실 수 있습니다.' },
+        ] },
+    ],
+    repairHints:[{ issue:'polite-request', ko:'정중한 부탁은 「〜ていただけませんか」.', exampleJa:'時間を変更していただけませんか。' }],
+  },
+  {
+    id:'conv_n4_lost_item', level:'N4', titleKo:'분실물 문의',
+    situationTags:['분실물','문의','역'],
+    requiredVocabIds:['v_n4_387','v_n4_388','v_n4_386','v_n4_323','v_n4_624'],
+    requiredGrammarIds:['g_n4_1','g_n4_37','g_n4_61'],
+    starterQuestions:[
+      { ja:'電車に傘を忘れてしまったんですが。', ko:'전철에 우산을 두고 내렸는데요.',
+        expectedPatterns:['〜てしまったんですが'],
+        sampleAnswers:[
+          { ja:'何時の電車ですか。', ko:'몇 시 전철입니까?' },
+          { ja:'どんな傘ですか。', ko:'어떤 우산입니까?' },
+        ] },
+      { ja:'見つかったら、連絡していただけませんか。', ko:'찾으면 연락해 주시지 않겠습니까?',
+        expectedPatterns:['〜たら','〜ていただけませんか'],
+        sampleAnswers:[
+          { ja:'はい、連絡先を書いてください。', ko:'네, 연락처를 적어 주세요.' },
+          { ja:'届いたらお電話します。', ko:'들어오면 전화드리겠습니다.' },
+        ] },
+    ],
+    repairHints:[{ issue:'regret', ko:'실수·유감은 「〜てしまいました」.', exampleJa:'財布を無くしてしまいました。' }],
+  },
+
+  // ─── N4 완성 D (라운드 28) — 신규 토픽 2 ────────────────────────────
+  {
+    id:'conv_n4_hotel_stay', level:'N4', titleKo:'호텔·숙소 이용',
+    situationTags:['호텔','여행','예약'],
+    requiredVocabIds:['v_n4_342','v_n4_386','v_n4_285','v_n4_767','v_n4_35'],
+    requiredGrammarIds:['g_n4_61','g_n4_46','g_n4_1'],
+    starterQuestions:[
+      { ja:'チェックインをお願いします。', ko:'체크인을 부탁합니다.',
+        expectedPatterns:['〜をお願いします'],
+        sampleAnswers:[
+          { ja:'お名前をお願いします。', ko:'성함을 부탁드립니다.' },
+          { ja:'予約した田中です。', ko:'예약한 다나카입니다.' },
+        ] },
+      { ja:'荷物を預かっていただけませんか。', ko:'짐을 맡아 주시지 않겠습니까?',
+        expectedPatterns:['〜ていただけませんか'],
+        sampleAnswers:[
+          { ja:'はい、夕方までお預かりできます。', ko:'네, 저녁까지 보관해 드릴 수 있습니다.' },
+          { ja:'こちらの紙にお名前を書いてください。', ko:'이 종이에 성함을 적어 주세요.' },
+        ] },
+    ],
+    repairHints:[{ issue:'polite-request', ko:'호텔에서는 「〜ていただけませんか」가 정중하다.', exampleJa:'タオルを取り替えていただけませんか。' }],
+  },
+  {
+    id:'conv_n4_office_phone', level:'N4', titleKo:'회사 전화 응대',
+    situationTags:['전화','회사','문의'],
+    requiredVocabIds:['v_n4_842','v_n4_625','v_n4_306','v_n4_840','v_n4_851'],
+    requiredGrammarIds:['g_n4_83','g_n4_2','g_n4_71'],
+    starterQuestions:[
+      { ja:'山田部長をお願いします。', ko:'야마다 부장님을 부탁합니다.',
+        expectedPatterns:['〜をお願いします'],
+        sampleAnswers:[
+          { ja:'ただいま外出中です。', ko:'지금 외출 중입니다.' },
+          { ja:'少々お待ちください。', ko:'잠시 기다려 주십시오.' },
+        ] },
+      { ja:'伝言をお願いできますか。', ko:'메시지를 부탁드릴 수 있을까요?',
+        expectedPatterns:['〜をお願いできますか'],
+        sampleAnswers:[
+          { ja:'はい、どうぞ。', ko:'네, 말씀하세요.' },
+          { ja:'戻りましたら、伝えておきます。', ko:'돌아오면 전해 놓겠습니다.' },
+        ] },
+    ],
+    repairHints:[{ issue:'humble', ko:'회사 전화에서는 자기 쪽 사람에게 경칭을 붙이지 않는다 (「山田は外出中です」).', exampleJa:'山田はただいま外出中です。' }],
   },
 ];

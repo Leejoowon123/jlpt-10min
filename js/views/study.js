@@ -16,6 +16,8 @@
 // N5 500 시점에 PAGE_SIZE 그대로(20) 충분 — UI 가 한 번에 20개만 그림. 풀 확장이 DOM 부담을 키우지 않음.
 
 import { vocab } from '../data/vocab.js';
+import { helpCard } from '../helpContent.js';
+import { speak } from '../tts.js';
 import { grammar } from '../data/grammar.js';
 import { reading } from '../data/reading.js';
 import { listening } from '../data/listening.js';
@@ -27,6 +29,8 @@ import { renderKanaChart, resetKana } from './kanaChart.js';
 import { getState } from '../storage.js';
 import { favoritesList, failureNotesList, markStudiedToday } from '../state.js';
 import { recordResult } from '../srs.js';
+import { getLearnedCoverage, classifyContentReadiness } from '../contentReadiness.js';
+import { getVocabRomaji } from '../romaji.js';
 import { escape, showToast } from '../ui.js';
 import { navigate } from '../router.js';
 import { peekStudyReturnRoute, consumeStudyReturnRoute, clearStudyReturnRoute } from '../studyReturn.js';
@@ -321,6 +325,7 @@ function drawLanding(screen) {
     aux.querySelector('#startFail').onclick = () => { if (failCount > 0) startSession('image', 'failure'); };
     screen.appendChild(aux);
   }
+  { const hc = helpCard('study'); if (hc) screen.prepend(hc); }
 }
 
 /** 학습법 분기. */
@@ -640,26 +645,52 @@ function drawList(screen) {
   }
 
   screen.appendChild(section);
+  { const key = (currentType === 'reading' || currentType === 'listening') ? 'readingListening'
+      : currentType === 'grammar' ? 'grammar' : null;
+    const hc = key && helpCard(key); if (hc) screen.prepend(hc); }
 }
 
 function rowFor(type, it) {
   const row = document.createElement('div');
   row.className = 'row';
   let title = '', sub = '';
-  if (type === 'vocab')     { title = `${it.word} (${it.reading})`; sub = it.meaningKo + ' · ' + it.exampleSentence; }
+  let titleIsHtml = false;
+  if (type === 'vocab')     { title = `${escape(it.word)} · ${escape(it.reading)} · <span class="muted romaji-sub">${escape(getVocabRomaji(it))}</span>`; titleIsHtml = true; sub = it.meaningKo + ' · ' + it.exampleSentence; }
   if (type === 'grammar')   { title = it.pattern;   sub = it.meaningKo; }
   if (type === 'reading')   { title = it.title;     sub = it.passage.slice(0, 36) + '…'; }
   if (type === 'listening') { title = it.scenario;  sub = it.script.slice(0, 36) + '…'; }
   if (type === 'kanji')     { title = `${it.kanji}  ${it.hiragana}`; sub = `${it.meaningKo} · ${it.strokeCount}획 · 부수 ${it.radical}`; }
+  // 독해/청해 — 학습 준비도 배지 (의존성 태깅이 있는 항목만)
+  let badge = '';
+  if ((type === 'reading' || type === 'listening') && (it.vocabIds || it.grammarIds)) {
+    const rs = (getState().reviewStates) || {};
+    const cov = getLearnedCoverage(it, rs);
+    const cls = classifyContentReadiness(it, rs);
+    const pct = Math.round(cov.totalKnownRatio * 100);
+    const newCount = cov.missingVocabIds.length;
+    const color = cls === 'ready' ? 'var(--good)' : cls === 'good_next' ? 'var(--accent)' : 'var(--muted)';
+    badge = `<div class="s readiness-badge" style="font-size:11px;color:${color}">`
+      + `준비도 ${pct}% · 배운 단어 ${cov.vocabKnown}/${cov.vocabTotal}`
+      + (cov.grammarTotal ? ` · 문법 ${cov.grammarKnown}/${cov.grammarTotal}` : '')
+      + (newCount > 0 ? ` · 새 단어 ${newCount}개` : '')
+      + `</div>`;
+  }
   row.innerHTML = `
     <div class="main">
-      <div class="t">${escape(title)}</div>
+      <div class="t">${titleIsHtml ? title : escape(title)}</div>
       <div class="s row-sub-2line">${escape(sub)}</div>
+      ${badge}
     </div>
     <div class="actions">
+      ${type === 'vocab' ? '<button class="icon-btn" data-act="listen" title="발음 듣기" aria-label="발음 듣기">🔊</button>' : ''}
       <button class="icon-btn" data-act="start" title="문제 풀이">▶</button>
     </div>
   `;
+  const listenBtn = row.querySelector('[data-act="listen"]');
+  if (listenBtn) listenBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // 학습 진입과 충돌 방지 — 발음만 재생, 학습 기록 없음
+    speak(it.word);
+  });
   row.querySelector('[data-act="start"]').addEventListener('click', () => {
     currentItem = { type, id: it.id };
     drawQuestion(document.getElementById('screen'));

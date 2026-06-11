@@ -532,7 +532,7 @@ export const stories = [
     ],
     vocabularyIds:[],
     grammarIds:['g_n4_22','g_n4_38'],
-    keyVocabularyIds:['v_n4_61','v_n4_39','v_n4_48','v_n4_100','v_n4_193'],
+    keyVocabularyIds:['v_n4_61','v_n4_39','v_n4_48','v_n4_100','v_n5_249'],
     keyGrammarIds:['g_n4_22','g_n4_38'],
     bodyHighlights:[
       [{text:'先週',reading:'せんしゅう',meaningKo:'지난주',kind:'time'},
@@ -582,7 +582,7 @@ export const stories = [
     ],
     vocabularyIds:[],
     grammarIds:['g_n5_13','g_n4_37'],
-    keyVocabularyIds:['v_n4_148','v_n4_149','v_n4_147','v_n4_150','v_n4_56'],
+    keyVocabularyIds:['v_n4_148','v_n4_149','v_n4_147','v_n5_230','v_n4_56'],
     keyGrammarIds:['g_n5_13'],
     bodyHighlights:[
       [{text:'熱',reading:'ねつ',meaningKo:'열',vocabId:'v_n4_148',kind:'vocab'},
@@ -593,7 +593,7 @@ export const stories = [
        {text:'保険証',reading:'ほけんしょう',meaningKo:'보험증',kind:'noun'}],
       [{text:'医者',reading:'いしゃ',meaningKo:'의사',kind:'noun'},
        {text:'風邪',reading:'かぜ',meaningKo:'감기',kind:'noun'}],
-      [{text:'薬',reading:'くすり',meaningKo:'약',vocabId:'v_n4_150',kind:'vocab'}],
+      [{text:'薬',reading:'くすり',meaningKo:'약',vocabId:'v_n5_230',kind:'vocab'}],
     ],
     tags:['생활','병원','감기'], estimatedMinutes:3, sourceType:'original',
   },
@@ -730,7 +730,7 @@ export const stories = [
     ],
     vocabularyIds:[],
     grammarIds:['g_n4_1','g_n4_12','g_n4_38'],
-    keyVocabularyIds:['v_n4_64','v_n4_211','v_n4_193','v_n4_66','v_n4_19'],
+    keyVocabularyIds:['v_n4_64','v_n4_211','v_n5_249','v_n5_179','v_n4_19'],
     keyGrammarIds:['g_n4_1','g_n4_12'],
     bodyHighlights:[
       [{text:'残業',reading:'ざんぎょう',meaningKo:'야근',vocabId:'v_n4_64',kind:'vocab'}],
@@ -785,13 +785,13 @@ export const stories = [
     ],
     vocabularyIds:[],
     grammarIds:['g_n4_25','g_n4_20','g_n4_19'],
-    keyVocabularyIds:['v_n4_170','v_n4_16','v_n4_185','v_n4_20','v_n4_175'],
+    keyVocabularyIds:['v_n5_138','v_n4_16','v_n4_185','v_n4_20','v_n4_175'],
     keyGrammarIds:['g_n4_25','g_n4_20'],
     bodyHighlights:[
       [{text:'机',reading:'つくえ',meaningKo:'책상',kind:'noun'},
        {text:'手紙',reading:'てがみ',meaningKo:'편지',kind:'noun'},
        {text:'見つけ',reading:'みつけ',meaningKo:'발견하다',vocabId:'v_n4_16',kind:'vocab'}],
-      [{text:'祖母',reading:'そぼ',meaningKo:'할머니',vocabId:'v_n4_170',kind:'vocab'}],
+      [{text:'祖母',reading:'そぼ',meaningKo:'할머니',vocabId:'v_n5_138',kind:'vocab'}],
       [{text:'元気',reading:'げんき',meaningKo:'건강·잘 지냄',vocabId:'v_n4_101',kind:'vocab'}],
       [{text:'急に',reading:'きゅうに',meaningKo:'갑자기',vocabId:'v_n4_245',kind:'vocab'},
        {text:'会いたく',reading:'あいたく',meaningKo:'만나고 싶어',kind:'verb'}],
@@ -801,13 +801,190 @@ export const stories = [
     ],
     tags:['단편','가족','편지'], estimatedMinutes:4, sourceType:'original',
   },
+
+  // ─── N4 1차 B (라운드 26) — 이야기 +2 / 단편 +2 ───────────────────────
+  {
+    id:'story_n4_007', type:'daily_story', level:'N4',
+    titleJa:'初めての出張', titleKo:'첫 출장',
+    summaryKo:'처음으로 오사카 출장을 준비하는 회사원의 하루.',
+    bodyJa:[
+      '来週、初めて大阪へ出張することになりました。',
+      '新幹線の切符はもう予約してあります。',
+      '課長に名刺の渡し方を教えてもらいました。',
+      '会場までの道も地図で確認しておきました。',
+      '緊張しますが、いい経験になると思います。',
+    ],
+    bodyReadings:[
+      [{text:'来週',reading:'らいしゅう'},{text:'初めて',reading:'はじめて'},{text:'大阪',reading:'おおさか'},{text:'出張',reading:'しゅっちょう'}],
+      [{text:'新幹線',reading:'しんかんせん'},{text:'切符',reading:'きっぷ'},{text:'予約',reading:'よやく'}],
+      [{text:'課長',reading:'かちょう'},{text:'名刺',reading:'めいし'},{text:'渡し方',reading:'わたしかた'},{text:'教えて',reading:'おしえて'}],
+      [{text:'会場',reading:'かいじょう'},{text:'道',reading:'みち'},{text:'地図',reading:'ちず'},{text:'確認',reading:'かくにん'}],
+      [{text:'緊張',reading:'きんちょう'},{text:'経験',reading:'けいけん'},{text:'思います',reading:'おもいます'}],
+    ],
+    bodyRomaji:[
+      'raishuu, hajimete oosaka e shucchou suru koto ni narimashita.',
+      'shinkansen no kippu wa mou yoyaku shite arimasu.',
+      'kachou ni meishi no watashikata o oshiete moraimashita.',
+      'kaijou made no michi mo chizu de kakunin shite okimashita.',
+      'kinchou shimasu ga, ii keiken ni naru to omoimasu.',
+    ],
+    bodyKo:[
+      '다음 주에 처음으로 오사카에 출장 가게 되었습니다.',
+      '신칸센 표는 이미 예약되어 있습니다.',
+      '과장님에게 명함 건네는 법을 배웠습니다.',
+      '행사장까지 가는 길도 지도로 확인해 두었습니다.',
+      '긴장되지만 좋은 경험이 될 거라고 생각합니다.',
+    ],
+    vocabularyIds:[], grammarIds:['g_n4_21','g_n4_43','g_n4_2'],
+    keyVocabularyIds:['v_n4_301','v_n4_302','v_n4_296','v_n4_374','v_n4_318'],
+    keyGrammarIds:['g_n4_21','g_n4_43'],
+    bodyHighlights:[
+      [{text:'出張',reading:'しゅっちょう',meaningKo:'출장',vocabId:'v_n4_301',kind:'vocab'}],
+      [{text:'予約',reading:'よやく',meaningKo:'예약',vocabId:'v_n4_35',kind:'vocab'}],
+      [{text:'名刺',reading:'めいし',meaningKo:'명함',vocabId:'v_n4_302',kind:'vocab'}],
+      [{text:'確認',reading:'かくにん',meaningKo:'확인',vocabId:'v_n4_307',kind:'vocab'}],
+      [{text:'緊張',reading:'きんちょう',meaningKo:'긴장',vocabId:'v_n4_374',kind:'vocab'}],
+    ],
+    tags:['일상','회사','출장'], estimatedMinutes:4, sourceType:'original',
+  },
+  {
+    id:'story_n4_008', type:'news_style', level:'N4',
+    titleJa:'駅前に新しい図書館', titleKo:'역 앞에 새 도서관',
+    summaryKo:'역 앞에 새로 생기는 도서관을 소개하는 뉴스풍 글.',
+    bodyJa:[
+      '来月、駅前に新しい図書館が建つ予定です。',
+      '営業時間は朝九時から夜八時までだそうです。',
+      '詳しいことはホームページで確認できます。',
+      '工事の間、近くの道は渋滞するかもしれません。',
+      '町の人たちは完成を楽しみにしています。',
+    ],
+    bodyReadings:[
+      [{text:'来月',reading:'らいげつ'},{text:'駅前',reading:'えきまえ'},{text:'新しい',reading:'あたらしい'},{text:'図書館',reading:'としょかん'},{text:'建つ',reading:'たつ'},{text:'予定',reading:'よてい'}],
+      [{text:'営業時間',reading:'えいぎょうじかん'},{text:'朝',reading:'あさ'},{text:'九時',reading:'くじ'},{text:'夜',reading:'よる'},{text:'八時',reading:'はちじ'}],
+      [{text:'詳しい',reading:'くわしい'},{text:'確認',reading:'かくにん'}],
+      [{text:'工事',reading:'こうじ'},{text:'間',reading:'あいだ'},{text:'近く',reading:'ちかく'},{text:'道',reading:'みち'},{text:'渋滞',reading:'じゅうたい'}],
+      [{text:'町',reading:'まち'},{text:'人',reading:'ひと'},{text:'完成',reading:'かんせい'},{text:'楽しみ',reading:'たのしみ'}],
+    ],
+    bodyRomaji:[
+      'raigetsu, ekimae ni atarashii toshokan ga tatsu yotei desu.',
+      'eigyou jikan wa asa ku-ji kara yoru hachi-ji made da sou desu.',
+      'kuwashii koto wa hoomupeeji de kakunin dekimasu.',
+      'kouji no aida, chikaku no michi wa juutai suru kamo shiremasen.',
+      'machi no hito-tachi wa kansei o tanoshimi ni shite imasu.',
+    ],
+    bodyKo:[
+      '다음 달 역 앞에 새 도서관이 세워질 예정입니다.',
+      '영업시간은 아침 9시부터 밤 8시까지라고 합니다.',
+      '자세한 내용은 홈페이지에서 확인할 수 있습니다.',
+      '공사하는 동안 근처 길이 막힐지도 모릅니다.',
+      '마을 사람들은 완성을 기대하고 있습니다.',
+    ],
+    vocabularyIds:[], grammarIds:['g_n4_50','g_n4_8','g_n4_19'],
+    keyVocabularyIds:['v_n4_276','v_n4_325','v_n4_307','v_n4_353','v_n5_74'],
+    keyGrammarIds:['g_n4_50','g_n4_19'],
+    bodyHighlights:[
+      [{text:'建つ',reading:'たつ',meaningKo:'(건물이) 서다',vocabId:'v_n4_276',kind:'vocab'}],
+      [{text:'営業時間',reading:'えいぎょうじかん',meaningKo:'영업시간',vocabId:'v_n4_325',kind:'vocab'}],
+      [{text:'確認',reading:'かくにん',meaningKo:'확인',vocabId:'v_n4_307',kind:'vocab'}],
+      [{text:'渋滞',reading:'じゅうたい',meaningKo:'정체',vocabId:'v_n4_353',kind:'vocab'}],
+      [{text:'楽しみ',reading:'たのしみ',meaningKo:'기대',kind:'noun'}],
+    ],
+    tags:['뉴스','도서관','지역'], estimatedMinutes:4, sourceType:'original',
+  },
+  {
+    id:'story_n4_009', type:'short_story', level:'N4',
+    titleJa:'落とし物の財布', titleKo:'주운 지갑',
+    summaryKo:'역에서 주운 지갑을 창구에 가져다준 뒤 일어난 작은 이야기.',
+    bodyJa:[
+      '駅のベンチで茶色い財布を見つけました。',
+      '中には現金とカードが入っていました。',
+      '急いでいましたが、駅の窓口に届けることにしました。',
+      '一週間後、財布の持ち主から手紙が届きました。',
+      '「ありがとう」の言葉に、心が温かくなりました。',
+    ],
+    bodyReadings:[
+      [{text:'駅',reading:'えき'},{text:'茶色い',reading:'ちゃいろい'},{text:'財布',reading:'さいふ'},{text:'見つけました',reading:'みつけました'}],
+      [{text:'中',reading:'なか'},{text:'現金',reading:'げんきん'},{text:'入って',reading:'はいって'}],
+      [{text:'急いで',reading:'いそいで'},{text:'駅',reading:'えき'},{text:'窓口',reading:'まどぐち'},{text:'届ける',reading:'とどける'}],
+      [{text:'一週間後',reading:'いっしゅうかんご'},{text:'財布',reading:'さいふ'},{text:'持ち主',reading:'もちぬし'},{text:'手紙',reading:'てがみ'},{text:'届きました',reading:'とどきました'}],
+      [{text:'言葉',reading:'ことば'},{text:'心',reading:'こころ'},{text:'温かく',reading:'あたたかく'}],
+    ],
+    bodyRomaji:[
+      'eki no benchi de chairoi saifu o mitsukemashita.',
+      'naka ni wa genkin to kaado ga haitte imashita.',
+      'isoide imashita ga, eki no madoguchi ni todokeru koto ni shimashita.',
+      'isshuukan-go, saifu no mochinushi kara tegami ga todokimashita.',
+      '"arigatou" no kotoba ni, kokoro ga atatakaku narimashita.',
+    ],
+    bodyKo:[
+      '역 벤치에서 갈색 지갑을 발견했습니다.',
+      '안에는 현금과 카드가 들어 있었습니다.',
+      '서두르고 있었지만 역 창구에 가져다주기로 했습니다.',
+      '일주일 뒤 지갑 주인에게서 편지가 도착했습니다.',
+      '"고마워요"라는 말에 마음이 따뜻해졌습니다.',
+    ],
+    vocabularyIds:[], grammarIds:['g_n4_20','g_n4_30'],
+    keyVocabularyIds:['v_n4_72','v_n4_365','v_n4_323','v_n4_13','v_n5_284'],
+    keyGrammarIds:['g_n4_20','g_n4_30'],
+    bodyHighlights:[
+      [{text:'財布',reading:'さいふ',meaningKo:'지갑',vocabId:'v_n4_72',kind:'vocab'}],
+      [{text:'現金',reading:'げんきん',meaningKo:'현금',vocabId:'v_n4_365',kind:'vocab'}],
+      [{text:'窓口',reading:'まどぐち',meaningKo:'창구',vocabId:'v_n4_323',kind:'vocab'}],
+      [{text:'手紙',reading:'てがみ',meaningKo:'편지',vocabId:'v_n5_284',kind:'vocab'}],
+      [{text:'言葉',reading:'ことば',meaningKo:'말',vocabId:'v_n5_188',kind:'vocab'}],
+    ],
+    tags:['단편','분실물','친절'], estimatedMinutes:4, sourceType:'original',
+  },
+  {
+    id:'story_n4_010', type:'short_story', level:'N4',
+    titleJa:'雨の日の親切', titleKo:'비 오는 날의 친절',
+    summaryKo:'우산을 잊은 날, 모르는 사람의 친절을 만난 이야기.',
+    bodyJa:[
+      '急に、強い雨が降ってきました。',
+      '傘を忘れて、駅の前で困っていました。',
+      'その時、知らない女の人が傘に入れてくれました。',
+      '駅まで一緒に歩きながら、少し話をしました。',
+      '今度は私が誰かに親切にしようと思いました。',
+    ],
+    bodyReadings:[
+      [{text:'急に',reading:'きゅうに'},{text:'強い',reading:'つよい'},{text:'雨',reading:'あめ'},{text:'降って',reading:'ふって'}],
+      [{text:'傘',reading:'かさ'},{text:'忘れて',reading:'わすれて'},{text:'駅',reading:'えき'},{text:'前',reading:'まえ'},{text:'困って',reading:'こまって'}],
+      [{text:'時',reading:'とき'},{text:'知らない',reading:'しらない'},{text:'女',reading:'おんな'},{text:'人',reading:'ひと'},{text:'傘',reading:'かさ'},{text:'入れて',reading:'いれて'}],
+      [{text:'駅',reading:'えき'},{text:'一緒',reading:'いっしょ'},{text:'歩き',reading:'あるき'},{text:'少し',reading:'すこし'},{text:'話',reading:'はなし'}],
+      [{text:'今度',reading:'こんど'},{text:'私',reading:'わたし'},{text:'誰か',reading:'だれか'},{text:'親切',reading:'しんせつ'},{text:'思いました',reading:'おもいました'}],
+    ],
+    bodyRomaji:[
+      'kyuu ni, tsuyoi ame ga futte kimashita.',
+      'kasa o wasurete, eki no mae de komatte imashita.',
+      'sono toki, shiranai onna no hito ga kasa ni irete kuremashita.',
+      'eki made issho ni aruki nagara, sukoshi hanashi o shimashita.',
+      'kondo wa watashi ga dareka ni shinsetsu ni shiyou to omoimashita.',
+    ],
+    bodyKo:[
+      '갑자기 강한 비가 내리기 시작했습니다.',
+      '우산을 잊고 와서 역 앞에서 곤란해하고 있었습니다.',
+      '그때 모르는 여자분이 우산을 씌워 주었습니다.',
+      '역까지 함께 걸으며 잠깐 이야기를 했습니다.',
+      '다음에는 내가 누군가에게 친절을 베풀어야겠다고 생각했습니다.',
+    ],
+    vocabularyIds:[], grammarIds:['g_n4_42','g_n4_30','g_n4_53'],
+    keyVocabularyIds:['v_n5_270','v_n5_450','v_n4_245','v_n5_188','v_n4_101'],
+    keyGrammarIds:['g_n4_42','g_n4_53'],
+    bodyHighlights:[
+      [{text:'急に',reading:'きゅうに',meaningKo:'갑자기',vocabId:'v_n4_245',kind:'vocab'}],
+      [{text:'傘',reading:'かさ',meaningKo:'우산',vocabId:'v_n5_270',kind:'vocab'}],
+      [{text:'入れてくれました',reading:'いれてくれました',meaningKo:'씌워 주었습니다',kind:'verb'}],
+      [{text:'一緒',reading:'いっしょ',meaningKo:'함께',kind:'noun'}],
+      [{text:'親切',reading:'しんせつ',meaningKo:'친절',vocabId:'v_n5_450',kind:'vocab'}],
+    ],
+    tags:['단편','비','친절'], estimatedMinutes:4, sourceType:'original',
+  },
 ];
 
 /** 이야기 탭 — daily/news 스타일. */
 export function getStoriesForListing() {
   return stories.filter(s => s.type === 'daily_story' || s.type === 'news_style');
 }
-
 /** 단편 소설 탭. */
 export function getNovelsForListing() {
   return stories.filter(s => s.type === 'short_story');
@@ -815,4 +992,17 @@ export function getNovelsForListing() {
 
 export function findStory(id) {
   return stories.find(s => s.id === id) || null;
+}
+
+// ─── 학습 의존성 보강 (라운드 29) — 본문 전체 기준 vocabularyIds/grammarIds ───
+//   keyVocabularyIds/keyGrammarIds 는 학습 연결 UI 용 핵심, 아래는 추천/준비도 계산용.
+const STORY_DEPS = {"story_n4_001":{"vocabularyIds":["v_n4_61","v_n4_39","v_n4_48","v_n4_100","v_n5_249","v_n4_21","v_n4_209","v_n4_572","v_n4_591","v_n4_592","v_n5_14","v_n5_239","v_n5_466","v_n5_22","v_n5_110","v_n5_264","v_n5_323","v_n5_484"],"grammarIds":["g_n4_22","g_n4_38","g_n4_43","g_n4_42","g_n4_44"]},"story_n4_002":{"vocabularyIds":["v_n4_148","v_n4_149","v_n4_147","v_n5_230","v_n4_56","v_n4_641","v_n4_572","v_n4_806","v_n5_23","v_n5_42","v_n5_229","v_n5_294","v_n5_339","v_n5_38","v_n5_227"],"grammarIds":["g_n5_13","g_n4_37"]},"story_n4_003":{"vocabularyIds":["v_n4_157","v_n4_154","v_n4_158","v_n4_208","v_n4_125","v_n4_22","v_n4_414","v_n4_737","v_n4_868","v_n4_392","v_n4_573","v_n5_14","v_n5_486","v_n5_40"],"grammarIds":["g_n4_16","g_n5_13","g_n4_68"]},"story_n4_004":{"vocabularyIds":["v_n4_85","v_n4_86","v_n4_84","v_n4_18","v_n4_135","v_n4_441","v_n4_464","v_n4_602","v_n4_236","v_n5_10","v_n5_14","v_n5_56","v_n5_247","v_n5_410","v_n5_466","v_n5_73","v_n5_246"],"grammarIds":["g_n4_21","g_n4_6","g_n4_17","g_n4_42"]},"story_n4_005":{"vocabularyIds":["v_n4_64","v_n4_211","v_n5_249","v_n5_179","v_n4_19","v_n4_379","v_n4_239","v_n4_243","v_n4_571","v_n5_162","v_n5_167","v_n5_474","v_n5_236","v_n5_37","v_n5_110","v_n5_161","v_n5_436"],"grammarIds":["g_n4_1","g_n4_12","g_n4_38"]},"story_n4_006":{"vocabularyIds":["v_n5_138","v_n4_16","v_n4_185","v_n4_20","v_n4_175","v_n4_144","v_n4_478","v_n4_652","v_n4_245","v_n4_638","v_n5_236","v_n5_466","v_n5_6","v_n5_101","v_n5_246","v_n5_283","v_n5_284"],"grammarIds":["g_n4_25","g_n4_20","g_n4_19","g_n4_17","g_n4_42","g_n4_44"]},"story_n4_007":{"vocabularyIds":["v_n4_301","v_n4_302","v_n4_296","v_n4_374","v_n4_318","v_n4_124","v_n4_35","v_n4_108","v_n4_132","v_n4_243","v_n5_239","v_n5_60","v_n5_93","v_n5_178","v_n5_424","v_n5_483","v_n5_160"],"grammarIds":["g_n4_21","g_n4_43","g_n4_2","g_n4_38"]},"story_n4_008":{"vocabularyIds":["v_n4_276","v_n4_325","v_n4_307","v_n4_353","v_n5_74","v_n4_853","v_n4_351","v_n4_602","v_n4_862","v_n4_36","v_n4_55","v_n5_14","v_n5_247","v_n5_9","v_n5_93","v_n5_339","v_n5_486","v_n5_131"],"grammarIds":["g_n4_50","g_n4_8","g_n4_19"]},"story_n4_009":{"vocabularyIds":["v_n4_72","v_n4_365","v_n4_323","v_n4_13","v_n5_284","v_n4_16","v_n5_99","v_n5_188","v_n5_384","v_n5_40","v_n5_111","v_n5_258"],"grammarIds":["g_n4_20","g_n4_30"]},"story_n4_010":{"vocabularyIds":["v_n5_270","v_n5_450","v_n4_245","v_n5_188","v_n4_101","v_n4_4","v_n4_387","v_n4_239","v_n4_638","v_n5_262","v_n5_417","v_n5_432","v_n5_465","v_n5_15","v_n5_40","v_n5_104"],"grammarIds":["g_n4_42","g_n4_30","g_n4_53","g_n4_38","g_n4_44"]}};
+for (const s of stories) {
+  if (STORY_DEPS[s.id]) Object.assign(s, STORY_DEPS[s.id]);
+}
+
+// ─── N5 스토리 의존성 보강 (라운드 31 백포트) ───
+const STORY_DEPS_N5 = {"story_n5_001":{"vocabularyIds":["v_n5_51","v_n5_24","v_n5_2","v_n5_6","v_n5_79","v_n5_341","v_n5_363","v_n5_4","v_n5_33","v_n5_78","v_n5_478","v_n5_38"],"grammarIds":["g_n5_1"]},"story_n5_002":{"vocabularyIds":["v_n5_43","v_n5_30","v_n5_7","v_n5_14","v_n5_102","v_n5_159","v_n5_383"],"grammarIds":["g_n5_1","g_n5_5","g_n5_17"]},"story_n5_003":{"vocabularyIds":["v_n5_71","v_n5_10","v_n5_43","v_n5_49","v_n5_113","v_n5_466","v_n5_21","v_n5_37","v_n5_54","v_n5_60","v_n5_302","v_n5_24","v_n5_38","v_n5_77","v_n5_123","v_n5_125","v_n5_150","v_n5_213","v_n5_383"],"grammarIds":["g_n5_1"]},"story_n5_004":{"vocabularyIds":["v_n5_15","v_n5_24","v_n5_40","v_n5_10","v_n5_4","v_n5_278","v_n5_417","v_n5_11","v_n5_21","v_n5_494","v_n5_38","v_n5_270"],"grammarIds":["g_n5_3"]},"story_n5_005":{"vocabularyIds":["v_n5_70","v_n5_17","v_n5_35","v_n5_172","v_n5_121","v_n5_166","v_n5_263","v_n5_363","v_n5_12","v_n5_37","v_n5_78","v_n5_155","v_n5_38"],"grammarIds":["g_n5_3"]},"story_n5_006":{"vocabularyIds":["v_n5_40","v_n5_160","v_n5_50","v_n5_239","v_n5_101","v_n5_99","v_n5_474","v_n5_26","v_n5_24","v_n5_131"],"grammarIds":["g_n5_6"]},"story_n5_007":{"vocabularyIds":["v_n5_56","v_n5_48","v_n5_7","v_n5_123","v_n5_197","v_n5_99","v_n5_407","v_n5_466","v_n5_94","v_n5_284","v_n5_461","v_n5_76","v_n5_106","v_n5_258"],"grammarIds":["g_n5_7"]},"story_n5_008":{"vocabularyIds":["v_n5_15","v_n5_56","v_n5_50","v_n5_131","v_n5_234","v_n5_99","v_n5_110","v_n5_161","v_n5_186","v_n5_283","v_n5_471","v_n5_111","v_n5_270","v_n5_313"],"grammarIds":["g_n5_7"]}};
+for (const s of stories) {
+  if (STORY_DEPS_N5[s.id]) Object.assign(s, STORY_DEPS_N5[s.id]);
 }

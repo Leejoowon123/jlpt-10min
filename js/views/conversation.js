@@ -3,6 +3,7 @@
 //   topic   — 질문 → TTS 재생 / 한국어 토글 → 텍스트 답변 → 평가 결과
 //   summary — 평균 점수 + 다시 / 목록 이동
 import { getConversationReadiness } from '../conversationReadiness.js';
+import { helpCard } from '../helpContent.js';
 import { createEngine } from '../conversationEngine.js';
 import { getState } from '../storage.js';
 import { speak, stopSpeaking, ttsAvailable } from '../tts.js';
@@ -37,6 +38,7 @@ export function renderConversation({ screen, params }) {
   if (mode === 'summary' && engine)  return drawSummary(screen);
   mode = 'list';
   drawList(screen);
+  { const hc = helpCard('conversation'); if (hc) screen.prepend(hc); }
 }
 
 // ────────────────────────────────────────────────────────────────────────────
