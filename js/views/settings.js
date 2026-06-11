@@ -10,6 +10,8 @@
 // 데이터 초기화 같은 위험한 액션은 이번 버전에 포함하지 않는다.
 
 import { getState } from '../storage.js';
+import { getVoiceStatus, refreshVoices, onVoiceStatusChange, ttsAvailable } from '../tts.js';
+import { getHelpEnabled, setHelpEnabled } from '../state.js';
 import {
   getFuriganaEnabled, setFuriganaEnabled,
   getVocabWarmupEnabled, setVocabWarmupEnabled,
@@ -100,6 +102,26 @@ function draw(screen) {
         </div>
       </div>
 
+      <label class="settings-row" style="display:flex;align-items:center;gap:10px;margin:6px 0;flex-wrap:wrap;cursor:pointer">
+        <input type="checkbox" id="helpToggle" ${getHelpEnabled() ? 'checked' : ''} style="margin:0">
+        <span style="flex:1;font-size:13px">사용 매뉴얼 표시</span>
+        <span class="muted" style="font-size:11px">화면별 도움말 카드</span>
+      </label>
+
+      <div class="settings-row" id="voiceStatusSection" style="margin:10px 0 0;padding-top:8px;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="flex:0 0 auto;font-size:13px">음성 상태</span>
+          <span id="voiceStatusText" class="muted" style="flex:1;font-size:12px">확인 중…</span>
+          <button class="btn" id="voiceRefreshBtn" type="button" style="font-size:12px;padding:4px 10px">음성 다시 감지</button>
+        </div>
+        <p class="muted" id="voiceStatusHint" style="margin:6px 0 0;font-size:11px;display:none">
+          브라우저가 설치된 일본어 음성을 늦게 불러올 수 있습니다.
+          「음성 다시 감지」를 눌러보세요. 계속 안 되면 Chrome/Edge/Safari 의 음성 설정을 확인하세요.
+          (재생이 안 되는 경우는 음성 없음과 달리, 브라우저의 자동 재생 정책 때문일 수 있습니다 —
+          화면을 한 번 탭한 뒤 다시 시도하세요.)
+        </p>
+      </div>
+
       <p class="muted" style="margin:10px 0 0;font-size:11px">
         설정은 자동 저장됩니다 · 데이터 초기화는 추후 별도 화면에서 제공 예정
       </p>
@@ -130,6 +152,35 @@ function draw(screen) {
     const v = setStoryRomajiEnabled(e.target.checked);
     showToast(v ? '로마자 표시 ON' : '로마자 표시 OFF');
   });
+  screen.querySelector('#helpToggle').addEventListener('change', (e) => {
+    const v = setHelpEnabled(e.target.checked);
+    showToast(v ? '사용 매뉴얼 ON' : '사용 매뉴얼 OFF');
+  });
+
+  // ── 음성 상태 (라운드 30) ──
+  const vsText = screen.querySelector('#voiceStatusText');
+  const vsHint = screen.querySelector('#voiceStatusHint');
+  function paintVoiceStatus(st) {
+    const map = {
+      'ja-found':    ['일본어 음성 감지됨 ✓', 'voice-status-ok', false],
+      'no-ja':       ['일본어 음성 없음', 'voice-status-bad', true],
+      'detecting':   ['감지 중…', 'voice-status-wait', false],
+      'unsupported': ['브라우저 미지원', 'voice-status-bad', true],
+    };
+    const [label, cls, showHint] = map[st] || map['detecting'];
+    vsText.textContent = label;
+    vsText.className = cls;
+    vsHint.style.display = showHint ? '' : 'none';
+  }
+  paintVoiceStatus(getVoiceStatus());
+  const unsubVoice = onVoiceStatusChange(paintVoiceStatus);
+  screen.querySelector('#voiceRefreshBtn').addEventListener('click', async () => {
+    paintVoiceStatus('detecting');
+    const st = await refreshVoices();
+    paintVoiceStatus(st);
+    showToast(st === 'ja-found' ? '일본어 음성을 찾았습니다' : '음성 감지를 다시 시도했습니다');
+  });
+
   screen.querySelector('#translationToggle').addEventListener('change', (e) => {
     const v = setStoryTranslationEnabled(e.target.checked);
     showToast(v ? '해석 표시 ON' : '해석 표시 OFF');

@@ -9,6 +9,9 @@ import { toggleFavorite, isFavorite, recordSessionItem, markStudiedToday } from 
 import { showToast } from '../ui.js';
 import { renderJa } from '../furigana.js';
 import { logAction } from '../actionLogger.js';
+import { getItemDependency, getLearnedCoverage, classifyContentReadiness } from '../contentReadiness.js';
+import { getState as _rsState } from '../storage.js';
+import { kanaToRomaji } from '../romaji.js';
 
 /**
  * @param {HTMLElement} root
@@ -45,6 +48,34 @@ export function renderQuestion(root, item, cb) {
     <span class="muted" id="qProgress">${cb?.headerLabel ?? ''}</span>
   `;
   wrap.appendChild(header);
+
+  // 독해/청해 — 준비도가 낮으면(locked) 진입은 허용하되 안내 + 학습 버튼 노출 (라운드 29).
+  if (q.itemType === 'reading' || q.itemType === 'listening') {
+    const dep = getItemDependency(q.itemType, item.itemId);
+    if (dep && (dep.vocabIds.length + dep.grammarIds.length) > 0) {
+      const rs = (_rsState().reviewStates) || {};
+      const cls = classifyContentReadiness(dep, rs);
+      if (cls === 'locked') {
+        const cov = getLearnedCoverage(dep, rs);
+        const firstMissing = cov.missingVocabIds[0] || null;
+        const banner = document.createElement('div');
+        banner.id = 'readinessBanner';
+        banner.className = 'muted';
+        banner.style.cssText = 'font-size:12px;border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:8px';
+        banner.innerHTML = `먼저 학습하면 좋아요 — 새 단어 ${cov.missingVocabIds.length}개`
+          + (cov.missingGrammarIds.length ? ` · 새 문법 ${cov.missingGrammarIds.length}개` : '')
+          + (firstMissing
+              ? ` <button class="btn" id="readinessStudyBtn" data-vocab-id="${firstMissing}"
+                    style="margin-left:6px;font-size:11px;padding:2px 8px">관련 단어 학습</button>`
+              : '');
+        wrap.appendChild(banner);
+        const sb = banner.querySelector('#readinessStudyBtn');
+        if (sb) sb.addEventListener('click', () => {
+          window.location.hash = '#study/vocab/card/' + sb.dataset.vocabId;
+        });
+      }
+    }
+  }
 
   // 청해: 오디오 영역. TTS 결과에 따라 스크립트 노출 여부가 결정된다.
   if (isListening) {
@@ -168,6 +199,9 @@ export function renderQuestion(root, item, cb) {
       <div class="explain">
         <h3>${correct ? '✅ 정답입니다' : '❌ 오답입니다'}</h3>
         <p>${escape(q.explanation).replace(/\n/g, '<br>')}</p>
+        ${isVocab && q.extra?.reading
+          ? `<p class="muted romaji-sub" style="font-size:12px">발음: ${escape(q.extra.reading)} · ${escape(kanaToRomaji(q.extra.reading))}</p>`
+          : ''}
         ${wordTtsHtml}
         ${q.extra?.similarGrammarIds?.length
           ? `<p class="muted">비슷한 문법: ${q.extra.similarGrammarIds.join(', ')} (문법비교 탭에서 학습 가능)</p>`

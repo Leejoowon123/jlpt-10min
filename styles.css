@@ -777,3 +777,46 @@ rt {
   border: 1px solid var(--line);
   align-self: center;
 }
+
+/* ── 도움말 카드 (라운드 30 — 사용 매뉴얼 토글) ───────────────────── */
+.help-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  margin: 0 0 10px;
+  padding: 0;
+  font-size: 12px;
+  max-width: 100%;
+  overflow-wrap: break-word; /* 360px 폭에서 줄바꿈 안전 */
+}
+.help-card-summary {
+  cursor: pointer;
+  padding: 8px 10px;
+  font-weight: 700;
+  color: var(--muted);
+  user-select: none;
+}
+.help-card-body { padding: 0 12px 8px; }
+.help-card-line { margin: 4px 0; color: var(--muted); line-height: 1.5; }
+
+/* ── 단어 카드 하단 버튼 줄 (다음 단계 / 다음 단어) — 모바일 wrap 안전 ── */
+.vocab-card-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;       /* 360px 에서 줄바꿈되어도 깨지지 않게 */
+  margin-top: 10px;
+}
+.vocab-card-nav .btn { flex: 1 1 auto; min-width: 120px; }
+
+/* ── 음성 상태 배지 (설정) ─────────────────────────────────────────── */
+.voice-status-ok   { color: var(--good); font-weight: 700; }
+.voice-status-bad  { color: var(--muted); }
+.voice-status-wait { color: var(--accent); }
+
+/* ── romaji 발음 보조 표기 (라운드 31) — 일본어보다 시각 우선순위 낮게 ── */
+.romaji-sub {
+  font-size: 0.85em;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  word-break: break-word; /* 360px 줄바꿈 안전 */
+}

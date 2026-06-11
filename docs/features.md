@@ -647,3 +647,48 @@ topicSentenceCoverage(topicId, rs)             : { relatedCount, knownCount, par
 ## 관련 문서
 - 회화 어댑터 설계: [offline-conversation.md](./offline-conversation.md)
 - 브라우저 수동 QA: [browser-qa-checklist.md](./browser-qa-checklist.md)
+
+## 라운드 30 — 음성/매뉴얼/발음/단어 카드 UX
+
+### Web Speech 음성 감지 안정화 (js/tts.js voice manager)
+- 즉시 getVoices() + `voiceschanged` 이벤트 + 재시도 루프(0/250/500/1000/2000ms) + 캐시.
+- speak() 호출 시 마지막으로 한 번 더 재확인 — 늦게 로드된 음성 회수.
+- 설정 화면 「음성 상태」: 감지됨/없음/감지 중/미지원 + [음성 다시 감지] 버튼.
+- 자동 재생 실패(브라우저 정책, `playback-error`)와 voice 없음(`no-ja-voice`)은 별개 메시지.
+- 일본어 voice 가 없어도 흐름을 막지 않음 — 기존 스크립트/텍스트 폴백 유지.
+
+### 사용 매뉴얼 토글 (settings.helpEnabled, 기본 OFF)
+- 설정 「사용 매뉴얼 표시」 ON 시 8개 화면(홈/학습/단어 카드/문법/독해·청해/복습/이야기/회화)에
+  접이식(details) 도움말 카드. OFF 시 DOM 에서 제거.
+
+### 단어 발음 버튼
+- 학습>단어>찾아보기 row · 복습(실패 노트/자주 볼 단어/오늘 복습)의 vocab row 에 🔊 버튼.
+- aria-label/title 은 "발음 듣기" 고정 (단어/뜻 미포함 — 정답 누출 방지).
+- 클릭은 발음만 — 학습 기록/정답/오답/streak/행동 로그 변화 없음.
+
+### 단어 이미지 카드 흐름 (라운드 30 변경)
+| 단계형 | 흐름 |
+| --- | --- |
+| ON | expose1 → expose2 → recall(3/5/7초) → confirm → quiz → answered |
+| OFF | **quickPreview**(이미지+단어+읽기+뜻+발음) → quiz → answered |
+
+- 모든 비퀴즈 단계에 [다음 단계/바로 확인/퀴즈로] + **[다음 단어 ⏭]** 두 버튼.
+- 「다음 단계」= 같은 단어의 다음 단계. 「다음 단어」= skip — 정답/오답/실패 노트/정답률/
+  행동 로그 모두 기록하지 않고 다음 카드로 (마지막 단어면 세션 요약).
+- 학습 기록(recordResult/recordSessionItem/markStudiedToday/onAnswered)은 **quiz 답변 시점에만**.
+- 단계 전환·다음 단어 시 stopSpeaking() + recall 타이머 정리.
+
+## 라운드 31 — 단어 발음 보조 (romaji) + N5 의존성 백포트
+
+### 단어 발음 보조: 히라가나 + romaji 표시
+- `js/romaji.js` `kanaToRomaji()` — 기본 오십음/탁음·반탁음/요음(きゃ)/촉음(っ→자음 중복,
+  っち→tch)/장음(ー→직전 모음 반복)/ん→n. 조사 발음 특수처리 없음 (reading 그대로 변환).
+- `getVocabRomaji(v)` — `v.romaji` override 우선, 없으면 reading 런타임 변환 (데이터 수동 추가 없음).
+- 표시: 카드(expose/quickPreview/confirm/해설) `待つ（まつ · matsu）`, 목록 row `待つ · まつ · matsu`,
+  복습 row, 단어 예문 문제 해설, 스토리 하이라이트 패널. `.romaji-sub` 보조 스타일(작고 muted).
+- 누출 방지: recall/quiz thinking 에 미표시, aria-label/title 미주입. TTS 는 일본어 원문만 (romaji 미전달).
+
+### N5 의존성 백포트
+- N5 reading/listening 80건 전수에 vocabIds/grammarIds/optional*/requiredCoverage(0.7) 태깅
+  (`scripts/gen-deps-n5.mjs` 생성·검수 후 베이크). **N5 콘텐츠는 N5 id 만 참조** (smoke blocking).
+- N5 스토리 8건 vocabularyIds/grammarIds 보강. 준비도 배지/스토리 라벨/locked 안내가 N5 에서도 동작.

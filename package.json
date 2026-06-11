@@ -5,7 +5,8 @@
   "scripts": {
     "smoke": "node smoke.mjs",
     "qa": "node qa.mjs",
-    "test": "node smoke.mjs && node qa.mjs"
+    "test": "node smoke.mjs && node qa.mjs",
+    "content:report": "node scripts/content-report.mjs"
   },
   "devDependencies": {
     "jsdom": "^29.1.1"

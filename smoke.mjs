@@ -43,9 +43,10 @@ console.log('');
 //   2.1:    vocab 100 / grammar 30 / reading·listening 12 / pairs 8 (페어 동결)
 //   2.2:    vocab 130 / grammar 35 / reading·listening 16 / pairs 8 (페어 동결)
 //   대량1차: vocab 250 / grammar 45 / reading·listening 25 / pairs 8 (페어 동결)
-const N5_MIN = { vocab: 250, grammar: 45, reading: 25, listening: 25, pairs: 8 };
+//   N5마무리(라운드 24): vocab 500 / kanji 100 / reading·listening 40 / sentenceBank 220
+const N5_MIN = { vocab: 500, grammar: 45, reading: 40, listening: 40, pairs: 8 };
 for (const [k, min] of Object.entries(N5_MIN)) {
-  ok(`N5 ${k} >= ${min} (대량1차)`, counts[k].N5 >= min, `actual=${counts[k].N5}`);
+  ok(`N5 ${k} >= ${min} (N5마무리)`, counts[k].N5 >= min, `actual=${counts[k].N5}`);
 }
 
 // 2) 데이터 무결성
@@ -521,9 +522,11 @@ for (const s of sentenceBank) {
   ok(`sentence ${s.id}: canUseInConversation boolean`, typeof s.canUseInConversation === 'boolean');
   if (s.canUseInConversation) trueConvCount++;
 }
-// 임계치 — N5 대량1차 기준 (N5 sentenceBank ≥ 150)
+// 임계치 — N5 마무리 기준 (N5 sentenceBank ≥ 220, 회화 가능 ≥ 120)
 const n5Sentences = sentenceBank.filter(s => s.level === 'N5').length;
-ok(`sentenceBank: N5 >= 150 (대량1차)`, n5Sentences >= 150, `actual=${n5Sentences}`);
+ok(`sentenceBank: N5 >= 220 (N5마무리)`, n5Sentences >= 220, `actual=${n5Sentences}`);
+const n5ConvSentences = sentenceBank.filter(s => s.level === 'N5' && s.canUseInConversation === true).length;
+ok(`sentenceBank: N5 회화 가능 >= 120 (N5마무리)`, n5ConvSentences >= 120, `actual=${n5ConvSentences}`);
 ok(`sentenceBank: canUseInConversation==true >= 20`, trueConvCount >= 20, `actual=${trueConvCount}`);
 ok(`sentenceBank: total >= 150`, sentenceBank.length >= 150, `actual=${sentenceBank.length}`);
 
@@ -782,24 +785,56 @@ ok('questionView calls onAnswered with payload',
    /onAnswered\s*\?\.\s*\(\s*\{[^}]*correct[^}]*itemType[^}]*itemId[^}]*\}\s*\)/.test(qvCodeOnly));
 
 // ── 콘텐츠 품질 감사 (실패가 아닌 경고 위주) ─────────────────────
-//   - 명백한 오류는 ok() 로 실패 처리. 품질 경고는 console.log 로만.
+//   - 명백한 오류는 ok() 로 실패 처리 (blocking).
+//   - 경고는 2단 분류 (라운드 25 안정화):
+//       unreviewed — 아직 판정하지 않은 신규 경고. 0 으로 줄이는 것이 목표.
+//       reviewed   — 검토 후 의도적으로 유지하기로 판정한 경고 (사유는 docs/content-status.md).
 //   - 향후 N5 500 / N4 확장 시에도 같은 기준 적용.
 const warnings = [];
 const warn = (msg) => warnings.push(msg);
+const reviewedWarnings = [];
+const warnReviewed = (msg) => reviewedWarnings.push(msg);
 
 console.log('\n=== 콘텐츠 품질 감사 ===');
 
-// vocab.word 중복 → 명백한 오류로 실패
+// vocab.word 전역 중복 → 명백한 오류로 실패 (라운드 27 — 레벨 교차 중복도 금지)
 const _wordSeen = new Map();
 for (const v of vocab) {
-  const key = `${v.level}:${v.word}`;
-  if (_wordSeen.has(key)) {
-    ok(`vocab.word 중복 금지 ${v.id} vs ${_wordSeen.get(key)}: "${v.word}"`, false);
+  if (_wordSeen.has(v.word)) {
+    ok(`vocab.word 전역 중복 금지 ${v.id} vs ${_wordSeen.get(v.word)}: "${v.word}"`, false);
   } else {
-    _wordSeen.set(key, v.id);
+    _wordSeen.set(v.word, v.id);
   }
 }
-ok('vocab.word 모두 고유 (레벨 내)', true); // sentinel — 위 루프가 실패하면 이미 errs에 추가
+ok('vocab.word 전역 고유 (레벨 교차 포함)', true); // sentinel — 위 루프가 실패하면 이미 errs에 추가
+
+// reading + meaningKo 조합 중복 → 경고 (동철이의어/사실상 같은 항목 검토용)
+{
+  const _rmSeen = new Map();
+  const _rmDups = [];
+  for (const v of vocab) {
+    const key = `${v.reading}|${v.meaningKo}`;
+    if (_rmSeen.has(key)) _rmDups.push(`${_rmSeen.get(key)} vs ${v.id}: ${v.reading}/${v.meaningKo}`);
+    else _rmSeen.set(key, v.id);
+  }
+  if (_rmDups.length) {
+    warn(`vocab reading+meaningKo 조합 중복: ${_rmDups.length}건`);
+    for (const d of _rmDups.slice(0, 5)) warn(`  ${d}`);
+  }
+}
+
+// meaningKo 완전 동일 쌍 → reviewed 리포트 (라운드 28 판정):
+//   한국어 뜻이 같아도 단어가 다르면 유의어쌍(車/自動車) 또는 한국어 동철이의
+//   (書く 쓰다[write] / 苦い 쓰다[bitter])로 의도적 — 검토 후 유지. 수가 급증하면 재검토.
+{
+  const _mkSeen = new Map();
+  let _mkPairs = 0;
+  for (const v of vocab) {
+    if (_mkSeen.has(v.meaningKo)) _mkPairs++;
+    else _mkSeen.set(v.meaningKo, v.word);
+  }
+  if (_mkPairs) warnReviewed(`vocab meaningKo 동일 쌍 (유의어/한국어 동철이의 — 검토 후 유지): ${_mkPairs}건`);
+}
 
 // vocab.meaningKo 과다 중복 → 경고 (3개 이상 같은 의미)
 const _meaningCount = {};
@@ -813,16 +848,72 @@ if (meaningDups.length) {
   for (const [m, ids] of meaningDups.slice(0, 5)) warn(`  "${m}" — ${ids.join(', ')}`);
 }
 
-// vocab.exampleSentence 중복 → 경고 (같은 예문을 여러 vocab이 공유)
+// vocab.exampleSentence 완전 중복 → 명백한 오류로 실패 (라운드 27 상향)
 const _sentSeen = {};
 for (const v of vocab) {
   const s = v.exampleSentence;
   (_sentSeen[s] = _sentSeen[s] || []).push(`${v.id}:${v.word}`);
 }
 const sentDups = Object.entries(_sentSeen).filter(([, arr]) => arr.length >= 2);
-if (sentDups.length) {
-  warn(`vocab exampleSentence 중복: ${sentDups.length}건`);
-  for (const [s, ids] of sentDups.slice(0, 5)) warn(`  "${s}" — ${ids.join(', ')}`);
+for (const [s, ids] of sentDups) {
+  ok(`vocab exampleSentence 완전 중복 금지: "${s}" — ${ids.join(', ')}`, false);
+}
+ok('vocab exampleSentence 완전 중복 0', true);
+
+// 유사 exampleSentence 후보 → 경고 (공백/구두점 제거 후 편집거리 ≤2)
+//   같은 단어쌍을 가르치는 사실상 같은 예문을 찾기 위한 리포트.
+{
+  const norm = (s) => (s || '').replace(/[、。!?！？\s]/g, '');
+  function editDist2(a, b) {
+    // 편집거리 ≤2 인지 빠르게 판정 (밴드 폭 2)
+    if (Math.abs(a.length - b.length) > 2) return false;
+    const m = a.length, n = b.length;
+    let prev = Array.from({ length: n + 1 }, (_, j) => j);
+    for (let i = 1; i <= m; i++) {
+      const cur = [i];
+      let rowMin = i;
+      for (let j = 1; j <= n; j++) {
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+        if (cur[j] < rowMin) rowMin = cur[j];
+      }
+      if (rowMin > 2) return false;
+      prev = cur;
+    }
+    return prev[n] <= 2;
+  }
+  const entries = vocab.filter(v => v.exampleSentence)
+    .map(v => ({ id: v.id, word: v.word, n: norm(v.exampleSentence) }));
+  // 길이 버킷으로 비교 횟수 제한
+  const byLen = new Map();
+  for (const e of entries) {
+    for (const L of [e.n.length - 1, e.n.length, e.n.length + 1, e.n.length + 2]) {
+      if (!byLen.has(L)) byLen.set(L, []);
+    }
+    byLen.get(e.n.length).push(e);
+  }
+  const similar = [];
+  for (let i = 0; i < entries.length; i++) {
+    const a = entries[i];
+    for (let dl = 0; dl <= 2; dl++) {
+      for (const b of (byLen.get(a.n.length + dl) || [])) {
+        if (b === a) continue;
+        if (dl === 0 && entries.indexOf(b) <= i) continue; // 같은 버킷 중복 비교 방지
+        if (a.n === b.n) continue; // 완전 중복은 위에서 blocking
+        if (a.n.length >= 6 && editDist2(a.n, b.n)) {
+          similar.push(`${a.id}(${a.word}) ≈ ${b.id}(${b.word})`);
+          if (similar.length >= 30) break;
+        }
+      }
+      if (similar.length >= 30) break;
+    }
+    if (similar.length >= 30) break;
+  }
+  // 라운드 27 판정: 전수 검토 결과 전부 "최소 문형 공유" (Xが痛いです / Xを買いました 등)
+  //   — 서로 다른 표제어를 같은 기초 문형으로 가르치는 의도적 패턴. 완전 중복은
+  //   위의 blocking 검증이 별도로 차단하므로 이 범주는 검토 후 유지.
+  if (similar.length) {
+    warnReviewed(`vocab 유사 예문 (최소 문형 공유 — 검토 후 유지, 상위 30 표집): ${similar.length}건`);
+  }
 }
 
 // vocab.exampleTranslation 누락 또는 너무 짧음
@@ -846,16 +937,33 @@ if (longSentences.length) {
 }
 
 // N5치고 어려운 한자 후보 — 예문 한자 개수 ≥5
+//   라운드 25 판정 기준: 예문의 모든 한자가 "N5 학습 범위"
+//   (N5 한자 덱 100자 ∪ N5 단어 표제어 한자) 안이고 후리가나 100% 이면
+//   학습 대상 노출이므로 "검토 후 유지" (reviewed). 범위 밖 한자가 섞이면 unreviewed.
 const KANJI_RE = /[一-鿿]/g;
-const hardKanji = [];
+const { kanji: _kanjiForAudit } = await import('./js/data/kanji.js');
+const _n5LearnableKanji = new Set();
+for (const k of _kanjiForAudit.filter(x => x.level === 'N5')) _n5LearnableKanji.add(k.kanji);
 for (const v of vocab.filter(x => x.level === 'N5')) {
-  const k = (v.exampleSentence.match(KANJI_RE) || []).length;
-  if (k >= 5) hardKanji.push({ id: v.id, word: v.word, kanjiCount: k, text: v.exampleSentence });
+  for (const c of (v.word.match(KANJI_RE) || [])) _n5LearnableKanji.add(c);
 }
-if (hardKanji.length) {
-  hardKanji.sort((a, b) => b.kanjiCount - a.kanjiCount);
-  warn(`N5 예문 한자 ≥5개: ${hardKanji.length}건 (난이도 검토 필요 후보)`);
-  for (const x of hardKanji.slice(0, 5)) warn(`  ${x.id} (한자 ${x.kanjiCount}) ${x.word}: ${x.text}`);
+const hardKanjiReviewed = [];
+const hardKanjiUnreviewed = [];
+for (const v of vocab.filter(x => x.level === 'N5')) {
+  const ks = v.exampleSentence.match(KANJI_RE) || [];
+  if (ks.length < 5) continue;
+  const outside = [...new Set(ks)].filter(c => !_n5LearnableKanji.has(c));
+  const entry = { id: v.id, word: v.word, kanjiCount: ks.length, outside, text: v.exampleSentence };
+  (outside.length ? hardKanjiUnreviewed : hardKanjiReviewed).push(entry);
+}
+if (hardKanjiReviewed.length) {
+  warnReviewed(`N5 예문 한자 ≥5개 (전부 N5 학습 범위 내 — 검토 후 유지): ${hardKanjiReviewed.length}건`);
+}
+if (hardKanjiUnreviewed.length) {
+  hardKanjiUnreviewed.sort((a, b) => b.kanjiCount - a.kanjiCount);
+  warn(`N5 예문에 N5 학습 범위 밖 한자: ${hardKanjiUnreviewed.length}건 (예문 수정 필요)`);
+  for (const x of hardKanjiUnreviewed.slice(0, 5))
+    warn(`  ${x.id} ${x.word} 밖:[${x.outside.join('')}] ${x.text}`);
 }
 
 // grammar.pattern 중복
@@ -870,33 +978,80 @@ for (const g of grammar) {
 }
 ok('grammar.pattern 모두 고유 (레벨 내)', true);
 
-// reading/listening choices 안 중복은 기존 check 가 잡음 — 보강:
-//   choices 가 본문/scenario 와 무관하게 진짜 의미 있는지 정도만 경고.
+// reading/listening choices — 빈 choice 경고 + 항목 내 중복 blocking (라운드 27)
 let _shortChoices = 0;
 for (const x of [...reading, ...listening]) {
   for (const c of x.choices) {
     if (!c || c.trim().length === 0) _shortChoices++;
   }
+  if (new Set(x.choices).size !== x.choices.length) {
+    ok(`choices 항목 내 중복 금지: ${x.id}`, false);
+  }
 }
+ok('reading/listening choices 항목 내 중복 0', true);
 if (_shortChoices) warn(`reading/listening 빈 choice: ${_shortChoices}건`);
 
-// sentenceBank.ja 중복 → 경고
+// sentenceBank.ja 완전 중복 → 명백한 오류로 실패 (라운드 27 상향)
 const _sbSeen = {};
 for (const s of sentenceBank) {
   (_sbSeen[s.ja] = _sbSeen[s.ja] || []).push(s.id);
 }
 const sbDups = Object.entries(_sbSeen).filter(([, arr]) => arr.length >= 2);
-if (sbDups.length) {
-  warn(`sentenceBank.ja 중복: ${sbDups.length}건`);
-  for (const [s, ids] of sbDups.slice(0, 5)) warn(`  "${s}" — ${ids.join(', ')}`);
+for (const [s, ids] of sbDups) {
+  ok(`sentenceBank.ja 완전 중복 금지: "${s}" — ${ids.join(', ')}`, false);
+}
+ok('sentenceBank.ja 완전 중복 0', true);
+
+// vocab 예문 ↔ sentenceBank.ja 완전 중복 — 분류 (라운드 27 판정):
+//   sentenceBank 는 설계상 vocab 예문을 sourceId/vocabIds 로 연결해 재사용한다.
+//   (1) 연결 있음 → 의도된 재사용 (reviewed)
+//   (2) 연결 없지만 문장이 그 표제어를 포함 → 정당한 우연 재사용 (reviewed)
+//   (3) 연결도 없고 표제어도 없음 → 무관한 복사 의심 (unreviewed)
+{
+  const sbByJa = new Map(sentenceBank.map(s => [s.ja, s]));
+  let linkedReuse = 0, containsReuse = 0;
+  const suspicious = [];
+  for (const v of vocab) {
+    const s = v.exampleSentence && sbByJa.get(v.exampleSentence);
+    if (!s) continue;
+    if (s.sourceId === v.id || (s.vocabIds || []).includes(v.id)) linkedReuse++;
+    else if (s.ja.includes(v.word) ||
+             (v.word.length >= 2 && s.ja.includes(v.word.slice(0, -1)))) containsReuse++; // 동사 활용형(言う→言って) 허용
+    else suspicious.push(`${v.id}(${v.word}) = ${s.id}`);
+  }
+  if (linkedReuse + containsReuse > 0) {
+    warnReviewed(`vocab 예문 ↔ sentenceBank 재사용 (소스 연결 ${linkedReuse} + 표제어 포함 ${containsReuse} — 설계상 의도)`);
+  }
+  if (suspicious.length) {
+    warn(`vocab 예문 ↔ sentenceBank 무관 복사 의심: ${suspicious.length}건`);
+    for (const c of suspicious.slice(0, 5)) warn(`  ${c}`);
+  }
 }
 
-// 출력
-console.log(`  품질 경고 수: ${warnings.length}`);
+// N4 콘텐츠에 N3/N2 급 문법 패턴 혼입 후보 → 경고
+{
+  const HARD_PATTERNS = /(に違いない|ばかりか|ものだから|ものだ。|べきだ|ざるを得|としたら|に関して|に対して|どころか|つつある|を通じて|につき)/;
+  const hits = [];
+  for (const v of vocab.filter(x => x.level === 'N4')) {
+    if (HARD_PATTERNS.test(v.exampleSentence)) hits.push(`vocab ${v.id}: ${v.exampleSentence}`);
+  }
+  for (const s of sentenceBank.filter(x => x.level === 'N4')) {
+    if (HARD_PATTERNS.test(s.ja)) hits.push(`sent ${s.id}: ${s.ja}`);
+  }
+  if (hits.length) {
+    warn(`N4 콘텐츠에 N3/N2 급 문법 패턴 후보: ${hits.length}건`);
+    for (const h of hits.slice(0, 5)) warn(`  ${h}`);
+  }
+}
+
+// 출력 — blocking 은 ok() 실패로 이미 처리. 여기서는 경고 2단 분류 출력.
+console.log(`  unreviewed 경고: ${warnings.length}건 (목표 0)`);
 if (warnings.length) {
-  console.log('  WARNINGS (상위 20):');
+  console.log('  UNREVIEWED WARNINGS (상위 20):');
   for (const w of warnings.slice(0, 20)) console.log(`    - ${w}`);
 }
+console.log(`  reviewed 경고 (검토 후 유지): ${reviewedWarnings.length}건`);
+for (const w of reviewedWarnings) console.log(`    - ${w}`);
 
 // ── imageKey 중복 리포트 상세 (단어 예시 포함) ───────────────────
 // ── 한자 데이터 검증 ──────────────────────────────────────────────
@@ -905,7 +1060,7 @@ const { kanaChart } = await import('./js/data/kana.js');
 
 ok('kanji is array', Array.isArray(kanji));
 const _n5KanjiCount = kanji.filter(k => k.level === 'N5').length;
-ok('N5 kanji >= 50 (대량1차)', _n5KanjiCount >= 50, `actual=${_n5KanjiCount}`);
+ok('N5 kanji >= 100 (N5마무리)', _n5KanjiCount >= 100, `actual=${_n5KanjiCount}`);
 
 const _kanjiSeen = new Set();
 const KANJI_LEVELS = new Set(['N5','N4','N3','N2']);
@@ -1029,6 +1184,33 @@ ok(`N5 reading passage furigana 커버율 == 100%`,  pct(covReading) === 100, `p
 ok(`N5 listening script furigana 커버율 == 100%`, pct(covListen)  === 100, `pct=${pct(covListen)}%`);
 ok(`N5 sentenceBank ja furigana 커버율 == 100%`,  pct(covSent)    === 100, `pct=${pct(covSent)}%`);
 
+// ── readings 정합 검증 (라운드 25 안정화 — blocking) ──────────────────
+//   명시 readings 의 text 는 반드시 대상 문장 안에 실제로 존재해야 한다.
+//   (질문용 단어를 scriptReadings 에 넣는 식의 혼입 방지.)
+{
+  let stale = 0;
+  const staleSamples = [];
+  const checkReadings = (items, jaPick, readingsPick, label) => {
+    for (const it of items) {
+      const ja = jaPick(it);
+      if (!ja) continue;
+      for (const r of (readingsPick(it) || [])) {
+        if (!ja.includes(r.text)) {
+          stale++;
+          if (staleSamples.length < 5) staleSamples.push(`${label} ${it.id}: '${r.text}'`);
+        }
+      }
+    }
+  };
+  checkReadings(vocab,        v => v.exampleSentence, v => v.exampleReadings,  'vocab');
+  checkReadings(reading,      r => r.passage,         r => r.passageReadings,  'reading');
+  checkReadings(reading,      r => r.question,        r => r.questionReadings, 'reading.q');
+  checkReadings(listening,    l => l.script,          l => l.scriptReadings,   'listening');
+  checkReadings(sentenceBank, s => s.ja,              s => s.readings,         'sentence');
+  ok('명시 readings text 가 모두 대상 문장에 존재', stale === 0,
+     `stale=${stale} ${staleSamples.join(' / ')}`);
+}
+
 // ── N4 후리가나 커버율 (라운드 14) ─────────────────────────────────────
 const cN4V = coverageFor('N4', vocab,    v => v.exampleSentence, v => v.exampleReadings);
 const cN4G = coverageFor('N4', grammar,  g => g.examples?.[0]?.ja, g => g.examples?.[0]?.readings);
@@ -1041,22 +1223,22 @@ console.log(`  grammar  example: ${cN4G.covered}/${cN4G.withKanji}  (${pct(cN4G)
 console.log(`  reading  passage: ${cN4R.covered}/${cN4R.withKanji}  (${pct(cN4R)}%)`);
 console.log(`  listen   script:  ${cN4L.covered}/${cN4L.withKanji}  (${pct(cN4L)}%)`);
 console.log(`  sentence ja:      ${cN4S.covered}/${cN4S.withKanji}  (${pct(cN4S)}%)`);
-ok('N4 vocab example furigana ≥ 80%',    pct(cN4V) >= 80, `pct=${pct(cN4V)}%`);
-ok('N4 grammar example furigana ≥ 80%',  pct(cN4G) >= 80, `pct=${pct(cN4G)}%`);
-ok('N4 reading passage furigana ≥ 80%',  pct(cN4R) >= 80, `pct=${pct(cN4R)}%`);
-ok('N4 listening script furigana ≥ 80%', pct(cN4L) >= 80, `pct=${pct(cN4L)}%`);
-ok('N4 sentenceBank furigana ≥ 80%',     pct(cN4S) >= 80, `pct=${pct(cN4S)}%`);
+ok('N4 vocab example furigana == 100% (1차 B)',    pct(cN4V) === 100, `pct=${pct(cN4V)}%`);
+ok('N4 grammar example furigana == 100% (1차 B)',  pct(cN4G) === 100, `pct=${pct(cN4G)}%`);
+ok('N4 reading passage furigana == 100% (1차 B)',  pct(cN4R) === 100, `pct=${pct(cN4R)}%`);
+ok('N4 listening script furigana == 100% (1차 B)', pct(cN4L) === 100, `pct=${pct(cN4L)}%`);
+ok('N4 sentenceBank furigana == 100% (1차 B)',     pct(cN4S) === 100, `pct=${pct(cN4S)}%`);
 
 // N4 1차 시드 — 수량 sentinel
-ok('N4 vocab ≥ 250',         vocab.filter(v=>v.level==='N4').length >= 250,
+ok('N4 vocab ≥ 900 (완성 D)',         vocab.filter(v=>v.level==='N4').length >= 900,
    `count=${vocab.filter(v=>v.level==='N4').length}`);
-ok('N4 grammar ≥ 40',        grammar.filter(g=>g.level==='N4').length >= 40,
+ok('N4 grammar ≥ 85 (완성 D)',        grammar.filter(g=>g.level==='N4').length >= 85,
    `count=${grammar.filter(g=>g.level==='N4').length}`);
-ok('N4 reading ≥ 20',        reading.filter(r=>r.level==='N4').length >= 20,
+ok('N4 reading ≥ 60 (완성 D)',        reading.filter(r=>r.level==='N4').length >= 60,
    `count=${reading.filter(r=>r.level==='N4').length}`);
-ok('N4 listening ≥ 20',      listening.filter(l=>l.level==='N4').length >= 20,
+ok('N4 listening ≥ 60 (완성 D)',      listening.filter(l=>l.level==='N4').length >= 60,
    `count=${listening.filter(l=>l.level==='N4').length}`);
-ok('N4 sentenceBank ≥ 100',  sentenceBank.filter(s=>s.level==='N4').length >= 100,
+ok('N4 sentenceBank ≥ 300 (완성 D)',  sentenceBank.filter(s=>s.level==='N4').length >= 300,
    `count=${sentenceBank.filter(s=>s.level==='N4').length}`);
 ok('N4 grammarPairs ≥ 8',    grammarPairs.filter(p=>p.level==='N4').length >= 8,
    `count=${grammarPairs.filter(p=>p.level==='N4').length}`);
@@ -1279,21 +1461,77 @@ ok('stories — N5 단편 소설 ≥ 3',
    `count=${getNovelsForListing().filter(s => s.level === 'N5').length}`);
 
 // 라운드 14 — N4 stories / novels
-ok('stories — N4 이야기 ≥ 4',
-   getStoriesForListing().filter(s => s.level === 'N4').length >= 4,
+ok('stories — N4 이야기 ≥ 6 (1차 B)',
+   getStoriesForListing().filter(s => s.level === 'N4').length >= 6,
    `count=${getStoriesForListing().filter(s => s.level === 'N4').length}`);
-ok('stories — N4 단편 소설 ≥ 2',
-   getNovelsForListing().filter(s => s.level === 'N4').length >= 2,
+ok('stories — N4 단편 소설 ≥ 4 (1차 B)',
+   getNovelsForListing().filter(s => s.level === 'N4').length >= 4,
    `count=${getNovelsForListing().filter(s => s.level === 'N4').length}`);
 // N4 kanji + conversation topics
 const { kanji: _kanji } = await import('./js/data/kanji.js');
-ok('N4 kanji ≥ 100',
-   _kanji.filter(k => k.level === 'N4').length >= 100,
+ok('N4 kanji ≥ 200 (완성 C)',
+   _kanji.filter(k => k.level === 'N4').length >= 200,
    `count=${_kanji.filter(k => k.level === 'N4').length}`);
 const { conversationTopics: _convs } = await import('./js/data/conversationTopics.js');
-ok('N4 conversationTopics ≥ 6',
-   _convs.filter(t => t.level === 'N4').length >= 6,
+ok('N4 conversationTopics ≥ 10 (완성 D)',
+   _convs.filter(t => t.level === 'N4').length >= 10,
    `count=${_convs.filter(t => t.level === 'N4').length}`);
+
+// 라운드 22 (N4 1차 A 점검) — N4 토픽별 sentenceBank 매칭 ≥ 3 (situationTags 교집합 기준)
+for (const t of _convs.filter(x => x.level === 'N4')) {
+  const tags = new Set(t.situationTags || []);
+  const matched = sentenceBank.filter(x =>
+    x.level === 'N4' && x.canUseInConversation &&
+    (x.situationTags || []).some(tag => tags.has(tag)));
+  ok(`N4 topic ${t.id}: 회화 가능 문장 매칭 ≥ 3`, matched.length >= 3,
+     `matched=${matched.length}`);
+}
+// N4 sentenceBank canUseInConversation ≥ 25
+ok('N4 sentenceBank canUseInConversation ≥ 25',
+   sentenceBank.filter(s => s.level === 'N4' && s.canUseInConversation).length >= 25);
+
+// ── 라운드 23: content-report ↔ smoke 수량 일치 + levelTargets 무결성 ─────
+const report = await import('./scripts/content-report.mjs');
+const _core = report.computeCoreStatus();
+const _n5row = _core.find(r => r.level === 'N5');
+const _n4row = _core.find(r => r.level === 'N4');
+ok('content-report: N5 vocab 누적 == smoke 집계',
+   _n5row.vocab.cur === vocab.filter(v => v.level === 'N5').length);
+ok('content-report: N4 vocab 누적 == N5+N4 합산',
+   _n4row.vocab.cur === vocab.filter(v => ['N5','N4'].includes(v.level)).length);
+ok('content-report: N4 grammar == smoke 집계',
+   _n4row.grammar.cur === grammar.filter(g => g.level === 'N4').length);
+ok('content-report: N4 reading/listening == smoke 집계',
+   _n4row.reading.cur === reading.filter(r => r.level === 'N4').length &&
+   _n4row.listening.cur === listening.filter(l => l.level === 'N4').length);
+const _aux = report.computeAuxStatus();
+const _n4aux = _aux.find(r => r.level === 'N4');
+ok('content-report: N4 보조 콘텐츠 == smoke 집계',
+   _n4aux.sentenceBank === sentenceBank.filter(s => s.level === 'N4').length &&
+   _n4aux.stories + _n4aux.shortStories === stories.filter(s => s.level === 'N4').length &&
+   _n4aux.conversationTopics === _convs.filter(t => t.level === 'N4').length);
+// levelTargets 기준 무결성 — 실수로 목표치가 깨지면 실패
+const { levelTargets: _lt } = await import('./js/data/levelTargets.js');
+ok('levelTargets: 4개 레벨 정의', _lt.length === 4 &&
+   ['N5','N4','N3','N2'].every(L => _lt.some(t => t.level === L)));
+ok('levelTargets: 누적 목표 단조 증가 (vocab/kanji)',
+   _lt[0].targetVocab < _lt[1].targetVocab && _lt[1].targetVocab < _lt[2].targetVocab &&
+   _lt[2].targetVocab < _lt[3].targetVocab &&
+   _lt[0].targetKanji < _lt[1].targetKanji && _lt[2].targetKanji < _lt[3].targetKanji);
+ok('levelTargets: 범위 목표 min ≤ max',
+   _lt.every(t => t.targetGrammarMin <= t.targetGrammarMax &&
+                  t.targetReadingMin <= t.targetReadingMax &&
+                  t.targetListeningMin <= t.targetListeningMax));
+// renderMarkdown 이 표를 생성하는지 (문서 갱신 가능성 보장)
+const _md = report.renderMarkdown();
+ok('content-report: Markdown 표 생성',
+   _md.includes('| 레벨 | 영역 |') && _md.includes('| N5 | vocab(누적) |'));
+// docs/content-status.md 존재 + 기준 설명 포함 (_fs 는 뒤에서 선언되므로 지역 import)
+const _fs23 = await import('node:fs');
+const statusDoc = _fs23.readFileSync(new URL('./docs/content-status.md', import.meta.url), 'utf8');
+ok('content-status.md: 존재 + 누적/범위/내부 목표치 설명',
+   /누적/.test(statusDoc) && /공식 확정 목록이 아니/.test(statusDoc) &&
+   /min~max|범위 목표/.test(statusDoc));
 
 // ── N5 stories body 후리가나 커버율 ──────────────────────────────────────
 const _allN5Stories = stories.filter(s => s.level === 'N5');
@@ -1959,6 +2197,260 @@ ok('data/n4/stories.json — JS 원본과 항목 수 일치',
 ok('data/n4/stories.json — sourceType 모두 original',
    _jsonRaw.every(s => s.sourceType === 'original'));
 
+
+// ── 라운드 29: 콘텐츠 의존성 + 준비도 유틸 검증 ─────────────────────────
+{
+  const _vSet = new Set(vocab.map(v => v.id));
+  const _gSet = new Set(grammar.map(g => g.id));
+  const _vLevel = new Map(vocab.map(v => [v.id, v.level]));
+  const _gLevel = new Map(grammar.map(g => [g.id, g.level]));
+  const ALLOWED_N4_DEP_LEVELS = new Set(['N4', 'N5']);
+
+  let _depBad = 0, _depLevelBad = 0, _depCore0 = 0, _depTagged = 0;
+  for (const [label, items] of [['reading', reading], ['listening', listening]]) {
+    for (const it of items.filter(x => x.level === 'N4')) {
+      const vAll = [...(it.vocabIds || []), ...(it.optionalVocabIds || [])];
+      const gAll = [...(it.grammarIds || []), ...(it.optionalGrammarIds || [])];
+      if (it.vocabIds || it.grammarIds) _depTagged++;
+      for (const id of vAll) {
+        if (!_vSet.has(id)) { ok(`${label} ${it.id}: dep vocab ${id} 존재`, false); _depBad++; }
+        else if (!ALLOWED_N4_DEP_LEVELS.has(_vLevel.get(id))) { ok(`${label} ${it.id}: dep vocab ${id} 레벨(N4/N5)`, false); _depLevelBad++; }
+      }
+      for (const id of gAll) {
+        if (!_gSet.has(id)) { ok(`${label} ${it.id}: dep grammar ${id} 존재`, false); _depBad++; }
+        else if (!ALLOWED_N4_DEP_LEVELS.has(_gLevel.get(id))) { ok(`${label} ${it.id}: dep grammar ${id} 레벨(N4/N5)`, false); _depLevelBad++; }
+      }
+      if (((it.vocabIds || []).length + (it.grammarIds || []).length) === 0) {
+        ok(`${label} ${it.id}: 핵심 의존성 ≥ 1`, false); _depCore0++;
+      }
+    }
+  }
+  ok('N4 reading/listening 의존성 참조 무결성 0 오류', _depBad === 0);
+  ok('N4 의존성 레벨 검사 (N3/N2 혼입 0)', _depLevelBad === 0);
+  ok('N4 reading/listening 핵심 의존성 0건 없음', _depCore0 === 0);
+  ok('N4 reading/listening 의존성 태깅 == 전수',
+     _depTagged === reading.filter(r=>r.level==='N4').length + listening.filter(l=>l.level==='N4').length,
+     `tagged=${_depTagged}`);
+
+  let _stBad = 0;
+  const { stories: _storiesDep } = await import('./js/data/stories.js');
+  for (const s of _storiesDep.filter(x => x.level === 'N4')) {
+    for (const id of (s.vocabularyIds || [])) if (!_vSet.has(id)) { ok(`story ${s.id}: vocabularyIds ${id} 존재`, false); _stBad++; }
+    for (const id of (s.grammarIds || [])) if (!_gSet.has(id)) { ok(`story ${s.id}: grammarIds ${id} 존재`, false); _stBad++; }
+    ok(`story ${s.id}: vocabularyIds 보강됨 (≥ 5)`, (s.vocabularyIds || []).length >= 5,
+       `count=${(s.vocabularyIds || []).length}`);
+  }
+  ok('story 의존성 참조 무결성 0 오류', _stBad === 0);
+
+  const { conversationTopics: _topicsDep } = await import('./js/data/conversationTopics.js');
+  let _tpBad = 0;
+  for (const t of _topicsDep) {
+    for (const id of (t.optionalVocabIds || [])) if (!_vSet.has(id)) _tpBad++;
+    for (const id of (t.optionalGrammarIds || [])) if (!_gSet.has(id)) _tpBad++;
+  }
+  ok('conversationTopics optional ids 참조 무결성', _tpBad === 0);
+
+  const cr = await import('./js/contentReadiness.js');
+  const mockItem = { vocabIds: ['a','b','c','d'], grammarIds: ['e'] };
+  const allKnown = { a:1,b:1,c:1,d:1,e:1 };
+  const fourKnown = { a:1,b:1,c:1,d:1 };
+  const threeKnown = { a:1,b:1,c:1 };
+  const twoKnown = { a:1,b:1 };
+  ok('readiness: 100% → ready', cr.classifyContentReadiness(mockItem, allKnown) === 'ready');
+  ok('readiness: 0.8 경계 → ready', cr.classifyContentReadiness(mockItem, fourKnown) === 'ready');
+  ok('readiness: 0.6 → good_next', cr.classifyContentReadiness(mockItem, threeKnown) === 'good_next');
+  ok('readiness: 0.4 → locked', cr.classifyContentReadiness(mockItem, twoKnown) === 'locked');
+  ok('readiness: 의존성 없음 → ready', cr.classifyContentReadiness({}, {}) === 'ready');
+  const _covT = cr.getLearnedCoverage(mockItem, threeKnown);
+  ok('coverage: 필드 정합', _covT.vocabTotal === 4 && _covT.vocabKnown === 3 && _covT.grammarTotal === 1
+     && _covT.grammarKnown === 0 && _covT.missingVocabIds.length === 1 && _covT.missingGrammarIds.length === 1);
+  ok('dependency: reading', (cr.getItemDependency('reading', 'r_n4_21')?.vocabIds || []).length >= 1);
+  ok('dependency: listening', (cr.getItemDependency('listening', 'l_n4_21')?.vocabIds || []).length >= 1);
+  ok('dependency: story', (cr.getItemDependency('story', 'story_n4_007')?.vocabIds || []).length >= 1);
+  ok('dependency: conversationTopic', (cr.getItemDependency('conversationTopic', 'conv_n4_hotel_stay')?.vocabIds || []).length >= 1);
+  for (const [name, fn] of [['reading', cr.getRecommendedReading], ['listening', cr.getRecommendedListening],
+                            ['stories', cr.getRecommendedStories], ['topics', cr.getRecommendedConversationTopics]]) {
+    const rec = fn('N4', {}, { count: 5 });
+    ok(`추천(${name}): 빈 배열 아님`, rec.length > 0, `len=${rec.length}`);
+    ok(`추천(${name}): readiness 필드 보유`, rec.every(r => ['ready','good_next','locked'].includes(r.readiness)));
+  }
+  const dep21 = cr.getItemDependency('reading', 'r_n4_21');
+  const simRs = {};
+  [...dep21.vocabIds, ...dep21.grammarIds].forEach(id => { simRs[id] = { correctCount: 1 }; });
+  const recSim = cr.getRecommendedReading('N4', simRs, { count: 60 });
+  const idx21 = recSim.findIndex(r => r.item.id === 'r_n4_21');
+  const firstLocked = recSim.findIndex(r => r.readiness === 'locked');
+  ok('추천: 학습 완비 항목(r_n4_21)이 locked 보다 앞', idx21 >= 0 && (firstLocked === -1 || idx21 < firstLocked),
+     `idx21=${idx21} firstLocked=${firstLocked}`);
+}
+
+
+// ── 라운드 30: 음성 안정화 / 매뉴얼 / 발음 버튼 / 카드 흐름 정적 검증 ────
+{
+  const _fs30 = await import('node:fs');
+  const ttsSrc = _fs30.readFileSync(new URL('./js/tts.js', import.meta.url), 'utf8');
+  // voice manager API
+  ok('tts: refreshVoices export', /export async function refreshVoices/.test(ttsSrc));
+  ok('tts: getVoiceStatus export', /export function getVoiceStatus/.test(ttsSrc));
+  ok('tts: onVoiceStatusChange export', /export function onVoiceStatusChange/.test(ttsSrc));
+  ok('tts: voiceschanged 리스너', /voiceschanged/.test(ttsSrc));
+  ok('tts: 재시도 루프 (RETRY_DELAYS)', /RETRY_DELAYS/.test(ttsSrc));
+  ok('tts: name 보조 판정 (Japanese/日本)', /japanese\|japan\|日本/i.test(ttsSrc));
+  ok('tts: speak 시 마지막 재확인', /cachedVoice \|\| findJaVoice\(\)/.test(ttsSrc));
+  ok('tts: 자동재생 실패 분리 (playback-error)', /playback-error/.test(ttsSrc));
+
+  const settingsSrc = _fs30.readFileSync(new URL('./js/views/settings.js', import.meta.url), 'utf8');
+  ok('settings: 음성 상태 영역', /voiceStatusSection/.test(settingsSrc));
+  ok('settings: 음성 다시 감지 버튼', /voiceRefreshBtn/.test(settingsSrc));
+  ok('settings: 매뉴얼 토글', /helpToggle/.test(settingsSrc));
+  ok('settings: 안내 문구 (늦게 불러올 수)', /늦게 불러올 수/.test(settingsSrc));
+
+  // helpEnabled API + 기본 false
+  const { getHelpEnabled, setHelpEnabled } = await import('./js/state.js');
+  ok('state: getHelpEnabled/setHelpEnabled 존재',
+     typeof getHelpEnabled === 'function' && typeof setHelpEnabled === 'function');
+  const stateSrc = _fs30.readFileSync(new URL('./js/state.js', import.meta.url), 'utf8');
+  ok('state: helpEnabled 기본 false (=== true 비교)', /helpEnabled === true/.test(stateSrc));
+  const { _helpKeys } = await import('./js/helpContent.js');
+  ok('helpContent: 8개 화면 키', _helpKeys.length >= 8, `keys=${_helpKeys.length}`);
+
+  // vocabCardView 카드 흐름 정책
+  const vcSrc = _fs30.readFileSync(new URL('./js/views/vocabCardView.js', import.meta.url), 'utf8');
+  ok('vocabCard: quickPreview 상태 존재', /quickPreview/.test(vcSrc));
+  ok('vocabCard: warmup OFF → quickPreview 시작',
+     /warmupEnabled \? 'expose1' : 'quickPreview'/.test(vcSrc));
+  // 학습 기록 호출은 onPick(quiz 답변) 안에서만 — recordResult 호출이 정확히 1곳
+  ok('vocabCard: recordResult 호출 1곳 (onPick 내)',
+     (vcSrc.match(/recordResult\(/g) || []).length === 1, // 호출 1곳 (import 는 매칭 안 됨)
+     `count=${(vcSrc.match(/recordResult\(/g) || []).length}`);
+  ok('vocabCard: markStudiedToday 호출 1곳',
+     (vcSrc.match(/markStudiedToday\(\)/g) || []).length === 1);
+  // skip 경로 — skipWord 함수 본문에 기록/로그 없음
+  const skipBody = (vcSrc.match(/function skipWord\(\) \{[\s\S]*?\n  \}/) || [''])[0];
+  ok('vocabCard: skipWord 존재', skipBody.length > 0);
+  ok('vocabCard: skipWord 에 recordResult 없음', !/recordResult/.test(skipBody));
+  ok('vocabCard: skipWord 에 logAction 없음', !/logAction/.test(skipBody));
+  ok('vocabCard: skipWord 가 타이머/음성 정리', /clearRecallTimer/.test(skipBody) && /stopSpeaking/.test(skipBody));
+  // 테스트 훅 유지
+  ok('vocabCard: _setRecallMsForTest 유지', /_setRecallMsForTest/.test(vcSrc));
+
+  // CSS — 모바일 wrap
+  const cssSrc = _fs30.readFileSync(new URL('./styles.css', import.meta.url), 'utf8');
+  ok('css: vocab-card-nav flex-wrap', /\.vocab-card-nav[\s\S]{0,120}flex-wrap:\s*wrap/.test(cssSrc));
+  ok('css: help-card 스타일', /\.help-card/.test(cssSrc));
+}
+
+
+// ── 라운드 31: romaji 변환 유틸 + 표시/누출 정책 ─────────────────────────
+{
+  const { kanaToRomaji, getVocabRomaji } = await import('./js/romaji.js');
+  // 단위 테스트 — 변환 기준 고정
+  const cases = [
+    ['まつ', 'matsu'], ['がっこう', 'gakkou'], ['しゃしん', 'shashin'],
+    ['ちょっと', 'chotto'], ['りょこう', 'ryokou'], ['コーヒー', 'koohii'],
+    ['まっちゃ', 'matcha'], ['ぎゅうにゅう', 'gyuunyuu'], ['キャンセル', 'kyanseru'],
+    ['ん', 'n'], ['ぱん', 'pan'],
+  ];
+  for (const [input, expected] of cases) {
+    ok(`romaji: ${input} → ${expected}`, kanaToRomaji(input) === expected,
+       `got=${kanaToRomaji(input)}`);
+  }
+  ok('romaji: 빈 값 안전', kanaToRomaji('') === '' && kanaToRomaji(null) === '' && kanaToRomaji(undefined) === '');
+  ok('romaji: 비문자열 안전', kanaToRomaji(123) === '');
+  ok('romaji: override 우선', getVocabRomaji({ reading: 'まつ', romaji: 'MATSU' }) === 'MATSU');
+  ok('romaji: 런타임 변환', getVocabRomaji({ reading: 'まつ' }) === 'matsu');
+
+  const _fs31 = await import('node:fs');
+  const vcSrc31 = _fs31.readFileSync(new URL('./js/views/vocabCardView.js', import.meta.url), 'utf8');
+  ok('vocabCard: getVocabRomaji 사용', /getVocabRomaji/.test(vcSrc31));
+  // recall/quiz 페인터에는 romaji 헬퍼 미사용 (누출 방지 정적 확인)
+  const recallBody31 = (vcSrc31.match(/function paintRecall\(\) \{[\s\S]*?\n  \}/) || [''])[0];
+  const quizBody31 = (vcSrc31.match(/function paintQuiz\(\) \{[\s\S]*?\n  \}/) || [''])[0];
+  ok('vocabCard: paintRecall 에 romaji 없음', recallBody31.length > 0 && !/getVocabRomaji|romaji/i.test(recallBody31));
+  ok('vocabCard: paintQuiz 에 romaji 없음', quizBody31.length > 0 && !/getVocabRomaji|romaji/i.test(quizBody31));
+  // aria-label/title 에 word/reading/romaji/meaningKo 미주입 — 발음 버튼은 고정 라벨만
+  ok('vocabCard: 발음 버튼 aria 고정 라벨', /aria-label="발음 듣기"/.test(vcSrc31));
+  ok('vocabCard: aria-label 에 변수 주입 없음', !/aria-label="\$\{/.test(vcSrc31));
+  const studySrc31 = _fs31.readFileSync(new URL('./js/views/study.js', import.meta.url), 'utf8');
+  ok('study: row romaji 표시', /romaji-sub/.test(studySrc31));
+  ok('study: listen 버튼 aria 고정', /aria-label="발음 듣기"/.test(studySrc31));
+  const reviewSrc31 = _fs31.readFileSync(new URL('./js/views/review.js', import.meta.url), 'utf8');
+  ok('review: row romaji 표시', /romaji-sub/.test(reviewSrc31));
+  const cssSrc31 = _fs31.readFileSync(new URL('./styles.css', import.meta.url), 'utf8');
+  ok('css: romaji-sub 보조 스타일', /\.romaji-sub/.test(cssSrc31));
+  // TTS 에 romaji 미전달 — speak( 호출에 romaji 변수 없음 (정적)
+  ok('vocabCard: speak 에 romaji 미전달', !/speak\([^)]*[rR]omaji/.test(vcSrc31));
+}
+
+
+// ── 라운드 31: N5 의존성 백포트 검증 ─────────────────────────────────────
+{
+  const _vSet5 = new Map(vocab.map(v => [v.id, v.level]));
+  const _gSet5 = new Map(grammar.map(g => [g.id, g.level]));
+
+  // N5 reading/listening — 전수 태깅 + 참조 무결성 + N5 만 참조 + 핵심 ≥1 (blocking)
+  let _tag5 = 0, _bad5 = 0, _lvl5 = 0, _core05 = 0;
+  for (const [label, items] of [['reading', reading], ['listening', listening]]) {
+    for (const it of items.filter(x => x.level === 'N5')) {
+      if (it.vocabIds || it.grammarIds) _tag5++;
+      for (const id of [...(it.vocabIds || []), ...(it.optionalVocabIds || [])]) {
+        if (!_vSet5.has(id)) { ok(`N5 ${label} ${it.id}: dep vocab ${id} 존재`, false); _bad5++; }
+        else if (_vSet5.get(id) !== 'N5') { ok(`N5 ${label} ${it.id}: dep ${id} 는 N5 만 허용`, false); _lvl5++; }
+      }
+      for (const id of [...(it.grammarIds || []), ...(it.optionalGrammarIds || [])]) {
+        if (!_gSet5.has(id)) { ok(`N5 ${label} ${it.id}: dep grammar ${id} 존재`, false); _bad5++; }
+        else if (_gSet5.get(id) !== 'N5') { ok(`N5 ${label} ${it.id}: dep ${id} 는 N5 만 허용`, false); _lvl5++; }
+      }
+      if (((it.vocabIds || []).length + (it.grammarIds || []).length) === 0) {
+        ok(`N5 ${label} ${it.id}: 핵심 의존성 ≥ 1`, false); _core05++;
+      }
+    }
+  }
+  ok('N5 reading/listening 의존성 태깅 == 전수 (80)', _tag5 === 80, `tagged=${_tag5}`);
+  ok('N5 의존성 참조 무결성 0 오류', _bad5 === 0);
+  ok('N5 의존성 N4/N3/N2 참조 0 (N5 만)', _lvl5 === 0);
+  ok('N5 핵심 의존성 0건 없음', _core05 === 0);
+
+  // N5 story — vocabularyIds/grammarIds/key* 무결성 + N5 만 참조
+  const { stories: _st5 } = await import('./js/data/stories.js');
+  let _stBad5 = 0;
+  for (const s of _st5.filter(x => x.level === 'N5')) {
+    for (const id of [...(s.vocabularyIds || []), ...(s.keyVocabularyIds || [])]) {
+      if (_vSet5.get(id) !== 'N5') { ok(`N5 story ${s.id}: vocab ref ${id} N5 만`, false); _stBad5++; }
+    }
+    for (const id of [...(s.grammarIds || []), ...(s.keyGrammarIds || [])]) {
+      if (_gSet5.get(id) !== 'N5') { ok(`N5 story ${s.id}: grammar ref ${id} N5 만`, false); _stBad5++; }
+    }
+    ok(`N5 story ${s.id}: vocabularyIds 보강 (≥ 5)`, (s.vocabularyIds || []).length >= 5,
+       `count=${(s.vocabularyIds || []).length}`);
+  }
+  ok('N5 story 의존성 무결성 0 오류', _stBad5 === 0);
+
+  // readiness 유틸 — N5 동작
+  const cr5 = await import('./js/contentReadiness.js');
+  ok('N5 dependency: reading', (cr5.getItemDependency('reading', 'r_n5_26')?.vocabIds || []).length >= 1);
+  ok('N5 dependency: listening', (cr5.getItemDependency('listening', 'l_n5_26')?.vocabIds || []).length >= 1);
+  const _firstN5Story = _st5.find(s => s.level === 'N5');
+  ok('N5 dependency: story', (cr5.getItemDependency('story', _firstN5Story.id)?.vocabIds || []).length >= 1);
+  for (const [name, fn] of [['reading', cr5.getRecommendedReading], ['listening', cr5.getRecommendedListening],
+                            ['stories', cr5.getRecommendedStories]]) {
+    const rec = fn('N5', {}, { count: 5 });
+    ok(`N5 추천(${name}): 빈 배열 아님`, rec.length > 0, `len=${rec.length}`);
+    ok(`N5 추천(${name}): readiness 분류 유효`, rec.every(r => ['ready','good_next','locked'].includes(r.readiness)));
+  }
+  // 분류 동작 — r_n5_26 의존성 전부 학습 → ready 가 locked 앞
+  const dep26 = cr5.getItemDependency('reading', 'r_n5_26');
+  const simRs5 = {};
+  [...dep26.vocabIds, ...dep26.grammarIds].forEach(id => { simRs5[id] = { correctCount: 1 }; });
+  ok('N5 분류: 전부 학습 → ready', cr5.classifyContentReadiness(dep26, simRs5) === 'ready');
+  ok('N5 분류: 빈 상태 → locked', cr5.classifyContentReadiness(dep26, {}) === 'locked');
+  const recSim5 = cr5.getRecommendedReading('N5', simRs5, { count: 40 });
+  const i26 = recSim5.findIndex(r => r.item.id === 'r_n5_26');
+  const iLock5 = recSim5.findIndex(r => r.readiness === 'locked');
+  ok('N5 추천: ready(r_n5_26)가 locked 보다 앞', i26 >= 0 && (iLock5 === -1 || i26 < iLock5),
+     `i26=${i26} iLock=${iLock5}`);
+}
+
 if (errs.length) {
   console.log('\nERRORS:');
   for (const e of errs) console.log(' -', e);
@@ -1966,7 +2458,9 @@ if (errs.length) {
 } else {
   console.log('\nALL CHECKS PASSED');
   if (warnings.length) {
-    console.log(`(${warnings.length} quality warnings — see audit section)`);
+    console.log(`(${warnings.length} unreviewed quality warnings — see audit section)`);
+  } else if (reviewedWarnings.length) {
+    console.log(`(unreviewed 0 / reviewed ${reviewedWarnings.length} — 검토 후 유지, docs/content-status.md 참조)`);
   }
 }
 

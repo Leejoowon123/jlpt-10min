@@ -1,1300 +1,2263 @@
 [
- {
-  "id": "story_n4_001",
-  "type": "daily_story",
-  "level": "N4",
-  "titleJa": "新しい職場の一日",
-  "titleKo": "새 직장에서의 하루",
-  "summaryKo": "새 회사에 출근한 첫날의 짧은 이야기.",
-  "bodyJa": [
-   "先週から新しい会社で働き始めました。",
-   "初日はとても緊張しましたが、みなさんが優しく教えてくれました。",
-   "部長に紹介してもらい、自分の席まで案内されました。",
-   "昼休みに同僚とランチへ行き、少し話せて安心しました。",
-   "明日からも頑張ろうと思います。"
-  ],
-  "bodyReadings": [
-   [
-    {
-     "text": "先週",
-     "reading": "せんしゅう"
-    },
-    {
-     "text": "新しい",
-     "reading": "あたらしい"
-    },
-    {
-     "text": "会社",
-     "reading": "かいしゃ"
-    },
-    {
-     "text": "働き始め",
-     "reading": "はたらきはじめ"
-    }
-   ],
-   [
-    {
-     "text": "初日",
-     "reading": "しょにち"
-    },
-    {
-     "text": "緊張",
-     "reading": "きんちょう"
-    },
-    {
-     "text": "優しく",
-     "reading": "やさしく"
-    },
-    {
-     "text": "教えて",
-     "reading": "おしえて"
-    }
-   ],
-   [
-    {
-     "text": "部長",
-     "reading": "ぶちょう"
-    },
-    {
-     "text": "紹介",
-     "reading": "しょうかい"
-    },
-    {
-     "text": "自分",
-     "reading": "じぶん"
-    },
-    {
-     "text": "席",
-     "reading": "せき"
-    },
-    {
-     "text": "案内",
-     "reading": "あんない"
-    }
-   ],
-   [
-    {
-     "text": "昼休み",
-     "reading": "ひるやすみ"
-    },
-    {
-     "text": "同僚",
-     "reading": "どうりょう"
-    },
-    {
-     "text": "少し",
-     "reading": "すこし"
-    },
-    {
-     "text": "話せて",
-     "reading": "はなせて"
-    },
-    {
-     "text": "安心",
-     "reading": "あんしん"
-    }
-   ],
-   [
-    {
-     "text": "明日",
-     "reading": "あした"
-    },
-    {
-     "text": "頑張ろう",
-     "reading": "がんばろう"
-    },
-    {
-     "text": "思います",
-     "reading": "おもいます"
-    }
-   ]
-  ],
-  "bodyRomaji": [
-   "senshuu kara atarashii kaisha de hataraki-hajimemashita.",
-   "shonichi wa totemo kinchou shimashita ga, minasan ga yasashiku oshiete kuremashita.",
-   "buchou ni shoukai shite morai, jibun no seki made annai saremashita.",
-   "hiruyasumi ni douryou to ranchi e iki, sukoshi hanasete anshin shimashita.",
-   "ashita kara mo ganbarou to omoimasu."
-  ],
-  "bodyKo": [
-   "지난주부터 새 회사에서 일하기 시작했습니다.",
-   "첫날은 매우 긴장했지만, 모두가 친절히 가르쳐 주었습니다.",
-   "부장님에게 소개받고, 제 자리까지 안내되었습니다.",
-   "점심시간에 동료와 점심을 먹으러 가서 조금 얘기할 수 있어 안심했습니다.",
-   "내일부터도 열심히 하려고 합니다."
-  ],
-  "vocabularyIds": [],
-  "grammarIds": [
-   "g_n4_22",
-   "g_n4_38"
-  ],
-  "keyVocabularyIds": [
-   "v_n4_61",
-   "v_n4_39",
-   "v_n4_48",
-   "v_n4_100",
-   "v_n4_193"
-  ],
-  "keyGrammarIds": [
-   "g_n4_22",
-   "g_n4_38"
-  ],
-  "bodyHighlights": [
-   [
-    {
-     "text": "先週",
-     "reading": "せんしゅう",
-     "meaningKo": "지난주",
-     "kind": "time"
-    },
-    {
-     "text": "働き始め",
-     "reading": "はたらきはじめ",
-     "meaningKo": "일하기 시작",
-     "kind": "verb"
-    }
-   ],
-   [
-    {
-     "text": "緊張",
-     "reading": "きんちょう",
-     "meaningKo": "긴장",
-     "kind": "noun"
-    },
-    {
-     "text": "優しく",
-     "reading": "やさしく",
-     "meaningKo": "친절히",
-     "kind": "adj"
-    }
-   ],
-   [
-    {
-     "text": "部長",
-     "reading": "ぶちょう",
-     "meaningKo": "부장",
-     "vocabId": "v_n4_61",
-     "kind": "vocab"
-    },
-    {
-     "text": "紹介",
-     "reading": "しょうかい",
-     "meaningKo": "소개",
-     "vocabId": "v_n4_39",
-     "kind": "vocab"
-    }
-   ],
-   [
-    {
-     "text": "昼休み",
-     "reading": "ひるやすみ",
-     "meaningKo": "점심시간",
-     "vocabId": "v_n4_48",
-     "kind": "vocab"
-    },
-    {
-     "text": "安心",
-     "reading": "あんしん",
-     "meaningKo": "안심",
-     "kind": "noun"
-    }
-   ],
-   [
-    {
-     "text": "頑張ろう",
-     "reading": "がんばろう",
-     "meaningKo": "열심히 하자",
-     "vocabId": "v_n4_100",
-     "kind": "vocab"
-    }
-   ]
-  ],
-  "tags": [
-   "생활",
-   "회사",
-   "첫날"
-  ],
-  "estimatedMinutes": 3,
-  "sourceType": "original"
- },
- {
-  "id": "story_n4_002",
-  "type": "daily_story",
-  "level": "N4",
-  "titleJa": "病院での一日",
-  "titleKo": "병원에서의 하루",
-  "summaryKo": "감기에 걸려 병원에 다녀온 짧은 이야기.",
-  "bodyJa": [
-   "昨日から熱があって、頭も痛かったです。",
-   "今朝、近くの病院へ行きました。",
-   "受付で保険証を見せて、しばらく待ちました。",
-   "医者が「風邪ですね。三日休んでください」と言いました。",
-   "薬をもらって、家で寝ました。"
-  ],
-  "bodyReadings": [
-   [
-    {
-     "text": "昨日",
-     "reading": "きのう"
-    },
-    {
-     "text": "熱",
-     "reading": "ねつ"
-    },
-    {
-     "text": "頭",
-     "reading": "あたま"
-    },
-    {
-     "text": "痛かった",
-     "reading": "いたかった"
-    }
-   ],
-   [
-    {
-     "text": "今朝",
-     "reading": "けさ"
-    },
-    {
-     "text": "近く",
-     "reading": "ちかく"
-    },
-    {
-     "text": "病院",
-     "reading": "びょういん"
-    },
-    {
-     "text": "行きました",
-     "reading": "いきました"
-    }
-   ],
-   [
-    {
-     "text": "受付",
-     "reading": "うけつけ"
-    },
-    {
-     "text": "保険証",
-     "reading": "ほけんしょう"
-    },
-    {
-     "text": "見せて",
-     "reading": "みせて"
-    },
-    {
-     "text": "待ちました",
-     "reading": "まちました"
-    }
-   ],
-   [
-    {
-     "text": "医者",
-     "reading": "いしゃ"
-    },
-    {
-     "text": "風邪",
-     "reading": "かぜ"
-    },
-    {
-     "text": "三日",
-     "reading": "みっか"
-    },
-    {
-     "text": "休んで",
-     "reading": "やすんで"
-    },
-    {
-     "text": "言いました",
-     "reading": "いいました"
-    }
-   ],
-   [
-    {
-     "text": "薬",
-     "reading": "くすり"
-    },
-    {
-     "text": "家",
-     "reading": "いえ"
-    },
-    {
-     "text": "寝ました",
-     "reading": "ねました"
-    }
-   ]
-  ],
-  "bodyRomaji": [
-   "kinou kara netsu ga atte, atama mo itakatta desu.",
-   "kesa, chikaku no byouin e ikimashita.",
-   "uketsuke de hokenshou o misete, shibaraku machimashita.",
-   "isha ga \"kaze desu ne. mikka yasunde kudasai\" to iimashita.",
-   "kusuri o moratte, ie de nemashita."
-  ],
-  "bodyKo": [
-   "어제부터 열이 있고 머리도 아팠습니다.",
-   "오늘 아침, 근처 병원에 갔습니다.",
-   "접수처에서 보험증을 보여주고 잠시 기다렸습니다.",
-   "의사가 \"감기네요. 사흘 쉬세요\"라고 말했습니다.",
-   "약을 받고 집에서 잤습니다."
-  ],
-  "vocabularyIds": [],
-  "grammarIds": [
-   "g_n5_13",
-   "g_n4_37"
-  ],
-  "keyVocabularyIds": [
-   "v_n4_148",
-   "v_n4_149",
-   "v_n4_147",
-   "v_n4_150",
-   "v_n4_56"
-  ],
-  "keyGrammarIds": [
-   "g_n5_13"
-  ],
-  "bodyHighlights": [
-   [
-    {
-     "text": "熱",
-     "reading": "ねつ",
-     "meaningKo": "열",
-     "vocabId": "v_n4_148",
-     "kind": "vocab"
-    },
-    {
-     "text": "頭",
-     "reading": "あたま",
-     "meaningKo": "머리",
-     "kind": "noun"
-    },
-    {
-     "text": "痛かった",
-     "reading": "いたかった",
-     "meaningKo": "아팠다",
-     "kind": "adj"
-    }
-   ],
-   [
-    {
-     "text": "病院",
-     "reading": "びょういん",
-     "meaningKo": "병원",
-     "vocabId": "v_n4_147",
-     "kind": "vocab"
-    }
-   ],
-   [
-    {
-     "text": "受付",
-     "reading": "うけつけ",
-     "meaningKo": "접수처",
-     "vocabId": "v_n4_56",
-     "kind": "vocab"
-    },
-    {
-     "text": "保険証",
-     "reading": "ほけんしょう",
-     "meaningKo": "보험증",
-     "kind": "noun"
-    }
-   ],
-   [
-    {
-     "text": "医者",
-     "reading": "いしゃ",
-     "meaningKo": "의사",
-     "kind": "noun"
-    },
-    {
-     "text": "風邪",
-     "reading": "かぜ",
-     "meaningKo": "감기",
-     "kind": "noun"
-    }
-   ],
-   [
-    {
-     "text": "薬",
-     "reading": "くすり",
-     "meaningKo": "약",
-     "vocabId": "v_n4_150",
-     "kind": "vocab"
-    }
-   ]
-  ],
-  "tags": [
-   "생활",
-   "병원",
-   "감기"
-  ],
-  "estimatedMinutes": 3,
-  "sourceType": "original"
- },
- {
-  "id": "story_n4_003",
-  "type": "news_style",
-  "level": "N4",
-  "titleJa": "駅の新しいルール",
-  "titleKo": "역의 새로운 규칙",
-  "summaryKo": "역에서 시작된 새 안내 규칙에 대한 가상 기사.",
-  "bodyJa": [
-   "来月から駅で新しいルールが始まります。",
-   "エスカレーターでは歩かないでください。両側に立ちます。",
-   "これは事故を減らすためのルールです。",
-   "駅員は「みなさんの安全のために協力してください」と話しています。"
-  ],
-  "bodyReadings": [
-   [
-    {
-     "text": "来月",
-     "reading": "らいげつ"
-    },
-    {
-     "text": "駅",
-     "reading": "えき"
-    },
-    {
-     "text": "新しい",
-     "reading": "あたらしい"
-    },
-    {
-     "text": "始まり",
-     "reading": "はじまり"
-    }
-   ],
-   [
-    {
-     "text": "歩かない",
-     "reading": "あるかない"
-    },
-    {
-     "text": "両側",
-     "reading": "りょうがわ"
-    },
-    {
-     "text": "立ちます",
-     "reading": "たちます"
-    }
-   ],
-   [
-    {
-     "text": "事故",
-     "reading": "じこ"
-    },
-    {
-     "text": "減らす",
-     "reading": "へらす"
-    }
-   ],
-   [
-    {
-     "text": "駅員",
-     "reading": "えきいん"
-    },
-    {
-     "text": "安全",
-     "reading": "あんぜん"
-    },
-    {
-     "text": "協力",
-     "reading": "きょうりょく"
-    },
-    {
-     "text": "話して",
-     "reading": "はなして"
-    }
-   ]
-  ],
-  "bodyRomaji": [
-   "raigetsu kara eki de atarashii ruuru ga hajimarimasu.",
-   "esukareetaa de wa arukanaide kudasai. ryougawa ni tachimasu.",
-   "kore wa jiko o herasu tame no ruuru desu.",
-   "ekiin wa \"minasan no anzen no tame ni kyouryoku shite kudasai\" to hanashite imasu."
-  ],
-  "bodyKo": [
-   "다음 달부터 역에서 새 규칙이 시작됩니다.",
-   "에스컬레이터에서는 걷지 말아 주세요. 양쪽에 섭니다.",
-   "이는 사고를 줄이기 위한 규칙입니다.",
-   "역무원은 \"모두의 안전을 위해 협력해 주세요\"라고 말하고 있습니다."
-  ],
-  "vocabularyIds": [],
-  "grammarIds": [
-   "g_n4_16",
-   "g_n5_13"
-  ],
-  "keyVocabularyIds": [
-   "v_n4_157",
-   "v_n4_154",
-   "v_n4_158",
-   "v_n4_208",
-   "v_n4_125"
-  ],
-  "keyGrammarIds": [
-   "g_n4_16"
-  ],
-  "bodyHighlights": [
-   [
-    {
-     "text": "駅",
-     "reading": "えき",
-     "meaningKo": "역",
-     "kind": "noun"
-    },
-    {
-     "text": "新しい",
-     "reading": "あたらしい",
-     "meaningKo": "새로운",
-     "kind": "adj"
-    }
-   ],
-   [
-    {
-     "text": "歩かない",
-     "reading": "あるかない",
-     "meaningKo": "걷지 않다",
-     "kind": "verb"
-    },
-    {
-     "text": "両側",
-     "reading": "りょうがわ",
-     "meaningKo": "양쪽",
-     "kind": "noun"
-    }
-   ],
-   [
-    {
-     "text": "事故",
-     "reading": "じこ",
-     "meaningKo": "사고",
-     "kind": "noun"
-    },
-    {
-     "text": "減らす",
-     "reading": "へらす",
-     "meaningKo": "줄이다",
-     "vocabId": "v_n4_208",
-     "kind": "vocab"
-    }
-   ],
-   [
-    {
-     "text": "安全",
-     "reading": "あんぜん",
-     "meaningKo": "안전",
-     "vocabId": "v_n4_154",
-     "kind": "vocab"
-    },
-    {
-     "text": "協力",
-     "reading": "きょうりょく",
-     "meaningKo": "협력",
-     "kind": "noun"
-    }
-   ]
-  ],
-  "tags": [
-   "뉴스",
-   "교통",
-   "안전"
-  ],
-  "estimatedMinutes": 2,
-  "sourceType": "original"
- },
- {
-  "id": "story_n4_004",
-  "type": "daily_story",
-  "level": "N4",
-  "titleJa": "引っ越しの準備",
-  "titleKo": "이사 준비",
-  "summaryKo": "다음 달 이사를 준비하는 짧은 일상 이야기.",
-  "bodyJa": [
-   "来月、駅の近くに引っ越すことになりました。",
-   "友だちが手伝ってくれるので、とても助かります。",
-   "今、古い家具を全部売ったり、捨てたりしています。",
-   "新しい部屋は今より小さいですが、駅に近くて便利です。",
-   "楽しみにしています。"
-  ],
-  "bodyReadings": [
-   [
-    {
-     "text": "来月",
-     "reading": "らいげつ"
-    },
-    {
-     "text": "駅",
-     "reading": "えき"
-    },
-    {
-     "text": "近く",
-     "reading": "ちかく"
-    },
-    {
-     "text": "引っ越す",
-     "reading": "ひっこす"
-    }
-   ],
-   [
-    {
-     "text": "友だち",
-     "reading": "ともだち"
-    },
-    {
-     "text": "手伝って",
-     "reading": "てつだって"
-    },
-    {
-     "text": "助かり",
-     "reading": "たすかり"
-    }
-   ],
-   [
-    {
-     "text": "今",
-     "reading": "いま"
-    },
-    {
-     "text": "古い",
-     "reading": "ふるい"
-    },
-    {
-     "text": "家具",
-     "reading": "かぐ"
-    },
-    {
-     "text": "全部",
-     "reading": "ぜんぶ"
-    },
-    {
-     "text": "売ったり",
-     "reading": "うったり"
-    },
-    {
-     "text": "捨てたり",
-     "reading": "すてたり"
-    }
-   ],
-   [
-    {
-     "text": "新しい",
-     "reading": "あたらしい"
-    },
-    {
-     "text": "部屋",
-     "reading": "へや"
-    },
-    {
-     "text": "小さい",
-     "reading": "ちいさい"
-    },
-    {
-     "text": "駅",
-     "reading": "えき"
-    },
-    {
-     "text": "近くて",
-     "reading": "ちかくて"
-    },
-    {
-     "text": "便利",
-     "reading": "べんり"
-    }
-   ],
-   [
-    {
-     "text": "楽しみ",
-     "reading": "たのしみ"
-    }
-   ]
-  ],
-  "bodyRomaji": [
-   "raigetsu, eki no chikaku ni hikkosu koto ni narimashita.",
-   "tomodachi ga tetsudatte kureru node, totemo tasukarimasu.",
-   "ima, furui kagu o zenbu uttari, sutetari shite imasu.",
-   "atarashii heya wa ima yori chiisai desu ga, eki ni chikakute benri desu.",
-   "tanoshimi ni shite imasu."
-  ],
-  "bodyKo": [
-   "다음 달, 역 근처로 이사하게 되었습니다.",
-   "친구가 도와줘서 정말 도움이 됩니다.",
-   "지금은 낡은 가구를 다 팔거나 버리고 있습니다.",
-   "새 방은 지금보다 작지만 역에 가까워서 편리합니다.",
-   "기대하고 있습니다."
-  ],
-  "vocabularyIds": [],
-  "grammarIds": [
-   "g_n4_21",
-   "g_n4_6"
-  ],
-  "keyVocabularyIds": [
-   "v_n4_85",
-   "v_n4_86",
-   "v_n4_84",
-   "v_n4_18",
-   "v_n4_135"
-  ],
-  "keyGrammarIds": [
-   "g_n4_21",
-   "g_n4_6"
-  ],
-  "bodyHighlights": [
-   [
-    {
-     "text": "引っ越す",
-     "reading": "ひっこす",
-     "meaningKo": "이사하다",
-     "vocabId": "v_n4_86",
-     "kind": "vocab"
-    }
-   ],
-   [
-    {
-     "text": "手伝って",
-     "reading": "てつだって",
-     "meaningKo": "도와줘서",
-     "vocabId": "v_n4_18",
-     "kind": "vocab"
-    }
-   ],
-   [
-    {
-     "text": "古い",
-     "reading": "ふるい",
-     "meaningKo": "낡은",
-     "kind": "adj"
-    },
-    {
-     "text": "家具",
-     "reading": "かぐ",
-     "meaningKo": "가구",
-     "vocabId": "v_n4_84",
-     "kind": "vocab"
-    },
-    {
-     "text": "売ったり",
-     "reading": "うったり",
-     "meaningKo": "팔거나",
-     "kind": "verb"
-    }
-   ],
-   [
-    {
-     "text": "新しい",
-     "reading": "あたらしい",
-     "meaningKo": "새로운",
-     "kind": "adj"
-    },
-    {
-     "text": "便利",
-     "reading": "べんり",
-     "meaningKo": "편리",
-     "kind": "adj"
-    }
-   ],
-   [
-    {
-     "text": "楽しみ",
-     "reading": "たのしみ",
-     "meaningKo": "기대",
-     "kind": "noun"
-    }
-   ]
-  ],
-  "tags": [
-   "생활",
-   "이사"
-  ],
-  "estimatedMinutes": 3,
-  "sourceType": "original"
- },
- {
-  "id": "story_n4_005",
-  "type": "short_story",
-  "level": "N4",
-  "titleJa": "最後のバス",
-  "titleKo": "마지막 버스",
-  "summaryKo": "야근 후 마지막 버스를 탔던 늦은 밤의 짧은 단편.",
-  "bodyJa": [
-   "会社の残業が終わったのは夜十時でした。",
-   "駅まで急いだけれど、最後のバスはもう出てしまいました。",
-   "雨が少し降っていて、寒かったです。",
-   "タクシーを呼ぼうかと思いましたが、料金が高すぎます。",
-   "結局、コンビニで温かいお茶を買って、ゆっくり歩いて帰りました。",
-   "長い夜でしたが、静かな道は少し気持ちよかったです。"
-  ],
-  "bodyReadings": [
-   [
-    {
-     "text": "会社",
-     "reading": "かいしゃ"
-    },
-    {
-     "text": "残業",
-     "reading": "ざんぎょう"
-    },
-    {
-     "text": "終わった",
-     "reading": "おわった"
-    },
-    {
-     "text": "夜",
-     "reading": "よる"
-    },
-    {
-     "text": "十時",
-     "reading": "じゅうじ"
-    }
-   ],
-   [
-    {
-     "text": "駅",
-     "reading": "えき"
-    },
-    {
-     "text": "急いだ",
-     "reading": "いそいだ"
-    },
-    {
-     "text": "最後",
-     "reading": "さいご"
-    },
-    {
-     "text": "出て",
-     "reading": "でて"
-    }
-   ],
-   [
-    {
-     "text": "雨",
-     "reading": "あめ"
-    },
-    {
-     "text": "少し",
-     "reading": "すこし"
-    },
-    {
-     "text": "降って",
-     "reading": "ふって"
-    },
-    {
-     "text": "寒かった",
-     "reading": "さむかった"
-    }
-   ],
-   [
-    {
-     "text": "呼ぼう",
-     "reading": "よぼう"
-    },
-    {
-     "text": "思いました",
-     "reading": "おもいました"
-    },
-    {
-     "text": "料金",
-     "reading": "りょうきん"
-    },
-    {
-     "text": "高すぎ",
-     "reading": "たかすぎ"
-    }
-   ],
-   [
-    {
-     "text": "結局",
-     "reading": "けっきょく"
-    },
-    {
-     "text": "温かい",
-     "reading": "あたたかい"
-    },
-    {
-     "text": "お茶",
-     "reading": "おちゃ"
-    },
-    {
-     "text": "買って",
-     "reading": "かって"
-    },
-    {
-     "text": "歩いて",
-     "reading": "あるいて"
-    },
-    {
-     "text": "帰り",
-     "reading": "かえり"
-    }
-   ],
-   [
-    {
-     "text": "長い",
-     "reading": "ながい"
-    },
-    {
-     "text": "夜",
-     "reading": "よる"
-    },
-    {
-     "text": "静かな",
-     "reading": "しずかな"
-    },
-    {
-     "text": "道",
-     "reading": "みち"
-    },
-    {
-     "text": "気持ちよかった",
-     "reading": "きもちよかった"
-    }
-   ]
-  ],
-  "bodyRomaji": [
-   "kaisha no zangyou ga owatta no wa yoru juu-ji deshita.",
-   "eki made isoida keredo, saigo no basu wa mou dete shimaimashita.",
-   "ame ga sukoshi futte ite, samukatta desu.",
-   "takushii o yobou ka to omoimashita ga, ryoukin ga takasugimasu.",
-   "kekkyoku, konbini de atatakai ocha o katte, yukkuri aruite kaerimashita.",
-   "nagai yoru deshita ga, shizuka na michi wa sukoshi kimochi yokatta desu."
-  ],
-  "bodyKo": [
-   "회사 야근이 끝난 것은 밤 10시였습니다.",
-   "역까지 서둘렀지만 마지막 버스는 이미 떠나 버렸습니다.",
-   "비가 조금 내리고 있어서 추웠습니다.",
-   "택시를 부를까 생각했지만, 요금이 너무 비쌌습니다.",
-   "결국, 편의점에서 따뜻한 차를 사서 천천히 걸어서 돌아갔습니다.",
-   "긴 밤이었지만, 조용한 길은 조금 기분이 좋았습니다."
-  ],
-  "vocabularyIds": [],
-  "grammarIds": [
-   "g_n4_1",
-   "g_n4_12",
-   "g_n4_38"
-  ],
-  "keyVocabularyIds": [
-   "v_n4_64",
-   "v_n4_211",
-   "v_n4_193",
-   "v_n4_66",
-   "v_n4_19"
-  ],
-  "keyGrammarIds": [
-   "g_n4_1",
-   "g_n4_12"
-  ],
-  "bodyHighlights": [
-   [
-    {
-     "text": "残業",
-     "reading": "ざんぎょう",
-     "meaningKo": "야근",
-     "vocabId": "v_n4_64",
-     "kind": "vocab"
-    }
-   ],
-   [
-    {
-     "text": "最後",
-     "reading": "さいご",
-     "meaningKo": "마지막",
-     "vocabId": "v_n4_211",
-     "kind": "vocab"
-    },
-    {
-     "text": "出て",
-     "reading": "でて",
-     "meaningKo": "떠나",
-     "kind": "verb"
-    }
-   ],
-   [
-    {
-     "text": "雨",
-     "reading": "あめ",
-     "meaningKo": "비",
-     "kind": "noun"
-    },
-    {
-     "text": "寒かった",
-     "reading": "さむかった",
-     "meaningKo": "추웠다",
-     "kind": "adj"
-    }
-   ],
-   [
-    {
-     "text": "料金",
-     "reading": "りょうきん",
-     "meaningKo": "요금",
-     "kind": "noun"
-    },
-    {
-     "text": "高すぎ",
-     "reading": "たかすぎ",
-     "meaningKo": "너무 비싸다",
-     "kind": "adj"
-    }
-   ],
-   [
-    {
-     "text": "温かい",
-     "reading": "あたたかい",
-     "meaningKo": "따뜻한",
-     "kind": "adj"
-    },
-    {
-     "text": "歩いて",
-     "reading": "あるいて",
-     "meaningKo": "걸어서",
-     "kind": "verb"
-    }
-   ],
-   [
-    {
-     "text": "静かな",
-     "reading": "しずかな",
-     "meaningKo": "조용한",
-     "kind": "adj"
-    }
-   ]
-  ],
-  "tags": [
-   "단편",
-   "밤",
-   "퇴근"
-  ],
-  "estimatedMinutes": 4,
-  "sourceType": "original"
- },
- {
-  "id": "story_n4_006",
-  "type": "short_story",
-  "level": "N4",
-  "titleJa": "祖母の手紙",
-  "titleKo": "할머니의 편지",
-  "summaryKo": "서랍에서 발견한 할머니의 오래된 편지에 대한 단편.",
-  "bodyJa": [
-   "机の引き出しに古い手紙を見つけました。",
-   "祖母が私に送ってくれたものでした。",
-   "「元気にしていますか。たまには遊びにきてください」と書いてありました。",
-   "読み終わったとき、急に祖母に会いたくなりました。",
-   "電話をかけたら、祖母はとても喜んでくれました。",
-   "今度の週末、祖母の家に行くことにしました。"
-  ],
-  "bodyReadings": [
-   [
-    {
-     "text": "机",
-     "reading": "つくえ"
-    },
-    {
-     "text": "引き出し",
-     "reading": "ひきだし"
-    },
-    {
-     "text": "古い",
-     "reading": "ふるい"
-    },
-    {
-     "text": "手紙",
-     "reading": "てがみ"
-    },
-    {
-     "text": "見つけ",
-     "reading": "みつけ"
-    }
-   ],
-   [
-    {
-     "text": "祖母",
-     "reading": "そぼ"
-    },
-    {
-     "text": "私",
-     "reading": "わたし"
-    },
-    {
-     "text": "送って",
-     "reading": "おくって"
-    }
-   ],
-   [
-    {
-     "text": "元気",
-     "reading": "げんき"
-    },
-    {
-     "text": "遊び",
-     "reading": "あそび"
-    },
-    {
-     "text": "書いて",
-     "reading": "かいて"
-    }
-   ],
-   [
-    {
-     "text": "読み終わった",
-     "reading": "よみおわった"
-    },
-    {
-     "text": "急に",
-     "reading": "きゅうに"
-    },
-    {
-     "text": "祖母",
-     "reading": "そぼ"
-    },
-    {
-     "text": "会いたく",
-     "reading": "あいたく"
-    }
-   ],
-   [
-    {
-     "text": "電話",
-     "reading": "でんわ"
-    },
-    {
-     "text": "喜んで",
-     "reading": "よろこんで"
-    }
-   ],
-   [
-    {
-     "text": "今度",
-     "reading": "こんど"
-    },
-    {
-     "text": "週末",
-     "reading": "しゅうまつ"
-    },
-    {
-     "text": "家",
-     "reading": "いえ"
-    },
-    {
-     "text": "行く",
-     "reading": "いく"
-    }
-   ]
-  ],
-  "bodyRomaji": [
-   "tsukue no hikidashi ni furui tegami o mitsukemashita.",
-   "sobo ga watashi ni okutte kureta mono deshita.",
-   "\"genki ni shite imasu ka. tama ni wa asobi ni kite kudasai\" to kaite arimashita.",
-   "yomiowatta toki, kyuu ni sobo ni aitaku narimashita.",
-   "denwa o kaketara, sobo wa totemo yorokonde kuremashita.",
-   "kondo no shuumatsu, sobo no ie ni iku koto ni shimashita."
-  ],
-  "bodyKo": [
-   "책상 서랍에서 오래된 편지를 발견했습니다.",
-   "할머니가 저에게 보내신 것이었습니다.",
-   "\"잘 지내고 있나요? 가끔은 놀러 와 주세요\"라고 적혀 있었습니다.",
-   "다 읽었을 때, 갑자기 할머니가 보고 싶어졌습니다.",
-   "전화를 걸자 할머니는 정말 기뻐해 주셨습니다.",
-   "이번 주말, 할머니 댁에 가기로 했습니다."
-  ],
-  "vocabularyIds": [],
-  "grammarIds": [
-   "g_n4_25",
-   "g_n4_20",
-   "g_n4_19"
-  ],
-  "keyVocabularyIds": [
-   "v_n4_170",
-   "v_n4_16",
-   "v_n4_185",
-   "v_n4_20",
-   "v_n4_175"
-  ],
-  "keyGrammarIds": [
-   "g_n4_25",
-   "g_n4_20"
-  ],
-  "bodyHighlights": [
-   [
-    {
-     "text": "机",
-     "reading": "つくえ",
-     "meaningKo": "책상",
-     "kind": "noun"
-    },
-    {
-     "text": "手紙",
-     "reading": "てがみ",
-     "meaningKo": "편지",
-     "kind": "noun"
-    },
-    {
-     "text": "見つけ",
-     "reading": "みつけ",
-     "meaningKo": "발견하다",
-     "vocabId": "v_n4_16",
-     "kind": "vocab"
-    }
-   ],
-   [
-    {
-     "text": "祖母",
-     "reading": "そぼ",
-     "meaningKo": "할머니",
-     "vocabId": "v_n4_170",
-     "kind": "vocab"
-    }
-   ],
-   [
-    {
-     "text": "元気",
-     "reading": "げんき",
-     "meaningKo": "건강·잘 지냄",
-     "vocabId": "v_n4_101",
-     "kind": "vocab"
-    }
-   ],
-   [
-    {
-     "text": "急に",
-     "reading": "きゅうに",
-     "meaningKo": "갑자기",
-     "vocabId": "v_n4_245",
-     "kind": "vocab"
-    },
-    {
-     "text": "会いたく",
-     "reading": "あいたく",
-     "meaningKo": "만나고 싶어",
-     "kind": "verb"
-    }
-   ],
-   [
-    {
-     "text": "電話",
-     "reading": "でんわ",
-     "meaningKo": "전화",
-     "kind": "noun"
-    },
-    {
-     "text": "喜んで",
-     "reading": "よろこんで",
-     "meaningKo": "기뻐하며",
-     "vocabId": "v_n4_185",
-     "kind": "vocab"
-    }
-   ],
-   [
-    {
-     "text": "週末",
-     "reading": "しゅうまつ",
-     "meaningKo": "주말",
-     "kind": "time"
-    }
-   ]
-  ],
-  "tags": [
-   "단편",
-   "가족",
-   "편지"
-  ],
-  "estimatedMinutes": 4,
-  "sourceType": "original"
- }
+  {
+    "id": "story_n4_001",
+    "type": "daily_story",
+    "level": "N4",
+    "titleJa": "新しい職場の一日",
+    "titleKo": "새 직장에서의 하루",
+    "summaryKo": "새 회사에 출근한 첫날의 짧은 이야기.",
+    "bodyJa": [
+      "先週から新しい会社で働き始めました。",
+      "初日はとても緊張しましたが、みなさんが優しく教えてくれました。",
+      "部長に紹介してもらい、自分の席まで案内されました。",
+      "昼休みに同僚とランチへ行き、少し話せて安心しました。",
+      "明日からも頑張ろうと思います。"
+    ],
+    "bodyReadings": [
+      [
+        {
+          "text": "先週",
+          "reading": "せんしゅう"
+        },
+        {
+          "text": "新しい",
+          "reading": "あたらしい"
+        },
+        {
+          "text": "会社",
+          "reading": "かいしゃ"
+        },
+        {
+          "text": "働き始め",
+          "reading": "はたらきはじめ"
+        }
+      ],
+      [
+        {
+          "text": "初日",
+          "reading": "しょにち"
+        },
+        {
+          "text": "緊張",
+          "reading": "きんちょう"
+        },
+        {
+          "text": "優しく",
+          "reading": "やさしく"
+        },
+        {
+          "text": "教えて",
+          "reading": "おしえて"
+        }
+      ],
+      [
+        {
+          "text": "部長",
+          "reading": "ぶちょう"
+        },
+        {
+          "text": "紹介",
+          "reading": "しょうかい"
+        },
+        {
+          "text": "自分",
+          "reading": "じぶん"
+        },
+        {
+          "text": "席",
+          "reading": "せき"
+        },
+        {
+          "text": "案内",
+          "reading": "あんない"
+        }
+      ],
+      [
+        {
+          "text": "昼休み",
+          "reading": "ひるやすみ"
+        },
+        {
+          "text": "同僚",
+          "reading": "どうりょう"
+        },
+        {
+          "text": "少し",
+          "reading": "すこし"
+        },
+        {
+          "text": "話せて",
+          "reading": "はなせて"
+        },
+        {
+          "text": "安心",
+          "reading": "あんしん"
+        }
+      ],
+      [
+        {
+          "text": "明日",
+          "reading": "あした"
+        },
+        {
+          "text": "頑張ろう",
+          "reading": "がんばろう"
+        },
+        {
+          "text": "思います",
+          "reading": "おもいます"
+        }
+      ]
+    ],
+    "bodyRomaji": [
+      "senshuu kara atarashii kaisha de hataraki-hajimemashita.",
+      "shonichi wa totemo kinchou shimashita ga, minasan ga yasashiku oshiete kuremashita.",
+      "buchou ni shoukai shite morai, jibun no seki made annai saremashita.",
+      "hiruyasumi ni douryou to ranchi e iki, sukoshi hanasete anshin shimashita.",
+      "ashita kara mo ganbarou to omoimasu."
+    ],
+    "bodyKo": [
+      "지난주부터 새 회사에서 일하기 시작했습니다.",
+      "첫날은 매우 긴장했지만, 모두가 친절히 가르쳐 주었습니다.",
+      "부장님에게 소개받고, 제 자리까지 안내되었습니다.",
+      "점심시간에 동료와 점심을 먹으러 가서 조금 얘기할 수 있어 안심했습니다.",
+      "내일부터도 열심히 하려고 합니다."
+    ],
+    "vocabularyIds": [
+      "v_n4_61",
+      "v_n4_39",
+      "v_n4_48",
+      "v_n4_100",
+      "v_n5_249",
+      "v_n4_21",
+      "v_n4_209",
+      "v_n4_572",
+      "v_n4_591",
+      "v_n4_592",
+      "v_n5_14",
+      "v_n5_239",
+      "v_n5_466",
+      "v_n5_22",
+      "v_n5_110",
+      "v_n5_264",
+      "v_n5_323",
+      "v_n5_484"
+    ],
+    "grammarIds": [
+      "g_n4_22",
+      "g_n4_38",
+      "g_n4_43",
+      "g_n4_42",
+      "g_n4_44"
+    ],
+    "keyVocabularyIds": [
+      "v_n4_61",
+      "v_n4_39",
+      "v_n4_48",
+      "v_n4_100",
+      "v_n5_249"
+    ],
+    "keyGrammarIds": [
+      "g_n4_22",
+      "g_n4_38"
+    ],
+    "bodyHighlights": [
+      [
+        {
+          "text": "先週",
+          "reading": "せんしゅう",
+          "meaningKo": "지난주",
+          "kind": "time"
+        },
+        {
+          "text": "働き始め",
+          "reading": "はたらきはじめ",
+          "meaningKo": "일하기 시작",
+          "kind": "verb"
+        }
+      ],
+      [
+        {
+          "text": "緊張",
+          "reading": "きんちょう",
+          "meaningKo": "긴장",
+          "kind": "noun"
+        },
+        {
+          "text": "優しく",
+          "reading": "やさしく",
+          "meaningKo": "친절히",
+          "kind": "adj"
+        }
+      ],
+      [
+        {
+          "text": "部長",
+          "reading": "ぶちょう",
+          "meaningKo": "부장",
+          "vocabId": "v_n4_61",
+          "kind": "vocab"
+        },
+        {
+          "text": "紹介",
+          "reading": "しょうかい",
+          "meaningKo": "소개",
+          "vocabId": "v_n4_39",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "昼休み",
+          "reading": "ひるやすみ",
+          "meaningKo": "점심시간",
+          "vocabId": "v_n4_48",
+          "kind": "vocab"
+        },
+        {
+          "text": "安心",
+          "reading": "あんしん",
+          "meaningKo": "안심",
+          "kind": "noun"
+        }
+      ],
+      [
+        {
+          "text": "頑張ろう",
+          "reading": "がんばろう",
+          "meaningKo": "열심히 하자",
+          "vocabId": "v_n4_100",
+          "kind": "vocab"
+        }
+      ]
+    ],
+    "tags": [
+      "생활",
+      "회사",
+      "첫날"
+    ],
+    "estimatedMinutes": 3,
+    "sourceType": "original"
+  },
+  {
+    "id": "story_n4_002",
+    "type": "daily_story",
+    "level": "N4",
+    "titleJa": "病院での一日",
+    "titleKo": "병원에서의 하루",
+    "summaryKo": "감기에 걸려 병원에 다녀온 짧은 이야기.",
+    "bodyJa": [
+      "昨日から熱があって、頭も痛かったです。",
+      "今朝、近くの病院へ行きました。",
+      "受付で保険証を見せて、しばらく待ちました。",
+      "医者が「風邪ですね。三日休んでください」と言いました。",
+      "薬をもらって、家で寝ました。"
+    ],
+    "bodyReadings": [
+      [
+        {
+          "text": "昨日",
+          "reading": "きのう"
+        },
+        {
+          "text": "熱",
+          "reading": "ねつ"
+        },
+        {
+          "text": "頭",
+          "reading": "あたま"
+        },
+        {
+          "text": "痛かった",
+          "reading": "いたかった"
+        }
+      ],
+      [
+        {
+          "text": "今朝",
+          "reading": "けさ"
+        },
+        {
+          "text": "近く",
+          "reading": "ちかく"
+        },
+        {
+          "text": "病院",
+          "reading": "びょういん"
+        },
+        {
+          "text": "行きました",
+          "reading": "いきました"
+        }
+      ],
+      [
+        {
+          "text": "受付",
+          "reading": "うけつけ"
+        },
+        {
+          "text": "保険証",
+          "reading": "ほけんしょう"
+        },
+        {
+          "text": "見せて",
+          "reading": "みせて"
+        },
+        {
+          "text": "待ちました",
+          "reading": "まちました"
+        }
+      ],
+      [
+        {
+          "text": "医者",
+          "reading": "いしゃ"
+        },
+        {
+          "text": "風邪",
+          "reading": "かぜ"
+        },
+        {
+          "text": "三日",
+          "reading": "みっか"
+        },
+        {
+          "text": "休んで",
+          "reading": "やすんで"
+        },
+        {
+          "text": "言いました",
+          "reading": "いいました"
+        }
+      ],
+      [
+        {
+          "text": "薬",
+          "reading": "くすり"
+        },
+        {
+          "text": "家",
+          "reading": "いえ"
+        },
+        {
+          "text": "寝ました",
+          "reading": "ねました"
+        }
+      ]
+    ],
+    "bodyRomaji": [
+      "kinou kara netsu ga atte, atama mo itakatta desu.",
+      "kesa, chikaku no byouin e ikimashita.",
+      "uketsuke de hokenshou o misete, shibaraku machimashita.",
+      "isha ga \"kaze desu ne. mikka yasunde kudasai\" to iimashita.",
+      "kusuri o moratte, ie de nemashita."
+    ],
+    "bodyKo": [
+      "어제부터 열이 있고 머리도 아팠습니다.",
+      "오늘 아침, 근처 병원에 갔습니다.",
+      "접수처에서 보험증을 보여주고 잠시 기다렸습니다.",
+      "의사가 \"감기네요. 사흘 쉬세요\"라고 말했습니다.",
+      "약을 받고 집에서 잤습니다."
+    ],
+    "vocabularyIds": [
+      "v_n4_148",
+      "v_n4_149",
+      "v_n4_147",
+      "v_n5_230",
+      "v_n4_56",
+      "v_n4_641",
+      "v_n4_572",
+      "v_n4_806",
+      "v_n5_23",
+      "v_n5_42",
+      "v_n5_229",
+      "v_n5_294",
+      "v_n5_339",
+      "v_n5_38",
+      "v_n5_227"
+    ],
+    "grammarIds": [
+      "g_n5_13",
+      "g_n4_37"
+    ],
+    "keyVocabularyIds": [
+      "v_n4_148",
+      "v_n4_149",
+      "v_n4_147",
+      "v_n5_230",
+      "v_n4_56"
+    ],
+    "keyGrammarIds": [
+      "g_n5_13"
+    ],
+    "bodyHighlights": [
+      [
+        {
+          "text": "熱",
+          "reading": "ねつ",
+          "meaningKo": "열",
+          "vocabId": "v_n4_148",
+          "kind": "vocab"
+        },
+        {
+          "text": "頭",
+          "reading": "あたま",
+          "meaningKo": "머리",
+          "kind": "noun"
+        },
+        {
+          "text": "痛かった",
+          "reading": "いたかった",
+          "meaningKo": "아팠다",
+          "kind": "adj"
+        }
+      ],
+      [
+        {
+          "text": "病院",
+          "reading": "びょういん",
+          "meaningKo": "병원",
+          "vocabId": "v_n4_147",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "受付",
+          "reading": "うけつけ",
+          "meaningKo": "접수처",
+          "vocabId": "v_n4_56",
+          "kind": "vocab"
+        },
+        {
+          "text": "保険証",
+          "reading": "ほけんしょう",
+          "meaningKo": "보험증",
+          "kind": "noun"
+        }
+      ],
+      [
+        {
+          "text": "医者",
+          "reading": "いしゃ",
+          "meaningKo": "의사",
+          "kind": "noun"
+        },
+        {
+          "text": "風邪",
+          "reading": "かぜ",
+          "meaningKo": "감기",
+          "kind": "noun"
+        }
+      ],
+      [
+        {
+          "text": "薬",
+          "reading": "くすり",
+          "meaningKo": "약",
+          "vocabId": "v_n5_230",
+          "kind": "vocab"
+        }
+      ]
+    ],
+    "tags": [
+      "생활",
+      "병원",
+      "감기"
+    ],
+    "estimatedMinutes": 3,
+    "sourceType": "original"
+  },
+  {
+    "id": "story_n4_003",
+    "type": "news_style",
+    "level": "N4",
+    "titleJa": "駅の新しいルール",
+    "titleKo": "역의 새로운 규칙",
+    "summaryKo": "역에서 시작된 새 안내 규칙에 대한 가상 기사.",
+    "bodyJa": [
+      "来月から駅で新しいルールが始まります。",
+      "エスカレーターでは歩かないでください。両側に立ちます。",
+      "これは事故を減らすためのルールです。",
+      "駅員は「みなさんの安全のために協力してください」と話しています。"
+    ],
+    "bodyReadings": [
+      [
+        {
+          "text": "来月",
+          "reading": "らいげつ"
+        },
+        {
+          "text": "駅",
+          "reading": "えき"
+        },
+        {
+          "text": "新しい",
+          "reading": "あたらしい"
+        },
+        {
+          "text": "始まり",
+          "reading": "はじまり"
+        }
+      ],
+      [
+        {
+          "text": "歩かない",
+          "reading": "あるかない"
+        },
+        {
+          "text": "両側",
+          "reading": "りょうがわ"
+        },
+        {
+          "text": "立ちます",
+          "reading": "たちます"
+        }
+      ],
+      [
+        {
+          "text": "事故",
+          "reading": "じこ"
+        },
+        {
+          "text": "減らす",
+          "reading": "へらす"
+        }
+      ],
+      [
+        {
+          "text": "駅員",
+          "reading": "えきいん"
+        },
+        {
+          "text": "安全",
+          "reading": "あんぜん"
+        },
+        {
+          "text": "協力",
+          "reading": "きょうりょく"
+        },
+        {
+          "text": "話して",
+          "reading": "はなして"
+        }
+      ]
+    ],
+    "bodyRomaji": [
+      "raigetsu kara eki de atarashii ruuru ga hajimarimasu.",
+      "esukareetaa de wa arukanaide kudasai. ryougawa ni tachimasu.",
+      "kore wa jiko o herasu tame no ruuru desu.",
+      "ekiin wa \"minasan no anzen no tame ni kyouryoku shite kudasai\" to hanashite imasu."
+    ],
+    "bodyKo": [
+      "다음 달부터 역에서 새 규칙이 시작됩니다.",
+      "에스컬레이터에서는 걷지 말아 주세요. 양쪽에 섭니다.",
+      "이는 사고를 줄이기 위한 규칙입니다.",
+      "역무원은 \"모두의 안전을 위해 협력해 주세요\"라고 말하고 있습니다."
+    ],
+    "vocabularyIds": [
+      "v_n4_157",
+      "v_n4_154",
+      "v_n4_158",
+      "v_n4_208",
+      "v_n4_125",
+      "v_n4_22",
+      "v_n4_414",
+      "v_n4_737",
+      "v_n4_868",
+      "v_n4_392",
+      "v_n4_573",
+      "v_n5_14",
+      "v_n5_486",
+      "v_n5_40"
+    ],
+    "grammarIds": [
+      "g_n4_16",
+      "g_n5_13",
+      "g_n4_68"
+    ],
+    "keyVocabularyIds": [
+      "v_n4_157",
+      "v_n4_154",
+      "v_n4_158",
+      "v_n4_208",
+      "v_n4_125"
+    ],
+    "keyGrammarIds": [
+      "g_n4_16"
+    ],
+    "bodyHighlights": [
+      [
+        {
+          "text": "駅",
+          "reading": "えき",
+          "meaningKo": "역",
+          "kind": "noun"
+        },
+        {
+          "text": "新しい",
+          "reading": "あたらしい",
+          "meaningKo": "새로운",
+          "kind": "adj"
+        }
+      ],
+      [
+        {
+          "text": "歩かない",
+          "reading": "あるかない",
+          "meaningKo": "걷지 않다",
+          "kind": "verb"
+        },
+        {
+          "text": "両側",
+          "reading": "りょうがわ",
+          "meaningKo": "양쪽",
+          "kind": "noun"
+        }
+      ],
+      [
+        {
+          "text": "事故",
+          "reading": "じこ",
+          "meaningKo": "사고",
+          "kind": "noun"
+        },
+        {
+          "text": "減らす",
+          "reading": "へらす",
+          "meaningKo": "줄이다",
+          "vocabId": "v_n4_208",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "安全",
+          "reading": "あんぜん",
+          "meaningKo": "안전",
+          "vocabId": "v_n4_154",
+          "kind": "vocab"
+        },
+        {
+          "text": "協力",
+          "reading": "きょうりょく",
+          "meaningKo": "협력",
+          "kind": "noun"
+        }
+      ]
+    ],
+    "tags": [
+      "뉴스",
+      "교통",
+      "안전"
+    ],
+    "estimatedMinutes": 2,
+    "sourceType": "original"
+  },
+  {
+    "id": "story_n4_004",
+    "type": "daily_story",
+    "level": "N4",
+    "titleJa": "引っ越しの準備",
+    "titleKo": "이사 준비",
+    "summaryKo": "다음 달 이사를 준비하는 짧은 일상 이야기.",
+    "bodyJa": [
+      "来月、駅の近くに引っ越すことになりました。",
+      "友だちが手伝ってくれるので、とても助かります。",
+      "今、古い家具を全部売ったり、捨てたりしています。",
+      "新しい部屋は今より小さいですが、駅に近くて便利です。",
+      "楽しみにしています。"
+    ],
+    "bodyReadings": [
+      [
+        {
+          "text": "来月",
+          "reading": "らいげつ"
+        },
+        {
+          "text": "駅",
+          "reading": "えき"
+        },
+        {
+          "text": "近く",
+          "reading": "ちかく"
+        },
+        {
+          "text": "引っ越す",
+          "reading": "ひっこす"
+        }
+      ],
+      [
+        {
+          "text": "友だち",
+          "reading": "ともだち"
+        },
+        {
+          "text": "手伝って",
+          "reading": "てつだって"
+        },
+        {
+          "text": "助かり",
+          "reading": "たすかり"
+        }
+      ],
+      [
+        {
+          "text": "今",
+          "reading": "いま"
+        },
+        {
+          "text": "古い",
+          "reading": "ふるい"
+        },
+        {
+          "text": "家具",
+          "reading": "かぐ"
+        },
+        {
+          "text": "全部",
+          "reading": "ぜんぶ"
+        },
+        {
+          "text": "売ったり",
+          "reading": "うったり"
+        },
+        {
+          "text": "捨てたり",
+          "reading": "すてたり"
+        }
+      ],
+      [
+        {
+          "text": "新しい",
+          "reading": "あたらしい"
+        },
+        {
+          "text": "部屋",
+          "reading": "へや"
+        },
+        {
+          "text": "小さい",
+          "reading": "ちいさい"
+        },
+        {
+          "text": "駅",
+          "reading": "えき"
+        },
+        {
+          "text": "近くて",
+          "reading": "ちかくて"
+        },
+        {
+          "text": "便利",
+          "reading": "べんり"
+        }
+      ],
+      [
+        {
+          "text": "楽しみ",
+          "reading": "たのしみ"
+        }
+      ]
+    ],
+    "bodyRomaji": [
+      "raigetsu, eki no chikaku ni hikkosu koto ni narimashita.",
+      "tomodachi ga tetsudatte kureru node, totemo tasukarimasu.",
+      "ima, furui kagu o zenbu uttari, sutetari shite imasu.",
+      "atarashii heya wa ima yori chiisai desu ga, eki ni chikakute benri desu.",
+      "tanoshimi ni shite imasu."
+    ],
+    "bodyKo": [
+      "다음 달, 역 근처로 이사하게 되었습니다.",
+      "친구가 도와줘서 정말 도움이 됩니다.",
+      "지금은 낡은 가구를 다 팔거나 버리고 있습니다.",
+      "새 방은 지금보다 작지만 역에 가까워서 편리합니다.",
+      "기대하고 있습니다."
+    ],
+    "vocabularyIds": [
+      "v_n4_85",
+      "v_n4_86",
+      "v_n4_84",
+      "v_n4_18",
+      "v_n4_135",
+      "v_n4_441",
+      "v_n4_464",
+      "v_n4_602",
+      "v_n4_236",
+      "v_n5_10",
+      "v_n5_14",
+      "v_n5_56",
+      "v_n5_247",
+      "v_n5_410",
+      "v_n5_466",
+      "v_n5_73",
+      "v_n5_246"
+    ],
+    "grammarIds": [
+      "g_n4_21",
+      "g_n4_6",
+      "g_n4_17",
+      "g_n4_42"
+    ],
+    "keyVocabularyIds": [
+      "v_n4_85",
+      "v_n4_86",
+      "v_n4_84",
+      "v_n4_18",
+      "v_n4_135"
+    ],
+    "keyGrammarIds": [
+      "g_n4_21",
+      "g_n4_6"
+    ],
+    "bodyHighlights": [
+      [
+        {
+          "text": "引っ越す",
+          "reading": "ひっこす",
+          "meaningKo": "이사하다",
+          "vocabId": "v_n4_86",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "手伝って",
+          "reading": "てつだって",
+          "meaningKo": "도와줘서",
+          "vocabId": "v_n4_18",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "古い",
+          "reading": "ふるい",
+          "meaningKo": "낡은",
+          "kind": "adj"
+        },
+        {
+          "text": "家具",
+          "reading": "かぐ",
+          "meaningKo": "가구",
+          "vocabId": "v_n4_84",
+          "kind": "vocab"
+        },
+        {
+          "text": "売ったり",
+          "reading": "うったり",
+          "meaningKo": "팔거나",
+          "kind": "verb"
+        }
+      ],
+      [
+        {
+          "text": "新しい",
+          "reading": "あたらしい",
+          "meaningKo": "새로운",
+          "kind": "adj"
+        },
+        {
+          "text": "便利",
+          "reading": "べんり",
+          "meaningKo": "편리",
+          "kind": "adj"
+        }
+      ],
+      [
+        {
+          "text": "楽しみ",
+          "reading": "たのしみ",
+          "meaningKo": "기대",
+          "kind": "noun"
+        }
+      ]
+    ],
+    "tags": [
+      "생활",
+      "이사"
+    ],
+    "estimatedMinutes": 3,
+    "sourceType": "original"
+  },
+  {
+    "id": "story_n4_005",
+    "type": "short_story",
+    "level": "N4",
+    "titleJa": "最後のバス",
+    "titleKo": "마지막 버스",
+    "summaryKo": "야근 후 마지막 버스를 탔던 늦은 밤의 짧은 단편.",
+    "bodyJa": [
+      "会社の残業が終わったのは夜十時でした。",
+      "駅まで急いだけれど、最後のバスはもう出てしまいました。",
+      "雨が少し降っていて、寒かったです。",
+      "タクシーを呼ぼうかと思いましたが、料金が高すぎます。",
+      "結局、コンビニで温かいお茶を買って、ゆっくり歩いて帰りました。",
+      "長い夜でしたが、静かな道は少し気持ちよかったです。"
+    ],
+    "bodyReadings": [
+      [
+        {
+          "text": "会社",
+          "reading": "かいしゃ"
+        },
+        {
+          "text": "残業",
+          "reading": "ざんぎょう"
+        },
+        {
+          "text": "終わった",
+          "reading": "おわった"
+        },
+        {
+          "text": "夜",
+          "reading": "よる"
+        },
+        {
+          "text": "十時",
+          "reading": "じゅうじ"
+        }
+      ],
+      [
+        {
+          "text": "駅",
+          "reading": "えき"
+        },
+        {
+          "text": "急いだ",
+          "reading": "いそいだ"
+        },
+        {
+          "text": "最後",
+          "reading": "さいご"
+        },
+        {
+          "text": "出て",
+          "reading": "でて"
+        }
+      ],
+      [
+        {
+          "text": "雨",
+          "reading": "あめ"
+        },
+        {
+          "text": "少し",
+          "reading": "すこし"
+        },
+        {
+          "text": "降って",
+          "reading": "ふって"
+        },
+        {
+          "text": "寒かった",
+          "reading": "さむかった"
+        }
+      ],
+      [
+        {
+          "text": "呼ぼう",
+          "reading": "よぼう"
+        },
+        {
+          "text": "思いました",
+          "reading": "おもいました"
+        },
+        {
+          "text": "料金",
+          "reading": "りょうきん"
+        },
+        {
+          "text": "高すぎ",
+          "reading": "たかすぎ"
+        }
+      ],
+      [
+        {
+          "text": "結局",
+          "reading": "けっきょく"
+        },
+        {
+          "text": "温かい",
+          "reading": "あたたかい"
+        },
+        {
+          "text": "お茶",
+          "reading": "おちゃ"
+        },
+        {
+          "text": "買って",
+          "reading": "かって"
+        },
+        {
+          "text": "歩いて",
+          "reading": "あるいて"
+        },
+        {
+          "text": "帰り",
+          "reading": "かえり"
+        }
+      ],
+      [
+        {
+          "text": "長い",
+          "reading": "ながい"
+        },
+        {
+          "text": "夜",
+          "reading": "よる"
+        },
+        {
+          "text": "静かな",
+          "reading": "しずかな"
+        },
+        {
+          "text": "道",
+          "reading": "みち"
+        },
+        {
+          "text": "気持ちよかった",
+          "reading": "きもちよかった"
+        }
+      ]
+    ],
+    "bodyRomaji": [
+      "kaisha no zangyou ga owatta no wa yoru juu-ji deshita.",
+      "eki made isoida keredo, saigo no basu wa mou dete shimaimashita.",
+      "ame ga sukoshi futte ite, samukatta desu.",
+      "takushii o yobou ka to omoimashita ga, ryoukin ga takasugimasu.",
+      "kekkyoku, konbini de atatakai ocha o katte, yukkuri aruite kaerimashita.",
+      "nagai yoru deshita ga, shizuka na michi wa sukoshi kimochi yokatta desu."
+    ],
+    "bodyKo": [
+      "회사 야근이 끝난 것은 밤 10시였습니다.",
+      "역까지 서둘렀지만 마지막 버스는 이미 떠나 버렸습니다.",
+      "비가 조금 내리고 있어서 추웠습니다.",
+      "택시를 부를까 생각했지만, 요금이 너무 비쌌습니다.",
+      "결국, 편의점에서 따뜻한 차를 사서 천천히 걸어서 돌아갔습니다.",
+      "긴 밤이었지만, 조용한 길은 조금 기분이 좋았습니다."
+    ],
+    "vocabularyIds": [
+      "v_n4_64",
+      "v_n4_211",
+      "v_n5_249",
+      "v_n5_179",
+      "v_n4_19",
+      "v_n4_379",
+      "v_n4_239",
+      "v_n4_243",
+      "v_n4_571",
+      "v_n5_162",
+      "v_n5_167",
+      "v_n5_474",
+      "v_n5_236",
+      "v_n5_37",
+      "v_n5_110",
+      "v_n5_161",
+      "v_n5_436"
+    ],
+    "grammarIds": [
+      "g_n4_1",
+      "g_n4_12",
+      "g_n4_38"
+    ],
+    "keyVocabularyIds": [
+      "v_n4_64",
+      "v_n4_211",
+      "v_n5_249",
+      "v_n5_179",
+      "v_n4_19"
+    ],
+    "keyGrammarIds": [
+      "g_n4_1",
+      "g_n4_12"
+    ],
+    "bodyHighlights": [
+      [
+        {
+          "text": "残業",
+          "reading": "ざんぎょう",
+          "meaningKo": "야근",
+          "vocabId": "v_n4_64",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "最後",
+          "reading": "さいご",
+          "meaningKo": "마지막",
+          "vocabId": "v_n4_211",
+          "kind": "vocab"
+        },
+        {
+          "text": "出て",
+          "reading": "でて",
+          "meaningKo": "떠나",
+          "kind": "verb"
+        }
+      ],
+      [
+        {
+          "text": "雨",
+          "reading": "あめ",
+          "meaningKo": "비",
+          "kind": "noun"
+        },
+        {
+          "text": "寒かった",
+          "reading": "さむかった",
+          "meaningKo": "추웠다",
+          "kind": "adj"
+        }
+      ],
+      [
+        {
+          "text": "料金",
+          "reading": "りょうきん",
+          "meaningKo": "요금",
+          "kind": "noun"
+        },
+        {
+          "text": "高すぎ",
+          "reading": "たかすぎ",
+          "meaningKo": "너무 비싸다",
+          "kind": "adj"
+        }
+      ],
+      [
+        {
+          "text": "温かい",
+          "reading": "あたたかい",
+          "meaningKo": "따뜻한",
+          "kind": "adj"
+        },
+        {
+          "text": "歩いて",
+          "reading": "あるいて",
+          "meaningKo": "걸어서",
+          "kind": "verb"
+        }
+      ],
+      [
+        {
+          "text": "静かな",
+          "reading": "しずかな",
+          "meaningKo": "조용한",
+          "kind": "adj"
+        }
+      ]
+    ],
+    "tags": [
+      "단편",
+      "밤",
+      "퇴근"
+    ],
+    "estimatedMinutes": 4,
+    "sourceType": "original"
+  },
+  {
+    "id": "story_n4_006",
+    "type": "short_story",
+    "level": "N4",
+    "titleJa": "祖母の手紙",
+    "titleKo": "할머니의 편지",
+    "summaryKo": "서랍에서 발견한 할머니의 오래된 편지에 대한 단편.",
+    "bodyJa": [
+      "机の引き出しに古い手紙を見つけました。",
+      "祖母が私に送ってくれたものでした。",
+      "「元気にしていますか。たまには遊びにきてください」と書いてありました。",
+      "読み終わったとき、急に祖母に会いたくなりました。",
+      "電話をかけたら、祖母はとても喜んでくれました。",
+      "今度の週末、祖母の家に行くことにしました。"
+    ],
+    "bodyReadings": [
+      [
+        {
+          "text": "机",
+          "reading": "つくえ"
+        },
+        {
+          "text": "引き出し",
+          "reading": "ひきだし"
+        },
+        {
+          "text": "古い",
+          "reading": "ふるい"
+        },
+        {
+          "text": "手紙",
+          "reading": "てがみ"
+        },
+        {
+          "text": "見つけ",
+          "reading": "みつけ"
+        }
+      ],
+      [
+        {
+          "text": "祖母",
+          "reading": "そぼ"
+        },
+        {
+          "text": "私",
+          "reading": "わたし"
+        },
+        {
+          "text": "送って",
+          "reading": "おくって"
+        }
+      ],
+      [
+        {
+          "text": "元気",
+          "reading": "げんき"
+        },
+        {
+          "text": "遊び",
+          "reading": "あそび"
+        },
+        {
+          "text": "書いて",
+          "reading": "かいて"
+        }
+      ],
+      [
+        {
+          "text": "読み終わった",
+          "reading": "よみおわった"
+        },
+        {
+          "text": "急に",
+          "reading": "きゅうに"
+        },
+        {
+          "text": "祖母",
+          "reading": "そぼ"
+        },
+        {
+          "text": "会いたく",
+          "reading": "あいたく"
+        }
+      ],
+      [
+        {
+          "text": "電話",
+          "reading": "でんわ"
+        },
+        {
+          "text": "喜んで",
+          "reading": "よろこんで"
+        }
+      ],
+      [
+        {
+          "text": "今度",
+          "reading": "こんど"
+        },
+        {
+          "text": "週末",
+          "reading": "しゅうまつ"
+        },
+        {
+          "text": "家",
+          "reading": "いえ"
+        },
+        {
+          "text": "行く",
+          "reading": "いく"
+        }
+      ]
+    ],
+    "bodyRomaji": [
+      "tsukue no hikidashi ni furui tegami o mitsukemashita.",
+      "sobo ga watashi ni okutte kureta mono deshita.",
+      "\"genki ni shite imasu ka. tama ni wa asobi ni kite kudasai\" to kaite arimashita.",
+      "yomiowatta toki, kyuu ni sobo ni aitaku narimashita.",
+      "denwa o kaketara, sobo wa totemo yorokonde kuremashita.",
+      "kondo no shuumatsu, sobo no ie ni iku koto ni shimashita."
+    ],
+    "bodyKo": [
+      "책상 서랍에서 오래된 편지를 발견했습니다.",
+      "할머니가 저에게 보내신 것이었습니다.",
+      "\"잘 지내고 있나요? 가끔은 놀러 와 주세요\"라고 적혀 있었습니다.",
+      "다 읽었을 때, 갑자기 할머니가 보고 싶어졌습니다.",
+      "전화를 걸자 할머니는 정말 기뻐해 주셨습니다.",
+      "이번 주말, 할머니 댁에 가기로 했습니다."
+    ],
+    "vocabularyIds": [
+      "v_n5_138",
+      "v_n4_16",
+      "v_n4_185",
+      "v_n4_20",
+      "v_n4_175",
+      "v_n4_144",
+      "v_n4_478",
+      "v_n4_652",
+      "v_n4_245",
+      "v_n4_638",
+      "v_n5_236",
+      "v_n5_466",
+      "v_n5_6",
+      "v_n5_101",
+      "v_n5_246",
+      "v_n5_283",
+      "v_n5_284"
+    ],
+    "grammarIds": [
+      "g_n4_25",
+      "g_n4_20",
+      "g_n4_19",
+      "g_n4_17",
+      "g_n4_42",
+      "g_n4_44"
+    ],
+    "keyVocabularyIds": [
+      "v_n5_138",
+      "v_n4_16",
+      "v_n4_185",
+      "v_n4_20",
+      "v_n4_175"
+    ],
+    "keyGrammarIds": [
+      "g_n4_25",
+      "g_n4_20"
+    ],
+    "bodyHighlights": [
+      [
+        {
+          "text": "机",
+          "reading": "つくえ",
+          "meaningKo": "책상",
+          "kind": "noun"
+        },
+        {
+          "text": "手紙",
+          "reading": "てがみ",
+          "meaningKo": "편지",
+          "kind": "noun"
+        },
+        {
+          "text": "見つけ",
+          "reading": "みつけ",
+          "meaningKo": "발견하다",
+          "vocabId": "v_n4_16",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "祖母",
+          "reading": "そぼ",
+          "meaningKo": "할머니",
+          "vocabId": "v_n5_138",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "元気",
+          "reading": "げんき",
+          "meaningKo": "건강·잘 지냄",
+          "vocabId": "v_n4_101",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "急に",
+          "reading": "きゅうに",
+          "meaningKo": "갑자기",
+          "vocabId": "v_n4_245",
+          "kind": "vocab"
+        },
+        {
+          "text": "会いたく",
+          "reading": "あいたく",
+          "meaningKo": "만나고 싶어",
+          "kind": "verb"
+        }
+      ],
+      [
+        {
+          "text": "電話",
+          "reading": "でんわ",
+          "meaningKo": "전화",
+          "kind": "noun"
+        },
+        {
+          "text": "喜んで",
+          "reading": "よろこんで",
+          "meaningKo": "기뻐하며",
+          "vocabId": "v_n4_185",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "週末",
+          "reading": "しゅうまつ",
+          "meaningKo": "주말",
+          "kind": "time"
+        }
+      ]
+    ],
+    "tags": [
+      "단편",
+      "가족",
+      "편지"
+    ],
+    "estimatedMinutes": 4,
+    "sourceType": "original"
+  },
+  {
+    "id": "story_n4_007",
+    "type": "daily_story",
+    "level": "N4",
+    "titleJa": "初めての出張",
+    "titleKo": "첫 출장",
+    "summaryKo": "처음으로 오사카 출장을 준비하는 회사원의 하루.",
+    "bodyJa": [
+      "来週、初めて大阪へ出張することになりました。",
+      "新幹線の切符はもう予約してあります。",
+      "課長に名刺の渡し方を教えてもらいました。",
+      "会場までの道も地図で確認しておきました。",
+      "緊張しますが、いい経験になると思います。"
+    ],
+    "bodyReadings": [
+      [
+        {
+          "text": "来週",
+          "reading": "らいしゅう"
+        },
+        {
+          "text": "初めて",
+          "reading": "はじめて"
+        },
+        {
+          "text": "大阪",
+          "reading": "おおさか"
+        },
+        {
+          "text": "出張",
+          "reading": "しゅっちょう"
+        }
+      ],
+      [
+        {
+          "text": "新幹線",
+          "reading": "しんかんせん"
+        },
+        {
+          "text": "切符",
+          "reading": "きっぷ"
+        },
+        {
+          "text": "予約",
+          "reading": "よやく"
+        }
+      ],
+      [
+        {
+          "text": "課長",
+          "reading": "かちょう"
+        },
+        {
+          "text": "名刺",
+          "reading": "めいし"
+        },
+        {
+          "text": "渡し方",
+          "reading": "わたしかた"
+        },
+        {
+          "text": "教えて",
+          "reading": "おしえて"
+        }
+      ],
+      [
+        {
+          "text": "会場",
+          "reading": "かいじょう"
+        },
+        {
+          "text": "道",
+          "reading": "みち"
+        },
+        {
+          "text": "地図",
+          "reading": "ちず"
+        },
+        {
+          "text": "確認",
+          "reading": "かくにん"
+        }
+      ],
+      [
+        {
+          "text": "緊張",
+          "reading": "きんちょう"
+        },
+        {
+          "text": "経験",
+          "reading": "けいけん"
+        },
+        {
+          "text": "思います",
+          "reading": "おもいます"
+        }
+      ]
+    ],
+    "bodyRomaji": [
+      "raishuu, hajimete oosaka e shucchou suru koto ni narimashita.",
+      "shinkansen no kippu wa mou yoyaku shite arimasu.",
+      "kachou ni meishi no watashikata o oshiete moraimashita.",
+      "kaijou made no michi mo chizu de kakunin shite okimashita.",
+      "kinchou shimasu ga, ii keiken ni naru to omoimasu."
+    ],
+    "bodyKo": [
+      "다음 주에 처음으로 오사카에 출장 가게 되었습니다.",
+      "신칸센 표는 이미 예약되어 있습니다.",
+      "과장님에게 명함 건네는 법을 배웠습니다.",
+      "행사장까지 가는 길도 지도로 확인해 두었습니다.",
+      "긴장되지만 좋은 경험이 될 거라고 생각합니다."
+    ],
+    "vocabularyIds": [
+      "v_n4_301",
+      "v_n4_302",
+      "v_n4_296",
+      "v_n4_374",
+      "v_n4_318",
+      "v_n4_124",
+      "v_n4_35",
+      "v_n4_108",
+      "v_n4_132",
+      "v_n4_243",
+      "v_n5_239",
+      "v_n5_60",
+      "v_n5_93",
+      "v_n5_178",
+      "v_n5_424",
+      "v_n5_483",
+      "v_n5_160"
+    ],
+    "grammarIds": [
+      "g_n4_21",
+      "g_n4_43",
+      "g_n4_2",
+      "g_n4_38"
+    ],
+    "keyVocabularyIds": [
+      "v_n4_301",
+      "v_n4_302",
+      "v_n4_296",
+      "v_n4_374",
+      "v_n4_318"
+    ],
+    "keyGrammarIds": [
+      "g_n4_21",
+      "g_n4_43"
+    ],
+    "bodyHighlights": [
+      [
+        {
+          "text": "出張",
+          "reading": "しゅっちょう",
+          "meaningKo": "출장",
+          "vocabId": "v_n4_301",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "予約",
+          "reading": "よやく",
+          "meaningKo": "예약",
+          "vocabId": "v_n4_35",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "名刺",
+          "reading": "めいし",
+          "meaningKo": "명함",
+          "vocabId": "v_n4_302",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "確認",
+          "reading": "かくにん",
+          "meaningKo": "확인",
+          "vocabId": "v_n4_307",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "緊張",
+          "reading": "きんちょう",
+          "meaningKo": "긴장",
+          "vocabId": "v_n4_374",
+          "kind": "vocab"
+        }
+      ]
+    ],
+    "tags": [
+      "일상",
+      "회사",
+      "출장"
+    ],
+    "estimatedMinutes": 4,
+    "sourceType": "original"
+  },
+  {
+    "id": "story_n4_008",
+    "type": "news_style",
+    "level": "N4",
+    "titleJa": "駅前に新しい図書館",
+    "titleKo": "역 앞에 새 도서관",
+    "summaryKo": "역 앞에 새로 생기는 도서관을 소개하는 뉴스풍 글.",
+    "bodyJa": [
+      "来月、駅前に新しい図書館が建つ予定です。",
+      "営業時間は朝九時から夜八時までだそうです。",
+      "詳しいことはホームページで確認できます。",
+      "工事の間、近くの道は渋滞するかもしれません。",
+      "町の人たちは完成を楽しみにしています。"
+    ],
+    "bodyReadings": [
+      [
+        {
+          "text": "来月",
+          "reading": "らいげつ"
+        },
+        {
+          "text": "駅前",
+          "reading": "えきまえ"
+        },
+        {
+          "text": "新しい",
+          "reading": "あたらしい"
+        },
+        {
+          "text": "図書館",
+          "reading": "としょかん"
+        },
+        {
+          "text": "建つ",
+          "reading": "たつ"
+        },
+        {
+          "text": "予定",
+          "reading": "よてい"
+        }
+      ],
+      [
+        {
+          "text": "営業時間",
+          "reading": "えいぎょうじかん"
+        },
+        {
+          "text": "朝",
+          "reading": "あさ"
+        },
+        {
+          "text": "九時",
+          "reading": "くじ"
+        },
+        {
+          "text": "夜",
+          "reading": "よる"
+        },
+        {
+          "text": "八時",
+          "reading": "はちじ"
+        }
+      ],
+      [
+        {
+          "text": "詳しい",
+          "reading": "くわしい"
+        },
+        {
+          "text": "確認",
+          "reading": "かくにん"
+        }
+      ],
+      [
+        {
+          "text": "工事",
+          "reading": "こうじ"
+        },
+        {
+          "text": "間",
+          "reading": "あいだ"
+        },
+        {
+          "text": "近く",
+          "reading": "ちかく"
+        },
+        {
+          "text": "道",
+          "reading": "みち"
+        },
+        {
+          "text": "渋滞",
+          "reading": "じゅうたい"
+        }
+      ],
+      [
+        {
+          "text": "町",
+          "reading": "まち"
+        },
+        {
+          "text": "人",
+          "reading": "ひと"
+        },
+        {
+          "text": "完成",
+          "reading": "かんせい"
+        },
+        {
+          "text": "楽しみ",
+          "reading": "たのしみ"
+        }
+      ]
+    ],
+    "bodyRomaji": [
+      "raigetsu, ekimae ni atarashii toshokan ga tatsu yotei desu.",
+      "eigyou jikan wa asa ku-ji kara yoru hachi-ji made da sou desu.",
+      "kuwashii koto wa hoomupeeji de kakunin dekimasu.",
+      "kouji no aida, chikaku no michi wa juutai suru kamo shiremasen.",
+      "machi no hito-tachi wa kansei o tanoshimi ni shite imasu."
+    ],
+    "bodyKo": [
+      "다음 달 역 앞에 새 도서관이 세워질 예정입니다.",
+      "영업시간은 아침 9시부터 밤 8시까지라고 합니다.",
+      "자세한 내용은 홈페이지에서 확인할 수 있습니다.",
+      "공사하는 동안 근처 길이 막힐지도 모릅니다.",
+      "마을 사람들은 완성을 기대하고 있습니다."
+    ],
+    "vocabularyIds": [
+      "v_n4_276",
+      "v_n4_325",
+      "v_n4_307",
+      "v_n4_353",
+      "v_n5_74",
+      "v_n4_853",
+      "v_n4_351",
+      "v_n4_602",
+      "v_n4_862",
+      "v_n4_36",
+      "v_n4_55",
+      "v_n5_14",
+      "v_n5_247",
+      "v_n5_9",
+      "v_n5_93",
+      "v_n5_339",
+      "v_n5_486",
+      "v_n5_131"
+    ],
+    "grammarIds": [
+      "g_n4_50",
+      "g_n4_8",
+      "g_n4_19"
+    ],
+    "keyVocabularyIds": [
+      "v_n4_276",
+      "v_n4_325",
+      "v_n4_307",
+      "v_n4_353",
+      "v_n5_74"
+    ],
+    "keyGrammarIds": [
+      "g_n4_50",
+      "g_n4_19"
+    ],
+    "bodyHighlights": [
+      [
+        {
+          "text": "建つ",
+          "reading": "たつ",
+          "meaningKo": "(건물이) 서다",
+          "vocabId": "v_n4_276",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "営業時間",
+          "reading": "えいぎょうじかん",
+          "meaningKo": "영업시간",
+          "vocabId": "v_n4_325",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "確認",
+          "reading": "かくにん",
+          "meaningKo": "확인",
+          "vocabId": "v_n4_307",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "渋滞",
+          "reading": "じゅうたい",
+          "meaningKo": "정체",
+          "vocabId": "v_n4_353",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "楽しみ",
+          "reading": "たのしみ",
+          "meaningKo": "기대",
+          "kind": "noun"
+        }
+      ]
+    ],
+    "tags": [
+      "뉴스",
+      "도서관",
+      "지역"
+    ],
+    "estimatedMinutes": 4,
+    "sourceType": "original"
+  },
+  {
+    "id": "story_n4_009",
+    "type": "short_story",
+    "level": "N4",
+    "titleJa": "落とし物の財布",
+    "titleKo": "주운 지갑",
+    "summaryKo": "역에서 주운 지갑을 창구에 가져다준 뒤 일어난 작은 이야기.",
+    "bodyJa": [
+      "駅のベンチで茶色い財布を見つけました。",
+      "中には現金とカードが入っていました。",
+      "急いでいましたが、駅の窓口に届けることにしました。",
+      "一週間後、財布の持ち主から手紙が届きました。",
+      "「ありがとう」の言葉に、心が温かくなりました。"
+    ],
+    "bodyReadings": [
+      [
+        {
+          "text": "駅",
+          "reading": "えき"
+        },
+        {
+          "text": "茶色い",
+          "reading": "ちゃいろい"
+        },
+        {
+          "text": "財布",
+          "reading": "さいふ"
+        },
+        {
+          "text": "見つけました",
+          "reading": "みつけました"
+        }
+      ],
+      [
+        {
+          "text": "中",
+          "reading": "なか"
+        },
+        {
+          "text": "現金",
+          "reading": "げんきん"
+        },
+        {
+          "text": "入って",
+          "reading": "はいって"
+        }
+      ],
+      [
+        {
+          "text": "急いで",
+          "reading": "いそいで"
+        },
+        {
+          "text": "駅",
+          "reading": "えき"
+        },
+        {
+          "text": "窓口",
+          "reading": "まどぐち"
+        },
+        {
+          "text": "届ける",
+          "reading": "とどける"
+        }
+      ],
+      [
+        {
+          "text": "一週間後",
+          "reading": "いっしゅうかんご"
+        },
+        {
+          "text": "財布",
+          "reading": "さいふ"
+        },
+        {
+          "text": "持ち主",
+          "reading": "もちぬし"
+        },
+        {
+          "text": "手紙",
+          "reading": "てがみ"
+        },
+        {
+          "text": "届きました",
+          "reading": "とどきました"
+        }
+      ],
+      [
+        {
+          "text": "言葉",
+          "reading": "ことば"
+        },
+        {
+          "text": "心",
+          "reading": "こころ"
+        },
+        {
+          "text": "温かく",
+          "reading": "あたたかく"
+        }
+      ]
+    ],
+    "bodyRomaji": [
+      "eki no benchi de chairoi saifu o mitsukemashita.",
+      "naka ni wa genkin to kaado ga haitte imashita.",
+      "isoide imashita ga, eki no madoguchi ni todokeru koto ni shimashita.",
+      "isshuukan-go, saifu no mochinushi kara tegami ga todokimashita.",
+      "\"arigatou\" no kotoba ni, kokoro ga atatakaku narimashita."
+    ],
+    "bodyKo": [
+      "역 벤치에서 갈색 지갑을 발견했습니다.",
+      "안에는 현금과 카드가 들어 있었습니다.",
+      "서두르고 있었지만 역 창구에 가져다주기로 했습니다.",
+      "일주일 뒤 지갑 주인에게서 편지가 도착했습니다.",
+      "\"고마워요\"라는 말에 마음이 따뜻해졌습니다."
+    ],
+    "vocabularyIds": [
+      "v_n4_72",
+      "v_n4_365",
+      "v_n4_323",
+      "v_n4_13",
+      "v_n5_284",
+      "v_n4_16",
+      "v_n5_99",
+      "v_n5_188",
+      "v_n5_384",
+      "v_n5_40",
+      "v_n5_111",
+      "v_n5_258"
+    ],
+    "grammarIds": [
+      "g_n4_20",
+      "g_n4_30"
+    ],
+    "keyVocabularyIds": [
+      "v_n4_72",
+      "v_n4_365",
+      "v_n4_323",
+      "v_n4_13",
+      "v_n5_284"
+    ],
+    "keyGrammarIds": [
+      "g_n4_20",
+      "g_n4_30"
+    ],
+    "bodyHighlights": [
+      [
+        {
+          "text": "財布",
+          "reading": "さいふ",
+          "meaningKo": "지갑",
+          "vocabId": "v_n4_72",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "現金",
+          "reading": "げんきん",
+          "meaningKo": "현금",
+          "vocabId": "v_n4_365",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "窓口",
+          "reading": "まどぐち",
+          "meaningKo": "창구",
+          "vocabId": "v_n4_323",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "手紙",
+          "reading": "てがみ",
+          "meaningKo": "편지",
+          "vocabId": "v_n5_284",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "言葉",
+          "reading": "ことば",
+          "meaningKo": "말",
+          "vocabId": "v_n5_188",
+          "kind": "vocab"
+        }
+      ]
+    ],
+    "tags": [
+      "단편",
+      "분실물",
+      "친절"
+    ],
+    "estimatedMinutes": 4,
+    "sourceType": "original"
+  },
+  {
+    "id": "story_n4_010",
+    "type": "short_story",
+    "level": "N4",
+    "titleJa": "雨の日の親切",
+    "titleKo": "비 오는 날의 친절",
+    "summaryKo": "우산을 잊은 날, 모르는 사람의 친절을 만난 이야기.",
+    "bodyJa": [
+      "急に、強い雨が降ってきました。",
+      "傘を忘れて、駅の前で困っていました。",
+      "その時、知らない女の人が傘に入れてくれました。",
+      "駅まで一緒に歩きながら、少し話をしました。",
+      "今度は私が誰かに親切にしようと思いました。"
+    ],
+    "bodyReadings": [
+      [
+        {
+          "text": "急に",
+          "reading": "きゅうに"
+        },
+        {
+          "text": "強い",
+          "reading": "つよい"
+        },
+        {
+          "text": "雨",
+          "reading": "あめ"
+        },
+        {
+          "text": "降って",
+          "reading": "ふって"
+        }
+      ],
+      [
+        {
+          "text": "傘",
+          "reading": "かさ"
+        },
+        {
+          "text": "忘れて",
+          "reading": "わすれて"
+        },
+        {
+          "text": "駅",
+          "reading": "えき"
+        },
+        {
+          "text": "前",
+          "reading": "まえ"
+        },
+        {
+          "text": "困って",
+          "reading": "こまって"
+        }
+      ],
+      [
+        {
+          "text": "時",
+          "reading": "とき"
+        },
+        {
+          "text": "知らない",
+          "reading": "しらない"
+        },
+        {
+          "text": "女",
+          "reading": "おんな"
+        },
+        {
+          "text": "人",
+          "reading": "ひと"
+        },
+        {
+          "text": "傘",
+          "reading": "かさ"
+        },
+        {
+          "text": "入れて",
+          "reading": "いれて"
+        }
+      ],
+      [
+        {
+          "text": "駅",
+          "reading": "えき"
+        },
+        {
+          "text": "一緒",
+          "reading": "いっしょ"
+        },
+        {
+          "text": "歩き",
+          "reading": "あるき"
+        },
+        {
+          "text": "少し",
+          "reading": "すこし"
+        },
+        {
+          "text": "話",
+          "reading": "はなし"
+        }
+      ],
+      [
+        {
+          "text": "今度",
+          "reading": "こんど"
+        },
+        {
+          "text": "私",
+          "reading": "わたし"
+        },
+        {
+          "text": "誰か",
+          "reading": "だれか"
+        },
+        {
+          "text": "親切",
+          "reading": "しんせつ"
+        },
+        {
+          "text": "思いました",
+          "reading": "おもいました"
+        }
+      ]
+    ],
+    "bodyRomaji": [
+      "kyuu ni, tsuyoi ame ga futte kimashita.",
+      "kasa o wasurete, eki no mae de komatte imashita.",
+      "sono toki, shiranai onna no hito ga kasa ni irete kuremashita.",
+      "eki made issho ni aruki nagara, sukoshi hanashi o shimashita.",
+      "kondo wa watashi ga dareka ni shinsetsu ni shiyou to omoimashita."
+    ],
+    "bodyKo": [
+      "갑자기 강한 비가 내리기 시작했습니다.",
+      "우산을 잊고 와서 역 앞에서 곤란해하고 있었습니다.",
+      "그때 모르는 여자분이 우산을 씌워 주었습니다.",
+      "역까지 함께 걸으며 잠깐 이야기를 했습니다.",
+      "다음에는 내가 누군가에게 친절을 베풀어야겠다고 생각했습니다."
+    ],
+    "vocabularyIds": [
+      "v_n5_270",
+      "v_n5_450",
+      "v_n4_245",
+      "v_n5_188",
+      "v_n4_101",
+      "v_n4_4",
+      "v_n4_387",
+      "v_n4_239",
+      "v_n4_638",
+      "v_n5_262",
+      "v_n5_417",
+      "v_n5_432",
+      "v_n5_465",
+      "v_n5_15",
+      "v_n5_40",
+      "v_n5_104"
+    ],
+    "grammarIds": [
+      "g_n4_42",
+      "g_n4_30",
+      "g_n4_53",
+      "g_n4_38",
+      "g_n4_44"
+    ],
+    "keyVocabularyIds": [
+      "v_n5_270",
+      "v_n5_450",
+      "v_n4_245",
+      "v_n5_188",
+      "v_n4_101"
+    ],
+    "keyGrammarIds": [
+      "g_n4_42",
+      "g_n4_53"
+    ],
+    "bodyHighlights": [
+      [
+        {
+          "text": "急に",
+          "reading": "きゅうに",
+          "meaningKo": "갑자기",
+          "vocabId": "v_n4_245",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "傘",
+          "reading": "かさ",
+          "meaningKo": "우산",
+          "vocabId": "v_n5_270",
+          "kind": "vocab"
+        }
+      ],
+      [
+        {
+          "text": "入れてくれました",
+          "reading": "いれてくれました",
+          "meaningKo": "씌워 주었습니다",
+          "kind": "verb"
+        }
+      ],
+      [
+        {
+          "text": "一緒",
+          "reading": "いっしょ",
+          "meaningKo": "함께",
+          "kind": "noun"
+        }
+      ],
+      [
+        {
+          "text": "親切",
+          "reading": "しんせつ",
+          "meaningKo": "친절",
+          "vocabId": "v_n5_450",
+          "kind": "vocab"
+        }
+      ]
+    ],
+    "tags": [
+      "단편",
+      "비",
+      "친절"
+    ],
+    "estimatedMinutes": 4,
+    "sourceType": "original"
+  }
 ]

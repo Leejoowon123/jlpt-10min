@@ -145,3 +145,27 @@ actionLogs / userActivity / anonymousActivity 스키마와 rules 는
 - `js/dataLoader.js` — 레벨/영역별 JSON fetch 우선 + JS fallback + 메모리 캐시.
 - `js/contentRepository.js` — 동기 getter + async preload 호환 계층.
 상세: [data-loading-plan.md](./data-loading-plan.md)
+
+## 콘텐츠 학습 의존성 + 준비도 (라운드 29)
+
+### 의존성 필드
+
+| 필드 | 대상 | 의미 |
+| --- | --- | --- |
+| `vocabIds` / `grammarIds` | reading, listening | 본문·문제 이해에 필요한 **핵심** 항목 (N4 콘텐츠는 N4/N5 만 참조) |
+| `optionalVocabIds` / `optionalGrammarIds` | reading, listening | 몰라도 전체 이해 가능한 **보조** 항목 |
+| `requiredCoverage` | reading, listening | 준비 판정 커버 기준 (기본 0.7) |
+| `keyVocabularyIds` / `keyGrammarIds` | stories | 학습 연결 UI 노출용 핵심 |
+| `vocabularyIds` / `grammarIds` | stories | 추천/준비도 계산용 전체(준핵심) |
+| `requiredVocabIds` / `requiredGrammarIds` | conversationTopics | 회화 필수 항목 (기존) |
+
+### readiness 계산 (js/contentReadiness.js)
+
+- "학습함" = `reviewStates[id]` 존재 (1회 이상 노출).
+- `totalKnownRatio` = (배운 핵심 vocab + grammar) / (전체 핵심 vocab + grammar). 의존성 없으면 1.
+- 분류: `ready` ≥ 0.8 / `good_next` ≥ 0.5 / `locked` < 0.5 (상수 `READINESS_READY_RATIO` 등).
+- 추천 정렬: ① ready+미완료 (ratio 낮은 순 — 너무 쉬운 것 후순위) ② good_next (missing 적은 순)
+  ③ locked (missing 적은 순, 추천이 비지 않게 포함). N4 레벨 풀은 N4+N5.
+- locked 여도 진입은 막지 않는다 — UI 는 "먼저 학습하면 좋아요" 안내 + 학습 버튼만 제공.
+- 오늘의 10분: 독해/청해 신규 후보를 ready → good_next → locked 순으로 배치 (그룹 내 셔플,
+  fallback 유지로 큐 10개 보장).

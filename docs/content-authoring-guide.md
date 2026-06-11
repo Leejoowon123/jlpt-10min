@@ -180,3 +180,93 @@ node qa.mjs       # DOM 시나리오 회귀
 - ❌ `canUseInConversation: true` 인 설명용 문장 등록
 
 위반은 회화 엔진의 안전 제약(학습한 단어/문법 안에서만 진행)을 무너뜨릴 수 있다.
+
+## 9. N4 콘텐츠 작성 기준 (라운드 22 보강)
+
+N5 기준에 더해 다음을 따른다:
+
+**어휘 (vocab)**
+- N5 기초 단어(行く/食べる 등)와 중복 금지 — N4 는 자타동사 짝(始める/始まる, 変える/変わる),
+  복합동사(乗り換える/引き出す), 한자 2자 명사(予約/相談/紹介/残業) 중심.
+- 예문 1~16자 내외, N4 문법(〜てしまう/〜ておく 등)을 섞으면 좋음.
+- `exampleReadings` 또는 `COMMON_FURIGANA` 로 후리가나 커버율 80%+ 유지 (smoke sentinel).
+
+**문법 (grammar)**
+- examples 의 readings 명시 권장 (자동 사전이 N4 한자를 모두 커버하지 못함).
+- similarGrammarIds 로 비교 페어 후보 연결 (〜そうです/〜ようです 등).
+
+**독해/청해**
+- 약속 변경·안내문·메모·교통 같은 실생활 텍스트 톤.
+- 청해 script 는 Web Speech TTS 가 한 호흡에 읽을 수 있는 1~2문장.
+
+**스토리**
+- bodyJa 4~7문단, **bodyRomaji 필수** (문단 수 일치 — smoke 검증).
+- bodyHighlights 의 vocabId 는 가능하면 N4 vocab 참조 (학습 연결 동선).
+- keyVocabularyIds ≥ 5, keyGrammarIds ≥ 2.
+
+**회화 주제**
+- requiredVocabIds/GrammarIds 는 실제 N4 항목 (N5 공통 문법 혼용 가능).
+- situationTags 가 sentenceBank 의 태그와 교집합을 갖도록 — 주제당 회화 가능 문장
+  **3개 이상 매칭** (smoke 가 자동 검증).
+
+**1차 A 임계치** (라운드 14 달성치 — 역사 기록):
+vocab 250 / grammar 40 / reading·listening 20 / sentenceBank 100(회화 가능 25+) /
+pairs 8 / kanji 100 / stories 4+2 / topics 6.
+
+## 10. N4 1차 B 작성 기준 (라운드 26 보강)
+
+1차 A 기준에 더해:
+
+- **후리가나는 100%가 기준** — 모든 신규 항목에 explicit readings 를 작성한다.
+  smoke 가 N4 도 `== 100%` sentinel 로 잠그므로, 자동 사전 의존은 더 이상 허용되지 않는다.
+- **readings 의 text 는 대상 문장에 실제 존재해야 한다** (blocking 검증).
+  질문(question)용 단어를 scriptReadings/passageReadings 에 넣지 말 것 —
+  선택지(choices) 단어도 마찬가지.
+- **신규 단어는 빌더 패턴** (`V4()` + `R()`) 으로 추가 — id 는 `v_n4_251` 이후 연번.
+- **자타동사 짝은 반드시 둘 다** 추가하고 tags 에 `'자타동사'` 를 붙인다.
+- **수수표현/수동/사역/가능 문법** (g_n4_41~46) 을 sentenceBank 예문에 적극 재사용 —
+  비교 페어(gp_n4_10~12)와 연결.
+- **N4 스토리는 JS(stories.js)에 추가한 뒤 data/n4/stories.json 을 재생성**:
+  `node -e "import('./js/data/stories.js').then(({stories})=>require('fs').writeFileSync('data/n4/stories.json', JSON.stringify(stories.filter(s=>s.level==='N4'), null, 2)+'
+','utf-8'))"`
+  (JS↔JSON drift 는 smoke 가 검증).
+- **imageKey 분산** — 한 키가 신규 추가분의 8% 를 넘지 않게.
+
+**1차 B 임계치** (smoke sentinel — 라운드 26 달성치 기준):
+vocab 400 / grammar 60 / reading·listening 40 / sentenceBank 180 /
+kanji 150 / stories 6+4 / 후리가나 전 영역 == 100%.
+
+## 11. 중복/유사 중복 작성 주의 (라운드 27 보강)
+
+- **word 는 전역(全레벨) 고유** — 같은 단어를 다른 레벨에 다시 만들지 말 것.
+  smoke 가 blocking 으로 차단한다. 상위 레벨에서 필요하면 기존 항목을 참조(vocabIds)로 연결.
+- **exampleSentence / sentenceBank.ja 완전 중복 금지** (blocking).
+  vocab 예문을 sentenceBank 에 재사용할 때는 반드시 sourceId 또는 vocabIds 로 연결 —
+  연결 없는 동일 문장은 "무관 복사 의심" 경고로 표면화된다.
+- **유사 예문(편집거리≤2)은 허용되는 패턴이 따로 있다** — 「Xが痛いです」류 최소 문형 공유는
+  서로 다른 표제어를 가르치는 한 의도적 패턴으로 reviewed. 단, 같은 표제어 계열에서
+  거의 같은 문장을 또 만들지는 말 것 (검수 비용 증가).
+- **한자 문자는 전역 고유** (blocking). 추가 전에 기존 300자 목록과 대조.
+- **reading/listening choices 는 항목 내 중복 금지** (blocking).
+- N4 콘텐츠에 N3/N2 급 문법(に違いない/ばかりか/べきだ 등)을 넣으면 경고로 표면화된다.
+
+**완성 C 임계치** (smoke sentinel — 라운드 27 달성치 기준):
+vocab 650 / kanji 200 / grammar 75 / reading·listening 50 / sentenceBank 230 /
+topics 8 / 후리가나 == 100% / 전역 중복 0.
+
+## 12. 학습 의존성(vocabIds/grammarIds) 작성 기준 (라운드 29 안정화)
+
+reading/listening/story/conversationTopics 는 학습 준비도 계산용 의존성 필드를 갖는다.
+
+- **vocabIds / grammarIds (핵심)** — 본문(지문/스크립트)과 문제 이해에 꼭 필요한 항목만.
+  **본문에 실제 등장하는 핵심 단어만 태깅**한다. 선택지·질문에만 나오는 단어는 넣지 않는다.
+- **optionalVocabIds / optionalGrammarIds (보조)** — 몰라도 전체 이해가 가능한 항목 (주로 N5 기초어).
+- **문법은 해당 문장 이해에 필요한 문형만 태깅** — 단순히 비슷해 보이는 패턴을 넣지 않는다.
+- **상위 레벨(N3/N2) 문법/단어 혼입 금지** — N4 콘텐츠의 의존성은 N4/N5 만 참조 (smoke blocking).
+- **N5 콘텐츠의 의존성은 N5 만 참조** (N4 포함 금지 — smoke blocking).
+- **N5/N4 reading/listening/story 는 의존성 필드가 필수** — 신규 항목 추가 시
+  gen-deps(-n5).mjs 초안 → 검수 → 베이크. 태깅 없는 항목은 smoke 전수 검사에서 실패한다.
+- requiredCoverage 는 기본 0.7 — 특별히 쉬운/어려운 항목만 조정.
+- 신규 작성 시 `node scripts/gen-deps.mjs` 로 초안을 생성한 뒤 **반드시 눈으로 검수**하고 베이크.
+- 스토리: keyVocabularyIds/keyGrammarIds = 학습 연결 UI 에 보여줄 핵심,
+  vocabularyIds/grammarIds = 추천/준비도 계산용 전체(준핵심 포함).

@@ -1,6 +1,9 @@
 // 복습 탭: 실패 노트 / 자주 볼 단어 / 오늘 due
 // 각 모드는 표시할 정보가 다르므로 모드별로 row 빌더를 분리한다.
 import { failureNotesList, favoritesList, removeFailureNote } from '../state.js';
+import { helpCard } from '../helpContent.js';
+import { speak } from '../tts.js';
+import { getVocabRomaji } from '../romaji.js';
 import { getDueItems } from '../srs.js';
 import { findItem } from '../questions.js';
 import { renderQuestion } from './questionView.js';
@@ -46,6 +49,7 @@ function draw(screen) {
     });
   }
   screen.appendChild(list);
+  { const hc = helpCard('review'); if (hc) screen.prepend(hc); }
 }
 
 function emptyLabel() {
@@ -86,17 +90,19 @@ function buildRow(m, meta) {
 
   let titleHtml = '', subHtml = '';
 
+  const romajiSpan = meta.itemType === 'vocab'
+    ? ` <span class="muted romaji-sub">· ${escape(getVocabRomaji(it))}</span>` : '';
   if (m === 'failure') {
-    titleHtml = `<span class="badge bad">${typeLabel(meta.itemType)}</span> ${escape(headlineOf(meta.itemType, it))}`;
+    titleHtml = `<span class="badge bad">${typeLabel(meta.itemType)}</span> ${escape(headlineOf(meta.itemType, it))}${romajiSpan}`;
     subHtml = `${escape(detailOf(meta.itemType, it))} · ${meta.wrongCount}회 오답`;
   } else if (m === 'favorite') {
     // 단어만 도착 — word / reading / 뜻 / 예문 (예문은 후리가나 렌더)
-    titleHtml = `<span class="badge">단어</span> ${escape(it.word)} <span class="muted">(${escape(it.reading)})</span>`;
+    titleHtml = `<span class="badge">단어</span> ${escape(it.word)} <span class="muted">(${escape(it.reading)} · <span class="romaji-sub">${escape(getVocabRomaji(it))}</span>)</span>`;
     subHtml = `${escape(it.meaningKo)}<br><span class="muted">예: ${renderJa(it.exampleSentence, it.exampleReadings || [])}</span>`;
   } else {
     // due
     const overdueLabel = dueLabel(meta.dueAt);
-    titleHtml = `<span class="badge">${typeLabel(meta.itemType)}</span> ${escape(headlineOf(meta.itemType, it))}`;
+    titleHtml = `<span class="badge">${typeLabel(meta.itemType)}</span> ${escape(headlineOf(meta.itemType, it))}${romajiSpan}`;
     subHtml = `정답 ${meta.correctCount} · 오답 ${meta.wrongCount} · <span class="badge ${overdueLabel.cls}">${overdueLabel.text}</span>`;
   }
 
@@ -106,10 +112,17 @@ function buildRow(m, meta) {
       <div class="s">${subHtml}</div>
     </div>
     <div class="actions">
+      ${meta.itemType === 'vocab' ? '<button class="icon-btn" data-act="listen" title="발음 듣기" aria-label="발음 듣기">🔊</button>' : ''}
       <button class="icon-btn" data-act="solve" title="문제 풀이">▶</button>
       ${m === 'failure' ? `<button class="icon-btn" data-act="remove" title="실패노트에서 제거">✓</button>` : ''}
     </div>
   `;
+
+  const listen = row.querySelector('[data-act="listen"]');
+  if (listen) listen.addEventListener('click', (e) => {
+    e.stopPropagation(); // 발음만 — 학습 기록/정답/오답 증가 없음
+    speak(it.word);
+  });
 
   row.querySelector('[data-act="solve"]').addEventListener('click', () => {
     active = { type: meta.itemType, id: meta.itemId };

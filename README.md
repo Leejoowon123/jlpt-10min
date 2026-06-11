@@ -5,10 +5,14 @@
 
 ## 현재 상태
 
-- **N5 안정화 완료** — 어휘 250 / 문법 45 / 독해·청해 25 / 한자 50 / 이야기 8 / sentenceBank 150 / 회화 주제 10
-- **N4 1차 시드 완료** — 어휘 250 / 문법 40 / 독해·청해 20 / 한자 100 / 이야기 6 / sentenceBank 100 / 회화 주제 6
-- 후리가나 커버율: N5/N4 전 영역 99~100% (smoke 가 매 실행 검증)
-- 테스트: smoke(정적·데이터) + qa(jsdom 670+ 어서션) + GitHub Actions CI
+- **N5 콘텐츠 완성 (검수 완료)** — 후리가나 100%, 품질 감사 unreviewed 경고 0.
+- **N4 콘텐츠 완성 (완성 D)** — 어휘·한자·문법·독해·청해 핵심 5개 영역 모두
+  최종 목표 달성 (누적 어휘 1402/1400 · 한자 300/300). 후리가나 100% + 전역 중복 0 잠금.
+- **N5/N4 추천 구조 잠금** — 독해/청해/이야기 학습 의존성 태깅 + 준비도(ready/good_next/locked)
+  배지·추천 엔진이 두 레벨 모두 동작. 단어 발음은 히라가나 + romaji 보조 표기.
+- **상세 수량과 최종 목표 대비 현황**: [docs/content-status.md](docs/content-status.md) ·
+  자동 리포트: `npm run content:report`
+- 테스트: smoke(정적·데이터) + qa(jsdom 700+ 어서션) + GitHub Actions CI
 
 ## 주요 기능
 
@@ -86,6 +90,7 @@ Web config 는 public 가능 — service account/Admin key 는 절대 커밋 금
 | [docs/asset-licenses.md](docs/asset-licenses.md) | 이미지 자산 라이선스 기록 |
 | [docs/content-authoring-guide.md](docs/content-authoring-guide.md) | 콘텐츠 작성 실무 가이드 |
 | [docs/offline-conversation.md](docs/offline-conversation.md) | 회화 모듈 어댑터 설계 |
+| [docs/content-status.md](docs/content-status.md) | 최종 목표 대비 콘텐츠 현황 (자동 리포트 기반) |
 | [docs/next-roadmap.md](docs/next-roadmap.md) | 단계별 로드맵 + TODO |
 | [docs/n5-expansion-plan.md](docs/n5-expansion-plan.md) | N5 확장 라운드 기록 |
 

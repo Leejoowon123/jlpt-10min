@@ -193,6 +193,16 @@ export function getStoryRomajiEnabled() {
   const v = getState().settings?.storyRomajiEnabled;
   return v !== false;
 }
+/** 사용 매뉴얼(도움말 카드) 표시 — 기본 false (화면을 가리지 않게). */
+export function getHelpEnabled() {
+  return getState().settings?.helpEnabled === true;
+}
+export function setHelpEnabled(enabled) {
+  const next = !!enabled;
+  update(s => { s.settings = s.settings || {}; s.settings.helpEnabled = next; });
+  return next;
+}
+
 export function setStoryRomajiEnabled(enabled) {
   const next = !!enabled;
   update(s => { s.settings = s.settings || {}; s.settings.storyRomajiEnabled = next; });

@@ -13,19 +13,24 @@
 //     모두 호출하지 않음. 학습 기록은 quiz 답변 시점에만.
 //   - recall/quiz thinking 단계에서는 target word/reading/meaningKo 가 DOM 텍스트에도 없도록 유지.
 //   - 후리가나 토글(renderJa) 은 예문 표시 단계(confirm/answered)에만 영향.
-//   - settings.vocabImageWarmupEnabled === false 면 expose1 ~ confirm 을 건너뛰고 곧장 quiz 로.
+//   - settings.vocabImageWarmupEnabled === false 면 quickPreview → quiz (라운드 30 변경 —
+//     바로 퀴즈가 아니라 단어를 한 번 보고 퀴즈로). quickPreview 에서는 학습 기록 없음.
+//   - 모든 비퀴즈 단계에 "다음 단어"(skip) 버튼 — 기록/실패노트/정답률/행동로그 모두 없이
+//     다음 카드로 이동. 마지막 단어면 onNext 가 세션 요약으로 보낸다.
 //
 // 호환성:
 //   - 시그니처는 그대로: renderVocabCard(root, item, cb).
 //   - today.js / study.js 의 onAnswered, onNext 콜백은 변경 없이 동작.
 
 import { vocab } from '../data/vocab.js';
+import { helpCard } from '../helpContent.js';
 import { mnemonicSvg } from '../mnemonic.js';
 import { recordResult } from '../srs.js';
 import { toggleFavorite, isFavorite, recordSessionItem, markStudiedToday,
          getVocabWarmupEnabled, getVocabRecallSeconds } from '../state.js';
 import { showToast } from '../ui.js';
 import { speak, stopSpeaking } from '../tts.js';
+import { getVocabRomaji } from '../romaji.js';
 import { renderJa } from '../furigana.js';
 import { logAction } from '../actionLogger.js';
 
@@ -45,6 +50,7 @@ function resolvedRecallMs() {
 }
 
 const STEP_LABELS = {
+  quickPreview: '미리 보기',
   expose1: '1/5 보기',
   expose2: '2/5 한 번 더',
   recall:  '3/5 떠올리기',
@@ -114,7 +120,7 @@ export function renderVocabCard(root, item, cb) {
 
   // 단계 진입점.
   const warmupEnabled = getVocabWarmupEnabled();
-  let state = warmupEnabled ? 'expose1' : 'quiz';
+  let state = warmupEnabled ? 'expose1' : 'quickPreview';
   let recallTimer = null;
 
   // 카드 컨테이너 — paint() 가 매번 wrap.innerHTML 으로 다시 그림.
@@ -147,10 +153,30 @@ export function renderVocabCard(root, item, cb) {
     wrap.appendChild(buildHeader(v.level, cb?.headerLabel, stepLabel));
 
     if (state === 'expose1' || state === 'expose2') paintExpose();
+    else if (state === 'quickPreview') paintQuickPreview();
     else if (state === 'recall')   paintRecall();
     else if (state === 'confirm')  paintConfirm();
     else if (state === 'quiz')     paintQuiz();
     else if (state === 'answered') paintAnswered();
+  }
+
+  // ── 다음 단어 (skip) — 기록/실패노트/정답률/행동로그 전부 없음 ───────
+  function skipWord() {
+    clearRecallTimer();   // recall 타이머 정리
+    stopSpeaking();
+    cb?.onNext?.();       // 다음 카드로 — 마지막이면 세션 요약
+  }
+
+  // ── 빠른 미리 보기 (단계형 OFF) — 학습 기록 없음 ─────────────────────
+  function paintQuickPreview() {
+    appendImage(true);
+    appendWordInfo({ withExample: false, withMnemonic: false });
+    const ttsHint = appendTtsRow({ withExampleBtn: false });
+    appendNavRow([
+      ['btn primary', '퀴즈로 →', () => goto('quiz')],
+      ['btn ghost skip-word', '다음 단어 ⏭', skipWord],
+    ]);
+    void tryAutoplay(ttsHint);
   }
 
   // ── 노출 1 / 노출 2 ─────────────────────────────
@@ -159,7 +185,8 @@ export function renderVocabCard(root, item, cb) {
     appendWordInfo({ withExample: false, withMnemonic: false });
     const ttsHint = appendTtsRow({ withExampleBtn: false });
     appendNavRow([
-      ['btn primary', '다음 →', () => goto(state === 'expose1' ? 'expose2' : 'recall')],
+      ['btn primary', '다음 단계 →', () => goto(state === 'expose1' ? 'expose2' : 'recall')],
+      ['btn ghost skip-word', '다음 단어 ⏭', skipWord],
     ]);
     // 자동 재생 시도 — 실패해도 무시 (브라우저 정책).
     void tryAutoplay(ttsHint);
@@ -196,6 +223,7 @@ export function renderVocabCard(root, item, cb) {
 
     appendNavRow([
       ['btn ghost', '바로 확인 →', () => { clearRecallTimer(); goto('confirm'); }],
+      ['btn ghost skip-word', '다음 단어 ⏭', skipWord],
     ]);
 
     // 타이머 — 0 ms 면 즉시 전환 (테스트용 가속화 케이스 안전망).
@@ -229,6 +257,7 @@ export function renderVocabCard(root, item, cb) {
     appendTtsRow({ withExampleBtn: true });
     appendNavRow([
       ['btn primary', '퀴즈로 →', () => goto('quiz')],
+      ['btn ghost skip-word', '다음 단어 ⏭', skipWord],
     ]);
   }
 
@@ -285,7 +314,7 @@ export function renderVocabCard(root, item, cb) {
     box.style.cssText = 'text-align:center;margin:8px 0';
     let html = `
       <p style="margin:0;font-size:16px"><strong>${escape(v.word)}</strong>
-         <span class="muted">(${escape(v.reading)})</span></p>
+         <span class="muted">(${escape(v.reading)} · <span class="romaji-sub">${escape(getVocabRomaji(v))}</span>)</span></p>
       <p class="muted" style="margin:4px 0 0;font-size:13px">${escape(v.meaningKo)}</p>
     `;
     if (withExample) {
@@ -335,7 +364,7 @@ export function renderVocabCard(root, item, cb) {
 
   function appendNavRow(buttons) {
     const row = document.createElement('div');
-    row.className = 'btn-row';
+    row.className = 'btn-row vocab-card-nav';
     row.style.marginTop = '12px';
     for (const [cls, label, onClick] of buttons) {
       const btn = document.createElement('button');
@@ -410,7 +439,7 @@ export function renderVocabCard(root, item, cb) {
       result.innerHTML = `
         <div class="explain">
           <h3>${correct ? '✅ 정답입니다' : '❌ 오답입니다'}</h3>
-          <p><strong>${escape(v.word)}</strong> <span class="muted">(${escape(v.reading)})</span> — ${escape(v.meaningKo)}</p>
+          <p><strong>${escape(v.word)}</strong> <span class="muted">(${escape(v.reading)} · <span class="romaji-sub">${escape(getVocabRomaji(v))}</span>)</span> — ${escape(v.meaningKo)}</p>
           <p>예문: ${renderJa(v.exampleSentence, v.exampleReadings || [])}<br>해석: ${escape(v.exampleTranslation)}</p>
           <p class="muted">연상: ${escape(v.mnemonicText)}</p>
         </div>
@@ -434,6 +463,7 @@ export function renderVocabCard(root, item, cb) {
       nextBtn.focus();
     }
   }
+  { const hc = helpCard('vocabCard'); if (hc) root.prepend(hc); }
 }
 
 function buildHeader(level, headerLabel, stepLabel) {

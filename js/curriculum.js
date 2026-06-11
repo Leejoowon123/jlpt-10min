@@ -8,6 +8,7 @@ import { reading } from './data/reading.js';
 import { listening } from './data/listening.js';
 import { getState, daysBetween, todayKey } from './storage.js';
 import { getDueItems } from './srs.js';
+import { classifyContentReadiness } from './contentReadiness.js';
 
 const TARGET_COUNT = 10;
 
@@ -51,6 +52,15 @@ function pickNew(itemType, list, level, count, excludeIds) {
   const fresh = byLevelOrEasier(list, level).filter(i => !seen.has(i.id) && !ex.has(i.id));
   // 신규가 없으면 이미 본 항목 중에서 채움 (복습 효과)
   const pool = fresh.length > 0 ? fresh : byLevelOrEasier(list, level).filter(i => !ex.has(i.id));
+  // 독해/청해는 학습 준비도가 높은(ready/good_next) 항목을 우선 배치 (라운드 29).
+  //   그룹 내에서는 기존처럼 셔플 — 준비도가 전부 낮아도 fallback 으로 큐는 채워진다.
+  if (itemType === 'reading' || itemType === 'listening') {
+    const rs = state.reviewStates || {};
+    const groups = { ready: [], good_next: [], locked: [] };
+    for (const i of pool) groups[classifyContentReadiness(i, rs)].push(i);
+    const ordered = [...shuffled(groups.ready), ...shuffled(groups.good_next), ...shuffled(groups.locked)];
+    return ordered.slice(0, count).map(i => ({ itemType, itemId: i.id, source: 'new' }));
+  }
   return shuffled(pool).slice(0, count).map(i => ({ itemType, itemId: i.id, source: 'new' }));
 }
 

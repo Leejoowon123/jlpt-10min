@@ -35,13 +35,14 @@
 - UI 수정 → 작은 PR
 - 자동 회귀 가능 → `qa.mjs` 시나리오로 승격
 
-### 3. N5 대량2차 — 권장 학습량 (250 → 500)
+### 3. N5 대량2차 — 권장 학습량 (250 → 500) ✅ 라운드 24 완료
 
-[n5-expansion-plan.md](./n5-expansion-plan.md) 의 "다음 라운드 — N5 대량 2차" 참조.
+[n5-expansion-plan.md](./n5-expansion-plan.md) 참조.
 
-- 단어 500 / 문법 60 / 독해·청해 50 / 회화 주제 15+ / sentenceBank 300+
-- mnemonic palette 220+ — max imageKey share ≤ 8% 유지
-- smoke 임계치 동기 상향
+- ✅ 단어 500 / 한자 100 / 독해·청해 각 40 / sentenceBank 220 (회화 가능 220)
+- ✅ N5 후리가나 6개 영역 100% (신규 항목 전부 explicit readings)
+- ✅ smoke 임계치 동기 상향 (vocab 500 / kanji 100 / reading·listening 40 / sentenceBank 220)
+- 남은 선택 항목: 문법 45→60, 회화 주제 10→15 (필수 아님 — 범위 목표 내 달성)
 
 ### 4. 한자 데이터 모델 도입 (1차 완료 — N5 50자 + 문자 표)
 
@@ -55,8 +56,10 @@
 - smoke: 한자 무결성·imageKey 매핑·가나 표 검증
 - qa: 한자 카드 thinking→reveal 흐름·가나 표 토글
 
-⏭ **다음 라운드 (N5 한자 100자 까지)**:
-- 추가 50자 — 동사 어간 자주 등장하는 한자, 시간 단위(時 등), 신체 부위 등.
+✅ **(라운드 24) N5 한자 100자 완료** — 추가 50자 (何今時分半間年週曜国語電車気天空海風雪
+花草犬猫魚鳥肉茶米駅店家文字前後左右外白黒赤青長明休行来帰出入).
+
+⏭ **다음 라운드 후보**:
 - 한자 카드를 오늘의 10분 큐에 일부 섞기 검토.
 - 한자 ↔ vocab.exampleWords 양방향 링크 (학습 흐름 연결).
 
@@ -89,18 +92,23 @@
 - 예시 단어 ref 무결성
 - 레벨별 카운트
 
-### 5. N4 1차 확장 (라운드 14 완료)
+### 5. N4 1차 확장 (라운드 14 시드 + 라운드 22 "1차 A" 점검 완료)
 
-**라운드 14** 에서 N4 1차 시드 완료:
-- vocab 250, grammar 40, reading 20, listening 20, sentenceBank 100, grammarPairs 8, kanji 100, stories 4+novels 2, conversationTopics 6.
-- 모든 카테고리 후리가나 커버율 ≥ 80%, 대부분 100%.
+**라운드 14** 에서 N4 1차 시드, **라운드 22** 에서 1차 A 요건 점검·보강 완료:
+- vocab 250, grammar 40, reading 20, listening 20, sentenceBank 100(회화 가능 99),
+  grammarPairs 9, kanji 100, stories 4+novels 2, conversationTopics 6.
+- 후리가나 커버율 99~100% (sentinel ≥ 80%).
+- (라운드 22) N4 토픽별 sentenceBank 매칭 ≥ 3 smoke 검증 추가 (실측 7~11),
+  N4 quiz thinking 누출/스토리 3단 본문(ruby/romaji/ko) qa 추가, 작성 가이드 N4 기준 보강.
 - N5 회귀 0.
 
-다음 N4 2차 확장 후보:
-- vocab 250 → 500 (어휘 깊이)
-- grammar 40 → 80 (N4 문법 확장)
-- 이야기/단편 추가 콘텐츠
-- N4 conversationTopics 추가 6 개 (총 12)
+다음 **N4 1차 B** 후보:
+- vocab 250 → 400 (자타동사 짝·복합동사 심화)
+- grammar 40 → 60 (수수표현 もらう/くれる/あげる 계열, 수동/사역 입문)
+- N4 stories 6 → 10 (이야기 +3, 단편 +1) — JSON-first 로 작성 (bodyRomaji 포함)
+- N4 conversationTopics 6 → 9 (레스토랑 예약 / 분실물 / 길 안내 역할 교대)
+- N4 kanji 100 → 150
+- 그 외 트랙: PWA service worker / shadowing 모드 / N5 story 추가
 
 ### 5a. (deprecated) 이전 N4 1차 확장 노트
 
@@ -172,6 +180,49 @@ N5 1차 임계치 패턴 재사용:
 2. Capacitor — 웹 코드 그대로 + 네이티브 API 어댑터만 추가
 3. React Native / Tauri Mobile — 큰 리팩터링 필요
 
+## 콘텐츠 우선순위 (라운드 25 — N5 검수 완료 기준)
+
+현황 표: [content-status.md](./content-status.md) · 자동 리포트: `npm run content:report`
+
+✅ **N5 완료 확정** — 라운드 24 (콘텐츠 목표 달성) + 라운드 25 (안정화/품질 검수).
+   vocab 500 / kanji 100 / reading 40 / listening 40 / sentenceBank 220, 후리가나 100%,
+   unreviewed 품질 경고 0 (판정 기록: content-status.md). smoke sentinel 로 잠금.
+
+✅ **N4 1차 B 완료 (라운드 26)** + ✅ **N4 완성 C 완료 (라운드 27)** —
+   vocab 652(누적 1152 — 최종 목표 82%) / kanji 200(누적 300 — **최종 목표 달성**) /
+   grammar 75 / reading·listening 각 50 / sentenceBank 230(회화 229) / 회화 주제 8 /
+   후리가나 100% / **전역 word·kanji·예문·ja 중복 0 (blocking)**. qa [157]~[162].
+
+✅ **N4 완성 D 완료 (라운드 28)** — 핵심 5개 영역 최종 목표 전부 달성:
+   vocab 902(누적 1402/1400) / kanji 300/300 / grammar 85 / reading·listening 각 60 /
+   sentenceBank 300(회화 299) / 회화 주제 10. 후리가나 100%, 전역 중복 0. qa [163]~[166].
+
+✅ **N4 안정화/품질 잠금 완료 (라운드 29)** — N4 는 콘텐츠+구조 모두 잠금 상태:
+   - 학습 의존성 스키마 (reading/listening 전수 120건 태깅, story vocabularyIds 보강)
+   - js/contentReadiness.js — 준비도(ready/good_next/locked)/커버리지/추천 유틸 + smoke 단위 테스트
+   - 오늘의 10분: 독해/청해 준비도 우선 배치 (fallback 유지)
+   - UI: 독해/청해 준비도 배지, 스토리 준비도 라벨, locked 안내+학습 버튼 (진입은 허용)
+   - 회화: 주제 준비도/배운·일부·잠긴 표현 수/배운 문장 기반 모범답안 — 기존 구현 검증 완료
+   - 남은 수동 항목: **실제 브라우저 1회 점검** (900 단어 체제 체감 — 사용자 환경에서)
+
+✅ **음성/매뉴얼/단어 카드 UX 안정화 완료 (라운드 30)** — TTS voice manager(재시도+
+   voiceschanged+수동 재감지), 설정 음성 상태 UI, 사용 매뉴얼 토글(8개 화면 접이식 도움말),
+   단어 목록/복습 발음 버튼(기록 미증가), 이미지 카드 quickPreview + 다음 단계/다음 단어.
+   **이 안정화 완료 후 N5 의존성 백포트를 진행한다.**
+
+다음 우선순위:
+
+✅ **N5 의존성 백포트 완료 (라운드 31)** — N5 reading/listening 80건 전수 태깅(N5 id 만,
+   blocking) + 스토리 보강 + 준비도/추천 N5 동작 + romaji 발음 보조 표기.
+   **N5/N4 모두 잠금 완료 → 다음은 N3 0차 시드.**
+
+1. **N3 0차 시드** — 현재 grammar 2 / reading·listening 각 1 (사실상 샘플).
+   vocab 100 + grammar 20 + 독해·청해 8 수준의 구조 검증 시드부터.
+   N4 에서 확립한 패턴(빌더, explicit readings, 의존성 태깅, sentinel 잠금)을 그대로 적용.
+2. **PWA** — manifest + service worker. 앱 shell cache-first, `data/**/*.json` stale-while-revalidate.
+
+그 후: N2 0차 시드 (N3 시드 안정화 후 동일 패턴).
+
 ## 트랙 별 우선순위
 
 콘텐츠 트랙과 기능 트랙을 분리해 진행 가능:
@@ -183,8 +234,8 @@ N5 1차 임계치 패턴 재사용:
 1 → 2 → 4 → 7 (안정화 → 브라우저 QA → 한자 모델 → 모바일)
 
 **현재 상태에서 추천 다음 작업**:
-- **2. 실제 브라우저 QA** — 한자 카드 + 가나 표 + 발음 듣기까지 시각/체감 확인.
-- 그 후 **N5 한자 50 → 100자** 또는 **3. N5 대량2차 콘텐츠** 중 선택.
+- **N4 1차 B** (콘텐츠 트랙 — N5 마무리 완료로 최우선) — 위 "콘텐츠 우선순위" 2번 참조.
+- **2. 실제 브라우저 QA** — N5 500 단어 체제에서 목록/검색 체감 확인 병행.
 
 
 ## (이관) 구 README 의 남은 TODO 목록

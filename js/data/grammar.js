@@ -386,7 +386,7 @@ export const grammar = [
     explanation:'의무·필요. 회화에서는 「〜なきゃ」「〜ないと」로 줄임.',
     examples:[
       { ja:'毎日勉強しなければなりません。', ko:'매일 공부해야 합니다.' },
-      { ja:'もう帰らなきゃ。', ko:'이제 가야 해.' },
+      { ja:'もう帰らなきゃ。', ko:'이제 가야 해.', readings:[{text:'帰らなきゃ',reading:'かえらなきゃ'}] },
     ],
     similarGrammarIds:['g_n4_4'], tags:['의무'] },
 
@@ -394,7 +394,7 @@ export const grammar = [
     explanation:'불필요·허락. 「〜なければならない」의 반대 표현.',
     examples:[
       { ja:'明日は来なくてもいいです。', ko:'내일은 오지 않아도 됩니다.' },
-      { ja:'急がなくてもいいよ。', ko:'서두르지 않아도 돼.' },
+      { ja:'急がなくてもいいよ。', ko:'서두르지 않아도 돼.', readings:[{text:'急がなくて',reading:'いそがなくて'}] },
     ],
     similarGrammarIds:['g_n4_3'], tags:['허락'] },
 
@@ -556,7 +556,7 @@ export const grammar = [
     examples:[
       { ja:'毎日運動するようにしています。', ko:'매일 운동하려고 하고 있습니다.',
         readings:[{text:'毎日',reading:'まいにち'},{text:'運動',reading:'うんどう'}] },
-      { ja:'忘れないようにメモする。', ko:'잊지 않도록 메모한다.' },
+      { ja:'忘れないようにメモする。', ko:'잊지 않도록 메모한다.', readings:[{text:'忘れない',reading:'わすれない'}] },
     ], similarGrammarIds:['g_n4_23'], tags:['습관'] },
 
   { id:'g_n4_23', level:'N4', pattern:'〜ようになる', meaningKo:'〜할 수 있게 되다',
@@ -720,6 +720,347 @@ export const grammar = [
       { ja:'走るのは難しい。', ko:'달리는 것은 어렵다.',
         readings:[{text:'走る',reading:'はしる'},{text:'難しい',reading:'むずかしい'}] },
     ], similarGrammarIds:[], tags:['명사화'] },
+
+
+  // ---------- N4 1차 B (라운드 26) — 수수/수동/사역/가능 ----------
+  { id:'g_n4_41', level:'N4', pattern:'〜てあげる', meaningKo:'〜해 주다 (내가 남에게)',
+    explanation:'내가(또는 화자 쪽이) 남을 위해 어떤 행위를 해 줌. 윗사람에게는 직접 쓰지 않는 것이 자연스러움.',
+    examples:[
+      { ja:'弟に本を読んであげました。', ko:'남동생에게 책을 읽어 주었습니다.',
+        readings:[{text:'弟',reading:'おとうと'},{text:'本',reading:'ほん'},{text:'読んで',reading:'よんで'}] },
+      { ja:'友だちに写真を撮ってあげました。', ko:'친구에게 사진을 찍어 주었습니다.',
+        readings:[{text:'友',reading:'とも'},{text:'写真',reading:'しゃしん'},{text:'撮って',reading:'とって'}] },
+    ], similarGrammarIds:['g_n4_42','g_n4_43'], tags:['수수표현'] },
+
+  { id:'g_n4_42', level:'N4', pattern:'〜てくれる', meaningKo:'〜해 주다 (남이 나에게)',
+    explanation:'남이 나(또는 내 쪽 사람)를 위해 행위를 해 줌. 고마움의 뉘앙스.',
+    examples:[
+      { ja:'先輩が仕事を教えてくれました。', ko:'선배가 일을 가르쳐 주었습니다.',
+        readings:[{text:'先輩',reading:'せんぱい'},{text:'仕事',reading:'しごと'},{text:'教えて',reading:'おしえて'}] },
+      { ja:'母が弁当を作ってくれます。', ko:'어머니가 도시락을 만들어 줍니다.',
+        readings:[{text:'母',reading:'はは'},{text:'弁当',reading:'べんとう'},{text:'作って',reading:'つくって'}] },
+    ], similarGrammarIds:['g_n4_41','g_n4_43'], tags:['수수표현'] },
+
+  { id:'g_n4_43', level:'N4', pattern:'〜てもらう', meaningKo:'〜해 받다 (남에게 부탁해서)',
+    explanation:'남에게 부탁하거나 호의로 행위를 받음. 주어는 받는 사람.',
+    examples:[
+      { ja:'友だちに手伝ってもらいました。', ko:'친구에게 도움을 받았습니다.',
+        readings:[{text:'友',reading:'とも'},{text:'手伝って',reading:'てつだって'}] },
+      { ja:'店員に在庫を確認してもらいました。', ko:'점원에게 재고를 확인 받았습니다.',
+        readings:[{text:'店員',reading:'てんいん'},{text:'在庫',reading:'ざいこ'},{text:'確認',reading:'かくにん'}] },
+    ], similarGrammarIds:['g_n4_41','g_n4_42'], tags:['수수표현'] },
+
+  { id:'g_n4_44', level:'N4', pattern:'〜(ら)れる (수동)', meaningKo:'〜당하다/〜되다 (수동)',
+    explanation:'수동 입문. 1그룹은 あ단+れる, 2그룹은 られる. 피해의 뉘앙스로도 사용.',
+    examples:[
+      { ja:'先生に褒められました。', ko:'선생님에게 칭찬받았습니다.',
+        readings:[{text:'先生',reading:'せんせい'},{text:'褒められました',reading:'ほめられました'}] },
+      { ja:'雨に降られて、服が濡れました。', ko:'비를 맞아서 옷이 젖었습니다.',
+        readings:[{text:'雨',reading:'あめ'},{text:'降られて',reading:'ふられて'},{text:'服',reading:'ふく'},{text:'濡れました',reading:'ぬれました'}] },
+    ], similarGrammarIds:['g_n4_46'], tags:['수동'] },
+
+  { id:'g_n4_45', level:'N4', pattern:'〜(さ)せる (사역)', meaningKo:'〜하게 하다 (사역)',
+    explanation:'사역 입문. 1그룹은 あ단+せる, 2그룹은 させる. 시킴/허용 두 용법.',
+    examples:[
+      { ja:'母は弟に野菜を食べさせました。', ko:'어머니는 남동생에게 채소를 먹게 했습니다.',
+        readings:[{text:'母',reading:'はは'},{text:'弟',reading:'おとうと'},{text:'野菜',reading:'やさい'},{text:'食べさせました',reading:'たべさせました'}] },
+      { ja:'子供を公園で遊ばせます。', ko:'아이를 공원에서 놀게 합니다.',
+        readings:[{text:'子供',reading:'こども'},{text:'公園',reading:'こうえん'},{text:'遊ばせます',reading:'あそばせます'}] },
+    ], similarGrammarIds:['g_n4_58'], tags:['사역'] },
+
+  { id:'g_n4_46', level:'N4', pattern:'〜(ら)れる (가능)', meaningKo:'〜할 수 있다 (가능형)',
+    explanation:'가능형. 1그룹은 え단+る, 2그룹은 られる. を가 が로 바뀌는 경우가 많음.',
+    examples:[
+      { ja:'漢字が読めますか。', ko:'한자를 읽을 수 있습니까?',
+        readings:[{text:'漢字',reading:'かんじ'},{text:'読めます',reading:'よめます'}] },
+      { ja:'明日なら来られます。', ko:'내일이라면 올 수 있습니다.',
+        readings:[{text:'明日',reading:'あした'},{text:'来られます',reading:'こられます'}] },
+    ], similarGrammarIds:['g_n4_44'], tags:['가능'] },
+
+  { id:'g_n4_47', level:'N4', pattern:'〜ように言う', meaningKo:'〜하라고 말하다 (지시 전달)',
+    explanation:'지시·명령을 간접적으로 전달. 「言う」 대신 「伝える」도 가능.',
+    examples:[
+      { ja:'医者は早く寝るように言いました。', ko:'의사는 일찍 자라고 말했습니다.',
+        readings:[{text:'医者',reading:'いしゃ'},{text:'早く',reading:'はやく'},{text:'寝る',reading:'ねる'},{text:'言いました',reading:'いいました'}] },
+    ], similarGrammarIds:['g_n4_48'], tags:['전달'] },
+
+  { id:'g_n4_48', level:'N4', pattern:'〜ように頼む', meaningKo:'〜해 달라고 부탁하다',
+    explanation:'의뢰의 간접 전달. 「頼む」 외에 「お願いする」도 사용.',
+    examples:[
+      { ja:'友だちに窓を閉めるように頼みました。', ko:'친구에게 창문을 닫아 달라고 부탁했습니다.',
+        readings:[{text:'友',reading:'とも'},{text:'窓',reading:'まど'},{text:'閉める',reading:'しめる'},{text:'頼みました',reading:'たのみました'}] },
+    ], similarGrammarIds:['g_n4_47'], tags:['전달'] },
+
+  { id:'g_n4_49', level:'N4', pattern:'〜はず', meaningKo:'(분명) 〜할 터/〜일 것',
+    explanation:'근거 있는 확신. 「はずがない」는 강한 부정.',
+    examples:[
+      { ja:'彼は今日来るはずです。', ko:'그는 오늘 올 것입니다.',
+        readings:[{text:'彼',reading:'かれ'},{text:'今日',reading:'きょう'},{text:'来る',reading:'くる'}] },
+      { ja:'そんなはずがありません。', ko:'그럴 리가 없습니다.',
+        readings:[] },
+    ], similarGrammarIds:['g_n4_39'], tags:['추측'] },
+
+  { id:'g_n4_50', level:'N4', pattern:'〜予定', meaningKo:'〜할 예정',
+    explanation:'공식적·객관적인 계획. つもり보다 확정된 느낌.',
+    examples:[
+      { ja:'三時に出発する予定です。', ko:'3시에 출발할 예정입니다.',
+        readings:[{text:'三時',reading:'さんじ'},{text:'出発',reading:'しゅっぱつ'},{text:'予定',reading:'よてい'}] },
+    ], similarGrammarIds:['g_n4_39'], tags:['계획'] },
+
+  { id:'g_n4_51', level:'N4', pattern:'〜かどうか', meaningKo:'〜인지 어떤지',
+    explanation:'불확실한 내용을 문장 안에 넣을 때. 의문사가 없는 의문문의 간접화.',
+    examples:[
+      { ja:'行けるかどうか、まだ分かりません。', ko:'갈 수 있을지 어떨지 아직 모르겠습니다.',
+        readings:[{text:'行ける',reading:'いける'},{text:'分かりません',reading:'わかりません'}] },
+    ], similarGrammarIds:[], tags:['표현'] },
+
+  { id:'g_n4_52', level:'N4', pattern:'〜でしょう', meaningKo:'〜겠지요 (추측/확인)',
+    explanation:'추측(내림조)과 확인(올림조). 정중한 단정 완화.',
+    examples:[
+      { ja:'明日は晴れるでしょう。', ko:'내일은 맑겠지요.',
+        readings:[{text:'明日',reading:'あした'},{text:'晴れる',reading:'はれる'}] },
+    ], similarGrammarIds:['g_n4_19'], tags:['추측'] },
+
+  { id:'g_n4_53', level:'N4', pattern:'〜(よ)うと思う', meaningKo:'〜하려고 생각하다',
+    explanation:'의지형 + と思う. 화자의 의지·계획.',
+    examples:[
+      { ja:'週末、部屋を掃除しようと思います。', ko:'주말에 방을 청소하려고 합니다.',
+        readings:[{text:'週末',reading:'しゅうまつ'},{text:'部屋',reading:'へや'},{text:'掃除',reading:'そうじ'},{text:'思います',reading:'おもいます'}] },
+    ], similarGrammarIds:['g_n4_38','g_n4_39'], tags:['의지'] },
+
+  { id:'g_n4_54', level:'N4', pattern:'〜ているところ', meaningKo:'지금 〜하는 중',
+    explanation:'동작의 진행 국면을 강조. 「今〜ているところです」 형태가 많음.',
+    examples:[
+      { ja:'今、資料を作っているところです。', ko:'지금 자료를 만들고 있는 중입니다.',
+        readings:[{text:'今',reading:'いま'},{text:'資料',reading:'しりょう'},{text:'作って',reading:'つくって'}] },
+    ], similarGrammarIds:['g_n4_26','g_n4_55'], tags:['시점'] },
+
+  { id:'g_n4_55', level:'N4', pattern:'〜たところ', meaningKo:'막 〜한 참',
+    explanation:'동작 직후의 시점. 「ちょうど〜たところです」.',
+    examples:[
+      { ja:'今、駅に着いたところです。', ko:'지금 막 역에 도착한 참입니다.',
+        readings:[{text:'今',reading:'いま'},{text:'駅',reading:'えき'},{text:'着いた',reading:'ついた'}] },
+    ], similarGrammarIds:['g_n4_54','g_n4_56'], tags:['시점'] },
+
+  { id:'g_n4_56', level:'N4', pattern:'〜たばかり', meaningKo:'막 〜했다 (시간이 얼마 안 됨)',
+    explanation:'동작 후 시간이 짧다는 화자의 기분. たところ보다 폭이 넓음.',
+    examples:[
+      { ja:'日本に来たばかりです。', ko:'일본에 온 지 얼마 안 되었습니다.',
+        readings:[{text:'日本',reading:'にほん'},{text:'来た',reading:'きた'}] },
+    ], similarGrammarIds:['g_n4_55','g_n4_33'], tags:['시점'] },
+
+  { id:'g_n4_57', level:'N4', pattern:'〜間に', meaningKo:'〜하는 사이에',
+    explanation:'어떤 상태·동작이 계속되는 동안에 다른 일이 일어남.',
+    examples:[
+      { ja:'寝ている間に、雨が降りました。', ko:'자는 사이에 비가 내렸습니다.',
+        readings:[{text:'寝て',reading:'ねて'},{text:'間',reading:'あいだ'},{text:'雨',reading:'あめ'},{text:'降りました',reading:'ふりました'}] },
+    ], similarGrammarIds:[], tags:['시점'] },
+
+  { id:'g_n4_58', level:'N4', pattern:'〜させてください', meaningKo:'〜하게 해 주세요 (허락 요청)',
+    explanation:'사역형 + てください. 정중한 허락 요청.',
+    examples:[
+      { ja:'少し考えさせてください。', ko:'조금 생각하게 해 주세요.',
+        readings:[{text:'少し',reading:'すこし'},{text:'考えさせて',reading:'かんがえさせて'}] },
+    ], similarGrammarIds:['g_n4_45'], tags:['사역','의뢰'] },
+
+  { id:'g_n4_59', level:'N4', pattern:'〜たほうがいい', meaningKo:'〜하는 편이 좋다 (조언)',
+    explanation:'조언·권고. 부정은 「〜ないほうがいい」.',
+    examples:[
+      { ja:'早く病院へ行ったほうがいいですよ。', ko:'빨리 병원에 가는 편이 좋아요.',
+        readings:[{text:'早く',reading:'はやく'},{text:'病院',reading:'びょういん'},{text:'行った',reading:'いった'}] },
+    ], similarGrammarIds:[], tags:['조언'] },
+
+  { id:'g_n4_60', level:'N4', pattern:'〜なさい', meaningKo:'〜하렴/〜하세요 (부드러운 명령)',
+    explanation:'ます형 어간 + なさい. 부모→아이, 교사→학생 등.',
+    examples:[
+      { ja:'早く寝なさい。', ko:'일찍 자렴.',
+        readings:[{text:'早く',reading:'はやく'},{text:'寝なさい',reading:'ねなさい'}] },
+    ], similarGrammarIds:[], tags:['명령'] },
+
+
+  // ---------- N4 완성 C (라운드 27) ----------
+  { id:'g_n4_61', level:'N4', pattern:'〜ていただけませんか', meaningKo:'〜해 주시지 않겠습니까 (매우 정중한 부탁)',
+    explanation:'てもらう의 겸양 가능형. てくれませんか보다 정중.',
+    examples:[
+      { ja:'もう一度説明していただけませんか。', ko:'한 번 더 설명해 주시지 않겠습니까?',
+        readings:[{text:'一度',reading:'いちど'},{text:'説明',reading:'せつめい'}] },
+      { ja:'写真を撮っていただけませんか。', ko:'사진을 찍어 주시지 않겠습니까?',
+        readings:[{text:'写真',reading:'しゃしん'},{text:'撮って',reading:'とって'}] },
+    ], similarGrammarIds:['g_n4_43'], tags:['의뢰','경어'] },
+
+  { id:'g_n4_62', level:'N4', pattern:'〜ことになっている', meaningKo:'〜하게 되어 있다 (규칙/관례)',
+    explanation:'규칙·예정으로 정해져 있는 일. 개인 의지가 아닌 결정.',
+    examples:[
+      { ja:'ゴミは月曜日に出すことになっています。', ko:'쓰레기는 월요일에 내놓게 되어 있습니다.',
+        readings:[{text:'月曜日',reading:'げつようび'},{text:'出す',reading:'だす'}] },
+    ], similarGrammarIds:['g_n4_21'], tags:['규칙'] },
+
+  { id:'g_n4_63', level:'N4', pattern:'〜場合', meaningKo:'〜할 경우',
+    explanation:'가정의 상황을 나타냄. 공지·안내문에서 자주 사용.',
+    examples:[
+      { ja:'雨の場合は中止になります。', ko:'비가 올 경우는 중지됩니다.',
+        readings:[{text:'雨',reading:'あめ'},{text:'場合',reading:'ばあい'},{text:'中止',reading:'ちゅうし'}] },
+    ], similarGrammarIds:['g_n4_27'], tags:['가정'] },
+
+  { id:'g_n4_64', level:'N4', pattern:'〜はずがない', meaningKo:'〜일 리가 없다',
+    explanation:'근거를 바탕으로 한 강한 부정 추측. はず의 부정형.',
+    examples:[
+      { ja:'彼が嘘をつくはずがありません。', ko:'그가 거짓말을 할 리가 없습니다.',
+        readings:[{text:'彼',reading:'かれ'},{text:'嘘',reading:'うそ'}] },
+    ], similarGrammarIds:['g_n4_49'], tags:['추측'] },
+
+  { id:'g_n4_65', level:'N4', pattern:'〜わけではない', meaningKo:'(반드시) 〜인 것은 아니다',
+    explanation:'부분 부정. 전면 부정이 아니라 일부를 부정.',
+    examples:[
+      { ja:'肉が嫌いなわけではありません。', ko:'고기를 싫어하는 것은 아닙니다.',
+        readings:[{text:'肉',reading:'にく'},{text:'嫌い',reading:'きらい'}] },
+    ], similarGrammarIds:['g_n4_64'], tags:['부정'] },
+
+  { id:'g_n4_66', level:'N4', pattern:'〜という', meaningKo:'〜라는',
+    explanation:'이름·내용을 인용해 명사를 수식.',
+    examples:[
+      { ja:'「さくら」という店を知っていますか。', ko:'"사쿠라"라는 가게를 알고 있나요?',
+        readings:[{text:'店',reading:'みせ'},{text:'知って',reading:'しって'}] },
+    ], similarGrammarIds:[], tags:['인용'] },
+
+  { id:'g_n4_67', level:'N4', pattern:'〜ような/〜ように (비유)', meaningKo:'〜같은/〜처럼',
+    explanation:'비유. ような+명사 / ように+동사·형용사.',
+    examples:[
+      { ja:'夢のような話ですね。', ko:'꿈같은 이야기네요.',
+        readings:[{text:'夢',reading:'ゆめ'},{text:'話',reading:'はなし'}] },
+      { ja:'鳥のように空を飛びたいです。', ko:'새처럼 하늘을 날고 싶습니다.',
+        readings:[{text:'鳥',reading:'とり'},{text:'空',reading:'そら'},{text:'飛びたい',reading:'とびたい'}] },
+    ], similarGrammarIds:['g_n4_10'], tags:['비유'] },
+
+  { id:'g_n4_68', level:'N4', pattern:'〜ため (원인)', meaningKo:'〜때문에 (원인/이유)',
+    explanation:'원인·이유의 딱딱한 표현. 공지문에서 자주 사용. 목적의 ために(g_n4_16)와 구별.',
+    examples:[
+      { ja:'事故のため、電車が遅れています。', ko:'사고 때문에 전철이 지연되고 있습니다.',
+        readings:[{text:'事故',reading:'じこ'},{text:'電車',reading:'でんしゃ'},{text:'遅れて',reading:'おくれて'}] },
+    ], similarGrammarIds:['g_n4_16','g_n4_17'], tags:['원인'] },
+
+  { id:'g_n4_69', level:'N4', pattern:'〜によると〜そうだ', meaningKo:'〜에 의하면 〜라고 한다',
+    explanation:'정보의 출처(によると) + 전문(そうだ)의 결합. 뉴스·예보 전달.',
+    examples:[
+      { ja:'天気予報によると、明日は雨だそうです。', ko:'일기예보에 의하면 내일은 비라고 합니다.',
+        readings:[{text:'天気予報',reading:'てんきよほう'},{text:'明日',reading:'あした'},{text:'雨',reading:'あめ'}] },
+    ], similarGrammarIds:['g_n4_8'], tags:['전문'] },
+
+  { id:'g_n4_70', level:'N4', pattern:'〜そうにない', meaningKo:'〜할 것 같지 않다',
+    explanation:'양태 そうだ의 부정. 실현 가능성이 낮아 보임.',
+    examples:[
+      { ja:'今日中に終わりそうにないです。', ko:'오늘 안에 끝날 것 같지 않습니다.',
+        readings:[{text:'今日中',reading:'きょうじゅう'},{text:'終わり',reading:'おわり'}] },
+    ], similarGrammarIds:['g_n4_9'], tags:['추측'] },
+
+  { id:'g_n4_71', level:'N4', pattern:'お/ご〜ください', meaningKo:'〜해 주십시오 (정중한 지시)',
+    explanation:'お+ます형/ご+한자어+ください. 안내문의 정중한 지시.',
+    examples:[
+      { ja:'白い線の内側でお待ちください。', ko:'흰 선 안쪽에서 기다려 주십시오.',
+        readings:[{text:'白い',reading:'しろい'},{text:'線',reading:'せん'},{text:'内側',reading:'うちがわ'},{text:'待ち',reading:'まち'}] },
+    ], similarGrammarIds:['g_n5_13'], tags:['경어','지시'] },
+
+  { id:'g_n4_72', level:'N4', pattern:'〜てばかりいる', meaningKo:'〜하고만 있다',
+    explanation:'같은 행동의 반복을 비판적으로 말할 때.',
+    examples:[
+      { ja:'弟はゲームをしてばかりいます。', ko:'남동생은 게임만 하고 있습니다.',
+        readings:[{text:'弟',reading:'おとうと'}] },
+    ], similarGrammarIds:['g_n4_33'], tags:['반복'] },
+
+  { id:'g_n4_73', level:'N4', pattern:'〜まま', meaningKo:'〜한 채',
+    explanation:'상태가 변하지 않고 계속됨. た형+まま / の+まま.',
+    examples:[
+      { ja:'電気をつけたまま寝てしまいました。', ko:'불을 켠 채 자 버렸습니다.',
+        readings:[{text:'電気',reading:'でんき'},{text:'寝て',reading:'ねて'}] },
+    ], similarGrammarIds:[], tags:['상태'] },
+
+  { id:'g_n4_74', level:'N4', pattern:'〜ずに', meaningKo:'〜하지 않고',
+    explanation:'ないで의 문어적 표현. する→せずに.',
+    examples:[
+      { ja:'朝ご飯を食べずに出かけました。', ko:'아침을 먹지 않고 외출했습니다.',
+        readings:[{text:'朝',reading:'あさ'},{text:'飯',reading:'はん'},{text:'食べ',reading:'たべ'},{text:'出かけました',reading:'でかけました'}] },
+    ], similarGrammarIds:[], tags:['부정'] },
+
+  { id:'g_n4_75', level:'N4', pattern:'〜なくてはいけない', meaningKo:'〜하지 않으면 안 된다',
+    explanation:'의무. なければならない의 회화체 변형. 회화에서는 なくちゃ로 줄임.',
+    examples:[
+      { ja:'今日中にレポートを出さなくてはいけません。', ko:'오늘 안에 리포트를 내지 않으면 안 됩니다.',
+        readings:[{text:'今日中',reading:'きょうじゅう'},{text:'出さ',reading:'ださ'}] },
+    ], similarGrammarIds:['g_n4_3'], tags:['의무'] },
+
+
+  // ---------- N4 완성 D (라운드 28) ----------
+  { id:'g_n4_76', level:'N4', pattern:'〜始める', meaningKo:'〜하기 시작하다',
+    explanation:'ます형 어간 + 始める. 동작의 개시.',
+    examples:[
+      { ja:'去年から日本語を習い始めました。', ko:'작년부터 일본어를 배우기 시작했습니다.',
+        readings:[{text:'去年',reading:'きょねん'},{text:'日本語',reading:'にほんご'},{text:'習い始めました',reading:'ならいはじめました'}] },
+    ], similarGrammarIds:['g_n4_79'], tags:['복합동사'] },
+
+  { id:'g_n4_77', level:'N4', pattern:'〜終わる', meaningKo:'다 〜하다 (완료)',
+    explanation:'ます형 어간 + 終わる. 동작의 완료.',
+    examples:[
+      { ja:'やっとレポートを書き終わりました。', ko:'드디어 리포트를 다 썼습니다.',
+        readings:[{text:'書き終わりました',reading:'かきおわりました'}] },
+    ], similarGrammarIds:['g_n4_76'], tags:['복합동사'] },
+
+  { id:'g_n4_78', level:'N4', pattern:'〜続ける', meaningKo:'계속 〜하다',
+    explanation:'ます형 어간 + 続ける. 동작의 지속.',
+    examples:[
+      { ja:'三時間も歩き続けました。', ko:'세 시간이나 계속 걸었습니다.',
+        readings:[{text:'三時間',reading:'さんじかん'},{text:'歩き続けました',reading:'あるきつづけました'}] },
+    ], similarGrammarIds:['g_n4_76'], tags:['복합동사'] },
+
+  { id:'g_n4_79', level:'N4', pattern:'〜出す', meaningKo:'갑자기 〜하기 시작하다',
+    explanation:'ます형 어간 + 出す. 갑작스러운 개시. 始める보다 돌발적.',
+    examples:[
+      { ja:'急に雨が降り出しました。', ko:'갑자기 비가 내리기 시작했습니다.',
+        readings:[{text:'急に',reading:'きゅうに'},{text:'雨',reading:'あめ'},{text:'降り出しました',reading:'ふりだしました'}] },
+    ], similarGrammarIds:['g_n4_76'], tags:['복합동사'] },
+
+  { id:'g_n4_80', level:'N4', pattern:'〜にする', meaningKo:'〜로 하다 (선택)',
+    explanation:'선택·결정. 메뉴 주문 등에서 빈출.',
+    examples:[
+      { ja:'飲み物はコーヒーにします。', ko:'음료는 커피로 하겠습니다.',
+        readings:[{text:'飲み物',reading:'のみもの'}] },
+    ], similarGrammarIds:['g_n4_20'], tags:['선택'] },
+
+  { id:'g_n4_81', level:'N4', pattern:'〜がする', meaningKo:'(소리/냄새/맛)이 나다',
+    explanation:'감각 표현. 音/声/匂い/味 + がする.',
+    examples:[
+      { ja:'隣の部屋から変な音がします。', ko:'옆방에서 이상한 소리가 납니다.',
+        readings:[{text:'隣',reading:'となり'},{text:'部屋',reading:'へや'},{text:'変',reading:'へん'},{text:'音',reading:'おと'}] },
+    ], similarGrammarIds:[], tags:['감각'] },
+
+  { id:'g_n4_82', level:'N4', pattern:'〜ばよかった', meaningKo:'〜했으면 좋았을 텐데 (후회)',
+    explanation:'ば형 + よかった. 하지 않은 일에 대한 후회.',
+    examples:[
+      { ja:'もっと早く予約すればよかったです。', ko:'더 일찍 예약했으면 좋았을 텐데요.',
+        readings:[{text:'早く',reading:'はやく'},{text:'予約',reading:'よやく'}] },
+    ], similarGrammarIds:['g_n4_27'], tags:['후회'] },
+
+  { id:'g_n4_83', level:'N4', pattern:'〜中(ちゅう/じゅう)', meaningKo:'〜중 / 〜내내',
+    explanation:'ちゅう=진행 중(会議中), じゅう=기간 전체(一日中).',
+    examples:[
+      { ja:'課長は今、会議中です。', ko:'과장님은 지금 회의 중입니다.',
+        readings:[{text:'課長',reading:'かちょう'},{text:'今',reading:'いま'},{text:'会議中',reading:'かいぎちゅう'}] },
+      { ja:'一日中、家で休みました。', ko:'하루 종일 집에서 쉬었습니다.',
+        readings:[{text:'一日中',reading:'いちにちじゅう'},{text:'家',reading:'いえ'},{text:'休みました',reading:'やすみました'}] },
+    ], similarGrammarIds:[], tags:['시점'] },
+
+  { id:'g_n4_84', level:'N4', pattern:'〜たら〜た (발견)', meaningKo:'〜했더니 〜했다 (발견/의외)',
+    explanation:'たら + 과거형. 행동 후 의외의 발견.',
+    examples:[
+      { ja:'箱を開けたら、猫が寝ていました。', ko:'상자를 열었더니 고양이가 자고 있었습니다.',
+        readings:[{text:'箱',reading:'はこ'},{text:'開けたら',reading:'あけたら'},{text:'猫',reading:'ねこ'},{text:'寝て',reading:'ねて'}] },
+    ], similarGrammarIds:['g_n4_27'], tags:['발견'] },
+
+  { id:'g_n4_85', level:'N4', pattern:'お〜になる', meaningKo:'〜하시다 (존경 입문)',
+    explanation:'お + ます형 어간 + になる. 기본 존경 표현.',
+    examples:[
+      { ja:'先生はもうお帰りになりました。', ko:'선생님은 벌써 돌아가셨습니다.',
+        readings:[{text:'先生',reading:'せんせい'},{text:'帰り',reading:'かえり'}] },
+    ], similarGrammarIds:['g_n4_71'], tags:['경어'] },
 
   // ---------- N3 ----------
   { id:'g_n3_1', level:'N3', pattern:'〜ことにする', meaningKo:'〜하기로 하다 (스스로 결정)',

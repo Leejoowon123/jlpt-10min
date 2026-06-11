@@ -12,6 +12,7 @@
 //   4. 최근 복습/실패 노트 간단 요약
 
 import { getState } from '../storage.js';
+import { helpCard } from '../helpContent.js';
 import { getDueCount } from '../srs.js';
 import { favoritesList, failureNotesList, todaySessionStats } from '../state.js';
 import { navigate } from '../router.js';
@@ -69,6 +70,7 @@ export function renderHome({ screen }) {
   screen.querySelector('#startBtn').addEventListener('click', () => navigate('today'));
   screen.querySelector('#goReview').addEventListener('click', () => navigate('review'));
   screen.querySelector('#changeLevelBtn').addEventListener('click', () => navigate('settings'));
+  { const hc = helpCard('home'); if (hc) screen.prepend(hc); }
 }
 
 function renderConvList(level) {

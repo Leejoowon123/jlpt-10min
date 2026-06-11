@@ -18,11 +18,15 @@
 
 // 데이터 접근은 contentRepository 경유 (라운드 17) — 직접 ../data/*.js import 금지.
 // preloadRepositoryLevel 완료 후에는 data/<level>/stories.json 데이터가 사용된다.
+import { helpCard } from '../helpContent.js';
+import { kanaToRomaji as _k2r } from '../romaji.js';
 import {
   getAllItems, findItem, findVocab, findGrammar,
   preloadRepositoryLevel, isRepositoryLevelLoaded,
 } from '../contentRepository.js';
 import { getState } from '../storage.js';
+import { getItemDependency, getLearnedCoverage, classifyContentReadiness, readinessLabel } from '../contentReadiness.js';
+import { getState as _getStateForReadiness } from '../storage.js';
 import { speak, stopSpeaking } from '../tts.js';
 import { renderJa } from '../furigana.js';
 import { containsKanji } from '../furigana.js';
@@ -196,6 +200,7 @@ export function renderStories({ screen, params }) {
   warmRepository();
   if (params && params[0]) return drawDetail(screen, params[0]);
   drawList(screen, 'stories', getStoriesForListing());
+  { const hc = helpCard('story'); if (hc) screen.prepend(hc); }
 }
 
 export function renderNovels({ screen, params }) {
@@ -306,6 +311,18 @@ function drawList(screen, key, allItems) {
       const progressLabel = (!isDone && prog.lastIndex > 0)
         ? ` · <span class="story-progress-note">마지막 ${prog.lastIndex + 1}/${total} 문단</span>`
         : '';
+      // 학습 준비도 라벨 (라운드 29) — keyVocabularyIds/keyGrammarIds 기반
+      let readinessNote = '';
+      {
+        const dep = getItemDependency('story', s.id);
+        if (dep && (dep.vocabIds.length + dep.grammarIds.length) > 0) {
+          const rs = (_getStateForReadiness().reviewStates) || {};
+          const cls = classifyContentReadiness(dep, rs);
+          const txt = cls === 'ready' ? '읽기 준비 완료' : readinessLabel(cls);
+          const color = cls === 'ready' ? 'var(--good)' : cls === 'good_next' ? 'var(--accent)' : 'var(--muted)';
+          readinessNote = ` · <span class="story-readiness" style="color:${color}">${txt}</span>`;
+        }
+      }
       row.classList.toggle('done', isDone);
       row.dataset.completed = isDone ? '1' : '0';
       // coverImage 가 있으면 썸네일, 없으면 기존 텍스트만 (fallback).
@@ -322,7 +339,7 @@ function drawList(screen, key, allItems) {
             ${doneBadge}
             ${escape(s.titleJa)} <span class="muted">— ${escape(s.titleKo)}</span>
           </div>
-          <div class="s">${escape(s.summaryKo)} · 약 ${s.estimatedMinutes}분${progressLabel}</div>
+          <div class="s">${escape(s.summaryKo)} · 약 ${s.estimatedMinutes}분${progressLabel}${readinessNote}</div>
         </div>
         <div class="actions"><button class="icon-btn" data-act="open" title="읽기">▶</button></div>
       `;
@@ -548,7 +565,7 @@ function showHighlightPanel(lineEl, h) {
     <div class="story-hl-info">
       <p style="margin:0;font-size:14px">
         <strong>${escape(h.text)}</strong>
-        <span class="muted">(${escape(h.reading || '')})</span> — ${escape(h.meaningKo || '')}
+        <span class="muted">(${escape(h.reading || '')}${h.reading ? ` · <span class="romaji-sub">${escape(_k2r(h.reading))}</span>` : ''})</span> — ${escape(h.meaningKo || '')}
       </p>
       <div class="btn-row" style="margin-top:6px;gap:6px;flex-wrap:wrap">
         <button class="btn small" data-hl-action="speak" data-text="${escape(h.text)}"
