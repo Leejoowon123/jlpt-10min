@@ -213,3 +213,7 @@ actionLogs / userActivity / anonymousActivity 스키마와 rules 는
   reading ready 1 / good_next 79 / locked 0, listening ready 22 / good_next 58 / locked 0,
   stories good_next 7 / locked 7 — 장문/심화 story 가 늘어 locked 가 생기지만(의존 어휘 미학습),
   전 영역 good_next 이상이 다수라 N5/N4 수료자에게 자연스럽게 열린다. 큐 fallback·복습 슬롯 유지.
+- 라운드 39 (N3 완성): 데이터 무결성 회귀 방지를 smoke blocking 으로 상설화 —
+  sourceId 전수 무결성(7개 sourceType), 필드 시프트(sourceId 타입), scriptReadings⊆script,
+  선택지 N2 패턴 0. 이는 데이터 일괄 편집(특히 전역 문자열 치환)이 일으키는 필드 손상을
+  CI 단계에서 잡는다. N2 시드부터도 동일 검증을 레벨별로 둔다.
