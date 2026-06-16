@@ -169,3 +169,47 @@ actionLogs / userActivity / anonymousActivity 스키마와 rules 는
 - locked 여도 진입은 막지 않는다 — UI 는 "먼저 학습하면 좋아요" 안내 + 학습 버튼만 제공.
 - 오늘의 10분: 독해/청해 신규 후보를 ready → good_next → locked 순으로 배치 (그룹 내 셔플,
   fallback 유지로 큐 10개 보장).
+
+### 레벨별 의존성 참조 규칙 (라운드 32 확정)
+
+| 콘텐츠 레벨 | 의존성으로 참조 가능한 레벨 |
+| --- | --- |
+| N5 | N5 만 |
+| N4 | N4 + N5 |
+| N3 | N3 + N4 + N5 (N2 금지) |
+
+추천 풀(levelPool)도 같은 누적 규칙: N3 추천은 N5/N4/N3 콘텐츠를 함께 정렬한다.
+
+### readiness 분류 보강 (라운드 33)
+
+- 핵심 비율 < 0.5 라도 **기초(optional) 의존성을 80% 이상 학습**했으면 locked → good_next 승격
+  (`OPTIONAL_FOUNDATION_RATIO`). N5/N4 를 마친 사용자에게 N3 콘텐츠가 자연스럽게 열린다.
+- 추천 정렬에 **목표 레벨 소가중치**(`TARGET_LEVEL_BONUS`, 같은 클래스 내 순서만 조정) +
+  **목표 레벨 최소 슬롯**(상위 n 에 목표 레벨 ≥ min(2, 보유 수) 보장, 꼬리 교체 방식).
+  복습(N5/N4) 항목은 배제되지 않는다.
+- **복습 최소 슬롯 (라운드 34)** — 목표 레벨 항목이 늘어 상위 n 을 전부 차지하는 경우,
+  꼬리 1 슬롯을 최상위 하위 레벨(복습) 항목으로 교체해 "복습 배제 금지" 를 양방향으로 보장
+  (`ensureTargetLevel` 내 역방향 가드, smoke/qa [188] 잠금).
+
+### N3 의존성 베이크 이력
+
+- 라운드 32: `READING_DEPS_N3` / `LISTENING_DEPS_N3` / `STORY_DEPS_N3` (r/l_n3_1~9, story 1~3).
+- 라운드 33: r_n3_1/2 핵심 의존성 수동 승격 (베이크 뒤 패치 블록).
+- 라운드 34: `*_DEPS_N3_R34` — 신규 id(r/l_n3_10~20, story_n3_004~006)만 담은 별도 테이블을
+  파일 끝에 추가. 기존 테이블/수동 패치는 그대로 유지된다 (Object.assign 순서 보장).
+- 라운드 35: 추천 회귀를 smoke 가 3개 상태로 검증 — ① 빈 학습(locked 라도 추천 비지 않음),
+  ② N5/N4 마스터(N3 ≥ 1 + 복습 ≥ 1), ③ N3 부분 학습(완료한 항목의 의존 콘텐츠가
+  ready 로 상위 진입, locked 독점 금지).
+- 라운드 36: `*_DEPS_N3_R36` — 신규 id(r/l_n3_21~40, story_n3_007~010)만 담은 별도 테이블.
+  gen-deps-n3 탐지 패턴 24종 추가(g_n3_41~70 중 안전한 것만). N5/N4 마스터 기준 분포:
+  reading ready 1 / good_next 39 / locked 0, listening ready 14 / good_next 26 / locked 0,
+  stories good_next 7 / locked 3 — 기초 승격(OPTIONAL_FOUNDATION_RATIO) 덕에 locked 독점 없음.
+- 라운드 37: grammar id 의미 변경 시 참조 재매핑 절차 확립 — g_n3_1/2 재정의에 따라
+  sentenceBank(sourceId/grammarIds)·stories(grammarIds + 베이크 테이블)·grammarPairs(a/b)·
+  similarGrammarIds 를 전부 추적해 N4 기본형 id 로 이관. grammar 패턴은
+  "레벨 교차 동일 0" 이 blocking 이므로, 같은 문형의 레벨 이동은 반드시 이 절차를 따른다.
+- 라운드 38: `*_DEPS_N3_R38` — 신규 id(r/l_n3_41~80, story_n3_011~014)만 별도 테이블.
+  N3 누적 vocab 2702/2700 달성으로 어휘 목표 완료. N5/N4 마스터 기준 분포:
+  reading ready 1 / good_next 79 / locked 0, listening ready 22 / good_next 58 / locked 0,
+  stories good_next 7 / locked 7 — 장문/심화 story 가 늘어 locked 가 생기지만(의존 어휘 미학습),
+  전 영역 good_next 이상이 다수라 N5/N4 수료자에게 자연스럽게 열린다. 큐 fallback·복습 슬롯 유지.

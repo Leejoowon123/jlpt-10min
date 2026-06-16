@@ -105,6 +105,8 @@ export function renderQuestion(root, item, cb) {
     // 일본어 원문에는 후리가나 적용 — 한자 읽기 보조 (정답 누출 없음).
     const ctx = document.createElement('div');
     ctx.className = 'q-context';
+    // 장문 독해 (지문 200자+) — 모바일 가독성용 클래스 (라운드 37)
+    if ((q.context.ja || '').length >= 200) ctx.classList.add('long-passage');
     // 단어 예문 문제 — 일본어 예문은 이미 보이므로 듣기 버튼 허용.
     const playExampleBtn = isVocab
       ? `<button class="btn tts-btn small" id="ttsExample"
