@@ -2822,6 +2822,111 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('N3 story 의존성 전수 (3차 포함)', _n3s38.every(s => (s.vocabularyIds || []).length > 0));
 }
 
+// ── 라운드 39: N3 3차 안정화 / 최종 품질 잠금 ───────────────────────────
+{
+  const N3v = vocab.filter(v => v.level === 'N3');
+  const { kanji: _k39 } = await import('./js/data/kanji.js');
+  const { conversationTopics: _t39 } = await import('./js/data/conversationTopics.js');
+  const { stories: _s39 } = await import('./js/data/stories.js');
+  const vIds39 = new Set(vocab.map(v => v.id));
+  const gIds39 = new Set(grammar.map(g => g.id));
+  const tIds39 = new Set(_t39.map(t => t.id));
+  const rIds39 = new Set(reading.map(r => r.id));
+  const lIds39 = new Set(listening.map(l => l.id));
+  const stIds39 = new Set(_s39.map(s => s.id));
+
+  // ── 1) 전역 replace / 데이터 손상 흔적 검출 (라운드 38 회귀 방지) ──
+  let damaged = 0;
+  for (const v of N3v) {
+    // 필드에 배열 리터럴 잔재나 따옴표 깨짐이 들어가면 손상
+    if (typeof v.word !== 'string' || typeof v.meaningKo !== 'string'
+        || typeof v.exampleSentence !== 'string' || typeof v.exampleTranslation !== 'string') damaged++;
+    else if (/[\[\]]/.test(v.word) || v.word === '' || v.meaningKo === '') damaged++;
+    else if (!/[。?!？！]$/.test(v.exampleSentence)) damaged++;  // 예문 끝 구두점 — 손상 시 잘림
+  }
+  ok('N3 vocab 손상 흔적 0 (전역 replace 회귀 방지)', damaged === 0, `damaged=${damaged}`);
+
+  // ── 2) sentenceBank sourceId 손상 0 (blocking) ──
+  const VALID39 = new Set(['vocab', 'grammar', 'reading', 'listening', 'conversation', 'story', 'original']);
+  let srcBad = 0;
+  for (const s of sentenceBank.filter(x => x.level === 'N3')) {
+    if (!VALID39.has(s.sourceType)) { srcBad++; continue; }
+    const okSrc =
+      (s.sourceType === 'vocab' && vIds39.has(s.sourceId)) ||
+      (s.sourceType === 'grammar' && gIds39.has(s.sourceId)) ||
+      (s.sourceType === 'conversation' && tIds39.has(s.sourceId)) ||
+      (s.sourceType === 'reading' && rIds39.has(s.sourceId)) ||
+      (s.sourceType === 'listening' && lIds39.has(s.sourceId)) ||
+      (s.sourceType === 'story' && stIds39.has(s.sourceId)) ||
+      (s.sourceType === 'original' && (s.sourceId === null || s.sourceId === undefined));
+    if (!okSrc) { srcBad++; if (srcBad <= 5) ok(`N3 ${s.id}: sourceId 무결 (${s.sourceType})`, false); }
+  }
+  ok('N3 sentenceBank sourceId 손상 0 (라운드 38 회귀 방지)', srcBad === 0, `bad=${srcBad}`);
+  // sourceId/vocabIds 가 배열 아닌 단일 string 인지 (필드 시프트 손상 검출)
+  let shift = 0;
+  for (const s of sentenceBank.filter(x => x.level === 'N3'))
+    if (typeof s.sourceId !== 'string' && s.sourceId !== null && s.sourceId !== undefined) shift++;
+  ok('N3 sentenceBank 필드 시프트 0 (sourceId 타입 정상)', shift === 0, `shift=${shift}`);
+
+  // ── 3) listening scriptReadings 혼입 방지 (질문/선택지 전용 단어 금지) ──
+  let mixIn = 0;
+  for (const l of listening.filter(x => x.level === 'N3')) {
+    const q = (l.question || '') + l.choices.join('');
+    for (const r of (l.scriptReadings || [])) {
+      if (!l.script.includes(r.text)) {
+        mixIn++;
+        if (mixIn <= 5) ok(`N3 ${l.id}: scriptReadings "${r.text}" 가 script 에 존재`, false);
+      }
+    }
+  }
+  ok('N3 listening scriptReadings 혼입 0 (질문/선택지 단어 금지 — 라운드 38 회귀 방지)', mixIn === 0, `mixed=${mixIn}`);
+
+  // ── 4) 선택지 N2급 문법 패턴 0 (본문 + 선택지 전체 스캔) ──
+  const HARD39 = /(に違いない|ばかりか|ものだから|べきだ|ざるを得|に関して|どころか|つつある|を通じて|につき|に際して|を巡って)/;
+  let n2choice = 0;
+  for (const it of [...reading, ...listening].filter(x => x.level === 'N3'))
+    if (it.choices.some(c => HARD39.test(c))) { n2choice++; ok(`${it.id}: 선택지 N2급 패턴 없음`, false); }
+  ok('N3 독해/청해 선택지 N2급 패턴 0', n2choice === 0);
+  // 독해 정답 10자+ verbatim 은 unreviewed warning (청해는 표준형식이라 라운드 37 블록에서 처리)
+  for (const r of reading.filter(x => x.level === 'N3')) {
+    const a = r.choices[r.answerIndex];
+    if (a.length >= 10 && r.passage.includes(a)) warn(`N3 reading ${r.id}: 정답(${a.length}자) 본문 verbatim`);
+  }
+
+  // ── 5) 학습범위 밖 한자 62건 최종 정책 (한도 75) ──
+  const deck39 = new Set(_k39.map(k => k.kanji));
+  for (const v of vocab) for (const c of v.word) if (/[一-鿿]/.test(c)) deck39.add(c);
+  const freq39 = {};
+  for (const v of N3v) for (const c of [...new Set([...v.exampleSentence].filter(x => /[一-鿿]/.test(x) && !deck39.has(x)))]) freq39[c] = (freq39[c] || 0) + 1;
+  const out39 = Object.values(freq39).reduce((a, b) => a + b, 0);
+  console.log(`  N3 학습범위 밖 한자: ${out39}건 / ${Object.keys(freq39).length}종 (최종 정책 한도 75 — 彼/誰/塔 등 하위 빈출, 후리가나 100%)`);
+  ok('N3 학습범위 밖 한자 ≤ 75 (최종 정책)', out39 <= 75, `out=${out39}`);
+
+  // ── 6) N3 완성 선언 기준 (모든 항목 충족 시 완성 가능) ──
+  const cumV = vocab.filter(v => ['N5', 'N4', 'N3'].includes(v.level)).length;
+  const cumK = _k39.filter(k => ['N5', 'N4', 'N3'].includes(k.level)).length;
+  const covAll = ['vocab', 'grammar', 'reading', 'listening', 'sentence'].every(name => {
+    const c = name === 'vocab' ? coverageFor('N3', vocab, v => v.exampleSentence, v => v.exampleReadings)
+      : name === 'grammar' ? coverageFor('N3', grammar, g => g.examples?.[0]?.ja, g => g.examples?.[0]?.readings)
+      : name === 'reading' ? coverageFor('N3', reading, r => r.passage, r => r.passageReadings)
+      : name === 'listening' ? coverageFor('N3', listening, l => l.script, l => l.scriptReadings)
+      : coverageFor('N3', sentenceBank, s => s.ja, s => s.readings);
+    return pct(c) === 100;
+  });
+  const criteria = {
+    '누적 vocab ≥ 2700': cumV >= 2700,
+    '누적 kanji ≥ 600': cumK >= 600,
+    'grammar ≥ 120': grammar.filter(g => g.level === 'N3').length >= 120,
+    'reading ≥ 80': reading.filter(r => r.level === 'N3').length >= 80,
+    'listening ≥ 80': listening.filter(l => l.level === 'N3').length >= 80,
+    '후리가나 100%': covAll,
+    '의존성 전수 태깅': reading.filter(r => r.level === 'N3').every(r => (r.vocabIds || []).length + (r.grammarIds || []).length > 0)
+      && listening.filter(l => l.level === 'N3').every(l => (l.vocabIds || []).length + (l.grammarIds || []).length > 0),
+  };
+  for (const [k, v] of Object.entries(criteria)) ok(`N3 완성 기준 — ${k}`, v);
+  console.log('  ★ N3 완성 선언 기준: 위 항목 + (전역 중복 0 / N2 참조 0 / unreviewed 0) 전부 통과 시 완성');
+}
+
 if (errs.length) {
   console.log('\nERRORS:');
   for (const e of errs) console.log(' -', e);
