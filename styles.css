@@ -186,6 +186,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
 .q-context .ja { font-size: 17px; }
 .q-context .ko { color: var(--text-dim); font-size: 13px; margin-top: 4px; }
+/* 장문 독해 (라운드 37) — 200자+ 지문은 글자를 한 단계 줄이고 행간/하단 여유 확보.
+   화면 스크롤은 .screen 의 padding-bottom(88px)이 탭바와의 겹침을 막는다. */
+.q-context.long-passage .ja { font-size: 15px; line-height: 1.9; }
+.q-context.long-passage { padding-bottom: 14px; }
 .choices { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
 .choice {
   display: flex; align-items: center; gap: 10px;

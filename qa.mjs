@@ -4119,6 +4119,560 @@ console.log('\n[179] N5 locked — 진입 가능 + 학습 버튼 card route + N4
   ok('179: N5 큐 10개 유지', q.length === 10, `got=${q.length}`);
 }
 
+// ── 라운드 32: N3 0차 시드 — UI 노출 ─────────────────────────────────
+console.log('\n[180] N3 학습 화면 — 콘텐츠 노출 + 준비도 배지');
+{
+  bootstrap();
+  setLevel('N3');
+  let screen = shell();
+  renderStudy({ screen, params: ['vocab', 'browse'] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N3')?.click();
+  ok('180: N3 단어 목록 노출 (row ≥ 1)', screen.querySelectorAll('#studyListSection .row').length >= 1);
+  ok('180: N3 row romaji 표시', !!screen.querySelector('.romaji-sub'));
+  screen = shell();
+  renderStudy({ screen, params: ['reading', 'browse'] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N3')?.click();
+  ok('180: N3 독해 준비도 배지', !!screen.querySelector('.readiness-badge'));
+  screen = shell();
+  renderStudy({ screen, params: ['listening', 'browse'] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N3')?.click();
+  ok('180: N3 청해 준비도 배지', !!screen.querySelector('.readiness-badge'));
+}
+
+console.log('\n[181] N3 이야기/회화 — 준비도/매칭 표시');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  let screen = shell();
+  renderStories({ screen, params: [] });
+  const lvlBtn = Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N3');
+  ok('181: N3 레벨 칩 존재', !!lvlBtn);
+  lvlBtn.click();
+  ok('181: N3 이야기 row ≥ 2', screen.querySelectorAll('#storyList .row').length >= 2);
+  ok('181: N3 이야기 준비도 라벨', !!screen.querySelector('.story-readiness'));
+  // 회화 목록
+  resetConversation();
+  screen = shell();
+  renderConversation({ screen, params: [] });
+  const txt = screen.textContent;
+  ok('181: 직장 일정 조정 토픽 노출', txt.includes('직장 일정 조정'));
+  ok('181: 관련 문장 수 표시', /관련 문장 \d+개/.test(txt));
+}
+
+console.log('\n[182] N3 단어 카드 — romaji 표시 + 누출 없음');
+{
+  bootstrap({ withTTS: true });
+  setLevel('N3');
+  state.setVocabWarmupEnabled(false);
+  const screen = shell();
+  renderStudy({ screen, params: ['vocab', 'card', 'v_n3_8'] }); // 募集(ぼしゅう) → boshuu
+  ok('182: quickPreview 에 boshuu 표시', screen.textContent.includes('boshuu'));
+  passPreview(screen);
+  ok('182: quiz thinking 에 romaji 미표시', !screen.textContent.includes('boshuu'));
+  ok('182: quiz thinking 에 뜻 미표시', !screen.textContent.includes('모집'));
+  ok('182: choice 4개', screen.querySelectorAll('.choice').length === 4);
+  // N3 스토리 직접 진입
+  const screen2 = shell();
+  renderStoryDetail({ screen: screen2, params: ['story_n3_001'] });
+  ok('182: N3 스토리 본문 ruby', !!screen2.querySelector('#storyBody ruby'));
+  ok('182: N3 인라인 하이라이트 ≥ 3', screen2.querySelectorAll('.story-inline-hl').length >= 3);
+}
+
+// ── 라운드 33: N3 안정화 — 하이라이트 학습 링크 / 회화 평가 / 로그 ────
+console.log('\n[183] N3 스토리 하이라이트 — 단어 학습 링크 동작');
+{
+  bootstrap();
+  setLevel('N3');
+  clearStudyReturnRoute();
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n3_003'] });
+  const pill = Array.from(screen.querySelectorAll('.story-inline-hl'))
+    .find(el => {
+      const li = parseInt(el.dataset.lineIdx, 10);
+      const hi = parseInt(el.dataset.hlIdx, 10);
+      const h = (_allStories.find(s => s.id === 'story_n3_003').bodyHighlights[li] || [])[hi];
+      return h && h.vocabId;
+    });
+  ok('183: vocabId 보유 하이라이트 존재', !!pill);
+  pill.click();
+  const panel = pill.closest('.story-line').querySelector('.story-hl-panel');
+  ok('183: 패널 노출 (뜻 표시)', panel && panel.hidden === false);
+  ok('183: 패널에 romaji 표시', /[a-z]{3,}/.test(panel.textContent));
+  const studyBtn = pill.closest('.story-line').querySelector('[data-hl-action="study-vocab"]');
+  ok('183: 단어 학습 버튼 존재', !!studyBtn);
+  studyBtn.click();
+  ok('183: card route 이동', window.location.hash.includes('study/vocab/card/'));
+  ok('183: returnRoute 저장', peekStudyReturnRoute() === 'story/story_n3_003');
+}
+
+console.log('\n[184] N3 회화 평가 — sampleAnswer/추천 + 원문 미기록');
+{
+  bootstrap();
+  const logger = await import('./js/actionLogger.js');
+  const { evaluateConversationAnswer: _ev33 } = await import('./js/localEvaluator.js');
+  const { conversationTopics: _ct33 } = await import('./js/data/conversationTopics.js');
+  const logWrites = [];
+  logger._setWriterForTest(async (path, value) => { logWrites.push({ path, value }); });
+  const topic = _ct33.find(t => t.id === 'conv_n3_opinion');
+  const SECRET = '私にとって環境は大切だと思います、キムです';
+  const result = _ev33({ topic, question: topic.starterQuestions[0], userText: SECRET, reviewStates: {} });
+  ok('184: 점수 반환', typeof result.score === 'number');
+  ok('184: sampleAnswer 제공 (기존 정책)', !!result.sampleAnswer && !!result.sampleAnswer.ja);
+  ok('184: sampleAnswer 는 topic 데이터 문장', topic.starterQuestions[0].sampleAnswers.some(a => a.ja === result.sampleAnswer.ja));
+  ok('184: 로그에 답변 원문 미기록', !JSON.stringify(logWrites).includes('キムです'));
+  ok('184: 평가 중 로그 0건', logWrites.length === 0);
+  logger._resetWriterForTest();
+}
+
+// ── 라운드 34: N3 1차 확장 — 신규 콘텐츠 UI 노출 ─────────────────────
+console.log('\n[185] N3 신규 독해/청해 — 렌더 + 후리가나 + 준비도 배지');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  let screen = shell();
+  renderQuestion(screen, { itemType: 'reading', itemId: 'r_n3_15' }, {});
+  ok('185: 신규 독해 r_n3_15 choice 4개', screen.querySelectorAll('.choice').length === 4);
+  ok('185: 신규 독해 지문 ruby', !!screen.querySelector('ruby'));
+  screen = shell();
+  renderQuestion(screen, { itemType: 'listening', itemId: 'l_n3_20' }, {});
+  ok('185: 신규 청해 l_n3_20 choice 4개', screen.querySelectorAll('.choice').length === 4);
+  // 신규 항목도 의존성 태깅 → 빈 학습 상태에서 배너/배지 동작
+  screen = shell();
+  renderQuestion(screen, { itemType: 'reading', itemId: 'r_n3_17' }, {});
+  ok('185: 신규 독해 준비도 배너 (빈 학습 상태)', !!screen.querySelector('#readinessBanner'));
+}
+
+console.log('\n[186] N3 신규 단어/문법 — 카드 + romaji + 퀴즈 누출 없음');
+{
+  bootstrap({ withTTS: true });
+  setLevel('N3');
+  state.setVocabWarmupEnabled(false);
+  const screen = shell();
+  renderStudy({ screen, params: ['vocab', 'card', 'v_n3_231'] }); // 挑戦(ちょうせん) → chousen
+  ok('186: quickPreview 에 chousen 표시', screen.textContent.includes('chousen'));
+  passPreview(screen);
+  ok('186: quiz thinking 에 romaji 미표시', !screen.textContent.includes('chousen'));
+  ok('186: quiz thinking 에 뜻 미표시', !screen.textContent.includes('도전'));
+  // 신규 문법 비교 페어 데이터 — gp_n3_5~8 grammarIds 실존
+  const { grammarPairs: _gp34 } = await import('./js/data/grammarPairs.js');
+  const { grammar: _g34 } = await import('./js/data/grammar.js');
+  const gIds34 = new Set(_g34.map(g => g.id));
+  const newPairs = _gp34.filter(p => p.level === 'N3');
+  ok('186: N3 문법 페어 ≥ 8', newPairs.length >= 8, `got=${newPairs.length}`);
+  ok('186: 페어 grammarIds 전부 실존', newPairs.every(p => (p.grammarIds || []).every(id => gIds34.has(id))));
+}
+
+console.log('\n[187] N3 신규 스토리/회화 토픽 — 목록·본문·매칭');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  let screen = shell();
+  renderStories({ screen, params: [] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N3')?.click();
+  ok('187: N3 이야기 row ≥ 4 (1차 확장)', screen.querySelectorAll('#storyList .row').length >= 4,
+     `got=${screen.querySelectorAll('#storyList .row').length}`);
+  // 신규 단편 본문
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n3_006'] });
+  ok('187: story_n3_006 본문 ruby', !!screen.querySelector('#storyBody ruby'));
+  ok('187: story_n3_006 인라인 하이라이트 ≥ 3', screen.querySelectorAll('.story-inline-hl').length >= 3);
+  ok('187: story_n3_006 romaji 표시', screen.textContent.includes('akirameru'));
+  // 신규 회화 토픽 노출 + 관련 문장
+  resetConversation();
+  screen = shell();
+  renderConversation({ screen, params: [] });
+  const txt = screen.textContent;
+  ok('187: 회의에서 의견 내기 토픽 노출', txt.includes('회의에서 의견 내기'));
+  ok('187: 예약·일정 문제 해결 토픽 노출', txt.includes('예약·일정 문제 해결'));
+  ok('187: 관련 문장 수 표시', /관련 문장 \d+개/.test(txt));
+}
+
+console.log('\n[188] N3 추천 — N5/N4 마스터: N3 포함 + 복습 미배제 (라운드 34 잠금)');
+{
+  bootstrap();
+  const cr34 = await import('./js/contentReadiness.js');
+  const { vocab: _v34 } = await import('./js/data/vocab.js');
+  const { grammar: _gr34 } = await import('./js/data/grammar.js');
+  const rsM = {};
+  [..._v34, ..._gr34].filter(x => ['N5', 'N4'].includes(x.level)).forEach(x => { rsM[x.id] = { correctCount: 1 }; });
+  for (const [name, fn] of [['reading', cr34.getRecommendedReading], ['listening', cr34.getRecommendedListening], ['stories', cr34.getRecommendedStories]]) {
+    const rec = fn('N3', rsM, { count: 6 });
+    ok(`188: 추천(${name}) N3 ≥ 1`, rec.some(r => r.item.level === 'N3'));
+    ok(`188: 추천(${name}) 복습(N5/N4) ≥ 1`, rec.some(r => r.item.level !== 'N3'),
+       rec.map(r => r.item.id).join(','));
+  }
+  // 빈 학습 상태에서도 추천이 비지 않음 (회귀)
+  const recEmpty = cr34.getRecommendedReading('N3', {}, { count: 5 });
+  ok('188: 빈 상태 추천 비지 않음', recEmpty.length > 0);
+}
+
+// ── 라운드 35: N3 1차 안정화 — 품질/추천/회화 잠금 ─────────────────────
+console.log('\n[189] N3 신규 문법 문제 — 렌더 + 해설 노출 시점');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  const screen = shell();
+  renderQuestion(screen, { itemType: 'grammar', itemId: 'g_n3_27' }, {});
+  ok('189: choice 4개', screen.querySelectorAll('.choice').length === 4);
+  ok('189: 예문 context ruby', !!screen.querySelector('.q-context ruby'));
+  // 라운드 35 보강된 explanation 은 선택 전 미노출
+  ok('189: 선택 전 해설 미노출', !screen.textContent.includes('으뜸'));
+  screen.querySelectorAll('.choice')[0].click();
+  const explain189 = screen.querySelector('.explain');
+  ok('189: 선택 후 .explain 등장', !!explain189);
+  ok('189: 보강된 해설 텍스트 노출', screen.textContent.includes('으뜸'));
+}
+
+console.log('\n[190] N3 오늘의 10분 — 큐 10개 + readiness fallback');
+{
+  bootstrap();
+  setLevel('N3');
+  const q190 = buildTodayQueue();
+  ok('190: N3 큐 10개 (빈 학습 상태 fallback)', q190.length === 10, `got=${q190.length}`);
+  // 부분 학습 상태에서도 큐 10개 유지
+  const cr35 = await import('./js/contentReadiness.js');
+  const dep190 = cr35.getItemDependency('reading', 'r_n3_13');
+  for (const id of [...dep190.vocabIds, ...dep190.grammarIds]) state.recordVocabResult?.(id, true);
+  ok('190: 부분 학습 후에도 큐 10개', buildTodayQueue().length === 10);
+}
+
+console.log('\n[191] N3 신규 토픽 회화 평가 — sampleAnswer 데이터 출처 + 원문 미기록');
+{
+  bootstrap();
+  const logger = await import('./js/actionLogger.js');
+  const { evaluateConversationAnswer: _ev35 } = await import('./js/localEvaluator.js');
+  const { conversationTopics: _ct35 } = await import('./js/data/conversationTopics.js');
+  const logWrites35 = [];
+  logger._setWriterForTest(async (path, value) => { logWrites35.push({ path, value }); });
+  for (const tid of ['conv_n3_meeting_opinion', 'conv_n3_school_presentation', 'conv_n3_reservation_problem']) {
+    const topic = _ct35.find(t => t.id === tid);
+    const SECRET35 = '会議で意見を言いました、パクです';
+    const r = _ev35({ topic, question: topic.starterQuestions[0], userText: SECRET35, reviewStates: {} });
+    ok(`191: ${tid} 점수 반환`, typeof r.score === 'number');
+    ok(`191: ${tid} sampleAnswer 는 topic 데이터 문장`,
+       topic.starterQuestions[0].sampleAnswers.some(a => a.ja === r.sampleAnswer.ja));
+  }
+  ok('191: 로그에 답변 원문 미기록', !JSON.stringify(logWrites35).includes('パクです'));
+  ok('191: 평가 중 로그 0건', logWrites35.length === 0);
+  logger._resetWriterForTest();
+}
+
+console.log('\n[192] N3 신규 스토리 — 하이라이트 학습 링크 + 복귀 (story_n3_004)');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  clearStudyReturnRoute();
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n3_004'] });
+  ok('192: 본문 ruby + romaji', !!screen.querySelector('#storyBody ruby') && screen.textContent.includes('renshuu'));
+  const pill192 = Array.from(screen.querySelectorAll('.story-inline-hl')).find(el => {
+    const li = parseInt(el.dataset.lineIdx, 10), hi = parseInt(el.dataset.hlIdx, 10);
+    const h = (_allStories.find(s => s.id === 'story_n3_004').bodyHighlights[li] || [])[hi];
+    return h && h.vocabId;
+  });
+  ok('192: vocabId 하이라이트 존재', !!pill192);
+  pill192.click();
+  const studyBtn192 = pill192.closest('.story-line').querySelector('[data-hl-action="study-vocab"]');
+  ok('192: 단어 학습 버튼', !!studyBtn192);
+  studyBtn192.click();
+  ok('192: card route 이동', window.location.hash.includes('study/vocab/card/'));
+  ok('192: returnRoute = story_n3_004', peekStudyReturnRoute() === 'story/story_n3_004');
+}
+
+// ── 라운드 36: N3 2차 확장 — 신규 콘텐츠 UI ────────────────────────────
+console.log('\n[193] N3 2차 신규 단어 카드 — romaji + 퀴즈 누출 없음');
+{
+  bootstrap({ withTTS: true });
+  setLevel('N3');
+  state.setVocabWarmupEnabled(false);
+  const screen = shell();
+  renderStudy({ screen, params: ['vocab', 'card', 'v_n3_561'] }); // 乗り越える → norikoeru
+  ok('193: quickPreview 에 norikoeru 표시', screen.textContent.includes('norikoeru'));
+  passPreview(screen);
+  ok('193: quiz thinking 에 romaji 미표시', !screen.textContent.includes('norikoeru'));
+  ok('193: quiz thinking 에 뜻 미표시', !screen.textContent.includes('극복'));
+  ok('193: choice 4개', screen.querySelectorAll('.choice').length === 4);
+}
+
+console.log('\n[194] N3 2차 신규 문법/독해/청해 — 렌더 + 배지 + 장문');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  let screen = shell();
+  renderQuestion(screen, { itemType: 'grammar', itemId: 'g_n3_45' }, {});
+  ok('194: 신규 문법 g_n3_45 choice 4개', screen.querySelectorAll('.choice').length === 4);
+  ok('194: 선택 전 해설 미노출', !screen.textContent.includes('연속적 변화'));
+  screen.querySelectorAll('.choice')[0].click();
+  ok('194: 선택 후 해설 노출', !!screen.querySelector('.explain'));
+  screen = shell();
+  renderQuestion(screen, { itemType: 'reading', itemId: 'r_n3_37' }, {});
+  ok('194: 장문 독해 r_n3_37 렌더 + ruby', screen.querySelectorAll('.choice').length === 4 && !!screen.querySelector('ruby'));
+  screen = shell();
+  renderQuestion(screen, { itemType: 'listening', itemId: 'l_n3_39' }, {});
+  ok('194: 신규 청해 l_n3_39 choice 4개', screen.querySelectorAll('.choice').length === 4);
+  screen = shell();
+  renderQuestion(screen, { itemType: 'reading', itemId: 'r_n3_29' }, {});
+  ok('194: 신규 독해 준비도 배너 (빈 학습 상태)', !!screen.querySelector('#readinessBanner'));
+}
+
+console.log('\n[195] N3 2차 신규 스토리/토픽 — 본문·하이라이트·평가');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  clearStudyReturnRoute();
+  let screen = shell();
+  renderStories({ screen, params: [] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N3')?.click();
+  ok('195: N3 이야기 row ≥ 7', screen.querySelectorAll('#storyList .row').length >= 7,
+     `got=${screen.querySelectorAll('#storyList .row').length}`);
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n3_009'] });
+  ok('195: story_n3_009 ruby + romaji', !!screen.querySelector('#storyBody ruby') && screen.textContent.includes('gokai'));
+  const pill195 = Array.from(screen.querySelectorAll('.story-inline-hl')).find(el => {
+    const li = parseInt(el.dataset.lineIdx, 10), hi = parseInt(el.dataset.hlIdx, 10);
+    const h = (_allStories.find(s => s.id === 'story_n3_009').bodyHighlights[li] || [])[hi];
+    return h && h.vocabId;
+  });
+  ok('195: vocabId 하이라이트 존재', !!pill195);
+  pill195.click();
+  pill195.closest('.story-line').querySelector('[data-hl-action="study-vocab"]').click();
+  ok('195: 학습 이동 + returnRoute', window.location.hash.includes('study/vocab/card/') && peekStudyReturnRoute() === 'story/story_n3_009');
+  // 신규 토픽 평가 — sampleAnswer 데이터 출처 + 원문 미기록
+  const logger = await import('./js/actionLogger.js');
+  const { evaluateConversationAnswer: _ev36 } = await import('./js/localEvaluator.js');
+  const { conversationTopics: _ct36 } = await import('./js/data/conversationTopics.js');
+  const logW36 = [];
+  logger._setWriterForTest(async (p, v) => { logW36.push(p); });
+  for (const tid of ['conv_n3_work_conflict', 'conv_n3_social_opinion', 'conv_n3_service_complaint']) {
+    const topic = _ct36.find(t => t.id === tid);
+    const r = _ev36({ topic, question: topic.starterQuestions[0], userText: '残業が多い気がします、チェです', reviewStates: {} });
+    ok(`195: ${tid} sampleAnswer 출처`, topic.starterQuestions[0].sampleAnswers.some(a => a.ja === r.sampleAnswer.ja));
+  }
+  ok('195: 평가 중 로그 0건 (원문 미기록)', logW36.length === 0);
+  logger._resetWriterForTest();
+}
+
+console.log('\n[196] N3 2차 — 추천 균형 + 오늘의 10분 큐 유지');
+{
+  bootstrap();
+  setLevel('N3');
+  const cr36 = await import('./js/contentReadiness.js');
+  const { vocab: _v36 } = await import('./js/data/vocab.js');
+  const { grammar: _g36 } = await import('./js/data/grammar.js');
+  const rsM36 = {};
+  [..._v36, ..._g36].filter(x => ['N5', 'N4'].includes(x.level)).forEach(x => { rsM36[x.id] = { correctCount: 1 }; });
+  for (const [name, fn] of [['reading', cr36.getRecommendedReading], ['listening', cr36.getRecommendedListening], ['stories', cr36.getRecommendedStories]]) {
+    const rec = fn('N3', rsM36, { count: 6 });
+    ok(`196: 추천(${name}) N3 포함 + 복습 유지`, rec.some(r => r.item.level === 'N3') && rec.some(r => r.item.level !== 'N3'),
+       rec.map(r => r.item.id).join(','));
+  }
+  ok('196: 오늘의 10분 큐 10개', buildTodayQueue().length === 10, `got=${buildTodayQueue().length}`);
+}
+
+// ── 라운드 37: N3 2차 안정화 — 장문 UX / g_n3_1·2 재검토 / 회화 추천 ──
+console.log('\n[197] 장문 독해 — long-passage 클래스 + CSS + 배지');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  const screen = shell();
+  renderQuestion(screen, { itemType: 'reading', itemId: 'r_n3_37' }, {});
+  const ctx197 = screen.querySelector('.q-context');
+  ok('197: long-passage 클래스 부여 (지문 200자+)', ctx197?.classList.contains('long-passage'));
+  ok('197: 장문에도 ruby 렌더', !!ctx197?.querySelector('ruby'));
+  ok('197: 준비도 배너 (빈 학습 상태)', !!screen.querySelector('#readinessBanner'));
+  const { readFileSync: _rf197 } = await import('node:fs');
+  ok('197: styles.css 에 long-passage 규칙', _rf197('styles.css', 'utf-8').includes('.q-context.long-passage'));
+  // 일반 길이 지문엔 클래스 없음
+  const screen2 = shell();
+  renderQuestion(screen2, { itemType: 'reading', itemId: 'r_n3_21' }, {});
+  ok('197: 단문엔 long-passage 미부여', !screen2.querySelector('.q-context')?.classList.contains('long-passage'));
+}
+
+console.log('\n[198] g_n3_1·2 재검토 결과 — 분리된 문법 렌더 + 페어 재매핑');
+{
+  bootstrap();
+  setLevel('N3');
+  const { grammar: _g198 } = await import('./js/data/grammar.js');
+  const { grammarPairs: _gp198 } = await import('./js/data/grammarPairs.js');
+  ok('198: g_n3_1 = ことにしている', _g198.find(g => g.id === 'g_n3_1').pattern === '〜ことにしている');
+  ok('198: g_n3_2 = ぶり(に)', _g198.find(g => g.id === 'g_n3_2').pattern === '〜ぶり(に)');
+  const gp198 = _gp198.find(p => p.id === 'gp_n3_1');
+  ok('198: gp_n3_1 은 N4 기본형 비교로 재매핑', gp198.a === 'g_n4_20' && gp198.b === 'g_n4_21');
+  let screen = shell();
+  renderQuestion(screen, { itemType: 'grammar', itemId: 'g_n3_1' }, {});
+  ok('198: g_n3_1 문제 렌더 (choice 4)', screen.querySelectorAll('.choice').length === 4);
+  screen = shell();
+  renderQuestion(screen, { itemType: 'grammar', itemId: 'g_n3_2' }, {});
+  ok('198: g_n3_2 문제 렌더 + 선택 전 해설 미노출',
+     screen.querySelectorAll('.choice').length === 4 && !screen.textContent.includes('다시 일어남'));
+  screen.querySelectorAll('.choice')[0].click();
+  ok('198: 선택 후 해설 노출', !!screen.querySelector('.explain'));
+}
+
+console.log('\n[199] 회화 평가 — sentenceBank 연습 문장 추천 + 원문 미기록');
+{
+  bootstrap();
+  const logger = await import('./js/actionLogger.js');
+  const { evaluateConversationAnswer: _ev37 } = await import('./js/localEvaluator.js');
+  const { conversationTopics: _ct37 } = await import('./js/data/conversationTopics.js');
+  const logW37 = [];
+  logger._setWriterForTest(async (p, v) => { logW37.push({ p, v }); });
+  const topic37 = _ct37.find(t => t.id === 'conv_n3_service_complaint');
+  const SECRET37 = '商品が届きません、ハンです';
+  const r37 = _ev37({ topic: topic37, question: topic37.starterQuestions[0], userText: SECRET37, reviewStates: {} });
+  ok('199: 관련 연습 문장(sentenceBank) 추천 존재', (r37.relatedPracticeSentences || []).length >= 1,
+     JSON.stringify((r37.relatedPracticeSentences || []).map(s => s.id)));
+  ok('199: 추천 문장은 N3 sentenceBank 의 실제 문장',
+     (r37.relatedPracticeSentences || []).every(s => /^sent_n3_/.test(s.id)));
+  ok('199: 로그에 답변 원문 미기록', !JSON.stringify(logW37).includes('ハンです'));
+  ok('199: 평가 중 로그 0건', logW37.length === 0);
+  logger._resetWriterForTest();
+}
+
+console.log('\n[200] 장문형 스토리 — 7~8문단 상세 + 학습 왕복');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  clearStudyReturnRoute();
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n3_007'] });
+  ok('200: 7문단 전부 렌더', screen.querySelectorAll('#storyBody .story-line').length === 7,
+     `got=${screen.querySelectorAll('#storyBody .story-line').length}`);
+  ok('200: ruby + romaji + 한국어', !!screen.querySelector('#storyBody ruby')
+     && screen.textContent.includes('joutatsu'));
+  const pill200 = Array.from(screen.querySelectorAll('.story-inline-hl')).find(el => {
+    const li = parseInt(el.dataset.lineIdx, 10), hi = parseInt(el.dataset.hlIdx, 10);
+    const h = (_allStories.find(s => s.id === 'story_n3_007').bodyHighlights[li] || [])[hi];
+    return h && h.vocabId;
+  });
+  ok('200: vocabId 하이라이트 존재', !!pill200);
+  pill200.click();
+  pill200.closest('.story-line').querySelector('[data-hl-action="study-vocab"]').click();
+  ok('200: 학습 이동 + returnRoute', window.location.hash.includes('study/vocab/card/')
+     && peekStudyReturnRoute() === 'story/story_n3_007');
+}
+
+// ── 라운드 38: N3 3차 마무리 확장 — 신규 콘텐츠 UI ──────────────────────
+console.log('\n[201] N3 3차 신규 단어 카드 — romaji + 퀴즈 누출 없음');
+{
+  bootstrap({ withTTS: true });
+  setLevel('N3');
+  state.setVocabWarmupEnabled(false);
+  const screen = shell();
+  renderStudy({ screen, params: ['vocab', 'card', 'v_n3_1138'] }); // 捉える → toraeru
+  ok('201: quickPreview 에 toraeru 표시', screen.textContent.includes('toraeru'));
+  passPreview(screen);
+  ok('201: quiz thinking 에 romaji 미표시', !screen.textContent.includes('toraeru'));
+  ok('201: quiz thinking 에 뜻 미표시', !screen.textContent.includes('파악'));
+  ok('201: choice 4개', screen.querySelectorAll('.choice').length === 4);
+}
+
+console.log('\n[202] N3 3차 신규 장문 독해 — long-passage class + 청해 숨김');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  let screen = shell();
+  renderQuestion(screen, { itemType: 'reading', itemId: 'r_n3_69' }, {}); // 장문(200+)
+  const ctx202 = screen.querySelector('.q-context');
+  ok('202: 신규 장문 long-passage 클래스', ctx202?.classList.contains('long-passage'));
+  ok('202: 장문 ruby 렌더', !!ctx202?.querySelector('ruby'));
+  // 신규 청해 — 스크립트 숨김(TTS 가능 시 context null)
+  const screen2 = shell();
+  renderQuestion(screen2, { itemType: 'listening', itemId: 'l_n3_67' }, {});
+  ok('202: 신규 청해 choice 4개', screen2.querySelectorAll('.choice').length === 4);
+}
+
+console.log('\n[203] N3 3차 신규 문법 — 해설 노출 시점 + 비교 페어');
+{
+  bootstrap();
+  setLevel('N3');
+  let screen = shell();
+  renderQuestion(screen, { itemType: 'grammar', itemId: 'g_n3_90' }, {}); // 〜得る
+  ok('203: choice 4개', screen.querySelectorAll('.choice').length === 4);
+  ok('203: 선택 전 해설 미노출', !screen.textContent.includes('가능성이 있음'));
+  screen.querySelectorAll('.choice')[0].click();
+  ok('203: 선택 후 .explain 등장', !!screen.querySelector('.explain'));
+  const { grammarPairs: _gp203 } = await import('./js/data/grammarPairs.js');
+  const { grammar: _g203 } = await import('./js/data/grammar.js');
+  const gIds203 = new Set(_g203.map(g => g.id));
+  const n3p = _gp203.filter(p => p.level === 'N3');
+  ok('203: N3 pairs ≥ 24', n3p.length >= 24);
+  ok('203: pair grammarIds 전부 실존', n3p.every(p => gIds203.has(p.a) && gIds203.has(p.b)));
+}
+
+console.log('\n[204] N3 3차 신규 스토리/토픽 — 본문·하이라이트·평가');
+{
+  bootstrap();
+  setLevel('N3');
+  setFuriganaEnabled(true);
+  clearStudyReturnRoute();
+  let screen = shell();
+  renderStories({ screen, params: [] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N3')?.click();
+  ok('204: N3 이야기 row ≥ 9', screen.querySelectorAll('#storyList .row').length >= 9,
+     `got=${screen.querySelectorAll('#storyList .row').length}`);
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n3_013'] });
+  ok('204: story_n3_013 ruby + romaji', !!screen.querySelector('#storyBody ruby') && screen.textContent.includes('kanten'));
+  const pill204 = Array.from(screen.querySelectorAll('.story-inline-hl')).find(el => {
+    const li = parseInt(el.dataset.lineIdx, 10), hi = parseInt(el.dataset.hlIdx, 10);
+    const h = (_allStories.find(s => s.id === 'story_n3_013').bodyHighlights[li] || [])[hi];
+    return h && h.vocabId;
+  });
+  ok('204: vocabId 하이라이트 존재', !!pill204);
+  pill204.click();
+  pill204.closest('.story-line').querySelector('[data-hl-action="study-vocab"]').click();
+  ok('204: 학습 이동 + returnRoute', window.location.hash.includes('study/vocab/card/')
+     && peekStudyReturnRoute() === 'story/story_n3_013');
+  // 신규 토픽 평가 + sentenceBank 추천 + 원문 미기록
+  const logger = await import('./js/actionLogger.js');
+  const { evaluateConversationAnswer: _ev38 } = await import('./js/localEvaluator.js');
+  const { conversationTopics: _ct38 } = await import('./js/data/conversationTopics.js');
+  const logW38 = [];
+  logger._setWriterForTest(async (p, v) => { logW38.push(p); });
+  for (const tid of ['conv_n3_social_debate', 'conv_n3_workplace_solution', 'conv_n3_local_event']) {
+    const topic = _ct38.find(t => t.id === tid);
+    const r = _ev38({ topic, question: topic.starterQuestions[0], userText: '高齢化は問題だと思います、リーです', reviewStates: {} });
+    ok(`204: ${tid} sampleAnswer 출처`, topic.starterQuestions[0].sampleAnswers.some(a => a.ja === r.sampleAnswer.ja));
+    ok(`204: ${tid} 관련 연습 문장 추천`, (r.relatedPracticeSentences || []).every(s => /^sent_n3_/.test(s.id)));
+  }
+  ok('204: 로그에 답변 원문 미기록', !JSON.stringify(logW38).includes('リーです'));
+  ok('204: 평가 중 로그 0건', logW38.length === 0);
+  logger._resetWriterForTest();
+}
+
+console.log('\n[205] N3 3차 — 추천 균형 + 큐 유지');
+{
+  bootstrap();
+  setLevel('N3');
+  const cr205 = await import('./js/contentReadiness.js');
+  const { vocab: _v205 } = await import('./js/data/vocab.js');
+  const { grammar: _g205 } = await import('./js/data/grammar.js');
+  const rsM = {};
+  [..._v205, ..._g205].filter(x => ['N5', 'N4'].includes(x.level)).forEach(x => { rsM[x.id] = { correctCount: 1 }; });
+  for (const [name, fn] of [['reading', cr205.getRecommendedReading], ['listening', cr205.getRecommendedListening], ['stories', cr205.getRecommendedStories]]) {
+    const rec = fn('N3', rsM, { count: 6 });
+    ok(`205: 추천(${name}) N3 포함 + 복습 유지`, rec.some(r => r.item.level === 'N3') && rec.some(r => r.item.level !== 'N3'));
+  }
+  ok('205: 오늘의 10분 큐 10개', buildTodayQueue().length === 10);
+  // N3 부분 학습: 신규 항목이 ready 로 상위 진입
+  const dep205 = cr205.getItemDependency('reading', 'r_n3_47');
+  const rsP = {};
+  for (const id of [...dep205.vocabIds, ...dep205.grammarIds, ...(dep205.optionalVocabIds || [])]) rsP[id] = { correctCount: 1 };
+  const recP = cr205.getRecommendedReading('N3', rsP, { count: 8 });
+  ok('205: 부분 학습 시 ready 항목 존재', recP.some(r => r.readiness === 'ready'));
+}
+
 if (errs.length) {
   console.log('\nQA ERRORS:');
   for (const e of errs) console.log(' -', e);

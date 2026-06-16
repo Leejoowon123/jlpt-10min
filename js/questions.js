@@ -33,8 +33,15 @@ export function buildQuestion(itemType, itemId) {
   if (itemType === 'vocab') {
     const v = findItem('vocab', itemId);
     if (!v) return null;
-    const sameLevel = vocab.filter(x => x.level === v.level && x.id !== v.id);
-    const distractors = shuffled(sameLevel).slice(0, 3).map(x => x.meaningKo);
+    // meaningKo 가 정답과 같은 항목(유의어쌍 する/やる 등)은 distractor 후보에서 제외 —
+    // 같은 텍스트가 두 번 나오면 선택지 중복이 된다 (라운드 33 수정).
+    const sameLevel = vocab.filter(x => x.level === v.level && x.id !== v.id && x.meaningKo !== v.meaningKo);
+    const distractors = [];
+    const usedMeanings = new Set([v.meaningKo]);
+    for (const x of shuffled(sameLevel)) {
+      if (!usedMeanings.has(x.meaningKo)) { distractors.push(x.meaningKo); usedMeanings.add(x.meaningKo); }
+      if (distractors.length === 3) break;
+    }
     const choices = shuffled([v.meaningKo, ...distractors]);
     return {
       itemType, itemId,

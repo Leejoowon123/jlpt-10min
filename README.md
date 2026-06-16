@@ -10,9 +10,15 @@
   최종 목표 달성 (누적 어휘 1402/1400 · 한자 300/300). 후리가나 100% + 전역 중복 0 잠금.
 - **N5/N4 추천 구조 잠금** — 독해/청해/이야기 학습 의존성 태깅 + 준비도(ready/good_next/locked)
   배지·추천 엔진이 두 레벨 모두 동작. 단어 발음은 히라가나 + romaji 보조 표기.
+- **N3 콘텐츠 목표 도달 (3차 마무리 확장 완료)** — 단어 1300(**누적 2702/2700**)·
+  한자 600/600·문법 120(+비교 페어 24)·독해 80(장문 200자+ 10편)·청해 80·
+  문장 350(회화 350)·회화 12주제·이야기 14편(이야기 10+단편 4).
+  **5개 핵심 영역 최종 목표 100% 달성.** 후리가나 100% + 전역 중복 0 + 교차 meaningKo/패턴 0 +
+  N2 참조 0 잠금, 전수 의존성 태깅 ([docs/content-status.md](docs/content-status.md) 판정 기록).
+  남은 단계: N3 3차 안정화 → N3 완성 선언.
 - **상세 수량과 최종 목표 대비 현황**: [docs/content-status.md](docs/content-status.md) ·
   자동 리포트: `npm run content:report`
-- 테스트: smoke(정적·데이터) + qa(jsdom 700+ 어서션) + GitHub Actions CI
+- 테스트: smoke(정적·데이터) + qa(jsdom 990+ 어서션) + GitHub Actions CI
 
 ## 주요 기능
 
@@ -48,7 +54,7 @@ VSCode Live Server 등도 동일하게 동작.
 ```bash
 npm install        # jsdom (최초 1회)
 node smoke.mjs     # 데이터 무결성 + 후리가나 커버율 + 정적/보안 검사
-node qa.mjs        # jsdom DOM 시나리오 (139 시나리오)
+node qa.mjs        # jsdom DOM 시나리오 (205 시나리오)
 ```
 
 둘 다 통과해야 PR 가능 — CI 가 동일 명령을 자동 실행.

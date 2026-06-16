@@ -82,6 +82,11 @@ export function kanaToRomaji(text) {
 
     if (syl === null) { out += one; geminate = false; continue; }
 
+    // ん 뒤에 모음/や행이 오면 음절 경계 표시 (ふんいき → fun'iki)
+    if (out.endsWith('n') && /^[aeiouy]/.test(syl) && s[i - 1] === 'ん') {
+      out += "'";
+    }
+
     if (geminate) {
       // 다음 자음 중복. ch- 는 t 로 (ちょっと → chotto 는 と의 t 중복이므로 일반 규칙으로 충분,
       // っち 처럼 ch 가 따라올 때만 t 를 붙인다: まっちゃ → matcha.
