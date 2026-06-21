@@ -115,6 +115,72 @@ anonymousActivity/{anonKey}     ← 비로그인 사용자 (분리 — rules 와
 - `anonymousActivity` — 비로그인 로그용. 스키마 검증만 (익명 특성상 본인 확인 불가).
 - 루트 기본 `.read/.write: false` — 위 노드 외 전부 차단.
 
+## 운영 rules — 로그인 필수 정책 (라운드 50, **현행**)
+
+라운드 50부터 **로그인 필수(signed-in only)** 정책. 클라이언트는 비로그인 시 로그를 쓰지 않으며(actionLogger
+`resolveUser()`→null→noop), `anonymousActivity` 신규 쓰기는 **폐기**되었다. rules 도 이에 맞춰 강화한다.
+아래 JSON 을 **Firebase Console → Build → Realtime Database → Rules 탭**에 붙여넣고 Publish (Firestore Rules 아님,
+테스트 모드 rules 금지):
+
+```json
+{
+  "rules": {
+    "actionLogs": {
+      "$date": {
+        "$eventId": {
+          ".read": false,
+          ".write": "auth != null && newData.exists() && newData.child('userType').val() === 'signed-in' && newData.child('userKey').val() === auth.uid",
+          ".validate": "newData.hasChildren(['type','at','userKey','userType'])"
+        }
+      }
+    },
+    "userActivity": {
+      "$userKey": {
+        ".read": false,
+        ".write": "auth != null && auth.uid === $userKey",
+        ".validate": "newData.hasChildren(['lastSeenAt','lastEventType','signedIn'])"
+      }
+    },
+    "anonymousActivity": {
+      ".read": false,
+      ".write": false
+    },
+    ".read": false,
+    ".write": false
+  }
+}
+```
+
+설명:
+- `actionLogs` — **`auth != null` 인 로그인 사용자만** 쓰기. payload 의 `userKey` 가 본인 uid 와 일치하고 `userType==='signed-in'` 이어야 통과(익명/위장 쓰기 차단). 읽기 전면 차단.
+- `userActivity` — 로그인 본인(uid 일치)만 쓰기.
+- `anonymousActivity` — **deprecated**: `.write: false` 로 신규 쓰기 차단. 기존 데이터는 삭제하지 않고 보존(코드에서 더 이상 쓰지 않음).
+- 루트 기본 `.read/.write: false`.
+
+#### payload ↔ rules 정합 최종 확인 (라운드 51)
+실제 `actionLogger.logAction` 출력과 위 rules 를 대조 — **일치 확인**:
+
+| 노드 | 실제 payload(로그인 시) | rules 요구 | 정합 |
+| --- | --- | --- | --- |
+| actionLogs | `{type, at, userKey:<uid>, userType:'signed-in', level, route, meta}` | `auth!=null` · `userKey===auth.uid` · `userType==='signed-in'` · `.validate [type,at,userKey,userType]` | ✅ |
+| userActivity | `{firstSeenAt, lastSeenAt, lastEventType, signedIn:true}` | `auth.uid===$userKey` · `.validate [lastSeenAt,lastEventType,signedIn]` | ✅ |
+| anonymousActivity | (신규 write 없음 — 코드에서 폐기) | `.write:false` | ✅ |
+
+> 비로그인 시 `resolveUser()→null→logAction noop` 이므로 클라이언트가 위 조건을 위반하는 write 를 시도하지 않는다.
+> smoke(`logAction: userKey = uid` / `anonymousActivity 미기록`) + qa [134]/[235] 가 이 정합을 상시 잠근다.
+
+### Authorized domains (로그인 필수 → 필수 확인)
+Firebase Console → Authentication → Settings → **Authorized domains** 에 배포 도메인이 있어야 이메일 로그인이 동작한다:
+- `localhost` (기본 포함 — 로컬 개발)
+- **GitHub Pages 도메인** `leejoowon123.github.io` (공개 배포 — 없으면 로그인 팝업/요청이 차단되어 앱 진입 불가)
+
+### 비밀번호 재설정 (라운드 52)
+로그인 화면 **"비밀번호를 잊으셨나요?"** → `authService.resetPassword(email)` → Firebase `sendPasswordResetEmail`.
+- **이메일 템플릿**: Firebase Console → Authentication → **Templates → 비밀번호 재설정(Password reset)** 에서 발신자명/제목/본문/언어를 수정할 수 있다. (기본 영문 → 필요 시 한국어로 변경 권장)
+- **Authorized domains**: 재설정 메일의 링크가 동작하려면 위 Authorized domains 에 배포 도메인이 등록돼 있어야 한다.
+- **무료 범위/요청 제한**: Firebase Auth 무료 쿼터 내에서 발송되나, 동일 이메일/IP 의 과도한 요청은 `auth/too-many-requests` 로 제한된다(앱은 한국어 안내).
+- **프라이버시**: 재설정 요청은 `actionLogs` 에 **기록하지 않는다**(이메일 미기록). 존재하지 않는 계정(`user-not-found`)도 중립 성공 메시지로 응답해 계정 존재 여부를 과도하게 노출하지 않는다.
+
 ### payload ↔ rules 일치 확인 (라운드 21 점검 완료)
 
 | 노드 | rules `.validate` 필수 | 코드 payload | 일치 |
@@ -151,6 +217,16 @@ Firebase Console (console.firebase.google.com)
 - 운영 전 **App Check**(reCAPTCHA v3/Enterprise) 적용을 검토 — config 만으로의
   대량 봇 쓰기를 차단하는 현실적 수단.
 - 더 강한 방어가 필요하면 Cloud Functions 경유 기록(서버 검증)으로 이전.
+
+### App Check 도입 분류 (라운드 48)
+
+- **지금 필수: 아니오.** 공개 베타 차단 요인이 아니다. 근거 — (1) 로그는 행동 메타(allowlist)만 기록,
+  민감정보 0 이라 유출 위험이 낮고, (2) 운영 Realtime DB rules 가 스키마/경로를 제약하며,
+  (3) 로그인 없이도 학습이 전부 동작해 로그 자체가 핵심 기능이 아니다.
+- **나중에 권장: 예.** 익명 write 남용/봇 대량 쓰기 방어를 위해 베타 운영 중 트래픽을 보고
+  reCAPTCHA v3 기반 App Check 적용을 권장. 비용 0(무료 쿼터 내), 정적 앱 호환.
+- **에스컬레이션 기준**: anonymousActivity/actionLogs 에 비정상 대량 쓰기가 관측되면 App Check → 그래도
+  부족하면 Cloud Functions 서버 검증 기록으로 단계 상향.
 
 ## main 병합 전 체크리스트 (라운드 21 최종판)
 

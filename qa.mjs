@@ -3112,6 +3112,11 @@ function mockAuthImpl() {
       return user;
     },
     signOut: async () => { user = null; },
+    resetPassword: async (email) => {
+      if (email.includes('many')) { const e = new Error('rate'); e.code = 'auth/too-many-requests'; throw e; }
+      if (email.includes('bademail')) { const e = new Error('inv'); e.code = 'auth/invalid-email'; throw e; }
+      // 성공(또는 user-not-found 는 authService 가 중립 성공 처리)
+    },
     observe: (cb) => { cb(user); },
   };
 }
@@ -3174,28 +3179,34 @@ console.log('\n[133] 로그인 실패 — 에러 메시지 표시 + 앱 생존')
   authSvc._resetAuthImplForTest();
 }
 
-console.log('\n[134] 비로그인 상태 앱 사용 + anonymous 로그');
+console.log('\n[134] 로그인 사용자 학습/스토리 로그 (signed-in) + 비로그인 noop');
 {
   bootstrap();
   authSvc._resetAuthImplForTest();
   const logWrites = [];
   logger._setWriterForTest(async (path, value) => { logWrites.push({ path, value }); });
   logger._resetThrottleForTest();
-  // 비로그인으로 학습/스토리 정상 동작
   state.setVocabWarmupEnabled(false);
+  // (a) 비로그인 — 학습은 동작하되 로그는 기록 안 됨(noop)
   let screen = shell();
   renderStudy({ screen, params: ['vocab', 'card', 'v_n5_1'] });
   passPreview(screen);
-  ok('134: 비로그인 학습 카드 정상', screen.querySelectorAll('.choice').length === 4);
-  ok('134: study_start 로그 (anonymous)',
-     logWrites.some(w => w.value?.type === 'study_start' && w.value.userType === 'anonymous'));
-  // vocab 답변 로그
+  ok('134: 학습 카드 정상 렌더', screen.querySelectorAll('.choice').length === 4);
+  ok('134: 비로그인 로그 0건(noop)', logWrites.length === 0);
+  // (b) 로그인(mock) 후 — study/story 로그가 signed-in 으로 기록
+  authSvc._setAuthImplForTest(mockAuthImpl());
+  await authSvc.signInWithEmail('learner@example.com', 'correct123');
+  logger._resetThrottleForTest();
+  screen = shell();
+  renderStudy({ screen, params: ['vocab', 'card', 'v_n5_1'] });
+  passPreview(screen);
+  ok('134: study_start 로그 (signed-in)',
+     logWrites.some(w => w.value?.type === 'study_start' && w.value.userType === 'signed-in'));
   screen.querySelectorAll('.choice')[0].click();
   await new Promise(r => setTimeout(r, 10));
   ok('134: vocab_card_answered 로그',
      logWrites.some(w => w.value?.type === 'vocab_card_answered' &&
                          typeof w.value.meta.correct === 'boolean'));
-  // story_open / story_complete
   screen = shell();
   renderStoryDetail({ screen, params: ['story_n5_001'] });
   await new Promise(r => setTimeout(r, 10));
@@ -3205,16 +3216,19 @@ console.log('\n[134] 비로그인 상태 앱 사용 + anonymous 로그');
   await new Promise(r => setTimeout(r, 10));
   ok('134: story_complete 로그',
      logWrites.some(w => w.value?.type === 'story_complete'));
-  // anon id 가 일관됨
-  const anonKeys = new Set(logWrites.filter(w => w.path.startsWith('actionLogs/')).map(w => w.value.userKey));
-  ok('134: anonymous userKey 일관', anonKeys.size === 1 &&
-     [...anonKeys][0].startsWith('anon_'));
+  // userKey = uid (이메일/anon 아님), anonymousActivity 미기록
+  const keys = new Set(logWrites.filter(w => w.path.startsWith('actionLogs/')).map(w => w.value.userKey));
+  ok('134: userKey = uid (anon_ 아님)', keys.size === 1 && [...keys][0] === 'uid_learner');
+  ok('134: anonymousActivity 미기록', !logWrites.some(w => w.path.startsWith('anonymousActivity')));
   logger._resetWriterForTest();
+  authSvc._resetAuthImplForTest();
 }
 
 console.log('\n[135] app_open 하루 1회 + write 실패 시 앱 생존');
 {
   bootstrap();
+  authSvc._setAuthImplForTest(mockAuthImpl());           // 로그인 필수 — 기록되려면 signed-in
+  await authSvc.signInWithEmail('opener@example.com', 'correct123');
   const logWrites = [];
   logger._setWriterForTest(async (path, value) => { logWrites.push({ path, value }); });
   logger._resetThrottleForTest();
@@ -3243,6 +3257,7 @@ console.log('\n[135] app_open 하루 1회 + write 실패 시 앱 생존');
      state.todaySessionStats().total >= 1);
   logger._resetWriterForTest();
   logger._resetThrottleForTest();
+  authSvc._resetAuthImplForTest();
 }
 
 console.log('\n[136] Firebase config 입력됨 — 계정 폼 + 상태 배지 (라운드 20)');
@@ -4790,6 +4805,769 @@ console.log('\n[211] N3 추천 — N3 독점 아님 + 복습 유지 + 큐 fallba
     ok(`211: 추천(${name}) N3 독점 아님(복습 ≥1)`, rec.some(r => r.item.level !== 'N3'));
   }
   ok('211: 큐 10개 유지', buildTodayQueue().length === 10);
+}
+
+// ── 라운드 40: N2 0차 시드 — 목표 레벨 N2 동작 ─────────────────────────
+console.log('\n[212] N2 목표 레벨 — 학습 화면 + 단어 카드 romaji/누출');
+{
+  bootstrap({ withTTS: true });
+  setLevel('N2');
+  let screen = shell();
+  renderStudy({ screen, params: ['vocab', 'browse'] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N2')?.click();
+  ok('212: N2 단어 목록 노출 (row ≥ 1)', screen.querySelectorAll('#studyListSection .row').length >= 1);
+  ok('212: N2 row romaji 표시', !!screen.querySelector('.romaji-sub'));
+  // 단어 카드 — 需要(じゅよう→juyou)
+  state.setVocabWarmupEnabled(false);
+  screen = shell();
+  renderStudy({ screen, params: ['vocab', 'card', 'v_n2_6'] });
+  ok('212: quickPreview 에 juyou 표시', screen.textContent.includes('juyou'));
+  passPreview(screen);
+  ok('212: quiz 에 romaji 미노출', !screen.textContent.includes('juyou'));
+  ok('212: quiz 에 뜻 미노출', !screen.textContent.includes('수요'));
+  ok('212: choice 4개', screen.querySelectorAll('.choice').length === 4);
+}
+
+console.log('\n[213] N2 독해/청해 — 준비도 배지 + 진입 + 문법 해설');
+{
+  bootstrap();
+  setLevel('N2');
+  setFuriganaEnabled(true);
+  let screen = shell();
+  renderStudy({ screen, params: ['reading', 'browse'] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N2')?.click();
+  ok('213: N2 독해 준비도 배지', !!screen.querySelector('.readiness-badge'));
+  screen = shell();
+  renderStudy({ screen, params: ['listening', 'browse'] });
+  Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N2')?.click();
+  ok('213: N2 청해 준비도 배지', !!screen.querySelector('.readiness-badge'));
+  // 독해 진입
+  screen = shell();
+  renderQuestion(screen, { itemType: 'reading', itemId: 'r_n2_2' }, {});
+  ok('213: N2 독해 choice 4 + ruby', screen.querySelectorAll('.choice').length === 4 && !!screen.querySelector('ruby'));
+  // 문법 해설 시점
+  screen = shell();
+  renderQuestion(screen, { itemType: 'grammar', itemId: 'g_n2_1' }, {});
+  ok('213: N2 문법 choice 4 + 선택 전 해설 미노출', screen.querySelectorAll('.choice').length === 4 && !screen.textContent.includes('문어적'));
+  screen.querySelectorAll('.choice')[0].click();
+  ok('213: 선택 후 .explain 등장', !!screen.querySelector('.explain'));
+}
+
+console.log('\n[214] N2 story — ruby/romaji/한국어 3단 + 하이라이트 학습 왕복');
+{
+  bootstrap();
+  setLevel('N2');
+  setFuriganaEnabled(true);
+  clearStudyReturnRoute();
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n2_001'] });
+  ok('214: 본문 ruby', !!screen.querySelector('#storyBody ruby'));
+  ok('214: romaji 표시', screen.textContent.includes('shoutengai') || screen.textContent.includes('fukyou'));
+  ok('214: 한국어 해석 노출', screen.textContent.includes('상점가') || screen.textContent.includes('불황'));
+  const pill = Array.from(screen.querySelectorAll('.story-inline-hl')).find(el => {
+    const li = parseInt(el.dataset.lineIdx, 10), hi = parseInt(el.dataset.hlIdx, 10);
+    const h = (_allStories.find(s => s.id === 'story_n2_001').bodyHighlights[li] || [])[hi];
+    return h && h.vocabId;
+  });
+  ok('214: vocabId 하이라이트 존재', !!pill);
+  pill.click();
+  pill.closest('.story-line').querySelector('[data-hl-action="study-vocab"]').click();
+  ok('214: 학습 이동 + returnRoute', window.location.hash.includes('study/vocab/card/')
+     && peekStudyReturnRoute() === 'story/story_n2_001');
+}
+
+console.log('\n[215] N2 회화 평가 — 표현 수 + sampleAnswer/연습 문장 + 원문 미기록');
+{
+  bootstrap();
+  const logger = await import('./js/actionLogger.js');
+  const { evaluateConversationAnswer: _ev40 } = await import('./js/localEvaluator.js');
+  const { conversationTopics: _ct40 } = await import('./js/data/conversationTopics.js');
+  const { sentenceBank: _sb40 } = await import('./js/data/sentenceBank.js');
+  const logW = [];
+  logger._setWriterForTest(async (p, v) => { logW.push({ p, v }); });
+  const n2t = _ct40.filter(t => t.level === 'N2');
+  ok('215: N2 토픽 ≥ 3', n2t.length >= 3);
+  const SECRET = '高齢化は課題だと考えます、ヤマダと申します';
+  for (const t of n2t) {
+    const r = _ev40({ topic: t, question: t.starterQuestions[0], userText: SECRET, reviewStates: {} });
+    ok(`215: ${t.id} sampleAnswer 출처`, t.starterQuestions[0].sampleAnswers.some(a => a.ja === r.sampleAnswer.ja));
+    ok(`215: ${t.id} 연습 문장 N2`, (r.relatedPracticeSentences || []).every(s => /^sent_n2_/.test(s.id)));
+    const m = _sb40.filter(s => s.level === 'N2' && s.canUseInConversation && (s.situationTags || []).some(x => t.situationTags.includes(x)));
+    ok(`215: ${t.id} 관련 문장 ≥ 5`, m.length >= 5);
+  }
+  ok('215: 로그에 답변 원문/이름 미기록', !JSON.stringify(logW).includes('ヤマダ'));
+  ok('215: 평가 중 로그 0건', logW.length === 0);
+  logger._resetWriterForTest();
+}
+
+console.log('\n[216] N2 추천/큐 — N2 포함 + 복습 유지 + 큐 10개');
+{
+  bootstrap();
+  setLevel('N2');
+  const cr = await import('./js/contentReadiness.js');
+  const { vocab: _v } = await import('./js/data/vocab.js');
+  const { grammar: _g } = await import('./js/data/grammar.js');
+  // 빈 학습 상태 추천 비지 않음
+  for (const fn of [cr.getRecommendedReading, cr.getRecommendedListening, cr.getRecommendedStories])
+    ok('216: 빈 학습 추천 비지 않음', fn('N2', {}, { count: 5 }).length > 0);
+  // N3 마스터 → N2 일부 + 하위 복습 유지
+  const rsM = {};
+  [..._v, ..._g].filter(x => ['N5', 'N4', 'N3'].includes(x.level)).forEach(x => { rsM[x.id] = { correctCount: 1 }; });
+  const rec = cr.getRecommendedReading('N2', rsM, { count: 8 });
+  ok('216: N2 추천에 N2 포함', rec.some(r => r.item.level === 'N2'));
+  ok('216: N2 추천에 복습(하위) 유지', rec.some(r => r.item.level !== 'N2'));
+  ok('216: N2 큐 10개', buildTodayQueue().length === 10);
+}
+
+// ── 라운드 41: N2 0차 안정화 — 목록 표시 / 문법 / 부분 학습 추천 ───────
+console.log('\n[217] N2 목표 레벨 — 4개 영역 목록 정상 표시');
+{
+  bootstrap();
+  setLevel('N2');
+  setFuriganaEnabled(true);
+  for (const [type, sel] of [['vocab', '#studyListSection .row'], ['grammar', '#studyListSection .row'], ['reading', '.readiness-badge'], ['listening', '.readiness-badge']]) {
+    const screen = shell();
+    renderStudy({ screen, params: [type, 'browse'] });
+    Array.from(screen.querySelectorAll('.chip')).find(b => b.textContent === 'N2')?.click();
+    ok(`217: N2 ${type} 목록 표시`, screen.querySelectorAll(sel).length >= 1, `sel=${sel}`);
+  }
+}
+
+console.log('\n[218] N2 단어 카드 — romaji + 누출 없음 (샘플 3종)');
+{
+  for (const [vid, romaji, mean] of [['v_n2_47', 'honshitsu', '본질'], ['v_n2_90', 'dakyou', '타협'], ['v_n2_100', 'yoron', '여론']]) {
+    bootstrap({ withTTS: true });
+    setLevel('N2');
+    state.setVocabWarmupEnabled(false);
+    const screen = shell();
+    renderStudy({ screen, params: ['vocab', 'card', vid] });
+    ok(`218: ${vid} quickPreview romaji`, screen.textContent.includes(romaji));
+    passPreview(screen);
+    ok(`218: ${vid} quiz romaji 미노출`, !screen.textContent.includes(romaji));
+    ok(`218: ${vid} quiz 뜻 미노출`, !screen.textContent.includes(mean));
+  }
+}
+
+console.log('\n[219] N2 신규 문법 — 해설 노출 시점 + 비교 페어');
+{
+  bootstrap();
+  setLevel('N2');
+  for (const [gid, hidden] of [['g_n2_2', '동반'], ['g_n2_13', '불문']]) {
+    const screen = shell();
+    renderQuestion(screen, { itemType: 'grammar', itemId: gid }, {});
+    ok(`219: ${gid} choice 4`, screen.querySelectorAll('.choice').length === 4);
+    const before = screen.querySelector('.explain');
+    ok(`219: ${gid} 선택 전 해설 미노출`, !before || !before.textContent.trim());
+    screen.querySelectorAll('.choice')[0].click();
+    ok(`219: ${gid} 선택 후 .explain 등장`, !!screen.querySelector('.explain'));
+  }
+  const { grammarPairs: _gp219 } = await import('./js/data/grammarPairs.js');
+  const { grammar: _g219 } = await import('./js/data/grammar.js');
+  const gIds = new Set(_g219.map(g => g.id));
+  const n2p = _gp219.filter(p => p.level === 'N2');
+  ok('219: N2 pairs ≥ 4', n2p.length >= 4);
+  ok('219: pair grammarIds 실존', n2p.every(p => gIds.has(p.a) && gIds.has(p.b)));
+}
+
+console.log('\n[220] N2 story — ruby/romaji/한국어 + 하이라이트 학습 왕복 (단편)');
+{
+  bootstrap();
+  setLevel('N2');
+  setFuriganaEnabled(true);
+  clearStudyReturnRoute();
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n2_003'] });
+  ok('220: 본문 ruby', !!screen.querySelector('#storyBody ruby'));
+  ok('220: romaji 표시', screen.textContent.includes('kisha') || screen.textContent.includes('jijitsu'));
+  ok('220: 한국어 해석', screen.textContent.includes('기자') || screen.textContent.includes('사실'));
+  const pill = Array.from(screen.querySelectorAll('.story-inline-hl')).find(el => {
+    const li = parseInt(el.dataset.lineIdx, 10), hi = parseInt(el.dataset.hlIdx, 10);
+    const h = (_allStories.find(s => s.id === 'story_n2_003').bodyHighlights[li] || [])[hi];
+    return h && h.vocabId;
+  });
+  ok('220: vocabId 하이라이트 존재', !!pill);
+  pill.click();
+  pill.closest('.story-line').querySelector('[data-hl-action="study-vocab"]').click();
+  ok('220: 학습 이동 + returnRoute', window.location.hash.includes('study/vocab/card/')
+     && peekStudyReturnRoute() === 'story/story_n2_003');
+}
+
+console.log('\n[221] N2 부분 학습 추천 + 회화 평가 원문 미기록');
+{
+  bootstrap();
+  setLevel('N2');
+  const cr = await import('./js/contentReadiness.js');
+  // N2 일부 학습 → 해당 항목 ready 상위
+  const dep = cr.getItemDependency('reading', 'r_n2_2');
+  const rsP = {};
+  for (const id of [...dep.vocabIds, ...dep.grammarIds, ...(dep.optionalVocabIds || [])]) rsP[id] = { correctCount: 1 };
+  const recP = cr.getRecommendedReading('N2', rsP, { count: 8 });
+  ok('221: 부분 학습 시 ready 항목 존재', recP.some(r => r.readiness === 'ready'));
+  ok('221: locked 독점 아님', recP.some(r => r.readiness !== 'locked'));
+  // 회화 평가 원문 미기록
+  const logger = await import('./js/actionLogger.js');
+  const { evaluateConversationAnswer: _ev41 } = await import('./js/localEvaluator.js');
+  const { conversationTopics: _ct41 } = await import('./js/data/conversationTopics.js');
+  const logW = [];
+  logger._setWriterForTest(async (p, v) => { logW.push({ p, v }); });
+  const topic = _ct41.find(t => t.id === 'conv_n2_news_discussion');
+  const r = _ev41({ topic, question: topic.starterQuestions[0], userText: '景気は回復しています、サトウです', reviewStates: {} });
+  ok('221: sampleAnswer 출처', topic.starterQuestions[0].sampleAnswers.some(a => a.ja === r.sampleAnswer.ja));
+  ok('221: 연습 문장 N2', (r.relatedPracticeSentences || []).every(s => /^sent_n2_/.test(s.id)));
+  ok('221: 로그에 원문/이름 미기록', !JSON.stringify(logW).includes('サトウ'));
+  ok('221: 평가 중 로그 0건', logW.length === 0);
+  logger._resetWriterForTest();
+}
+
+// ── 라운드 42: N2 1차 확장 ─────────────────────────────────────────────
+console.log('\n[222] N2 1차 확장 — 수량 sentinel');
+{
+  const { vocab: _v42 } = await import('./js/data/vocab.js');
+  const { kanji: _k42 } = await import('./js/data/kanji.js');
+  const { grammar: _g42 } = await import('./js/data/grammar.js');
+  const { grammarPairs: _gp42 } = await import('./js/data/grammarPairs.js');
+  const { reading: _r42 } = await import('./js/data/reading.js');
+  const { listening: _l42 } = await import('./js/data/listening.js');
+  const { sentenceBank: _sb42 } = await import('./js/data/sentenceBank.js');
+  const { conversationTopics: _t42 } = await import('./js/data/conversationTopics.js');
+  const { stories: _s42 } = await import('./js/data/stories.js');
+  ok('222: N2 vocab 300', _v42.filter(v => v.level === 'N2').length >= 300);
+  ok('222: N2 kanji 200', _k42.filter(k => k.level === 'N2').length >= 200);
+  ok('222: N2 grammar 40', _g42.filter(g => g.level === 'N2').length >= 40);
+  ok('222: N2 pairs 10', _gp42.filter(p => p.level === 'N2').length >= 10);
+  ok('222: N2 reading 20', _r42.filter(r => r.level === 'N2').length >= 20);
+  ok('222: N2 listening 20', _l42.filter(l => l.level === 'N2').length >= 20);
+  ok('222: N2 sentenceBank 120', _sb42.filter(s => s.level === 'N2').length >= 120);
+  ok('222: N2 회화 가능 100', _sb42.filter(s => s.level === 'N2' && s.canUseInConversation).length >= 100);
+  ok('222: N2 topics 6', _t42.filter(t => t.level === 'N2').length >= 6);
+  ok('222: N2 stories 6', _s42.filter(s => s.level === 'N2').length >= 6);
+}
+
+console.log('\n[223] N2 신규 단어 카드 — romaji + 누출 없음 (1차 샘플 3종)');
+{
+  for (const [vid, romaji, mean] of [['v_n2_157', 'kakusa', '격차'], ['v_n2_290', 'kyoutei', '협정'], ['v_n2_261', 'dakaisaku', '타개책']]) {
+    bootstrap({ withTTS: true });
+    setLevel('N2');
+    state.setVocabWarmupEnabled(false);
+    const screen = shell();
+    renderStudy({ screen, params: ['vocab', 'card', vid] });
+    ok(`223: ${vid} quickPreview romaji`, screen.textContent.includes(romaji));
+    passPreview(screen);
+    ok(`223: ${vid} quiz romaji 미노출`, !screen.textContent.includes(romaji));
+    ok(`223: ${vid} quiz 뜻 미노출`, !screen.textContent.includes(mean));
+  }
+}
+
+console.log('\n[224] N2 신규 문법 — 해설 노출 시점 + 신규 페어 동작');
+{
+  bootstrap();
+  setLevel('N2');
+  for (const gid of ['g_n2_24', 'g_n2_30', 'g_n2_37']) {
+    const screen = shell();
+    renderQuestion(screen, { itemType: 'grammar', itemId: gid }, {});
+    ok(`224: ${gid} choice 4`, screen.querySelectorAll('.choice').length === 4);
+    const before = screen.querySelector('.explain');
+    ok(`224: ${gid} 선택 전 해설 미노출`, !before || !before.textContent.trim());
+    screen.querySelectorAll('.choice')[0].click();
+    ok(`224: ${gid} 선택 후 .explain 등장`, !!screen.querySelector('.explain'));
+  }
+  const { grammarPairs: _gp224 } = await import('./js/data/grammarPairs.js');
+  const { grammar: _g224 } = await import('./js/data/grammar.js');
+  const gIds = new Set(_g224.map(g => g.id));
+  const n2p = _gp224.filter(p => p.level === 'N2');
+  ok('224: N2 pairs ≥ 10', n2p.length >= 10);
+  ok('224: pair grammarIds 실존', n2p.every(p => gIds.has(p.a) && gIds.has(p.b)));
+  const gp5 = _gp224.find(p => p.id === 'gp_n2_5');
+  ok('224: gp_n2_5 choices 4 + answer 유효', gp5 && gp5.choices.length === 4 && gp5.choices[gp5.answerIndex]);
+}
+
+console.log('\n[225] N2 신규 회화 주제 + 신규 story 하이라이트 왕복');
+{
+  const { conversationTopics: _ct225 } = await import('./js/data/conversationTopics.js');
+  const { sentenceBank: _sb225 } = await import('./js/data/sentenceBank.js');
+  const topic = _ct225.find(t => t.id === 'conv_n2_service_request');
+  ok('225: 신규 주제 존재', !!topic);
+  const m = _sb225.filter(s => s.level === 'N2' && s.canUseInConversation
+    && (s.situationTags || []).some(tg => topic.situationTags.includes(tg)));
+  ok('225: 관련 문장 ≥ 5', m.length >= 5, `match=${m.length}`);
+  // sampleAnswer 가 실제 sentenceBank 문장과 연결
+  const jaSet = new Set(_sb225.map(s => s.ja));
+  ok('225: sampleAnswer 출처(sentenceBank)', topic.starterQuestions.every(q => q.sampleAnswers.some(a => jaSet.has(a.ja))));
+  // 신규 story 왕복
+  bootstrap();
+  setLevel('N2');
+  setFuriganaEnabled(true);
+  clearStudyReturnRoute();
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n2_004'] });
+  ok('225: 신규 story ruby', !!screen.querySelector('#storyBody ruby'));
+  ok('225: 신규 story romaji', screen.textContent.includes('fukkou') || screen.textContent.includes('machi'));
+  ok('225: 신규 story 한국어', screen.textContent.includes('부흥') || screen.textContent.includes('마을'));
+  const pill = Array.from(screen.querySelectorAll('.story-inline-hl')).find(el => {
+    const li = parseInt(el.dataset.lineIdx, 10), hi = parseInt(el.dataset.hlIdx, 10);
+    const h = (_allStories.find(s => s.id === 'story_n2_004').bodyHighlights[li] || [])[hi];
+    return h && h.vocabId;
+  });
+  ok('225: vocabId 하이라이트 존재', !!pill);
+  pill.click();
+  pill.closest('.story-line').querySelector('[data-hl-action="study-vocab"]').click();
+  ok('225: 학습 이동 + returnRoute', window.location.hash.includes('study/vocab/card/')
+     && peekStudyReturnRoute() === 'story/story_n2_004');
+}
+
+// ── 라운드 43: N2 1차 안정화 ───────────────────────────────────────────
+console.log('\n[226] N2 복구 0차 단어 + 신규 1차 단어 — 카드 정상 + romaji + 누출 없음');
+{
+  // v_n2_77(核心, 복구된 0차) + v_n2_290(協定, 1차) 모두 정상 렌더
+  for (const [vid, romaji, mean] of [['v_n2_77', 'kakushin', '핵심'], ['v_n2_290', 'kyoutei', '협정']]) {
+    bootstrap({ withTTS: true });
+    setLevel('N2');
+    state.setVocabWarmupEnabled(false);
+    const screen = shell();
+    renderStudy({ screen, params: ['vocab', 'card', vid] });
+    ok(`226: ${vid} 카드 렌더`, screen.querySelectorAll('.choice').length === 4 || !!screen.textContent);
+    ok(`226: ${vid} quickPreview romaji`, screen.textContent.includes(romaji));
+    passPreview(screen);
+    ok(`226: ${vid} quiz romaji 미노출`, !screen.textContent.includes(romaji));
+    ok(`226: ${vid} quiz 뜻 미노출`, !screen.textContent.includes(mean));
+  }
+}
+
+console.log('\n[227] N2 추천 비편중 — N2 큐에 N2+하위 복습 혼재');
+{
+  bootstrap();
+  setLevel('N2');
+  const cr = await import('./js/contentReadiness.js');
+  const { vocab: _v227 } = await import('./js/data/vocab.js');
+  const { grammar: _g227 } = await import('./js/data/grammar.js');
+  // N3 마스터 + N2 일부 학습
+  const rs = {};
+  [..._v227, ..._g227].filter(x => ['N5', 'N4', 'N3'].includes(x.level)).forEach(x => { rs[x.id] = { correctCount: 1 }; });
+  const dep = cr.getItemDependency('reading', 'r_n2_2');
+  [...dep.vocabIds, ...dep.grammarIds, ...(dep.optionalVocabIds || [])].forEach(id => { rs[id] = { correctCount: 1 }; });
+  const rec = cr.getRecommendedReading('N2', rs, { count: 8 });
+  ok('227: N2 ready 상위 존재', rec.length > 0 && rec[0].readiness === 'ready');
+  ok('227: 추천이 N2 단독 아님(하위 복습 포함)', rec.some(r => r.item.level !== 'N2'));
+  ok('227: 추천에 N2 포함', rec.some(r => r.item.level === 'N2'));
+  const q = buildTodayQueue();
+  ok('227: 큐 10개', q.length === 10);
+}
+
+// ── 라운드 44: N2 2차 확장 ─────────────────────────────────────────────
+console.log('\n[228] N2 2차 수량 + 장문 long-passage 렌더');
+{
+  const { vocab: _v } = await import('./js/data/vocab.js');
+  const { kanji: _k } = await import('./js/data/kanji.js');
+  const { grammar: _g } = await import('./js/data/grammar.js');
+  const { grammarPairs: _gp } = await import('./js/data/grammarPairs.js');
+  const { reading: _r } = await import('./js/data/reading.js');
+  const { listening: _l } = await import('./js/data/listening.js');
+  const { sentenceBank: _sb } = await import('./js/data/sentenceBank.js');
+  const { conversationTopics: _t } = await import('./js/data/conversationTopics.js');
+  const { stories: _s } = await import('./js/data/stories.js');
+  ok('228: N2 vocab 900', _v.filter(v => v.level === 'N2').length >= 900);
+  ok('228: N2 kanji 300', _k.filter(k => k.level === 'N2').length >= 300);
+  ok('228: N2 grammar 80', _g.filter(g => g.level === 'N2').length >= 80);
+  ok('228: N2 pairs 20', _gp.filter(p => p.level === 'N2').length >= 20);
+  ok('228: N2 reading 50', _r.filter(r => r.level === 'N2').length >= 50);
+  ok('228: N2 listening 50', _l.filter(l => l.level === 'N2').length >= 50);
+  ok('228: N2 sentenceBank 320', _sb.filter(s => s.level === 'N2').length >= 320);
+  ok('228: N2 topics 10', _t.filter(t => t.level === 'N2').length >= 10);
+  ok('228: N2 stories 10', _s.filter(s => s.level === 'N2').length >= 10);
+  // 장문 long-passage 렌더
+  bootstrap(); setLevel('N2'); setFuriganaEnabled(true);
+  const screen = shell();
+  renderQuestion(screen, { itemType: 'reading', itemId: 'r_n2_48' }, {});
+  const ctx = screen.querySelector('.q-context');
+  ok('228: r_n2_48 long-passage 클래스', ctx?.classList.contains('long-passage'));
+  ok('228: 장문에도 ruby 렌더', !!ctx?.querySelector('ruby'));
+  ok('228: 선택지 4개', screen.querySelectorAll('.choice').length === 4);
+}
+
+console.log('\n[229] N2 2차 신규 단어 카드 — romaji + 누출 없음');
+{
+  for (const [vid, romaji, mean] of [['v_n2_301', 'seiken', '정권'], ['v_n2_435', 'fukushi', '복지'], ['v_n2_701', 'geinou', '예능']]) {
+    bootstrap({ withTTS: true }); setLevel('N2'); state.setVocabWarmupEnabled(false);
+    const screen = shell();
+    renderStudy({ screen, params: ['vocab', 'card', vid] });
+    ok(`229: ${vid} quickPreview romaji`, screen.textContent.includes(romaji));
+    passPreview(screen);
+    ok(`229: ${vid} quiz romaji 미노출`, !screen.textContent.includes(romaji));
+    ok(`229: ${vid} quiz 뜻 미노출`, !screen.textContent.includes(mean));
+  }
+}
+
+console.log('\n[230] N2 2차 신규 문법/회화/story');
+{
+  bootstrap(); setLevel('N2');
+  for (const gid of ['g_n2_43', 'g_n2_56', 'g_n2_77']) {
+    const screen = shell();
+    renderQuestion(screen, { itemType: 'grammar', itemId: gid }, {});
+    ok(`230: ${gid} choice 4`, screen.querySelectorAll('.choice').length === 4);
+    const before = screen.querySelector('.explain');
+    ok(`230: ${gid} 선택 전 해설 미노출`, !before || !before.textContent.trim());
+    screen.querySelectorAll('.choice')[0].click();
+    ok(`230: ${gid} 선택 후 .explain 등장`, !!screen.querySelector('.explain'));
+  }
+  // 신규 회화 주제 매칭 + sampleAnswer 출처
+  const { conversationTopics: _ct } = await import('./js/data/conversationTopics.js');
+  const { sentenceBank: _sb } = await import('./js/data/sentenceBank.js');
+  const topic = _ct.find(t => t.id === 'conv_n2_tech_life');
+  const jaSet = new Set(_sb.map(s => s.ja));
+  const m = _sb.filter(s => s.level === 'N2' && s.canUseInConversation && (s.situationTags || []).some(tg => topic.situationTags.includes(tg)));
+  ok('230: 신규 주제 관련 문장 ≥ 5', m.length >= 5, `match=${m.length}`);
+  ok('230: sampleAnswer 출처(sentenceBank)', topic.starterQuestions.every(q => q.sampleAnswers.some(a => jaSet.has(a.ja))));
+  // 신규 story 왕복
+  setLevel('N2'); setFuriganaEnabled(true); clearStudyReturnRoute();
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n2_009'] });
+  ok('230: 신규 story ruby', !!screen.querySelector('#storyBody ruby'));
+  ok('230: 신규 story romaji', screen.textContent.includes('sofu') || screen.textContent.includes('tanmatsu'));
+  const pill = Array.from(screen.querySelectorAll('.story-inline-hl')).find(el => {
+    const li = parseInt(el.dataset.lineIdx, 10), hi = parseInt(el.dataset.hlIdx, 10);
+    const h = (_allStories.find(s => s.id === 'story_n2_009').bodyHighlights[li] || [])[hi];
+    return h && h.vocabId;
+  });
+  ok('230: vocabId 하이라이트 존재', !!pill);
+  pill.click();
+  pill.closest('.story-line').querySelector('[data-hl-action="study-vocab"]').click();
+  ok('230: 학습 이동 + returnRoute', window.location.hash.includes('study/vocab/card/') && peekStudyReturnRoute() === 'story/story_n2_009');
+}
+
+// ── 라운드 45: N2 2차 안정화 ───────────────────────────────────────────
+console.log('\n[231] N2 회화 평가(2차 신규 주제) — sampleAnswer 출처 + 원문 미기록');
+{
+  bootstrap(); setLevel('N2');
+  const logger = await import('./js/actionLogger.js');
+  const { evaluateConversationAnswer } = await import('./js/localEvaluator.js');
+  const { conversationTopics } = await import('./js/data/conversationTopics.js');
+  const logW = [];
+  logger._setWriterForTest(async (p, v) => { logW.push({ p, v }); });
+  const topic = conversationTopics.find(t => t.id === 'conv_n2_policy_opinion');
+  const r = evaluateConversationAnswer({ topic, question: topic.starterQuestions[0], userText: 'この政策は是正すべきだ、タナカと申します', reviewStates: {} });
+  ok('231: sampleAnswer 출처', topic.starterQuestions[0].sampleAnswers.some(a => a.ja === r.sampleAnswer.ja));
+  ok('231: 연습 문장 N2', (r.relatedPracticeSentences || []).every(s => /^sent_n2_/.test(s.id)));
+  ok('231: 로그에 원문/이름 미기록', !JSON.stringify(logW).includes('タナカ'));
+  ok('231: 평가 중 로그 0건', logW.length === 0);
+  logger._resetWriterForTest();
+}
+
+console.log('\n[232] N2 imageKey 재분산 단어 — 카드 정상 + romaji + 누출 없음');
+{
+  for (const [vid, romaji, mean] of [['v_n2_312', 'shihou', '사법'], ['v_n2_540', 'angou', '암호']]) {
+    bootstrap({ withTTS: true }); setLevel('N2'); state.setVocabWarmupEnabled(false);
+    const screen = shell();
+    renderStudy({ screen, params: ['vocab', 'card', vid] });
+    ok(`232: ${vid} quickPreview romaji`, screen.textContent.includes(romaji));
+    passPreview(screen);
+    ok(`232: ${vid} quiz romaji 미노출`, !screen.textContent.includes(romaji));
+    ok(`232: ${vid} quiz 뜻 미노출`, !screen.textContent.includes(mean));
+  }
+  // imageKey 최다 사용률 ≤10% 재확인
+  const { vocab: _v232 } = await import('./js/data/vocab.js');
+  const n2 = _v232.filter(v => v.level === 'N2');
+  const ik = {}; n2.forEach(v => { ik[v.imageKey] = (ik[v.imageKey] || 0) + 1; });
+  const top = Object.entries(ik).sort((a, b) => b[1] - a[1])[0];
+  ok('232: imageKey 최다 ≤10%', top[1] / n2.length <= 0.10, `${top[0]} ${(100*top[1]/n2.length).toFixed(1)}%`);
+}
+
+// ── 라운드 46: N2 3차 마무리 확장 ───────────────────────────────────────
+console.log('\n[233] N2 3차 신규 문법/회화/story — 해설 시점 + ruby/romaji + 하이라이트 왕복');
+{
+  bootstrap(); setLevel('N2');
+  for (const gid of ['g_n2_81', 'g_n2_140', 'g_n2_180']) {
+    const screen = shell();
+    renderQuestion(screen, { itemType: 'grammar', itemId: gid }, {});
+    ok(`233: ${gid} choice 4`, screen.querySelectorAll('.choice').length === 4);
+    const before = screen.querySelector('.explain');
+    ok(`233: ${gid} 선택 전 해설 미노출`, !before || !before.textContent.trim());
+    screen.querySelectorAll('.choice')[0].click();
+    ok(`233: ${gid} 선택 후 .explain 등장`, !!screen.querySelector('.explain'));
+  }
+  // 3차 신규 회화 주제 매칭 (정책 찬반 토론) ≥ 5
+  const { conversationTopics: _ct233 } = await import('./js/data/conversationTopics.js');
+  const { sentenceBank: _sb233 } = await import('./js/data/sentenceBank.js');
+  const topic = _ct233.find(t => t.id === 'conv_n2_policy_debate');
+  const m = _sb233.filter(s => s.level === 'N2' && s.canUseInConversation && (s.situationTags || []).some(tg => (topic.situationTags || []).includes(tg)));
+  ok('233: 신규 주제 관련 문장 ≥ 5', m.length >= 5, `match=${m.length}`);
+  // 3차 신규 story 왕복 (story_n2_018)
+  setLevel('N2'); setFuriganaEnabled(true); clearStudyReturnRoute();
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n2_018'] });
+  ok('233: 신규 story ruby', !!screen.querySelector('#storyBody ruby'));
+  ok('233: 신규 story romaji', screen.textContent.includes('teinen') || screen.textContent.includes('kyoushitsu'));
+  const pill = Array.from(screen.querySelectorAll('.story-inline-hl')).find(el => {
+    const li = parseInt(el.dataset.lineIdx, 10), hi = parseInt(el.dataset.hlIdx, 10);
+    const h = (_allStories.find(s => s.id === 'story_n2_018').bodyHighlights[li] || [])[hi];
+    return h && h.vocabId;
+  });
+  ok('233: vocabId 하이라이트 존재', !!pill);
+  pill.click();
+  pill.closest('.story-line').querySelector('[data-hl-action="study-vocab"]').click();
+  ok('233: 학습 이동 + returnRoute', window.location.hash.includes('study/vocab/card/') && peekStudyReturnRoute() === 'story/story_n2_018');
+}
+
+// ── 라운드 47: N2 3차 안정화 / 최종 품질 잠금 ───────────────────────────
+console.log('\n[234] N2 최종 안정화 — 경계문형 교체본/장문/story/회화/추천/로그');
+{
+  // 1) N1→N2 교체 경계문형: 문법 문제 + 해설 노출 시점
+  bootstrap(); setLevel('N2');
+  for (const gid of ['g_n2_82', 'g_n2_117', 'g_n2_161']) {
+    const screen = shell();
+    renderQuestion(screen, { itemType: 'grammar', itemId: gid }, {});
+    ok(`234: ${gid} choice 4`, screen.querySelectorAll('.choice').length === 4);
+    const before = screen.querySelector('.explain');
+    ok(`234: ${gid} 선택 전 해설 미노출`, !before || !before.textContent.trim());
+    screen.querySelectorAll('.choice')[0].click();
+    ok(`234: ${gid} 선택 후 .explain 등장`, !!screen.querySelector('.explain'));
+  }
+  // 2) 교체 경계문형은 N1PAT 에 걸리지 않음 (데이터 레벨)
+  const { grammar: _g234 } = await import('./js/data/grammar.js');
+  const N1PAT = /(んばかり|べからず|まじき|ずくめ|きらいがある|をよそに|んがため|や否や|が早いか|ごとき|たりとも|ずにはおかない|ずにはすまない|を禁じ得ない|ないまでも|であれ[、。]|ともなると|とあって|涙ながらに|きっての|の極み|てやまない|を皮切り|ないではおか|たら最後|ずじまい|が関の山|はおろか|べく|やいなや|ときたら|いかんで|ようものなら|ばそれまで|めく|ぶる|ふしがある|といったらない|ものを|始末だ|あっての|もさることながら|にかたくない|運びとなる|随一)/;
+  const n2g = _g234.filter(g => g.level === 'N2');
+  let n1hit = 0;
+  for (const g of n2g) for (const e of (g.examples || [])) if (N1PAT.test(e.ja) || N1PAT.test(g.pattern)) n1hit++;
+  ok('234: N2 문법 패턴/예문 N1급 0 (확장 스캔)', n1hit === 0, `hit=${n1hit}`);
+  // 3) 장문 독해 long-passage 렌더
+  bootstrap(); setLevel('N2'); setFuriganaEnabled(true);
+  let screen = shell();
+  renderQuestion(screen, { itemType: 'reading', itemId: 'r_n2_48' }, {});
+  const ctx = screen.querySelector('.q-context');
+  ok('234: 장문 long-passage 클래스', ctx?.classList.contains('long-passage'));
+  ok('234: 장문 ruby 렌더', !!ctx?.querySelector('ruby'));
+  // 4) keyVocab 보강 story 왕복 (story_n2_012)
+  setLevel('N2'); setFuriganaEnabled(true); clearStudyReturnRoute();
+  screen = shell();
+  renderStoryDetail({ screen, params: ['story_n2_012'] });
+  ok('234: story ruby', !!screen.querySelector('#storyBody ruby'));
+  const pill = Array.from(screen.querySelectorAll('.story-inline-hl')).find(el => {
+    const li = parseInt(el.dataset.lineIdx, 10), hi = parseInt(el.dataset.hlIdx, 10);
+    const h = (_allStories.find(s => s.id === 'story_n2_012').bodyHighlights[li] || [])[hi];
+    return h && h.vocabId;
+  });
+  ok('234: story vocabId 하이라이트', !!pill);
+  pill.click();
+  pill.closest('.story-line').querySelector('[data-hl-action="study-vocab"]').click();
+  ok('234: 학습 이동 + returnRoute', window.location.hash.includes('study/vocab/card/') && peekStudyReturnRoute() === 'story/story_n2_012');
+  // 5) 회화 평가 — policy_debate sampleAnswer 출처(sentenceBank) + 로그 원문 미기록
+  const logger = await import('./js/actionLogger.js');
+  const { evaluateConversationAnswer } = await import('./js/localEvaluator.js');
+  const { conversationTopics } = await import('./js/data/conversationTopics.js');
+  const logW = [];
+  logger._setWriterForTest(async (p, v) => { logW.push({ p, v }); });
+  const topic = conversationTopics.find(t => t.id === 'conv_n2_policy_debate');
+  const r = evaluateConversationAnswer({ topic, question: topic.starterQuestions[0], userText: '私はこの政策に賛成です、ヤマダと申します', reviewStates: {} });
+  ok('234: policy_debate sampleAnswer 출처', topic.starterQuestions[0].sampleAnswers.some(a => a.ja === r.sampleAnswer.ja));
+  ok('234: 연습 문장 N2', (r.relatedPracticeSentences || []).every(s => /^sent_n2_/.test(s.id)));
+  ok('234: 로그에 원문/이름 미기록', !JSON.stringify(logW).includes('ヤマダ'));
+  ok('234: 평가 중 로그 0건', logW.length === 0);
+  logger._resetWriterForTest();
+  // 6) 추천 비편중 — N3 마스터 시 N2 포함 + 하위 복습 유지
+  const cr = await import('./js/contentReadiness.js');
+  const { vocab: _v234 } = await import('./js/data/vocab.js');
+  const rs = {};
+  for (const x of _v234.filter(z => ['N5', 'N4', 'N3'].includes(z.level))) rs[x.id] = { box: 5, seen: 5, correct: 5 };
+  const rec = cr.getRecommendedReading('N2', rs, { count: 10 });
+  const lv = rec.map(x => (x.item.id.match(/_(n[0-9])_/) || [])[1]);
+  ok('234: 추천 N2 포함', lv.includes('n2'));
+  ok('234: 추천 하위 복습 유지', lv.some(x => x && x !== 'n2'));
+  ok('234: 추천 N2 과편중 아님 (≤70%)', lv.filter(x => x === 'n2').length / lv.length <= 0.7);
+}
+
+// ── 라운드 48: 릴리스 후보 안정화 — story player toolbar / 설정 영속 / 로그 보안 ──
+console.log('\n[235] 릴리스 안정화 — story player compact toolbar + 설정 영속 + 로그 보안');
+{
+  const { getStoryRomajiEnabled, setStoryRomajiEnabled } = await import('./js/state.js');
+  // 1) story player compact toolbar 구조 + 본문 가림 방지 클래스
+  bootstrap(); setLevel('N2'); setFuriganaEnabled(true);
+  const screen = shell();
+  renderStoryDetail({ screen, params: ['story_n2_001'] });
+  ok('235: storyPlayer 존재', !!screen.querySelector('#storyPlayer'));
+  ok('235: compact 컨트롤 행(prev/playAll/next)', !!screen.querySelector('#storyControlsRow #storyPrev') && !!screen.querySelector('#storyPlayAll') && !!screen.querySelector('#storyNext'));
+  ok('235: 위치 표시 storyPos', !!screen.querySelector('#storyPos'));
+  ok('235: has-story-player(본문 하단 패딩→플레이어가 본문 가리지 않음)', screen.classList.contains('has-story-player'));
+  // 2) 설정 2차 토글(스토리 로마자) 영속 — localStorage 저장/복원
+  setStoryRomajiEnabled(false);
+  ok('235: storyRomaji OFF 저장', getStoryRomajiEnabled() === false);
+  setStoryRomajiEnabled(true);
+  ok('235: storyRomaji ON 복원', getStoryRomajiEnabled() === true);
+  // 3) 로그 payload 보안 — allowlist 외 키 제거 + 민감정보 0 (signed-in 필요)
+  const logger = await import('./js/actionLogger.js');
+  authSvc._setAuthImplForTest(mockAuthImpl());
+  await authSvc.signInWithEmail('seclog@example.com', 'correct123');
+  logger._resetThrottleForTest();
+  let cap = null;
+  logger._setWriterForTest(async (p, v) => { if (p.startsWith('actionLogs/')) cap = v; });
+  logger.logAction('grammar_answered', { itemType: 'grammar', itemId: 'g_n2_82', correct: false, email: 'a@b.com', password: 'pw', userText: 'ユーザー入力', transcript: '音声原文' });
+  logger._resetWriterForTest();
+  ok('235: 로그 meta allowlist만', cap && Object.keys(cap.meta).every(k => ['itemType', 'itemId', 'storyId', 'correct', 'method'].includes(k)));
+  ok('235: 로그 민감정보 0', cap && !/a@b\.com|pw|ユーザー入力|音声原文/.test(JSON.stringify(cap)));
+  ok('235: userKey 는 uid(이메일 아님)', cap && cap.userKey === 'uid_seclog' && !String(cap.userKey).includes('@'));
+  authSvc._resetAuthImplForTest();
+}
+
+// ── 라운드 49: PWA 최소 구현 — 등록 방어 + 렌더 회귀 ──────────────────────
+console.log('\n[236] PWA — SW 등록 방어(미지원/실패) + 앱 렌더 회귀');
+{
+  const { registerServiceWorker } = await import('./js/pwa.js');
+  // 1) serviceWorker 미지원 환경 — false 반환, throw 없음
+  let threw = false, r1;
+  try { r1 = registerServiceWorker({}); } catch { threw = true; }
+  ok('236: 미지원 nav → false, throw 없음', r1 === false && !threw);
+  // 2) navigator 자체 부재 — throw 없음
+  let threw2 = false, r2;
+  try { r2 = registerServiceWorker(null); } catch { threw2 = true; }
+  ok('236: nav 부재 → false, throw 없음', r2 === false && !threw2);
+  // 3) 지원 환경 mock — register 호출 + 상대경로/scope, true 반환
+  let calledWith = null;
+  const nav3 = { serviceWorker: { register: (url, opts) => { calledWith = { url, opts }; return Promise.resolve({}); } } };
+  const r3 = registerServiceWorker(nav3);
+  ok('236: 지원 nav → 등록 시도(true)', r3 === true);
+  ok('236: SW 경로 상대(./service-worker.js)', calledWith && calledWith.url === './service-worker.js' && !calledWith.url.startsWith('/'));
+  ok('236: scope 상대(./)', calledWith && calledWith.opts && calledWith.opts.scope === './');
+  // 4) register 가 reject 해도 throw 전파 없음 (학습 흐름 비차단)
+  let threw4 = false, r4;
+  try { r4 = registerServiceWorker({ serviceWorker: { register: () => Promise.reject(new Error('boom')) } }); } catch { threw4 = true; }
+  ok('236: 등록 실패해도 throw 없음', r4 === true && !threw4);
+  await new Promise((res) => setTimeout(res, 0)); // reject 마이크로태스크 소진 — unhandled 없음
+  // 5) 앱 기본 렌더 회귀 — 홈/학습/이야기 정상 렌더
+  bootstrap(); setLevel('N2');
+  let screen = shell(); renderHome({ screen });
+  ok('236: 홈 렌더 회귀', screen.textContent.length > 0 && !!screen.querySelector('button,.card,a'));
+  screen = shell(); renderStoryDetail({ screen, params: ['story_n2_001'] });
+  ok('236: 스토리 렌더 회귀(PWA 배선 후)', !!screen.querySelector('#storyBody') && !!screen.querySelector('#storyPlayer'));
+}
+
+// ── 라운드 50: 로그인 필수 / 인증 게이트 ─────────────────────────────────────
+console.log('\n[237] 인증 게이트 — 비로그인 차단/의도 route 복귀/로그아웃 재차단/렌더 회귀');
+{
+  bootstrap();
+  const router = await import('./js/router.js');
+  const auth = await import('./js/authService.js');
+  const gate = await import('./js/views/authGate.js');
+  auth._resetAuthImplForTest();
+  // 게이트 배선 (app.js 와 동일: getCurrentUser 기반)
+  router.setAuthGate(() => !!auth.getCurrentUser(), gate.renderAuthGate);
+  let homeN = 0, studyN = 0;
+  router.register('home', ({ screen }) => { homeN++; screen.innerHTML = '<div id="homeMock">HOME</div>'; });
+  router.register('study', ({ screen }) => { studyN++; screen.innerHTML = '<div id="studyMock">STUDY</div>'; });
+  // (1) 비로그인 상태 #study 직접 접근 → 로그인 화면
+  window.location.hash = '#study';
+  router.start();
+  ok('237: 비로그인 #study → 로그인 화면', !!document.querySelector('#authEmail') && !document.querySelector('#studyMock'));
+  ok('237: auth-locked 클래스 부여', document.body.classList.contains('auth-locked'));
+  ok('237: 의도 route(study) 보관', router.consumePendingRoute() === 'study');
+  // (2) Firebase 미설정 분기 안내 — renderAuthGate 가 크래시 없이 동작(여기선 config 있어 폼 렌더)
+  let gateThrew = false;
+  try { const s = shell(); gate.renderAuthGate({ screen: s }); ok('237: 게이트 폼 렌더(크래시 없음)', !!s.querySelector('#loginBtn')); }
+  catch { gateThrew = true; }
+  ok('237: 게이트 렌더 throw 없음', !gateThrew);
+  const s2 = shell(); gate.renderAuthLoading({ screen: s2 });
+  ok('237: 로딩 화면 렌더', /확인 중/.test(s2.textContent));
+  // (3) 로그인 → 의도 route(study) 복귀
+  auth._setAuthImplForTest(mockAuthImpl());
+  await auth.signInWithEmail('gate@example.com', 'correct123');
+  router.navigate('study');                 // 이제 guard 통과
+  ok('237: 로그인 후 study 렌더', !!document.querySelector('#studyMock'));
+  ok('237: auth-locked 해제', !document.body.classList.contains('auth-locked'));
+  // (4) 로그아웃 → 앱 접근 차단(게이트 재노출)
+  await auth.logout();
+  router.navigate('home');                  // hash #study→#home → hashchange(비동기) → 게이트 render
+  await new Promise(r => setTimeout(r, 5));  // hashchange 처리 대기
+  ok('237: 로그아웃 후 home 접근 차단(게이트)', !!document.querySelector('#authEmail') && !document.querySelector('#homeMock'));
+  // 정리 — 게이트 해제(이후 시나리오 비간섭)
+  router.setAuthGate(null, null);
+  auth._resetAuthImplForTest();
+}
+
+// ── 라운드 52: 비밀번호 재설정 (로그인 화면) ─────────────────────────────────
+console.log('\n[238] 비밀번호 재설정 — 빈 이메일/성공/실패/중복방지/회귀/로그 미기록');
+{
+  bootstrap();
+  const { renderAuthGate } = await import('./js/views/authGate.js');
+  authSvc._setAuthImplForTest(mockAuthImpl());
+  const logWrites = [];
+  logger._setWriterForTest(async (path, value) => { logWrites.push({ path, value }); });
+  logger._resetThrottleForTest();
+  const screen = shell();
+  renderAuthGate({ screen });
+  const emailEl = screen.querySelector('#authEmail');
+  const errEl = screen.querySelector('#authError');
+  const forgotBtn = screen.querySelector('#forgotBtn');
+  ok('238: #forgotBtn(잊으셨나요) 존재', !!forgotBtn && /잊으셨나요/.test(forgotBtn.textContent));
+  // (1) 빈 이메일 → 안내
+  emailEl.value = '';
+  forgotBtn.click();
+  await new Promise(r => setTimeout(r, 5));
+  ok('238: 빈 이메일 → 안내 메시지', /이메일을 입력/.test(errEl.textContent));
+  ok('238: 빈 이메일 시 로그/요청 없음', logWrites.length === 0);
+  // (2) 유효 이메일 + 성공 → 토스트 성공 메시지 + 에러 없음
+  emailEl.value = 'forgetful@example.com';
+  forgotBtn.click();
+  ok('238: 요청 중 버튼 비활성(중복 방지)', forgotBtn.disabled === true);
+  await new Promise(r => setTimeout(r, 10));
+  ok('238: 성공 토스트 메시지', /재설정 메일을 보냈습니다|재설정 안내/.test(document.querySelector('.toast')?.textContent || ''));
+  ok('238: 성공 후 버튼 재활성', forgotBtn.disabled === false);
+  ok('238: 성공 후 에러 없음', errEl.textContent === '');
+  // (3) 실패(too-many-requests) → 한국어 오류
+  emailEl.value = 'many@example.com';
+  forgotBtn.click();
+  await new Promise(r => setTimeout(r, 10));
+  ok('238: 실패 → 한국어 오류', /너무 많습니다/.test(errEl.textContent));
+  // (4) 로그인/회원가입 흐름 회귀 — 버튼 정상 동작
+  emailEl.value = 'learner@example.com';
+  screen.querySelector('#authPassword').value = 'correct123';
+  screen.querySelector('#loginBtn').click();
+  await new Promise(r => setTimeout(r, 15));
+  ok('238: 로그인 흐름 회귀 없음(로그인 성공)', authSvc.getCurrentUser()?.uid === 'uid_learner');
+  // (5) 로그 payload 에 이메일 미기록 (재설정은 로그 안 함)
+  ok('238: 로그에 이메일 원문 없음',
+     !JSON.stringify(logWrites).includes('forgetful@example.com') &&
+     !JSON.stringify(logWrites).includes('many@example.com'));
+  ok('238: 재설정 관련 로그 이벤트 없음',
+     !logWrites.some(w => /reset|password/i.test(w.value?.type || '')));
+  logger._resetWriterForTest();
+  authSvc._resetAuthImplForTest();
+}
+
+// ── 라운드 53: vocab JSON 분리 — dataLoader 경로/fallback ─────────────────────
+console.log('\n[239] vocab JSON 분리 — dataLoader JSON 경로 로드/렌더 + fetch 실패/비배열 fallback');
+{
+  bootstrap();
+  const dl = await import('./js/dataLoader.js');
+  const { getVocabRomaji } = await import('./js/romaji.js');
+  dl.clearDataCache();
+  // (1) JSON 경로 — fetch mock 이 data/n5/vocab.json 반환
+  dl._setFetchForTest(async (url) => {
+    if (url.endsWith('n5/vocab.json')) return { ok: true, json: async () => JSON.parse(readFileSync(new URL('./data/n5/vocab.json', import.meta.url), 'utf8')) };
+    return { ok: false, status: 404 };
+  });
+  const n5 = await dl.loadVocab('N5');
+  ok('239: JSON 경로 N5 로드(500)', Array.isArray(n5) && n5.length === 500);
+  // JSON 데이터로 목록 렌더(렌더 가능성 증명)
+  const screen = shell();
+  const list = document.createElement('div'); list.id = 'vlistJson';
+  n5.slice(0, 20).forEach(v => { const d = document.createElement('div'); d.className = 'vrow'; d.textContent = `${v.word} · ${v.reading} · ${v.meaningKo}`; list.appendChild(d); });
+  screen.appendChild(list);
+  ok('239: JSON 데이터로 목록 20행 렌더', screen.querySelectorAll('.vrow').length === 20 && screen.querySelector('.vrow').textContent.includes('·'));
+  const withReadings = n5.find(v => Array.isArray(v.exampleReadings) && v.exampleReadings.length);
+  ok('239: JSON 항목 필드 보존(imageKey/tags/exampleReadings)',
+     !!n5[0].imageKey && Array.isArray(n5[0].tags) && !!n5[0].exampleSentence &&
+     !!withReadings && typeof withReadings.exampleReadings[0].reading === 'string');
+  ok('239: romaji 변환 유지', typeof getVocabRomaji(n5[0]) === 'string' && getVocabRomaji(n5[0]).length > 0);
+  // (2) fetch 실패 → JS fallback
+  dl.clearDataCache();
+  dl._setFetchForTest(async () => { throw new Error('offline'); });
+  const n2 = await dl.loadVocab('N2');
+  ok('239: fetch 실패 → JS fallback(N2 2300)', Array.isArray(n2) && n2.length === 2300 && n2[0].id === 'v_n2_1');
+  // (3) 비배열 JSON → fallback
+  dl.clearDataCache();
+  dl._setFetchForTest(async () => ({ ok: true, json: async () => ({ notArray: true }) }));
+  const n4 = await dl.loadVocab('N4');
+  ok('239: 비배열 JSON → fallback(N4 902)', Array.isArray(n4) && n4.length === 902);
+  // (4) jsonPathFor 상대경로(서브패스 안전) — PWA precache/SW SWR 재사용
+  ok('239: jsonPathFor 상대경로', dl.jsonPathFor('N5', 'vocab') === 'data/n5/vocab.json');
+  dl._resetFetchForTest(); dl.clearDataCache();
 }
 
 if (errs.length) {

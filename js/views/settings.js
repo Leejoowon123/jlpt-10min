@@ -131,8 +131,8 @@ function draw(screen) {
       <h2 style="margin:0 0 8px;font-size:14px">계정</h2>
       <div id="accountBody"></div>
       <p class="muted" style="margin:8px 0 0;font-size:11px">
-        로그인 없이도 모든 기능을 사용할 수 있습니다 ·
-        비밀번호는 저장하지 않으며, 로그인 시 최소 행동 로그만 기록됩니다
+        앱 사용에는 이메일 로그인이 필요합니다 ·
+        비밀번호는 저장하지 않으며, 최소 행동 로그만 기록됩니다
       </p>
     </section>
   `;
@@ -277,8 +277,8 @@ function drawAccount(screen) {
       <button class="btn" id="logoutBtn">로그아웃</button>
     `;
     body.querySelector('#logoutBtn').addEventListener('click', async () => {
+      logAction('logout');          // 로그인 상태에서 먼저 기록(로그아웃 후엔 signed-in 아님 → noop)
       await logout();
-      logAction('logout');
       showToast('로그아웃되었습니다');
       drawAccount(screen);
     });

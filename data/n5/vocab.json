@@ -1,0 +1,10099 @@
+[
+  {
+    "id": "v_n5_1",
+    "level": "N5",
+    "word": "待つ",
+    "reading": "まつ",
+    "meaningKo": "기다리다",
+    "exampleSentence": "駅で友だちを待っています。",
+    "exampleTranslation": "역에서 친구를 기다리고 있습니다.",
+    "mnemonicText": "시계 앞에 서 있는 사람을 떠올려 보세요.",
+    "imageKey": "time",
+    "tags": [
+      "동사",
+      "일상"
+    ]
+  },
+  {
+    "id": "v_n5_2",
+    "level": "N5",
+    "word": "食べる",
+    "reading": "たべる",
+    "meaningKo": "먹다",
+    "exampleSentence": "朝ごはんにパンを食べます。",
+    "exampleTranslation": "아침에 빵을 먹습니다.",
+    "mnemonicText": "밥상 앞의 모습.",
+    "imageKey": "food",
+    "tags": [
+      "동사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_3",
+    "level": "N5",
+    "word": "飲む",
+    "reading": "のむ",
+    "meaningKo": "마시다",
+    "exampleSentence": "毎朝コーヒーを飲みます。",
+    "exampleTranslation": "매일 아침 커피를 마십니다.",
+    "mnemonicText": "머그컵에서 김이 오르는 모습.",
+    "imageKey": "drink",
+    "tags": [
+      "동사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_4",
+    "level": "N5",
+    "word": "学校",
+    "reading": "がっこう",
+    "meaningKo": "학교",
+    "exampleSentence": "私は学校に行きます。",
+    "exampleTranslation": "저는 학교에 갑니다.",
+    "mnemonicText": "책가방을 멘 학생.",
+    "imageKey": "school",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_5",
+    "level": "N5",
+    "word": "本",
+    "reading": "ほん",
+    "meaningKo": "책",
+    "exampleSentence": "図書館で本を読みます。",
+    "exampleTranslation": "도서관에서 책을 읽습니다.",
+    "mnemonicText": "펼쳐진 책.",
+    "imageKey": "book",
+    "tags": [
+      "명사"
+    ]
+  },
+  {
+    "id": "v_n5_6",
+    "level": "N5",
+    "word": "行く",
+    "reading": "いく",
+    "meaningKo": "가다",
+    "exampleSentence": "友だちの家へ行きます。",
+    "exampleTranslation": "친구 집에 갑니다.",
+    "exampleReadings": [
+      {
+        "text": "家",
+        "reading": "いえ"
+      },
+      {
+        "text": "行きます",
+        "reading": "いきます"
+      }
+    ],
+    "mnemonicText": "화살표가 앞으로 향하는 모습.",
+    "imageKey": "arrow",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_7",
+    "level": "N5",
+    "word": "見る",
+    "reading": "みる",
+    "meaningKo": "보다",
+    "exampleSentence": "テレビを見ます。",
+    "exampleTranslation": "TV를 봅니다.",
+    "mnemonicText": "커다란 눈.",
+    "imageKey": "eye",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_8",
+    "level": "N5",
+    "word": "水",
+    "reading": "みず",
+    "meaningKo": "물",
+    "exampleSentence": "水をください。",
+    "exampleTranslation": "물 주세요.",
+    "mnemonicText": "유리잔의 물방울.",
+    "imageKey": "water",
+    "tags": [
+      "명사"
+    ]
+  },
+  {
+    "id": "v_n5_9",
+    "level": "N5",
+    "word": "時間",
+    "reading": "じかん",
+    "meaningKo": "시간",
+    "exampleSentence": "時間がありません。",
+    "exampleTranslation": "시간이 없습니다.",
+    "mnemonicText": "벽시계.",
+    "imageKey": "time",
+    "tags": [
+      "명사"
+    ]
+  },
+  {
+    "id": "v_n5_10",
+    "level": "N5",
+    "word": "友だち",
+    "reading": "ともだち",
+    "meaningKo": "친구",
+    "exampleSentence": "友だちと話します。",
+    "exampleTranslation": "친구와 이야기합니다.",
+    "mnemonicText": "두 사람의 실루엣.",
+    "imageKey": "person",
+    "tags": [
+      "명사"
+    ]
+  },
+  {
+    "id": "v_n5_11",
+    "level": "N5",
+    "word": "電車",
+    "reading": "でんしゃ",
+    "meaningKo": "전철",
+    "exampleSentence": "電車で会社に行きます。",
+    "exampleTranslation": "전철로 회사에 갑니다.",
+    "mnemonicText": "레일 위의 전차.",
+    "imageKey": "train",
+    "tags": [
+      "명사"
+    ]
+  },
+  {
+    "id": "v_n5_12",
+    "level": "N5",
+    "word": "安い",
+    "reading": "やすい",
+    "meaningKo": "싸다",
+    "exampleSentence": "このりんごは安いです。",
+    "exampleTranslation": "이 사과는 쌉니다.",
+    "mnemonicText": "가격표가 떨어지는 모습.",
+    "imageKey": "money",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_13",
+    "level": "N5",
+    "word": "高い",
+    "reading": "たかい",
+    "meaningKo": "비싸다/높다",
+    "exampleSentence": "この時計は高いです。",
+    "exampleTranslation": "이 시계는 비쌉니다.",
+    "mnemonicText": "산처럼 올라간 가격.",
+    "imageKey": "mountain",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_14",
+    "level": "N5",
+    "word": "新しい",
+    "reading": "あたらしい",
+    "meaningKo": "새롭다",
+    "exampleSentence": "新しい本を買いました。",
+    "exampleTranslation": "새 책을 샀습니다.",
+    "mnemonicText": "반짝이는 새 물건.",
+    "imageKey": "new",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_15",
+    "level": "N5",
+    "word": "雨",
+    "reading": "あめ",
+    "meaningKo": "비",
+    "exampleSentence": "今日は雨が降っています。",
+    "exampleTranslation": "오늘은 비가 내리고 있습니다.",
+    "mnemonicText": "구름에서 떨어지는 빗방울.",
+    "imageKey": "weather",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_16",
+    "level": "N5",
+    "word": "父",
+    "reading": "ちち",
+    "meaningKo": "(자기) 아버지",
+    "exampleSentence": "父は会社員です。",
+    "exampleTranslation": "아버지는 회사원입니다.",
+    "mnemonicText": "정장 차림의 남성.",
+    "imageKey": "family",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_17",
+    "level": "N5",
+    "word": "母",
+    "reading": "はは",
+    "meaningKo": "(자기) 어머니",
+    "exampleSentence": "母はパンを作ります。",
+    "exampleTranslation": "어머니는 빵을 만듭니다.",
+    "mnemonicText": "앞치마를 두른 모습.",
+    "imageKey": "family",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_18",
+    "level": "N5",
+    "word": "先生",
+    "reading": "せんせい",
+    "meaningKo": "선생님",
+    "exampleSentence": "日本語の先生は親切です。",
+    "exampleTranslation": "일본어 선생님은 친절합니다.",
+    "exampleReadings": [
+      {
+        "text": "日本語",
+        "reading": "にほんご"
+      },
+      {
+        "text": "先生",
+        "reading": "せんせい"
+      },
+      {
+        "text": "親切",
+        "reading": "しんせつ"
+      }
+    ],
+    "mnemonicText": "분필을 든 손.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "직업"
+    ]
+  },
+  {
+    "id": "v_n5_19",
+    "level": "N5",
+    "word": "学生",
+    "reading": "がくせい",
+    "meaningKo": "학생",
+    "exampleSentence": "私は学生です。",
+    "exampleTranslation": "저는 학생입니다.",
+    "mnemonicText": "책가방을 멘 사람.",
+    "imageKey": "school",
+    "tags": [
+      "명사",
+      "직업"
+    ]
+  },
+  {
+    "id": "v_n5_20",
+    "level": "N5",
+    "word": "名前",
+    "reading": "なまえ",
+    "meaningKo": "이름",
+    "exampleSentence": "お名前は何ですか。",
+    "exampleTranslation": "성함이 어떻게 되십니까?",
+    "mnemonicText": "이름표.",
+    "imageKey": "book",
+    "tags": [
+      "명사"
+    ]
+  },
+  {
+    "id": "v_n5_21",
+    "level": "N5",
+    "word": "今日",
+    "reading": "きょう",
+    "meaningKo": "오늘",
+    "exampleSentence": "今日は土曜日です。",
+    "exampleTranslation": "오늘은 토요일입니다.",
+    "mnemonicText": "달력의 오늘 칸 강조.",
+    "imageKey": "calendar",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_22",
+    "level": "N5",
+    "word": "明日",
+    "reading": "あした",
+    "meaningKo": "내일",
+    "exampleSentence": "明日、映画を見ます。",
+    "exampleTranslation": "내일 영화를 봅니다.",
+    "mnemonicText": "달력의 다음 칸.",
+    "imageKey": "calendar",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_23",
+    "level": "N5",
+    "word": "昨日",
+    "reading": "きのう",
+    "meaningKo": "어제",
+    "exampleSentence": "昨日はとても寒かったです。",
+    "exampleTranslation": "어제는 매우 추웠습니다.",
+    "mnemonicText": "달력의 이전 칸.",
+    "imageKey": "calendar",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_24",
+    "level": "N5",
+    "word": "朝",
+    "reading": "あさ",
+    "meaningKo": "아침",
+    "exampleSentence": "朝、コーヒーを飲みます。",
+    "exampleTranslation": "아침에 커피를 마십니다.",
+    "mnemonicText": "떠오르는 해.",
+    "imageKey": "morning",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_25",
+    "level": "N5",
+    "word": "夜",
+    "reading": "よる",
+    "meaningKo": "밤",
+    "exampleSentence": "夜は静かです。",
+    "exampleTranslation": "밤은 조용합니다.",
+    "mnemonicText": "달과 별.",
+    "imageKey": "night",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_26",
+    "level": "N5",
+    "word": "月曜日",
+    "reading": "げつようび",
+    "meaningKo": "월요일",
+    "exampleSentence": "月曜日にテストがあります。",
+    "exampleTranslation": "월요일에 시험이 있습니다.",
+    "exampleReadings": [
+      {
+        "text": "月曜日",
+        "reading": "げつようび"
+      }
+    ],
+    "mnemonicText": "주간 캘린더의 첫 칸.",
+    "imageKey": "mon",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_27",
+    "level": "N5",
+    "word": "夏",
+    "reading": "なつ",
+    "meaningKo": "여름",
+    "exampleSentence": "夏は海で泳ぎます。",
+    "exampleTranslation": "여름에는 바다에서 수영합니다.",
+    "mnemonicText": "태양과 야자수.",
+    "imageKey": "summer",
+    "tags": [
+      "명사",
+      "계절"
+    ]
+  },
+  {
+    "id": "v_n5_28",
+    "level": "N5",
+    "word": "冬",
+    "reading": "ふゆ",
+    "meaningKo": "겨울",
+    "exampleSentence": "冬は雪が降ります。",
+    "exampleTranslation": "겨울에는 눈이 내립니다.",
+    "mnemonicText": "눈사람.",
+    "imageKey": "winter",
+    "tags": [
+      "명사",
+      "계절"
+    ]
+  },
+  {
+    "id": "v_n5_29",
+    "level": "N5",
+    "word": "海",
+    "reading": "うみ",
+    "meaningKo": "바다",
+    "exampleSentence": "夏休みに海へ行きます。",
+    "exampleTranslation": "여름방학에 바다에 갑니다.",
+    "mnemonicText": "파도와 갈매기.",
+    "imageKey": "sea",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_30",
+    "level": "N5",
+    "word": "花",
+    "reading": "はな",
+    "meaningKo": "꽃",
+    "exampleSentence": "公園で花を見ました。",
+    "exampleTranslation": "공원에서 꽃을 봤습니다.",
+    "mnemonicText": "활짝 핀 한 송이.",
+    "imageKey": "flower",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_31",
+    "level": "N5",
+    "word": "犬",
+    "reading": "いぬ",
+    "meaningKo": "개",
+    "exampleSentence": "うちの犬は元気です。",
+    "exampleTranslation": "우리 집 개는 건강합니다.",
+    "mnemonicText": "꼬리를 흔드는 강아지.",
+    "imageKey": "dog",
+    "tags": [
+      "명사",
+      "동물"
+    ]
+  },
+  {
+    "id": "v_n5_32",
+    "level": "N5",
+    "word": "猫",
+    "reading": "ねこ",
+    "meaningKo": "고양이",
+    "exampleSentence": "猫がソファで寝ています。",
+    "exampleTranslation": "고양이가 소파에서 자고 있습니다.",
+    "mnemonicText": "동그란 귀와 수염.",
+    "imageKey": "cat",
+    "tags": [
+      "명사",
+      "동물"
+    ]
+  },
+  {
+    "id": "v_n5_33",
+    "level": "N5",
+    "word": "ご飯",
+    "reading": "ごはん",
+    "meaningKo": "밥/식사",
+    "exampleSentence": "もうご飯を食べましたか。",
+    "exampleTranslation": "벌써 밥을 먹었습니까?",
+    "mnemonicText": "김이 나는 밥공기.",
+    "imageKey": "rice",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_34",
+    "level": "N5",
+    "word": "肉",
+    "reading": "にく",
+    "meaningKo": "고기",
+    "exampleSentence": "昨日、肉を食べました。",
+    "exampleTranslation": "어제 고기를 먹었습니다.",
+    "mnemonicText": "스테이크 한 조각.",
+    "imageKey": "meat",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_35",
+    "level": "N5",
+    "word": "野菜",
+    "reading": "やさい",
+    "meaningKo": "채소",
+    "exampleSentence": "野菜を毎日食べます。",
+    "exampleTranslation": "채소를 매일 먹습니다.",
+    "mnemonicText": "당근과 브로콜리.",
+    "imageKey": "vegetable",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_36",
+    "level": "N5",
+    "word": "果物",
+    "reading": "くだもの",
+    "meaningKo": "과일",
+    "exampleSentence": "果物が好きです。",
+    "exampleTranslation": "과일을 좋아합니다.",
+    "mnemonicText": "사과와 바나나.",
+    "imageKey": "fruit",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_37",
+    "level": "N5",
+    "word": "お茶",
+    "reading": "おちゃ",
+    "meaningKo": "(녹)차",
+    "exampleSentence": "お茶を一杯ください。",
+    "exampleTranslation": "차 한 잔 주세요.",
+    "mnemonicText": "찻잔에서 김이 모락모락.",
+    "imageKey": "tea",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_38",
+    "level": "N5",
+    "word": "家",
+    "reading": "いえ",
+    "meaningKo": "집",
+    "exampleSentence": "家に帰ります。",
+    "exampleTranslation": "집에 돌아갑니다.",
+    "mnemonicText": "지붕이 있는 작은 집.",
+    "imageKey": "house",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_39",
+    "level": "N5",
+    "word": "大学",
+    "reading": "だいがく",
+    "meaningKo": "대학(교)",
+    "exampleSentence": "兄は大学で勉強しています。",
+    "exampleTranslation": "형은 대학에서 공부하고 있습니다.",
+    "mnemonicText": "캠퍼스 건물.",
+    "imageKey": "school",
+    "tags": [
+      "명사",
+      "교육"
+    ]
+  },
+  {
+    "id": "v_n5_40",
+    "level": "N5",
+    "word": "駅",
+    "reading": "えき",
+    "meaningKo": "(전철) 역",
+    "exampleSentence": "駅まで歩きました。",
+    "exampleTranslation": "역까지 걸었습니다.",
+    "mnemonicText": "플랫폼과 표지판.",
+    "imageKey": "station",
+    "tags": [
+      "명사",
+      "교통"
+    ]
+  },
+  {
+    "id": "v_n5_41",
+    "level": "N5",
+    "word": "銀行",
+    "reading": "ぎんこう",
+    "meaningKo": "은행",
+    "exampleSentence": "銀行は何時までですか。",
+    "exampleTranslation": "은행은 몇 시까지 합니까?",
+    "mnemonicText": "기둥이 있는 건물.",
+    "imageKey": "money",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_42",
+    "level": "N5",
+    "word": "病院",
+    "reading": "びょういん",
+    "meaningKo": "병원",
+    "exampleSentence": "頭が痛くて病院へ行きました。",
+    "exampleTranslation": "머리가 아파서 병원에 갔습니다.",
+    "mnemonicText": "십자 마크가 있는 건물.",
+    "imageKey": "hospital",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_43",
+    "level": "N5",
+    "word": "公園",
+    "reading": "こうえん",
+    "meaningKo": "공원",
+    "exampleSentence": "公園を散歩します。",
+    "exampleTranslation": "공원을 산책합니다.",
+    "mnemonicText": "벤치와 나무.",
+    "imageKey": "park",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_44",
+    "level": "N5",
+    "word": "店",
+    "reading": "みせ",
+    "meaningKo": "가게",
+    "exampleSentence": "駅の前に店があります。",
+    "exampleTranslation": "역 앞에 가게가 있습니다.",
+    "mnemonicText": "간판이 걸린 가게.",
+    "imageKey": "shop",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_45",
+    "level": "N5",
+    "word": "車",
+    "reading": "くるま",
+    "meaningKo": "자동차",
+    "exampleSentence": "父の車は赤いです。",
+    "exampleTranslation": "아버지의 차는 빨갛습니다.",
+    "mnemonicText": "바퀴 네 개.",
+    "imageKey": "car",
+    "tags": [
+      "명사",
+      "교통"
+    ]
+  },
+  {
+    "id": "v_n5_46",
+    "level": "N5",
+    "word": "買う",
+    "reading": "かう",
+    "meaningKo": "사다",
+    "exampleSentence": "コンビニでパンを買いました。",
+    "exampleTranslation": "편의점에서 빵을 샀습니다.",
+    "mnemonicText": "동전과 영수증.",
+    "imageKey": "shopping",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_47",
+    "level": "N5",
+    "word": "読む",
+    "reading": "よむ",
+    "meaningKo": "읽다",
+    "exampleSentence": "毎日新聞を読みます。",
+    "exampleTranslation": "매일 신문을 읽습니다.",
+    "mnemonicText": "펼친 책 위의 손가락.",
+    "imageKey": "read",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_48",
+    "level": "N5",
+    "word": "書く",
+    "reading": "かく",
+    "meaningKo": "쓰다",
+    "exampleSentence": "ノートに名前を書きます。",
+    "exampleTranslation": "노트에 이름을 씁니다.",
+    "mnemonicText": "연필 끝.",
+    "imageKey": "write",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_49",
+    "level": "N5",
+    "word": "話す",
+    "reading": "はなす",
+    "meaningKo": "이야기하다",
+    "exampleSentence": "友だちと電話で話します。",
+    "exampleTranslation": "친구와 전화로 이야기합니다.",
+    "mnemonicText": "말풍선.",
+    "imageKey": "speak",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_50",
+    "level": "N5",
+    "word": "聞く",
+    "reading": "きく",
+    "meaningKo": "듣다/묻다",
+    "exampleSentence": "音楽を聞きます。",
+    "exampleTranslation": "음악을 듣습니다.",
+    "mnemonicText": "귀에 모은 손.",
+    "imageKey": "listen",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_51",
+    "level": "N5",
+    "word": "起きる",
+    "reading": "おきる",
+    "meaningKo": "일어나다",
+    "exampleSentence": "毎朝6時に起きます。",
+    "exampleTranslation": "매일 아침 6시에 일어납니다.",
+    "mnemonicText": "알람 시계.",
+    "imageKey": "wake",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_52",
+    "level": "N5",
+    "word": "寝る",
+    "reading": "ねる",
+    "meaningKo": "자다",
+    "exampleSentence": "夜11時に寝ます。",
+    "exampleTranslation": "밤 11시에 잡니다.",
+    "mnemonicText": "베개 위의 사람.",
+    "imageKey": "sleep",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_53",
+    "level": "N5",
+    "word": "来る",
+    "reading": "くる",
+    "meaningKo": "오다",
+    "exampleSentence": "明日、友だちが来ます。",
+    "exampleTranslation": "내일 친구가 옵니다.",
+    "mnemonicText": "이쪽으로 향하는 화살표.",
+    "imageKey": "arrow",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_54",
+    "level": "N5",
+    "word": "帰る",
+    "reading": "かえる",
+    "meaningKo": "돌아가다/돌아오다",
+    "exampleSentence": "七時に家に帰ります。",
+    "exampleTranslation": "7시에 집에 돌아갑니다.",
+    "mnemonicText": "U턴 화살표.",
+    "imageKey": "return",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_55",
+    "level": "N5",
+    "word": "大きい",
+    "reading": "おおきい",
+    "meaningKo": "크다",
+    "exampleSentence": "これは大きい荷物ですね。",
+    "exampleTranslation": "이건 큰 짐이네요.",
+    "mnemonicText": "양손을 벌린 모습.",
+    "imageKey": "big",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_56",
+    "level": "N5",
+    "word": "小さい",
+    "reading": "ちいさい",
+    "meaningKo": "작다",
+    "exampleSentence": "妹は小さい犬を飼っています。",
+    "exampleTranslation": "여동생은 작은 개를 키웁니다.",
+    "mnemonicText": "손바닥 위의 작은 점.",
+    "imageKey": "small",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_57",
+    "level": "N5",
+    "word": "暑い",
+    "reading": "あつい",
+    "meaningKo": "덥다",
+    "exampleSentence": "今日はとても暑いです。",
+    "exampleTranslation": "오늘은 매우 덥습니다.",
+    "mnemonicText": "땀이 흐르는 얼굴.",
+    "imageKey": "hot",
+    "tags": [
+      "형용사",
+      "날씨"
+    ]
+  },
+  {
+    "id": "v_n5_58",
+    "level": "N5",
+    "word": "寒い",
+    "reading": "さむい",
+    "meaningKo": "춥다",
+    "exampleSentence": "冬の朝は寒いです。",
+    "exampleTranslation": "겨울 아침은 춥습니다.",
+    "mnemonicText": "몸을 움츠린 모습.",
+    "imageKey": "cold",
+    "tags": [
+      "형용사",
+      "날씨"
+    ]
+  },
+  {
+    "id": "v_n5_59",
+    "level": "N5",
+    "word": "美味しい",
+    "reading": "おいしい",
+    "meaningKo": "맛있다",
+    "exampleSentence": "このケーキは美味しいです。",
+    "exampleTranslation": "이 케이크는 맛있습니다.",
+    "mnemonicText": "반짝이는 음식.",
+    "imageKey": "yummy",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_60",
+    "level": "N5",
+    "word": "いい",
+    "reading": "いい",
+    "meaningKo": "좋다",
+    "exampleSentence": "天気がいいですね。",
+    "exampleTranslation": "날씨가 좋네요.",
+    "mnemonicText": "엄지척.",
+    "imageKey": "good",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_61",
+    "level": "N5",
+    "word": "写真",
+    "reading": "しゃしん",
+    "meaningKo": "사진",
+    "exampleSentence": "公園で写真を撮ります。",
+    "exampleTranslation": "공원에서 사진을 찍습니다.",
+    "exampleReadings": [
+      {
+        "text": "公園",
+        "reading": "こうえん"
+      },
+      {
+        "text": "写真",
+        "reading": "しゃしん"
+      },
+      {
+        "text": "撮ります",
+        "reading": "とります"
+      }
+    ],
+    "mnemonicText": "카메라 셔터.",
+    "imageKey": "photo",
+    "tags": [
+      "명사"
+    ]
+  },
+  {
+    "id": "v_n5_62",
+    "level": "N5",
+    "word": "兄",
+    "reading": "あに",
+    "meaningKo": "(자기) 형/오빠",
+    "exampleSentence": "兄は会社で働きます。",
+    "exampleTranslation": "형은 회사에서 일합니다.",
+    "mnemonicText": "키 큰 남자 옆에 선 사람.",
+    "imageKey": "family",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_63",
+    "level": "N5",
+    "word": "姉",
+    "reading": "あね",
+    "meaningKo": "(자기) 누나/언니",
+    "exampleSentence": "姉は本を読みます。",
+    "exampleTranslation": "누나는 책을 읽습니다.",
+    "mnemonicText": "머리가 긴 여성.",
+    "imageKey": "family",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_64",
+    "level": "N5",
+    "word": "弟",
+    "reading": "おとうと",
+    "meaningKo": "남동생",
+    "exampleSentence": "弟は元気な子です。",
+    "exampleTranslation": "남동생은 활발한 아이입니다.",
+    "mnemonicText": "키 작은 남자아이.",
+    "imageKey": "family",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_65",
+    "level": "N5",
+    "word": "妹",
+    "reading": "いもうと",
+    "meaningKo": "여동생",
+    "exampleSentence": "妹は学校が好きです。",
+    "exampleTranslation": "여동생은 학교를 좋아합니다.",
+    "mnemonicText": "머리띠를 한 여자아이.",
+    "imageKey": "family",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_66",
+    "level": "N5",
+    "word": "火曜日",
+    "reading": "かようび",
+    "meaningKo": "화요일",
+    "exampleSentence": "火曜日に病院へ行きます。",
+    "exampleTranslation": "화요일에 병원에 갑니다.",
+    "mnemonicText": "달력의 두 번째 칸.",
+    "imageKey": "tue",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_67",
+    "level": "N5",
+    "word": "水曜日",
+    "reading": "すいようび",
+    "meaningKo": "수요일",
+    "exampleSentence": "水曜日は休みです。",
+    "exampleTranslation": "수요일은 휴일입니다.",
+    "mnemonicText": "달력 중간 칸.",
+    "imageKey": "wed",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_68",
+    "level": "N5",
+    "word": "木曜日",
+    "reading": "もくようび",
+    "meaningKo": "목요일",
+    "exampleSentence": "木曜日に映画を見ます。",
+    "exampleTranslation": "목요일에 영화를 봅니다.",
+    "mnemonicText": "달력의 네 번째 칸.",
+    "imageKey": "thu",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_69",
+    "level": "N5",
+    "word": "金曜日",
+    "reading": "きんようび",
+    "meaningKo": "금요일",
+    "exampleSentence": "金曜日の夜は外で食べます。",
+    "exampleTranslation": "금요일 밤에는 밖에서 먹습니다.",
+    "mnemonicText": "달력의 다섯 번째 칸.",
+    "imageKey": "fri",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_70",
+    "level": "N5",
+    "word": "土曜日",
+    "reading": "どようび",
+    "meaningKo": "토요일",
+    "exampleSentence": "土曜日は公園へ行きます。",
+    "exampleTranslation": "토요일에는 공원에 갑니다.",
+    "mnemonicText": "주말의 첫 칸.",
+    "imageKey": "sat",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_71",
+    "level": "N5",
+    "word": "日曜日",
+    "reading": "にちようび",
+    "meaningKo": "일요일",
+    "exampleSentence": "日曜日は家でゆっくりします。",
+    "exampleTranslation": "일요일에는 집에서 쉽니다.",
+    "mnemonicText": "주말의 두 번째 칸.",
+    "imageKey": "sun",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_72",
+    "level": "N5",
+    "word": "今",
+    "reading": "いま",
+    "meaningKo": "지금",
+    "exampleSentence": "今、何時ですか。",
+    "exampleTranslation": "지금 몇 시입니까?",
+    "mnemonicText": "현재 시각의 시계.",
+    "imageKey": "time",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_73",
+    "level": "N5",
+    "word": "部屋",
+    "reading": "へや",
+    "meaningKo": "방",
+    "exampleSentence": "私の部屋は静かです。",
+    "exampleTranslation": "제 방은 조용합니다.",
+    "mnemonicText": "문이 있는 작은 공간.",
+    "imageKey": "room",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_74",
+    "level": "N5",
+    "word": "図書館",
+    "reading": "としょかん",
+    "meaningKo": "도서관",
+    "exampleSentence": "図書館で勉強します。",
+    "exampleTranslation": "도서관에서 공부합니다.",
+    "mnemonicText": "책장이 늘어선 건물.",
+    "imageKey": "library",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_75",
+    "level": "N5",
+    "word": "トイレ",
+    "reading": "トイレ",
+    "meaningKo": "화장실",
+    "exampleSentence": "トイレはどこですか。",
+    "exampleTranslation": "화장실은 어디입니까?",
+    "mnemonicText": "문 위 표시판.",
+    "imageKey": "toilet",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_76",
+    "level": "N5",
+    "word": "上",
+    "reading": "うえ",
+    "meaningKo": "위",
+    "exampleSentence": "机の上にペンがあります。",
+    "exampleTranslation": "책상 위에 펜이 있습니다.",
+    "exampleReadings": [
+      {
+        "text": "机",
+        "reading": "つくえ"
+      },
+      {
+        "text": "上",
+        "reading": "うえ"
+      }
+    ],
+    "mnemonicText": "위쪽 화살표.",
+    "imageKey": "up",
+    "tags": [
+      "명사",
+      "위치"
+    ]
+  },
+  {
+    "id": "v_n5_77",
+    "level": "N5",
+    "word": "下",
+    "reading": "した",
+    "meaningKo": "아래",
+    "exampleSentence": "椅子の下に猫がいます。",
+    "exampleTranslation": "의자 아래에 고양이가 있습니다.",
+    "mnemonicText": "아래쪽 화살표.",
+    "imageKey": "down",
+    "tags": [
+      "명사",
+      "위치"
+    ]
+  },
+  {
+    "id": "v_n5_78",
+    "level": "N5",
+    "word": "パン",
+    "reading": "パン",
+    "meaningKo": "빵",
+    "exampleSentence": "朝、パンを食べます。",
+    "exampleTranslation": "아침에 빵을 먹습니다.",
+    "mnemonicText": "부풀어 오른 빵.",
+    "imageKey": "bread",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_79",
+    "level": "N5",
+    "word": "コーヒー",
+    "reading": "コーヒー",
+    "meaningKo": "커피",
+    "exampleSentence": "コーヒーを一杯ください。",
+    "exampleTranslation": "커피 한 잔 주세요.",
+    "mnemonicText": "김이 나는 컵.",
+    "imageKey": "coffee",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_80",
+    "level": "N5",
+    "word": "お金",
+    "reading": "おかね",
+    "meaningKo": "돈",
+    "exampleSentence": "お金がありません。",
+    "exampleTranslation": "돈이 없습니다.",
+    "mnemonicText": "동전 더미.",
+    "imageKey": "money",
+    "tags": [
+      "명사"
+    ]
+  },
+  {
+    "id": "v_n5_81",
+    "level": "N5",
+    "word": "円",
+    "reading": "えん",
+    "meaningKo": "엔(화폐 단위)",
+    "exampleSentence": "これは五百円です。",
+    "exampleTranslation": "이건 500엔입니다.",
+    "mnemonicText": "동전 표면의 円 글자.",
+    "imageKey": "yen",
+    "tags": [
+      "명사",
+      "화폐"
+    ]
+  },
+  {
+    "id": "v_n5_82",
+    "level": "N5",
+    "word": "教室",
+    "reading": "きょうしつ",
+    "meaningKo": "교실",
+    "exampleSentence": "教室で先生と話します。",
+    "exampleTranslation": "교실에서 선생님과 이야기합니다.",
+    "mnemonicText": "책상이 늘어선 방.",
+    "imageKey": "classroom",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_83",
+    "level": "N5",
+    "word": "試験",
+    "reading": "しけん",
+    "meaningKo": "시험",
+    "exampleSentence": "明日は日本語の試験です。",
+    "exampleTranslation": "내일은 일본어 시험입니다.",
+    "mnemonicText": "시험지와 연필.",
+    "imageKey": "exam",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_84",
+    "level": "N5",
+    "word": "宿題",
+    "reading": "しゅくだい",
+    "meaningKo": "숙제",
+    "exampleSentence": "宿題を忘れました。",
+    "exampleTranslation": "숙제를 잊어버렸습니다.",
+    "mnemonicText": "펼친 노트.",
+    "imageKey": "homework",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_85",
+    "level": "N5",
+    "word": "勉強",
+    "reading": "べんきょう",
+    "meaningKo": "공부",
+    "exampleSentence": "毎日日本語を勉強します。",
+    "exampleTranslation": "매일 일본어를 공부합니다.",
+    "mnemonicText": "책 앞에 앉은 모습.",
+    "imageKey": "study",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_86",
+    "level": "N5",
+    "word": "映画",
+    "reading": "えいが",
+    "meaningKo": "영화",
+    "exampleSentence": "週末に映画を見ます。",
+    "exampleTranslation": "주말에 영화를 봅니다.",
+    "mnemonicText": "영화관 스크린.",
+    "imageKey": "movie",
+    "tags": [
+      "명사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_87",
+    "level": "N5",
+    "word": "音楽",
+    "reading": "おんがく",
+    "meaningKo": "음악",
+    "exampleSentence": "音楽を聞くのが好きです。",
+    "exampleTranslation": "음악 듣기를 좋아합니다.",
+    "mnemonicText": "음표가 떠오르는 모습.",
+    "imageKey": "music",
+    "tags": [
+      "명사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_88",
+    "level": "N5",
+    "word": "旅行",
+    "reading": "りょこう",
+    "meaningKo": "여행",
+    "exampleSentence": "来月、旅行に行きます。",
+    "exampleTranslation": "다음 달에 여행 갑니다.",
+    "mnemonicText": "여행 가방.",
+    "imageKey": "travel",
+    "tags": [
+      "명사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_89",
+    "level": "N5",
+    "word": "散歩",
+    "reading": "さんぽ",
+    "meaningKo": "산책",
+    "exampleSentence": "朝、公園で散歩します。",
+    "exampleTranslation": "아침에 공원에서 산책합니다.",
+    "mnemonicText": "걷는 사람의 발자국.",
+    "imageKey": "walk",
+    "tags": [
+      "명사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_90",
+    "level": "N5",
+    "word": "雪",
+    "reading": "ゆき",
+    "meaningKo": "눈",
+    "exampleSentence": "雪が降っています。",
+    "exampleTranslation": "눈이 내리고 있습니다.",
+    "mnemonicText": "떨어지는 눈송이.",
+    "imageKey": "snow",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_91",
+    "level": "N5",
+    "word": "山",
+    "reading": "やま",
+    "meaningKo": "산",
+    "exampleSentence": "山は高いです。",
+    "exampleTranslation": "산은 높습니다.",
+    "mnemonicText": "뾰족한 산봉우리.",
+    "imageKey": "mountain",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_92",
+    "level": "N5",
+    "word": "川",
+    "reading": "かわ",
+    "meaningKo": "강",
+    "exampleSentence": "川で泳ぎました。",
+    "exampleTranslation": "강에서 수영했습니다.",
+    "mnemonicText": "흐르는 물줄기.",
+    "imageKey": "river",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_93",
+    "level": "N5",
+    "word": "する",
+    "reading": "する",
+    "meaningKo": "하다",
+    "exampleSentence": "今、何をしますか。",
+    "exampleTranslation": "지금 무엇을 합니까?",
+    "mnemonicText": "움직이는 화살표.",
+    "imageKey": "do",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_94",
+    "level": "N5",
+    "word": "ある",
+    "reading": "ある",
+    "meaningKo": "있다 (무생물)",
+    "exampleSentence": "机の上にりんごがあります。",
+    "exampleTranslation": "책상 위에 사과가 있습니다.",
+    "mnemonicText": "사물 옆 표시.",
+    "imageKey": "default",
+    "tags": [
+      "동사",
+      "존재"
+    ]
+  },
+  {
+    "id": "v_n5_95",
+    "level": "N5",
+    "word": "いる",
+    "reading": "いる",
+    "meaningKo": "있다 (생물)",
+    "exampleSentence": "公園に犬がいます。",
+    "exampleTranslation": "공원에 개가 있습니다.",
+    "mnemonicText": "사람·동물 옆 표시.",
+    "imageKey": "animal",
+    "tags": [
+      "동사",
+      "존재"
+    ]
+  },
+  {
+    "id": "v_n5_96",
+    "level": "N5",
+    "word": "使う",
+    "reading": "つかう",
+    "meaningKo": "사용하다",
+    "exampleSentence": "スプーンを使います。",
+    "exampleTranslation": "숟가락을 사용합니다.",
+    "mnemonicText": "도구를 잡은 손.",
+    "imageKey": "use",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_97",
+    "level": "N5",
+    "word": "明るい",
+    "reading": "あかるい",
+    "meaningKo": "밝다",
+    "exampleSentence": "この部屋は明るいです。",
+    "exampleTranslation": "이 방은 밝습니다.",
+    "mnemonicText": "햇빛이 비치는 모습.",
+    "imageKey": "bright",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_98",
+    "level": "N5",
+    "word": "重い",
+    "reading": "おもい",
+    "meaningKo": "무겁다",
+    "exampleSentence": "このかばんは重いです。",
+    "exampleTranslation": "이 가방은 무겁습니다.",
+    "mnemonicText": "아래로 처진 가방.",
+    "imageKey": "heavy",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_99",
+    "level": "N5",
+    "word": "ありがとう",
+    "reading": "ありがとう",
+    "meaningKo": "고맙다",
+    "exampleSentence": "ありがとうございます。",
+    "exampleTranslation": "감사합니다.",
+    "mnemonicText": "고개 숙이는 인사.",
+    "imageKey": "thanks",
+    "tags": [
+      "회화표현",
+      "인사"
+    ]
+  },
+  {
+    "id": "v_n5_100",
+    "level": "N5",
+    "word": "すみません",
+    "reading": "すみません",
+    "meaningKo": "죄송합니다/실례합니다",
+    "exampleSentence": "すみません、駅はどこですか。",
+    "exampleTranslation": "실례합니다, 역은 어디입니까?",
+    "mnemonicText": "손을 들며 묻는 모습.",
+    "imageKey": "apology",
+    "tags": [
+      "회화표현",
+      "인사"
+    ]
+  },
+  {
+    "id": "v_n5_101",
+    "level": "N5",
+    "word": "元気",
+    "reading": "げんき",
+    "meaningKo": "건강함/활기참",
+    "exampleSentence": "お元気ですか。",
+    "exampleTranslation": "잘 지내세요?",
+    "mnemonicText": "활기찬 표정.",
+    "imageKey": "health",
+    "tags": [
+      "な형용사",
+      "상태"
+    ]
+  },
+  {
+    "id": "v_n5_102",
+    "level": "N5",
+    "word": "子供",
+    "reading": "こども",
+    "meaningKo": "아이",
+    "exampleSentence": "公園に子供がいます。",
+    "exampleTranslation": "공원에 아이가 있습니다.",
+    "mnemonicText": "작은 키의 어린 사람.",
+    "imageKey": "family",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_103",
+    "level": "N5",
+    "word": "男",
+    "reading": "おとこ",
+    "meaningKo": "남자",
+    "exampleSentence": "男の人が話しています。",
+    "exampleTranslation": "남자가 이야기하고 있습니다.",
+    "mnemonicText": "정장 입은 사람의 윤곽.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "사람"
+    ]
+  },
+  {
+    "id": "v_n5_104",
+    "level": "N5",
+    "word": "女",
+    "reading": "おんな",
+    "meaningKo": "여자",
+    "exampleSentence": "女の人が本を読みます。",
+    "exampleTranslation": "여자가 책을 읽습니다.",
+    "mnemonicText": "머리 긴 사람의 윤곽.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "사람"
+    ]
+  },
+  {
+    "id": "v_n5_105",
+    "level": "N5",
+    "word": "一時",
+    "reading": "いちじ",
+    "meaningKo": "1시",
+    "exampleSentence": "一時に会いましょう。",
+    "exampleTranslation": "1시에 만납시다.",
+    "mnemonicText": "시계 바늘이 1을 가리킴.",
+    "imageKey": "time",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_106",
+    "level": "N5",
+    "word": "分",
+    "reading": "ふん",
+    "meaningKo": "분(시간 단위)",
+    "exampleSentence": "十分待ってください。",
+    "exampleTranslation": "10분 기다려 주세요.",
+    "mnemonicText": "시계의 분 단위.",
+    "imageKey": "time",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_107",
+    "level": "N5",
+    "word": "半",
+    "reading": "はん",
+    "meaningKo": "반(30분)",
+    "exampleSentence": "三時半に来ます。",
+    "exampleTranslation": "3시 반에 옵니다.",
+    "mnemonicText": "시계 바늘이 6에 위치.",
+    "imageKey": "time",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_108",
+    "level": "N5",
+    "word": "後",
+    "reading": "あと",
+    "meaningKo": "후/뒤",
+    "exampleSentence": "晩ご飯の後で散歩します。",
+    "exampleTranslation": "저녁 식사 후에 산책합니다.",
+    "exampleReadings": [
+      {
+        "text": "晩ご飯",
+        "reading": "ばんごはん"
+      },
+      {
+        "text": "後",
+        "reading": "あと"
+      },
+      {
+        "text": "散歩",
+        "reading": "さんぽ"
+      }
+    ],
+    "mnemonicText": "시간 화살표의 끝.",
+    "imageKey": "time",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_109",
+    "level": "N5",
+    "word": "空港",
+    "reading": "くうこう",
+    "meaningKo": "공항",
+    "exampleSentence": "空港まで電車で行きます。",
+    "exampleTranslation": "공항까지 전철로 갑니다.",
+    "mnemonicText": "비행기 활주로.",
+    "imageKey": "travel",
+    "tags": [
+      "명사",
+      "장소",
+      "교통"
+    ]
+  },
+  {
+    "id": "v_n5_110",
+    "level": "N5",
+    "word": "会社",
+    "reading": "かいしゃ",
+    "meaningKo": "회사",
+    "exampleSentence": "毎朝会社に行きます。",
+    "exampleTranslation": "매일 아침 회사에 갑니다.",
+    "mnemonicText": "사각형 건물.",
+    "imageKey": "office",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_111",
+    "level": "N5",
+    "word": "中",
+    "reading": "なか",
+    "meaningKo": "안/속",
+    "exampleSentence": "かばんの中に本があります。",
+    "exampleTranslation": "가방 안에 책이 있습니다.",
+    "mnemonicText": "박스 가운데 점.",
+    "imageKey": "arrow",
+    "tags": [
+      "명사",
+      "위치"
+    ]
+  },
+  {
+    "id": "v_n5_112",
+    "level": "N5",
+    "word": "横",
+    "reading": "よこ",
+    "meaningKo": "옆/가로",
+    "exampleSentence": "銀行の横に店があります。",
+    "exampleTranslation": "은행 옆에 가게가 있습니다.",
+    "mnemonicText": "좌우 화살표.",
+    "imageKey": "arrow",
+    "tags": [
+      "명사",
+      "위치"
+    ]
+  },
+  {
+    "id": "v_n5_113",
+    "level": "N5",
+    "word": "飲み物",
+    "reading": "のみもの",
+    "meaningKo": "음료",
+    "exampleSentence": "飲み物は何にしますか。",
+    "exampleTranslation": "음료는 무엇으로 하시겠어요?",
+    "mnemonicText": "음료수 컵.",
+    "imageKey": "drink",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_114",
+    "level": "N5",
+    "word": "お酒",
+    "reading": "おさけ",
+    "meaningKo": "술",
+    "exampleSentence": "お酒は飲みません。",
+    "exampleTranslation": "술은 마시지 않습니다.",
+    "mnemonicText": "술잔.",
+    "imageKey": "drink",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_115",
+    "level": "N5",
+    "word": "甘い",
+    "reading": "あまい",
+    "meaningKo": "달다",
+    "exampleSentence": "このケーキは甘いです。",
+    "exampleTranslation": "이 케이크는 답니다.",
+    "mnemonicText": "반짝이는 사탕.",
+    "imageKey": "food",
+    "tags": [
+      "형용사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_116",
+    "level": "N5",
+    "word": "辛い",
+    "reading": "からい",
+    "meaningKo": "맵다",
+    "exampleSentence": "このカレーは辛いです。",
+    "exampleTranslation": "이 카레는 맵습니다.",
+    "mnemonicText": "붉은 고추.",
+    "imageKey": "food",
+    "tags": [
+      "형용사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_117",
+    "level": "N5",
+    "word": "鉛筆",
+    "reading": "えんぴつ",
+    "meaningKo": "연필",
+    "exampleSentence": "鉛筆で名前を書きます。",
+    "exampleTranslation": "연필로 이름을 씁니다.",
+    "mnemonicText": "뾰족한 연필 끝.",
+    "imageKey": "write",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_118",
+    "level": "N5",
+    "word": "辞書",
+    "reading": "じしょ",
+    "meaningKo": "사전",
+    "exampleSentence": "分からない言葉は辞書で見ます。",
+    "exampleTranslation": "모르는 말은 사전에서 봅니다.",
+    "exampleReadings": [
+      {
+        "text": "分からない",
+        "reading": "わからない"
+      },
+      {
+        "text": "言葉",
+        "reading": "ことば"
+      },
+      {
+        "text": "辞書",
+        "reading": "じしょ"
+      },
+      {
+        "text": "見ます",
+        "reading": "みます"
+      }
+    ],
+    "mnemonicText": "두꺼운 사전.",
+    "imageKey": "book",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_119",
+    "level": "N5",
+    "word": "授業",
+    "reading": "じゅぎょう",
+    "meaningKo": "수업",
+    "exampleSentence": "授業は九時からです。",
+    "exampleTranslation": "수업은 9시부터입니다.",
+    "exampleReadings": [
+      {
+        "text": "授業",
+        "reading": "じゅぎょう"
+      },
+      {
+        "text": "九時",
+        "reading": "くじ"
+      }
+    ],
+    "mnemonicText": "학교 종.",
+    "imageKey": "classroom",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_120",
+    "level": "N5",
+    "word": "スポーツ",
+    "reading": "スポーツ",
+    "meaningKo": "스포츠",
+    "exampleSentence": "スポーツが好きです。",
+    "exampleTranslation": "스포츠를 좋아합니다.",
+    "mnemonicText": "공과 라켓.",
+    "imageKey": "sports",
+    "tags": [
+      "명사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_121",
+    "level": "N5",
+    "word": "料理",
+    "reading": "りょうり",
+    "meaningKo": "요리",
+    "exampleSentence": "母の料理は美味しいです。",
+    "exampleTranslation": "어머니의 요리는 맛있습니다.",
+    "mnemonicText": "프라이팬과 요리.",
+    "imageKey": "food",
+    "tags": [
+      "명사",
+      "취미",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_122",
+    "level": "N5",
+    "word": "絵",
+    "reading": "え",
+    "meaningKo": "그림",
+    "exampleSentence": "子供が絵を描きます。",
+    "exampleTranslation": "아이가 그림을 그립니다.",
+    "mnemonicText": "팔레트와 붓.",
+    "imageKey": "art",
+    "tags": [
+      "명사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_123",
+    "level": "N5",
+    "word": "空",
+    "reading": "そら",
+    "meaningKo": "하늘",
+    "exampleSentence": "今日の空はきれいです。",
+    "exampleTranslation": "오늘 하늘은 예쁩니다.",
+    "mnemonicText": "파란 하늘.",
+    "imageKey": "weather",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_124",
+    "level": "N5",
+    "word": "星",
+    "reading": "ほし",
+    "meaningKo": "별",
+    "exampleSentence": "夜空に星が見えます。",
+    "exampleTranslation": "밤하늘에 별이 보입니다.",
+    "mnemonicText": "반짝이는 별.",
+    "imageKey": "night",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_125",
+    "level": "N5",
+    "word": "風",
+    "reading": "かぜ",
+    "meaningKo": "바람",
+    "exampleSentence": "今日は風が強いです。",
+    "exampleTranslation": "오늘은 바람이 강합니다.",
+    "mnemonicText": "흩날리는 잎.",
+    "imageKey": "weather",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_126",
+    "level": "N5",
+    "word": "言う",
+    "reading": "いう",
+    "meaningKo": "말하다",
+    "exampleSentence": "もう一度言ってください。",
+    "exampleTranslation": "한 번 더 말해 주세요.",
+    "mnemonicText": "말풍선.",
+    "imageKey": "speak",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_127",
+    "level": "N5",
+    "word": "入る",
+    "reading": "はいる",
+    "meaningKo": "들어가다",
+    "exampleSentence": "部屋に入ります。",
+    "exampleTranslation": "방에 들어갑니다.",
+    "mnemonicText": "문 안으로 향한 화살표.",
+    "imageKey": "arrow",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_128",
+    "level": "N5",
+    "word": "広い",
+    "reading": "ひろい",
+    "meaningKo": "넓다",
+    "exampleSentence": "この公園は広いです。",
+    "exampleTranslation": "이 공원은 넓습니다.",
+    "mnemonicText": "양옆으로 펼쳐진 화살표.",
+    "imageKey": "big",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_129",
+    "level": "N5",
+    "word": "おはよう",
+    "reading": "おはよう",
+    "meaningKo": "(아침) 안녕",
+    "exampleSentence": "おはようございます。",
+    "exampleTranslation": "안녕하세요 (아침 인사).",
+    "mnemonicText": "아침 해와 손 인사.",
+    "imageKey": "morning",
+    "tags": [
+      "회화표현",
+      "인사"
+    ]
+  },
+  {
+    "id": "v_n5_130",
+    "level": "N5",
+    "word": "こんにちは",
+    "reading": "こんにちは",
+    "meaningKo": "(낮) 안녕",
+    "exampleSentence": "こんにちは、元気ですか。",
+    "exampleTranslation": "안녕하세요, 잘 지내세요?",
+    "mnemonicText": "한낮의 햇살.",
+    "imageKey": "sun",
+    "tags": [
+      "회화표현",
+      "인사"
+    ]
+  },
+  {
+    "id": "v_n5_131",
+    "level": "N5",
+    "word": "人",
+    "reading": "ひと",
+    "meaningKo": "사람",
+    "exampleSentence": "公園に人がたくさんいます。",
+    "exampleTranslation": "공원에 사람이 많이 있습니다.",
+    "mnemonicText": "서 있는 한 명.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "사람"
+    ]
+  },
+  {
+    "id": "v_n5_132",
+    "level": "N5",
+    "word": "大人",
+    "reading": "おとな",
+    "meaningKo": "어른",
+    "exampleSentence": "大人は二人です。",
+    "exampleTranslation": "어른은 두 명입니다.",
+    "mnemonicText": "키 큰 성인 실루엣.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "사람"
+    ]
+  },
+  {
+    "id": "v_n5_133",
+    "level": "N5",
+    "word": "赤ちゃん",
+    "reading": "あかちゃん",
+    "meaningKo": "아기",
+    "exampleSentence": "赤ちゃんが寝ています。",
+    "exampleTranslation": "아기가 자고 있습니다.",
+    "mnemonicText": "요람 안 아기.",
+    "imageKey": "baby",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_134",
+    "level": "N5",
+    "word": "家族",
+    "reading": "かぞく",
+    "meaningKo": "가족",
+    "exampleSentence": "家族と一緒にご飯を食べます。",
+    "exampleTranslation": "가족과 함께 밥을 먹습니다.",
+    "exampleReadings": [
+      {
+        "text": "家族",
+        "reading": "かぞく"
+      },
+      {
+        "text": "一緒",
+        "reading": "いっしょ"
+      },
+      {
+        "text": "飯",
+        "reading": "はん"
+      },
+      {
+        "text": "食べます",
+        "reading": "たべます"
+      }
+    ],
+    "mnemonicText": "손을 잡은 사람들.",
+    "imageKey": "family",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_135",
+    "level": "N5",
+    "word": "夫",
+    "reading": "おっと",
+    "meaningKo": "남편",
+    "exampleSentence": "夫は会社員です。",
+    "exampleTranslation": "남편은 회사원입니다.",
+    "mnemonicText": "정장 차림.",
+    "imageKey": "husband",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_136",
+    "level": "N5",
+    "word": "妻",
+    "reading": "つま",
+    "meaningKo": "아내",
+    "exampleSentence": "妻と買い物に行きます。",
+    "exampleTranslation": "아내와 쇼핑하러 갑니다.",
+    "mnemonicText": "반지를 낀 손.",
+    "imageKey": "wife",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_137",
+    "level": "N5",
+    "word": "祖父",
+    "reading": "そふ",
+    "meaningKo": "할아버지",
+    "exampleSentence": "祖父は元気です。",
+    "exampleTranslation": "할아버지는 건강합니다.",
+    "mnemonicText": "흰 수염 어르신.",
+    "imageKey": "grandpa",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_138",
+    "level": "N5",
+    "word": "祖母",
+    "reading": "そぼ",
+    "meaningKo": "할머니",
+    "exampleSentence": "祖母は料理が上手です。",
+    "exampleTranslation": "할머니는 요리를 잘하십니다.",
+    "mnemonicText": "안경 쓴 어르신.",
+    "imageKey": "grandma",
+    "tags": [
+      "명사",
+      "가족"
+    ]
+  },
+  {
+    "id": "v_n5_139",
+    "level": "N5",
+    "word": "お父さん",
+    "reading": "おとうさん",
+    "meaningKo": "(남의·존경) 아버지",
+    "exampleSentence": "お父さんはどこですか。",
+    "exampleTranslation": "아버님은 어디 계세요?",
+    "mnemonicText": "정장 입은 남성.",
+    "imageKey": "father",
+    "tags": [
+      "명사",
+      "가족",
+      "존경"
+    ]
+  },
+  {
+    "id": "v_n5_140",
+    "level": "N5",
+    "word": "お母さん",
+    "reading": "おかあさん",
+    "meaningKo": "(남의·존경) 어머니",
+    "exampleSentence": "お母さんによろしく。",
+    "exampleTranslation": "어머님께 안부 전해 주세요.",
+    "mnemonicText": "손 흔드는 어머니.",
+    "imageKey": "mother",
+    "tags": [
+      "명사",
+      "가족",
+      "존경"
+    ]
+  },
+  {
+    "id": "v_n5_141",
+    "level": "N5",
+    "word": "一",
+    "reading": "いち",
+    "meaningKo": "1, 하나",
+    "exampleSentence": "りんごを一つください。",
+    "exampleTranslation": "사과 하나 주세요.",
+    "mnemonicText": "손가락 하나.",
+    "imageKey": "num_one",
+    "tags": [
+      "명사",
+      "숫자"
+    ]
+  },
+  {
+    "id": "v_n5_142",
+    "level": "N5",
+    "word": "二",
+    "reading": "に",
+    "meaningKo": "2, 둘",
+    "exampleSentence": "二人で行きます。",
+    "exampleTranslation": "둘이서 갑니다.",
+    "mnemonicText": "손가락 둘.",
+    "imageKey": "num_two",
+    "tags": [
+      "명사",
+      "숫자"
+    ]
+  },
+  {
+    "id": "v_n5_143",
+    "level": "N5",
+    "word": "三",
+    "reading": "さん",
+    "meaningKo": "3, 셋",
+    "exampleSentence": "三時に集まります。",
+    "exampleTranslation": "3시에 모입니다.",
+    "mnemonicText": "손가락 셋.",
+    "imageKey": "num_three",
+    "tags": [
+      "명사",
+      "숫자"
+    ]
+  },
+  {
+    "id": "v_n5_144",
+    "level": "N5",
+    "word": "五",
+    "reading": "ご",
+    "meaningKo": "5, 다섯",
+    "exampleSentence": "五分待ってください。",
+    "exampleTranslation": "5분 기다려 주세요.",
+    "mnemonicText": "활짝 편 손바닥.",
+    "imageKey": "num_five",
+    "tags": [
+      "명사",
+      "숫자"
+    ]
+  },
+  {
+    "id": "v_n5_145",
+    "level": "N5",
+    "word": "七",
+    "reading": "しち",
+    "meaningKo": "7, 일곱",
+    "exampleSentence": "七時に起きます。",
+    "exampleTranslation": "7시에 일어납니다.",
+    "mnemonicText": "주사위 7면.",
+    "imageKey": "num_seven",
+    "tags": [
+      "명사",
+      "숫자"
+    ]
+  },
+  {
+    "id": "v_n5_146",
+    "level": "N5",
+    "word": "十",
+    "reading": "じゅう",
+    "meaningKo": "10, 열",
+    "exampleSentence": "十分かかります。",
+    "exampleTranslation": "10분 걸립니다.",
+    "mnemonicText": "양손의 손가락 10.",
+    "imageKey": "num_ten",
+    "tags": [
+      "명사",
+      "숫자"
+    ]
+  },
+  {
+    "id": "v_n5_147",
+    "level": "N5",
+    "word": "百",
+    "reading": "ひゃく",
+    "meaningKo": "100, 백",
+    "exampleSentence": "百円です。",
+    "exampleTranslation": "100엔입니다.",
+    "mnemonicText": "세 자리 숫자.",
+    "imageKey": "num_hundred",
+    "tags": [
+      "명사",
+      "숫자"
+    ]
+  },
+  {
+    "id": "v_n5_148",
+    "level": "N5",
+    "word": "千",
+    "reading": "せん",
+    "meaningKo": "1000, 천",
+    "exampleSentence": "千円札を出します。",
+    "exampleTranslation": "천 엔 지폐를 냅니다.",
+    "mnemonicText": "천 단위 표기.",
+    "imageKey": "num_thousand",
+    "tags": [
+      "명사",
+      "숫자"
+    ]
+  },
+  {
+    "id": "v_n5_149",
+    "level": "N5",
+    "word": "万",
+    "reading": "まん",
+    "meaningKo": "10000, 만",
+    "exampleSentence": "一万円かかります。",
+    "exampleTranslation": "1만 엔 듭니다.",
+    "mnemonicText": "만 단위 금액.",
+    "imageKey": "num_10k",
+    "tags": [
+      "명사",
+      "숫자"
+    ]
+  },
+  {
+    "id": "v_n5_150",
+    "level": "N5",
+    "word": "時",
+    "reading": "じ",
+    "meaningKo": "시 (시간 단위)",
+    "exampleSentence": "何時に来ますか。",
+    "exampleTranslation": "몇 시에 오십니까?",
+    "mnemonicText": "시계 정시.",
+    "imageKey": "clock",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_151",
+    "level": "N5",
+    "word": "週",
+    "reading": "しゅう",
+    "meaningKo": "주(week)",
+    "exampleSentence": "今週は忙しいです。",
+    "exampleTranslation": "이번 주는 바쁩니다.",
+    "mnemonicText": "주간 달력.",
+    "imageKey": "week",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_152",
+    "level": "N5",
+    "word": "月",
+    "reading": "つき",
+    "meaningKo": "달(月)",
+    "exampleSentence": "夜空に月が出ています。",
+    "exampleTranslation": "밤하늘에 달이 떠 있습니다.",
+    "mnemonicText": "밤하늘 달.",
+    "imageKey": "moon_month",
+    "tags": [
+      "명사",
+      "시간",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_153",
+    "level": "N5",
+    "word": "年",
+    "reading": "とし",
+    "meaningKo": "해/년",
+    "exampleSentence": "来年、日本へ行きます。",
+    "exampleTranslation": "내년에 일본에 갑니다.",
+    "mnemonicText": "연도 캘린더.",
+    "imageKey": "year",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_154",
+    "level": "N5",
+    "word": "午前",
+    "reading": "ごぜん",
+    "meaningKo": "오전",
+    "exampleSentence": "午前九時に授業があります。",
+    "exampleTranslation": "오전 9시에 수업이 있습니다.",
+    "exampleReadings": [
+      {
+        "text": "午前",
+        "reading": "ごぜん"
+      },
+      {
+        "text": "九時",
+        "reading": "くじ"
+      },
+      {
+        "text": "授業",
+        "reading": "じゅぎょう"
+      }
+    ],
+    "mnemonicText": "오전의 해.",
+    "imageKey": "noon",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_155",
+    "level": "N5",
+    "word": "午後",
+    "reading": "ごご",
+    "meaningKo": "오후",
+    "exampleSentence": "午後から雨が降ります。",
+    "exampleTranslation": "오후부터 비가 내립니다.",
+    "mnemonicText": "저녁의 해.",
+    "imageKey": "evening",
+    "tags": [
+      "명사",
+      "시간"
+    ]
+  },
+  {
+    "id": "v_n5_156",
+    "level": "N5",
+    "word": "国",
+    "reading": "くに",
+    "meaningKo": "나라",
+    "exampleSentence": "どの国から来ましたか。",
+    "exampleTranslation": "어느 나라에서 오셨습니까?",
+    "mnemonicText": "세계 지도.",
+    "imageKey": "map",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_157",
+    "level": "N5",
+    "word": "日本",
+    "reading": "にほん",
+    "meaningKo": "일본",
+    "exampleSentence": "日本へ旅行に行きます。",
+    "exampleTranslation": "일본에 여행 갑니다.",
+    "mnemonicText": "섬 모양 지도.",
+    "imageKey": "map",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_158",
+    "level": "N5",
+    "word": "韓国",
+    "reading": "かんこく",
+    "meaningKo": "한국",
+    "exampleSentence": "韓国の友だちがいます。",
+    "exampleTranslation": "한국 친구가 있습니다.",
+    "mnemonicText": "반도 모양.",
+    "imageKey": "map",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_159",
+    "level": "N5",
+    "word": "町",
+    "reading": "まち",
+    "meaningKo": "마을/동네",
+    "exampleSentence": "この町は静かです。",
+    "exampleTranslation": "이 동네는 조용합니다.",
+    "mnemonicText": "마을 도로.",
+    "imageKey": "street",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_160",
+    "level": "N5",
+    "word": "道",
+    "reading": "みち",
+    "meaningKo": "길",
+    "exampleSentence": "道を渡ります。",
+    "exampleTranslation": "길을 건넙니다.",
+    "mnemonicText": "곧게 뻗은 길.",
+    "imageKey": "street",
+    "tags": [
+      "명사",
+      "장소"
+    ]
+  },
+  {
+    "id": "v_n5_161",
+    "level": "N5",
+    "word": "バス",
+    "reading": "バス",
+    "meaningKo": "버스",
+    "exampleSentence": "バスで学校に行きます。",
+    "exampleTranslation": "버스로 학교에 갑니다.",
+    "mnemonicText": "노란 버스.",
+    "imageKey": "bus",
+    "tags": [
+      "명사",
+      "교통"
+    ]
+  },
+  {
+    "id": "v_n5_162",
+    "level": "N5",
+    "word": "タクシー",
+    "reading": "タクシー",
+    "meaningKo": "택시",
+    "exampleSentence": "雨だからタクシーに乗ります。",
+    "exampleTranslation": "비가 와서 택시를 탑니다.",
+    "mnemonicText": "택시.",
+    "imageKey": "taxi",
+    "tags": [
+      "명사",
+      "교통"
+    ]
+  },
+  {
+    "id": "v_n5_163",
+    "level": "N5",
+    "word": "自転車",
+    "reading": "じてんしゃ",
+    "meaningKo": "자전거",
+    "exampleSentence": "自転車で公園へ行きます。",
+    "exampleTranslation": "자전거로 공원에 갑니다.",
+    "mnemonicText": "두 바퀴.",
+    "imageKey": "bicycle",
+    "tags": [
+      "명사",
+      "교통"
+    ]
+  },
+  {
+    "id": "v_n5_164",
+    "level": "N5",
+    "word": "飛行機",
+    "reading": "ひこうき",
+    "meaningKo": "비행기",
+    "exampleSentence": "飛行機で日本へ行きます。",
+    "exampleTranslation": "비행기로 일본에 갑니다.",
+    "mnemonicText": "하늘을 나는 비행기.",
+    "imageKey": "travel",
+    "tags": [
+      "명사",
+      "교통"
+    ]
+  },
+  {
+    "id": "v_n5_165",
+    "level": "N5",
+    "word": "船",
+    "reading": "ふね",
+    "meaningKo": "배(ship)",
+    "exampleSentence": "船で島へ行きます。",
+    "exampleTranslation": "배로 섬에 갑니다.",
+    "mnemonicText": "바다 위 배.",
+    "imageKey": "ship",
+    "tags": [
+      "명사",
+      "교통"
+    ]
+  },
+  {
+    "id": "v_n5_166",
+    "level": "N5",
+    "word": "スーパー",
+    "reading": "スーパー",
+    "meaningKo": "슈퍼마켓",
+    "exampleSentence": "スーパーで野菜を買います。",
+    "exampleTranslation": "슈퍼에서 채소를 삽니다.",
+    "mnemonicText": "쇼핑카트.",
+    "imageKey": "supermarket",
+    "tags": [
+      "명사",
+      "장소",
+      "쇼핑"
+    ]
+  },
+  {
+    "id": "v_n5_167",
+    "level": "N5",
+    "word": "コンビニ",
+    "reading": "コンビニ",
+    "meaningKo": "편의점",
+    "exampleSentence": "コンビニでお茶を買いました。",
+    "exampleTranslation": "편의점에서 차를 샀습니다.",
+    "mnemonicText": "24시간 가게.",
+    "imageKey": "shop",
+    "tags": [
+      "명사",
+      "장소",
+      "쇼핑"
+    ]
+  },
+  {
+    "id": "v_n5_168",
+    "level": "N5",
+    "word": "牛乳",
+    "reading": "ぎゅうにゅう",
+    "meaningKo": "우유",
+    "exampleSentence": "毎朝牛乳を飲みます。",
+    "exampleTranslation": "매일 아침 우유를 마십니다.",
+    "mnemonicText": "우유팩.",
+    "imageKey": "milk",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_169",
+    "level": "N5",
+    "word": "ジュース",
+    "reading": "ジュース",
+    "meaningKo": "주스",
+    "exampleSentence": "オレンジジュースをください。",
+    "exampleTranslation": "오렌지 주스 주세요.",
+    "mnemonicText": "주스 컵.",
+    "imageKey": "juice",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_170",
+    "level": "N5",
+    "word": "ビール",
+    "reading": "ビール",
+    "meaningKo": "맥주",
+    "exampleSentence": "ビールを一本ください。",
+    "exampleTranslation": "맥주 한 병 주세요.",
+    "mnemonicText": "맥주잔.",
+    "imageKey": "beer",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_171",
+    "level": "N5",
+    "word": "卵",
+    "reading": "たまご",
+    "meaningKo": "계란",
+    "exampleSentence": "朝、卵を食べます。",
+    "exampleTranslation": "아침에 계란을 먹습니다.",
+    "mnemonicText": "타원형 알.",
+    "imageKey": "egg",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_172",
+    "level": "N5",
+    "word": "魚",
+    "reading": "さかな",
+    "meaningKo": "생선/물고기",
+    "exampleSentence": "魚を食べるのが好きです。",
+    "exampleTranslation": "생선 먹는 것을 좋아합니다.",
+    "mnemonicText": "물고기 모양.",
+    "imageKey": "fish",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_173",
+    "level": "N5",
+    "word": "ケーキ",
+    "reading": "ケーキ",
+    "meaningKo": "케이크",
+    "exampleSentence": "誕生日にケーキを食べました。",
+    "exampleTranslation": "생일에 케이크를 먹었습니다.",
+    "mnemonicText": "초가 꽂힌 케이크.",
+    "imageKey": "cake",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_174",
+    "level": "N5",
+    "word": "寿司",
+    "reading": "すし",
+    "meaningKo": "초밥",
+    "exampleSentence": "寿司が大好きです。",
+    "exampleTranslation": "초밥을 정말 좋아합니다.",
+    "mnemonicText": "초밥 한 점.",
+    "imageKey": "sushi",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_175",
+    "level": "N5",
+    "word": "ラーメン",
+    "reading": "ラーメン",
+    "meaningKo": "라면",
+    "exampleSentence": "今日はラーメンを食べました。",
+    "exampleTranslation": "오늘은 라면을 먹었습니다.",
+    "mnemonicText": "라면 그릇.",
+    "imageKey": "ramen",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_176",
+    "level": "N5",
+    "word": "レストラン",
+    "reading": "レストラン",
+    "meaningKo": "레스토랑",
+    "exampleSentence": "レストランで友だちと食事します。",
+    "exampleTranslation": "레스토랑에서 친구와 식사합니다.",
+    "mnemonicText": "식당 식기.",
+    "imageKey": "restaurant",
+    "tags": [
+      "명사",
+      "장소",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_177",
+    "level": "N5",
+    "word": "デパート",
+    "reading": "デパート",
+    "meaningKo": "백화점",
+    "exampleSentence": "デパートで服を買いました。",
+    "exampleTranslation": "백화점에서 옷을 샀습니다.",
+    "mnemonicText": "쇼핑백 가득.",
+    "imageKey": "shopping",
+    "tags": [
+      "명사",
+      "장소",
+      "쇼핑"
+    ]
+  },
+  {
+    "id": "v_n5_178",
+    "level": "N5",
+    "word": "切符",
+    "reading": "きっぷ",
+    "meaningKo": "표(ticket)",
+    "exampleSentence": "切符を一枚ください。",
+    "exampleTranslation": "표 한 장 주세요.",
+    "mnemonicText": "기차표.",
+    "imageKey": "ticket",
+    "tags": [
+      "명사",
+      "교통",
+      "쇼핑"
+    ]
+  },
+  {
+    "id": "v_n5_179",
+    "level": "N5",
+    "word": "値段",
+    "reading": "ねだん",
+    "meaningKo": "가격",
+    "exampleSentence": "これの値段はいくらですか。",
+    "exampleTranslation": "이것의 가격은 얼마입니까?",
+    "mnemonicText": "가격표.",
+    "imageKey": "money",
+    "tags": [
+      "명사",
+      "쇼핑"
+    ]
+  },
+  {
+    "id": "v_n5_180",
+    "level": "N5",
+    "word": "注文",
+    "reading": "ちゅうもん",
+    "meaningKo": "주문",
+    "exampleSentence": "注文をお願いします。",
+    "exampleTranslation": "주문 부탁드립니다.",
+    "mnemonicText": "주문서.",
+    "imageKey": "restaurant",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_181",
+    "level": "N5",
+    "word": "メニュー",
+    "reading": "メニュー",
+    "meaningKo": "메뉴",
+    "exampleSentence": "メニューを見せてください。",
+    "exampleTranslation": "메뉴를 보여주세요.",
+    "mnemonicText": "메뉴판.",
+    "imageKey": "menu",
+    "tags": [
+      "명사",
+      "음식"
+    ]
+  },
+  {
+    "id": "v_n5_182",
+    "level": "N5",
+    "word": "セール",
+    "reading": "セール",
+    "meaningKo": "세일",
+    "exampleSentence": "今日はセールで安いです。",
+    "exampleTranslation": "오늘은 세일이어서 쌉니다.",
+    "mnemonicText": "할인 태그.",
+    "imageKey": "sale",
+    "tags": [
+      "명사",
+      "쇼핑"
+    ]
+  },
+  {
+    "id": "v_n5_183",
+    "level": "N5",
+    "word": "ノート",
+    "reading": "ノート",
+    "meaningKo": "노트",
+    "exampleSentence": "ノートに字を書きます。",
+    "exampleTranslation": "노트에 글자를 씁니다.",
+    "mnemonicText": "스프링 노트.",
+    "imageKey": "notebook",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_184",
+    "level": "N5",
+    "word": "紙",
+    "reading": "かみ",
+    "meaningKo": "종이",
+    "exampleSentence": "紙にメモを書きます。",
+    "exampleTranslation": "종이에 메모를 씁니다.",
+    "mnemonicText": "한 장의 종이.",
+    "imageKey": "paper",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_185",
+    "level": "N5",
+    "word": "質問",
+    "reading": "しつもん",
+    "meaningKo": "질문",
+    "exampleSentence": "質問はありますか。",
+    "exampleTranslation": "질문 있으십니까?",
+    "mnemonicText": "물음표.",
+    "imageKey": "question",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_186",
+    "level": "N5",
+    "word": "答え",
+    "reading": "こたえ",
+    "meaningKo": "답",
+    "exampleSentence": "答えがわかりません。",
+    "exampleTranslation": "답을 모르겠습니다.",
+    "mnemonicText": "체크 표시.",
+    "imageKey": "answer",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_187",
+    "level": "N5",
+    "word": "漢字",
+    "reading": "かんじ",
+    "meaningKo": "한자",
+    "exampleSentence": "漢字は難しいです。",
+    "exampleTranslation": "한자는 어렵습니다.",
+    "mnemonicText": "한자 한 글자.",
+    "imageKey": "kanji",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_188",
+    "level": "N5",
+    "word": "言葉",
+    "reading": "ことば",
+    "meaningKo": "말/단어",
+    "exampleSentence": "新しい言葉を勉強します。",
+    "exampleTranslation": "새 단어를 공부합니다.",
+    "exampleReadings": [
+      {
+        "text": "新しい",
+        "reading": "あたらしい"
+      },
+      {
+        "text": "言葉",
+        "reading": "ことば"
+      },
+      {
+        "text": "勉強",
+        "reading": "べんきょう"
+      }
+    ],
+    "mnemonicText": "말풍선과 문자.",
+    "imageKey": "word",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_189",
+    "level": "N5",
+    "word": "英語",
+    "reading": "えいご",
+    "meaningKo": "영어",
+    "exampleSentence": "英語の授業があります。",
+    "exampleTranslation": "영어 수업이 있습니다.",
+    "mnemonicText": "알파벳.",
+    "imageKey": "english",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_190",
+    "level": "N5",
+    "word": "日本語",
+    "reading": "にほんご",
+    "meaningKo": "일본어",
+    "exampleSentence": "日本語を勉強しています。",
+    "exampleTranslation": "일본어를 공부하고 있습니다.",
+    "mnemonicText": "あ 한 글자.",
+    "imageKey": "japanese",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_191",
+    "level": "N5",
+    "word": "平仮名",
+    "reading": "ひらがな",
+    "meaningKo": "히라가나",
+    "exampleSentence": "平仮名を覚えました。",
+    "exampleTranslation": "히라가나를 외웠습니다.",
+    "mnemonicText": "부드러운 글자.",
+    "imageKey": "hiragana",
+    "tags": [
+      "명사",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_192",
+    "level": "N5",
+    "word": "留学生",
+    "reading": "りゅうがくせい",
+    "meaningKo": "유학생",
+    "exampleSentence": "私は留学生です。",
+    "exampleTranslation": "저는 유학생입니다.",
+    "mnemonicText": "학생모.",
+    "imageKey": "student",
+    "tags": [
+      "명사",
+      "학교",
+      "직업"
+    ]
+  },
+  {
+    "id": "v_n5_193",
+    "level": "N5",
+    "word": "キッチン",
+    "reading": "キッチン",
+    "meaningKo": "부엌",
+    "exampleSentence": "キッチンで料理をします。",
+    "exampleTranslation": "부엌에서 요리합니다.",
+    "mnemonicText": "프라이팬.",
+    "imageKey": "kitchen",
+    "tags": [
+      "명사",
+      "집"
+    ]
+  },
+  {
+    "id": "v_n5_194",
+    "level": "N5",
+    "word": "寝室",
+    "reading": "しんしつ",
+    "meaningKo": "침실",
+    "exampleSentence": "寝室は二階です。",
+    "exampleTranslation": "침실은 2층입니다.",
+    "mnemonicText": "침대 옆 램프.",
+    "imageKey": "bedroom",
+    "tags": [
+      "명사",
+      "집"
+    ]
+  },
+  {
+    "id": "v_n5_195",
+    "level": "N5",
+    "word": "お風呂",
+    "reading": "おふろ",
+    "meaningKo": "욕실/목욕",
+    "exampleSentence": "夜にお風呂に入ります。",
+    "exampleTranslation": "밤에 목욕합니다.",
+    "mnemonicText": "욕조.",
+    "imageKey": "bathroom",
+    "tags": [
+      "명사",
+      "집"
+    ]
+  },
+  {
+    "id": "v_n5_196",
+    "level": "N5",
+    "word": "椅子",
+    "reading": "いす",
+    "meaningKo": "의자",
+    "exampleSentence": "ベンチに座って休みます。",
+    "exampleTranslation": "벤치에 앉아 쉽니다.",
+    "exampleReadings": [
+      {
+        "text": "座って",
+        "reading": "すわって"
+      },
+      {
+        "text": "休みます",
+        "reading": "やすみます"
+      }
+    ],
+    "mnemonicText": "네 다리 의자.",
+    "imageKey": "chair",
+    "tags": [
+      "명사",
+      "집"
+    ]
+  },
+  {
+    "id": "v_n5_197",
+    "level": "N5",
+    "word": "机",
+    "reading": "つくえ",
+    "meaningKo": "책상",
+    "exampleSentence": "机の上に本があります。",
+    "exampleTranslation": "책상 위에 책이 있습니다.",
+    "mnemonicText": "평평한 책상.",
+    "imageKey": "desk",
+    "tags": [
+      "명사",
+      "집",
+      "학교"
+    ]
+  },
+  {
+    "id": "v_n5_198",
+    "level": "N5",
+    "word": "ベッド",
+    "reading": "ベッド",
+    "meaningKo": "침대",
+    "exampleSentence": "ベッドで寝ます。",
+    "exampleTranslation": "침대에서 잡니다.",
+    "mnemonicText": "침대와 이불.",
+    "imageKey": "bedroom",
+    "tags": [
+      "명사",
+      "집"
+    ]
+  },
+  {
+    "id": "v_n5_199",
+    "level": "N5",
+    "word": "窓",
+    "reading": "まど",
+    "meaningKo": "창문",
+    "exampleSentence": "窓を開けてください。",
+    "exampleTranslation": "창문을 열어주세요.",
+    "mnemonicText": "창틀.",
+    "imageKey": "window",
+    "tags": [
+      "명사",
+      "집"
+    ]
+  },
+  {
+    "id": "v_n5_200",
+    "level": "N5",
+    "word": "電気",
+    "reading": "でんき",
+    "meaningKo": "전기/전등",
+    "exampleSentence": "電気を消してください。",
+    "exampleTranslation": "전등을 꺼주세요.",
+    "mnemonicText": "전구.",
+    "imageKey": "bright",
+    "tags": [
+      "명사",
+      "집"
+    ]
+  },
+  {
+    "id": "v_n5_201",
+    "level": "N5",
+    "word": "テーブル",
+    "reading": "テーブル",
+    "meaningKo": "테이블",
+    "exampleSentence": "テーブルに花を置きます。",
+    "exampleTranslation": "테이블에 꽃을 둡니다.",
+    "mnemonicText": "식탁.",
+    "imageKey": "desk",
+    "tags": [
+      "명사",
+      "집"
+    ]
+  },
+  {
+    "id": "v_n5_202",
+    "level": "N5",
+    "word": "ドア",
+    "reading": "ドア",
+    "meaningKo": "문",
+    "exampleSentence": "ドアを閉めました。",
+    "exampleTranslation": "문을 닫았습니다.",
+    "mnemonicText": "문 손잡이.",
+    "imageKey": "door",
+    "tags": [
+      "명사",
+      "집"
+    ]
+  },
+  {
+    "id": "v_n5_203",
+    "level": "N5",
+    "word": "ゲーム",
+    "reading": "ゲーム",
+    "meaningKo": "게임",
+    "exampleSentence": "ゲームをするのが好きです。",
+    "exampleTranslation": "게임 하는 것을 좋아합니다.",
+    "mnemonicText": "게임 컨트롤러.",
+    "imageKey": "game",
+    "tags": [
+      "명사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_204",
+    "level": "N5",
+    "word": "テレビ",
+    "reading": "テレビ",
+    "meaningKo": "텔레비전",
+    "exampleSentence": "夜、テレビを見ます。",
+    "exampleTranslation": "밤에 텔레비전을 봅니다.",
+    "mnemonicText": "TV 화면.",
+    "imageKey": "tv",
+    "tags": [
+      "명사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_205",
+    "level": "N5",
+    "word": "新聞",
+    "reading": "しんぶん",
+    "meaningKo": "신문",
+    "exampleSentence": "毎朝新聞を読みます。",
+    "exampleTranslation": "매일 아침 신문을 읽습니다.",
+    "mnemonicText": "접힌 신문.",
+    "imageKey": "read",
+    "tags": [
+      "명사",
+      "일상"
+    ]
+  },
+  {
+    "id": "v_n5_206",
+    "level": "N5",
+    "word": "歌",
+    "reading": "うた",
+    "meaningKo": "노래",
+    "exampleSentence": "好きな歌があります。",
+    "exampleTranslation": "좋아하는 노래가 있습니다.",
+    "mnemonicText": "음표.",
+    "imageKey": "sing",
+    "tags": [
+      "명사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_207",
+    "level": "N5",
+    "word": "歌う",
+    "reading": "うたう",
+    "meaningKo": "노래하다",
+    "exampleSentence": "カラオケで歌います。",
+    "exampleTranslation": "노래방에서 노래합니다.",
+    "mnemonicText": "마이크.",
+    "imageKey": "sing",
+    "tags": [
+      "동사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_208",
+    "level": "N5",
+    "word": "泳ぐ",
+    "reading": "およぐ",
+    "meaningKo": "수영하다",
+    "exampleSentence": "夏に海で泳ぎます。",
+    "exampleTranslation": "여름에 바다에서 수영합니다.",
+    "mnemonicText": "팔을 젓는 모습.",
+    "imageKey": "swim",
+    "tags": [
+      "동사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_209",
+    "level": "N5",
+    "word": "走る",
+    "reading": "はしる",
+    "meaningKo": "달리다",
+    "exampleSentence": "毎朝公園を走ります。",
+    "exampleTranslation": "매일 아침 공원을 달립니다.",
+    "mnemonicText": "달리는 다리.",
+    "imageKey": "run",
+    "tags": [
+      "동사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_210",
+    "level": "N5",
+    "word": "描く",
+    "reading": "かく",
+    "meaningKo": "(그림을) 그리다",
+    "exampleSentence": "妹は花の絵を描きます。",
+    "exampleTranslation": "여동생은 꽃 그림을 그립니다.",
+    "exampleReadings": [
+      {
+        "text": "妹",
+        "reading": "いもうと"
+      },
+      {
+        "text": "花",
+        "reading": "はな"
+      },
+      {
+        "text": "絵",
+        "reading": "え"
+      },
+      {
+        "text": "描きます",
+        "reading": "かきます"
+      }
+    ],
+    "mnemonicText": "붓.",
+    "imageKey": "draw",
+    "tags": [
+      "동사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_211",
+    "level": "N5",
+    "word": "撮る",
+    "reading": "とる",
+    "meaningKo": "(사진을) 찍다",
+    "exampleSentence": "家族の写真を撮りました。",
+    "exampleTranslation": "가족 사진을 찍었습니다.",
+    "mnemonicText": "카메라 셔터.",
+    "imageKey": "photo",
+    "tags": [
+      "동사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_212",
+    "level": "N5",
+    "word": "パーティー",
+    "reading": "パーティー",
+    "meaningKo": "파티",
+    "exampleSentence": "明日、パーティーがあります。",
+    "exampleTranslation": "내일 파티가 있습니다.",
+    "mnemonicText": "폭죽과 케이크.",
+    "imageKey": "party",
+    "tags": [
+      "명사",
+      "취미"
+    ]
+  },
+  {
+    "id": "v_n5_213",
+    "level": "N5",
+    "word": "木",
+    "reading": "き",
+    "meaningKo": "나무",
+    "exampleSentence": "公園に大きい木があります。",
+    "exampleTranslation": "공원에 큰 나무가 있습니다.",
+    "mnemonicText": "우뚝 선 나무.",
+    "imageKey": "tree",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_214",
+    "level": "N5",
+    "word": "草",
+    "reading": "くさ",
+    "meaningKo": "풀",
+    "exampleSentence": "庭に草がたくさんあります。",
+    "exampleTranslation": "정원에 풀이 많이 있습니다.",
+    "mnemonicText": "초록 풀잎.",
+    "imageKey": "grass",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_215",
+    "level": "N5",
+    "word": "太陽",
+    "reading": "たいよう",
+    "meaningKo": "태양",
+    "exampleSentence": "太陽が明るいです。",
+    "exampleTranslation": "태양이 밝습니다.",
+    "mnemonicText": "환한 해.",
+    "imageKey": "sun",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_216",
+    "level": "N5",
+    "word": "曇り",
+    "reading": "くもり",
+    "meaningKo": "흐림",
+    "exampleSentence": "今日は曇りです。",
+    "exampleTranslation": "오늘은 흐립니다.",
+    "mnemonicText": "구름 가득한 하늘.",
+    "imageKey": "cloudy",
+    "tags": [
+      "명사",
+      "날씨"
+    ]
+  },
+  {
+    "id": "v_n5_217",
+    "level": "N5",
+    "word": "晴れ",
+    "reading": "はれ",
+    "meaningKo": "맑음",
+    "exampleSentence": "明日は晴れでしょう。",
+    "exampleTranslation": "내일은 맑겠지요.",
+    "mnemonicText": "맑은 해와 구름.",
+    "imageKey": "sunny",
+    "tags": [
+      "명사",
+      "날씨"
+    ]
+  },
+  {
+    "id": "v_n5_218",
+    "level": "N5",
+    "word": "暖かい",
+    "reading": "あたたかい",
+    "meaningKo": "따뜻하다",
+    "exampleSentence": "春は暖かいです。",
+    "exampleTranslation": "봄은 따뜻합니다.",
+    "mnemonicText": "미지근한 컵.",
+    "imageKey": "hot",
+    "tags": [
+      "형용사",
+      "날씨"
+    ]
+  },
+  {
+    "id": "v_n5_219",
+    "level": "N5",
+    "word": "涼しい",
+    "reading": "すずしい",
+    "meaningKo": "시원하다",
+    "exampleSentence": "秋は涼しいです。",
+    "exampleTranslation": "가을은 시원합니다.",
+    "mnemonicText": "바람이 부는 표시.",
+    "imageKey": "cold",
+    "tags": [
+      "형용사",
+      "날씨"
+    ]
+  },
+  {
+    "id": "v_n5_220",
+    "level": "N5",
+    "word": "池",
+    "reading": "いけ",
+    "meaningKo": "연못",
+    "exampleSentence": "公園の池に魚がいます。",
+    "exampleTranslation": "공원 연못에 물고기가 있습니다.",
+    "mnemonicText": "작은 물웅덩이.",
+    "imageKey": "pond",
+    "tags": [
+      "명사",
+      "자연"
+    ]
+  },
+  {
+    "id": "v_n5_221",
+    "level": "N5",
+    "word": "目",
+    "reading": "め",
+    "meaningKo": "눈(eye)",
+    "exampleSentence": "目が痛いです。",
+    "exampleTranslation": "눈이 아픕니다.",
+    "mnemonicText": "커다란 눈동자.",
+    "imageKey": "eye",
+    "tags": [
+      "명사",
+      "몸"
+    ]
+  },
+  {
+    "id": "v_n5_222",
+    "level": "N5",
+    "word": "鼻",
+    "reading": "はな",
+    "meaningKo": "코",
+    "exampleSentence": "鼻が高いです。",
+    "exampleTranslation": "코가 높습니다.",
+    "mnemonicText": "코의 윤곽.",
+    "imageKey": "nose",
+    "tags": [
+      "명사",
+      "몸"
+    ]
+  },
+  {
+    "id": "v_n5_223",
+    "level": "N5",
+    "word": "口",
+    "reading": "くち",
+    "meaningKo": "입",
+    "exampleSentence": "口を開けてください。",
+    "exampleTranslation": "입을 벌려주세요.",
+    "mnemonicText": "입의 모양.",
+    "imageKey": "mouth",
+    "tags": [
+      "명사",
+      "몸"
+    ]
+  },
+  {
+    "id": "v_n5_224",
+    "level": "N5",
+    "word": "耳",
+    "reading": "みみ",
+    "meaningKo": "귀",
+    "exampleSentence": "耳でよく聞きます。",
+    "exampleTranslation": "귀로 잘 듣습니다.",
+    "mnemonicText": "귀의 윤곽.",
+    "imageKey": "ear",
+    "tags": [
+      "명사",
+      "몸"
+    ]
+  },
+  {
+    "id": "v_n5_225",
+    "level": "N5",
+    "word": "手",
+    "reading": "て",
+    "meaningKo": "손",
+    "exampleSentence": "手を洗います。",
+    "exampleTranslation": "손을 씻습니다.",
+    "mnemonicText": "펼친 손.",
+    "imageKey": "hand",
+    "tags": [
+      "명사",
+      "몸"
+    ]
+  },
+  {
+    "id": "v_n5_226",
+    "level": "N5",
+    "word": "足",
+    "reading": "あし",
+    "meaningKo": "다리/발",
+    "exampleSentence": "足が痛いです。",
+    "exampleTranslation": "발이 아픕니다.",
+    "mnemonicText": "발 모양.",
+    "imageKey": "foot",
+    "tags": [
+      "명사",
+      "몸"
+    ]
+  },
+  {
+    "id": "v_n5_227",
+    "level": "N5",
+    "word": "頭",
+    "reading": "あたま",
+    "meaningKo": "머리",
+    "exampleSentence": "頭が痛いです。",
+    "exampleTranslation": "머리가 아픕니다.",
+    "mnemonicText": "머리의 윤곽.",
+    "imageKey": "head",
+    "tags": [
+      "명사",
+      "몸"
+    ]
+  },
+  {
+    "id": "v_n5_228",
+    "level": "N5",
+    "word": "体",
+    "reading": "からだ",
+    "meaningKo": "몸",
+    "exampleSentence": "体に気をつけてください。",
+    "exampleTranslation": "몸 조심하세요.",
+    "mnemonicText": "사람의 실루엣.",
+    "imageKey": "body",
+    "tags": [
+      "명사",
+      "몸"
+    ]
+  },
+  {
+    "id": "v_n5_229",
+    "level": "N5",
+    "word": "医者",
+    "reading": "いしゃ",
+    "meaningKo": "의사",
+    "exampleSentence": "医者に行きました。",
+    "exampleTranslation": "의사에게 갔습니다.",
+    "mnemonicText": "청진기.",
+    "imageKey": "doctor",
+    "tags": [
+      "명사",
+      "직업",
+      "건강"
+    ]
+  },
+  {
+    "id": "v_n5_230",
+    "level": "N5",
+    "word": "薬",
+    "reading": "くすり",
+    "meaningKo": "약",
+    "exampleSentence": "毎日薬を飲みます。",
+    "exampleTranslation": "매일 약을 먹습니다.",
+    "mnemonicText": "알약 두 개.",
+    "imageKey": "medicine",
+    "tags": [
+      "명사",
+      "건강"
+    ]
+  },
+  {
+    "id": "v_n5_231",
+    "level": "N5",
+    "word": "立つ",
+    "reading": "たつ",
+    "meaningKo": "서다",
+    "exampleSentence": "前に立ってください。",
+    "exampleTranslation": "앞에 서주세요.",
+    "mnemonicText": "바로 선 사람.",
+    "imageKey": "stand",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_232",
+    "level": "N5",
+    "word": "座る",
+    "reading": "すわる",
+    "meaningKo": "앉다",
+    "exampleSentence": "椅子に座ります。",
+    "exampleTranslation": "의자에 앉습니다.",
+    "mnemonicText": "의자에 앉은 모습.",
+    "imageKey": "sit",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_233",
+    "level": "N5",
+    "word": "出る",
+    "reading": "でる",
+    "meaningKo": "나가다",
+    "exampleSentence": "家を出ます。",
+    "exampleTranslation": "집을 나섭니다.",
+    "mnemonicText": "문 밖으로.",
+    "imageKey": "exit",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_234",
+    "level": "N5",
+    "word": "持つ",
+    "reading": "もつ",
+    "meaningKo": "들다/가지다",
+    "exampleSentence": "かばんを持ちます。",
+    "exampleTranslation": "가방을 듭니다.",
+    "mnemonicText": "손에 든 가방.",
+    "imageKey": "hold",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_235",
+    "level": "N5",
+    "word": "作る",
+    "reading": "つくる",
+    "meaningKo": "만들다",
+    "exampleSentence": "母がケーキを作ります。",
+    "exampleTranslation": "어머니가 케이크를 만듭니다.",
+    "mnemonicText": "망치질하는 모습.",
+    "imageKey": "make",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_236",
+    "level": "N5",
+    "word": "終わる",
+    "reading": "おわる",
+    "meaningKo": "끝나다",
+    "exampleSentence": "授業が終わりました。",
+    "exampleTranslation": "수업이 끝났습니다.",
+    "mnemonicText": "정지 표시.",
+    "imageKey": "end",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_237",
+    "level": "N5",
+    "word": "開ける",
+    "reading": "あける",
+    "meaningKo": "열다",
+    "exampleSentence": "窓を開けます。",
+    "exampleTranslation": "창문을 엽니다.",
+    "mnemonicText": "열린 자물쇠.",
+    "imageKey": "open",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_238",
+    "level": "N5",
+    "word": "閉める",
+    "reading": "しめる",
+    "meaningKo": "닫다",
+    "exampleSentence": "ドアを閉めてください。",
+    "exampleTranslation": "문을 닫아주세요.",
+    "mnemonicText": "잠긴 자물쇠.",
+    "imageKey": "close",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_239",
+    "level": "N5",
+    "word": "教える",
+    "reading": "おしえる",
+    "meaningKo": "가르치다",
+    "exampleSentence": "日本語を教えています。",
+    "exampleTranslation": "일본어를 가르치고 있습니다.",
+    "mnemonicText": "화이트보드 앞 선생님.",
+    "imageKey": "teach",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_240",
+    "level": "N5",
+    "word": "出かける",
+    "reading": "でかける",
+    "meaningKo": "외출하다",
+    "exampleSentence": "朝、出かけます。",
+    "exampleTranslation": "아침에 외출합니다.",
+    "mnemonicText": "문 밖으로 가는 화살표.",
+    "imageKey": "exit",
+    "tags": [
+      "동사"
+    ]
+  },
+  {
+    "id": "v_n5_241",
+    "level": "N5",
+    "word": "黒い",
+    "reading": "くろい",
+    "meaningKo": "검다",
+    "exampleSentence": "黒いかばんを買いました。",
+    "exampleTranslation": "검은 가방을 샀습니다.",
+    "mnemonicText": "검은 사각형.",
+    "imageKey": "black",
+    "tags": [
+      "형용사",
+      "색"
+    ]
+  },
+  {
+    "id": "v_n5_242",
+    "level": "N5",
+    "word": "白い",
+    "reading": "しろい",
+    "meaningKo": "희다",
+    "exampleSentence": "白い紙に書きます。",
+    "exampleTranslation": "흰 종이에 씁니다.",
+    "mnemonicText": "하얀 사각형.",
+    "imageKey": "white",
+    "tags": [
+      "형용사",
+      "색"
+    ]
+  },
+  {
+    "id": "v_n5_243",
+    "level": "N5",
+    "word": "赤い",
+    "reading": "あかい",
+    "meaningKo": "빨갛다",
+    "exampleSentence": "赤い花がきれいです。",
+    "exampleTranslation": "빨간 꽃이 예쁩니다.",
+    "mnemonicText": "빨간 원.",
+    "imageKey": "red",
+    "tags": [
+      "형용사",
+      "색"
+    ]
+  },
+  {
+    "id": "v_n5_244",
+    "level": "N5",
+    "word": "青い",
+    "reading": "あおい",
+    "meaningKo": "파랗다",
+    "exampleSentence": "空が青いです。",
+    "exampleTranslation": "하늘이 파랗습니다.",
+    "mnemonicText": "파란 원.",
+    "imageKey": "blue",
+    "tags": [
+      "형용사",
+      "색"
+    ]
+  },
+  {
+    "id": "v_n5_245",
+    "level": "N5",
+    "word": "黄色い",
+    "reading": "きいろい",
+    "meaningKo": "노랗다",
+    "exampleSentence": "黄色いバスが来ました。",
+    "exampleTranslation": "노란 버스가 왔습니다.",
+    "mnemonicText": "노란 원.",
+    "imageKey": "yellow",
+    "tags": [
+      "형용사",
+      "색"
+    ]
+  },
+  {
+    "id": "v_n5_246",
+    "level": "N5",
+    "word": "古い",
+    "reading": "ふるい",
+    "meaningKo": "낡다/오래되다",
+    "exampleSentence": "これは古い本です。",
+    "exampleTranslation": "이것은 오래된 책입니다.",
+    "mnemonicText": "옛 시계.",
+    "imageKey": "old",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_247",
+    "level": "N5",
+    "word": "楽しい",
+    "reading": "たのしい",
+    "meaningKo": "즐겁다",
+    "exampleSentence": "パーティーは楽しかったです。",
+    "exampleTranslation": "파티는 즐거웠습니다.",
+    "mnemonicText": "웃는 얼굴.",
+    "imageKey": "fun",
+    "tags": [
+      "형용사",
+      "감정"
+    ]
+  },
+  {
+    "id": "v_n5_248",
+    "level": "N5",
+    "word": "悲しい",
+    "reading": "かなしい",
+    "meaningKo": "슬프다",
+    "exampleSentence": "その話は悲しいです。",
+    "exampleTranslation": "그 이야기는 슬픕니다.",
+    "mnemonicText": "눈물 흘리는 얼굴.",
+    "imageKey": "sad",
+    "tags": [
+      "형용사",
+      "감정"
+    ]
+  },
+  {
+    "id": "v_n5_249",
+    "level": "N5",
+    "word": "忙しい",
+    "reading": "いそがしい",
+    "meaningKo": "바쁘다",
+    "exampleSentence": "今日は忙しいです。",
+    "exampleTranslation": "오늘은 바쁩니다.",
+    "mnemonicText": "분주히 뛰는 모습.",
+    "imageKey": "busy",
+    "tags": [
+      "형용사",
+      "감정"
+    ]
+  },
+  {
+    "id": "v_n5_250",
+    "level": "N5",
+    "word": "短い",
+    "reading": "みじかい",
+    "meaningKo": "짧다",
+    "exampleSentence": "髪が短いです。",
+    "exampleTranslation": "머리가 짧습니다.",
+    "mnemonicText": "짧은 화살표.",
+    "imageKey": "short",
+    "tags": [
+      "형용사"
+    ]
+  },
+  {
+    "id": "v_n5_251",
+    "level": "N5",
+    "word": "顔",
+    "reading": "かお",
+    "meaningKo": "얼굴",
+    "exampleSentence": "朝、顔を洗います。",
+    "exampleTranslation": "아침에 세수를 합니다.",
+    "mnemonicText": "거울 속 얼굴.",
+    "imageKey": "head",
+    "tags": [
+      "명사",
+      "몸"
+    ],
+    "exampleReadings": [
+      {
+        "text": "朝",
+        "reading": "あさ"
+      },
+      {
+        "text": "顔",
+        "reading": "かお"
+      },
+      {
+        "text": "洗います",
+        "reading": "あらいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_252",
+    "level": "N5",
+    "word": "髪",
+    "reading": "かみ",
+    "meaningKo": "머리카락",
+    "exampleSentence": "髪を切りました。",
+    "exampleTranslation": "머리를 잘랐습니다.",
+    "mnemonicText": "긴 머리카락.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "몸"
+    ],
+    "exampleReadings": [
+      {
+        "text": "髪",
+        "reading": "かみ"
+      },
+      {
+        "text": "切りました",
+        "reading": "きりました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_253",
+    "level": "N5",
+    "word": "歯",
+    "reading": "は",
+    "meaningKo": "이(치아)",
+    "exampleSentence": "毎晩歯を磨きます。",
+    "exampleTranslation": "매일 밤 이를 닦습니다.",
+    "mnemonicText": "하얀 치아.",
+    "imageKey": "mouth",
+    "tags": [
+      "명사",
+      "몸"
+    ],
+    "exampleReadings": [
+      {
+        "text": "毎晩",
+        "reading": "まいばん"
+      },
+      {
+        "text": "歯",
+        "reading": "は"
+      },
+      {
+        "text": "磨きます",
+        "reading": "みがきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_254",
+    "level": "N5",
+    "word": "お腹",
+    "reading": "おなか",
+    "meaningKo": "배(복부)",
+    "exampleSentence": "お腹が痛いです。",
+    "exampleTranslation": "배가 아픕니다.",
+    "mnemonicText": "배를 잡은 모습.",
+    "imageKey": "body",
+    "tags": [
+      "명사",
+      "몸"
+    ],
+    "exampleReadings": [
+      {
+        "text": "お腹",
+        "reading": "おなか"
+      },
+      {
+        "text": "痛い",
+        "reading": "いたい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_255",
+    "level": "N5",
+    "word": "指",
+    "reading": "ゆび",
+    "meaningKo": "손가락",
+    "exampleSentence": "指が長いです。",
+    "exampleTranslation": "손가락이 깁니다.",
+    "mnemonicText": "다섯 손가락.",
+    "imageKey": "hand",
+    "tags": [
+      "명사",
+      "몸"
+    ],
+    "exampleReadings": [
+      {
+        "text": "指",
+        "reading": "ゆび"
+      },
+      {
+        "text": "長い",
+        "reading": "ながい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_256",
+    "level": "N5",
+    "word": "声",
+    "reading": "こえ",
+    "meaningKo": "목소리",
+    "exampleSentence": "大きい声で話してください。",
+    "exampleTranslation": "큰 소리로 말해 주세요.",
+    "mnemonicText": "말풍선.",
+    "imageKey": "speak",
+    "tags": [
+      "명사",
+      "몸"
+    ],
+    "exampleReadings": [
+      {
+        "text": "大きい",
+        "reading": "おおきい"
+      },
+      {
+        "text": "声",
+        "reading": "こえ"
+      },
+      {
+        "text": "話して",
+        "reading": "はなして"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_257",
+    "level": "N5",
+    "word": "背",
+    "reading": "せ",
+    "meaningKo": "키/등",
+    "exampleSentence": "兄は背が高いです。",
+    "exampleTranslation": "형은 키가 큽니다.",
+    "mnemonicText": "키 재기.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "몸"
+    ],
+    "exampleReadings": [
+      {
+        "text": "兄",
+        "reading": "あに"
+      },
+      {
+        "text": "背",
+        "reading": "せ"
+      },
+      {
+        "text": "高い",
+        "reading": "たかい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_258",
+    "level": "N5",
+    "word": "心",
+    "reading": "こころ",
+    "meaningKo": "마음",
+    "exampleSentence": "心が温かい人です。",
+    "exampleTranslation": "마음이 따뜻한 사람입니다.",
+    "mnemonicText": "하트.",
+    "imageKey": "mind",
+    "tags": [
+      "명사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "心",
+        "reading": "こころ"
+      },
+      {
+        "text": "温かい",
+        "reading": "あたたかい"
+      },
+      {
+        "text": "人",
+        "reading": "ひと"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_259",
+    "level": "N5",
+    "word": "おじさん",
+    "reading": "おじさん",
+    "meaningKo": "아저씨/삼촌",
+    "exampleSentence": "おじさんは東京にいます。",
+    "exampleTranslation": "삼촌은 도쿄에 있습니다.",
+    "mnemonicText": "중년 남성.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "가족"
+    ],
+    "exampleReadings": [
+      {
+        "text": "東京",
+        "reading": "とうきょう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_260",
+    "level": "N5",
+    "word": "おばさん",
+    "reading": "おばさん",
+    "meaningKo": "아주머니/이모",
+    "exampleSentence": "おばさんの家へ行きます。",
+    "exampleTranslation": "이모 집에 갑니다.",
+    "mnemonicText": "중년 여성.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "가족"
+    ],
+    "exampleReadings": [
+      {
+        "text": "家",
+        "reading": "いえ"
+      },
+      {
+        "text": "行きます",
+        "reading": "いきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_261",
+    "level": "N5",
+    "word": "男の子",
+    "reading": "おとこのこ",
+    "meaningKo": "남자아이",
+    "exampleSentence": "男の子が走っています。",
+    "exampleTranslation": "남자아이가 달리고 있습니다.",
+    "mnemonicText": "뛰는 소년.",
+    "imageKey": "baby",
+    "tags": [
+      "명사",
+      "사람"
+    ],
+    "exampleReadings": [
+      {
+        "text": "男の子",
+        "reading": "おとこのこ"
+      },
+      {
+        "text": "走って",
+        "reading": "はしって"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_262",
+    "level": "N5",
+    "word": "女の子",
+    "reading": "おんなのこ",
+    "meaningKo": "여자아이",
+    "exampleSentence": "女の子が歌っています。",
+    "exampleTranslation": "여자아이가 노래하고 있습니다.",
+    "mnemonicText": "노래하는 소녀.",
+    "imageKey": "baby",
+    "tags": [
+      "명사",
+      "사람"
+    ],
+    "exampleReadings": [
+      {
+        "text": "女の子",
+        "reading": "おんなのこ"
+      },
+      {
+        "text": "歌って",
+        "reading": "うたって"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_263",
+    "level": "N5",
+    "word": "みんな",
+    "reading": "みんな",
+    "meaningKo": "모두",
+    "exampleSentence": "みんなで食べましょう。",
+    "exampleTranslation": "다 함께 먹읍시다.",
+    "mnemonicText": "여러 사람.",
+    "imageKey": "person",
+    "tags": [
+      "명사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "食べましょう",
+        "reading": "たべましょう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_264",
+    "level": "N5",
+    "word": "自分",
+    "reading": "じぶん",
+    "meaningKo": "자기 자신",
+    "exampleSentence": "自分で作りました。",
+    "exampleTranslation": "직접 만들었습니다.",
+    "mnemonicText": "자신을 가리키는 손.",
+    "imageKey": "person",
+    "tags": [
+      "명사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "自分",
+        "reading": "じぶん"
+      },
+      {
+        "text": "作りました",
+        "reading": "つくりました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_265",
+    "level": "N5",
+    "word": "玄関",
+    "reading": "げんかん",
+    "meaningKo": "현관",
+    "exampleSentence": "玄関で靴を脱ぎます。",
+    "exampleTranslation": "현관에서 신발을 벗습니다.",
+    "mnemonicText": "현관문.",
+    "imageKey": "door",
+    "tags": [
+      "명사",
+      "집"
+    ],
+    "exampleReadings": [
+      {
+        "text": "玄関",
+        "reading": "げんかん"
+      },
+      {
+        "text": "靴",
+        "reading": "くつ"
+      },
+      {
+        "text": "脱ぎます",
+        "reading": "ぬぎます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_266",
+    "level": "N5",
+    "word": "庭",
+    "reading": "にわ",
+    "meaningKo": "마당/정원",
+    "exampleSentence": "庭に花があります。",
+    "exampleTranslation": "마당에 꽃이 있습니다.",
+    "mnemonicText": "잔디 마당.",
+    "imageKey": "grass",
+    "tags": [
+      "명사",
+      "집"
+    ],
+    "exampleReadings": [
+      {
+        "text": "庭",
+        "reading": "にわ"
+      },
+      {
+        "text": "花",
+        "reading": "はな"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_267",
+    "level": "N5",
+    "word": "階段",
+    "reading": "かいだん",
+    "meaningKo": "계단",
+    "exampleSentence": "階段を上がってください。",
+    "exampleTranslation": "계단을 올라가 주세요.",
+    "mnemonicText": "계단.",
+    "imageKey": "up",
+    "tags": [
+      "명사",
+      "집"
+    ],
+    "exampleReadings": [
+      {
+        "text": "階段",
+        "reading": "かいだん"
+      },
+      {
+        "text": "上がって",
+        "reading": "あがって"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_268",
+    "level": "N5",
+    "word": "エレベーター",
+    "reading": "エレベーター",
+    "meaningKo": "엘리베이터",
+    "exampleSentence": "エレベーターで三階へ行きます。",
+    "exampleTranslation": "엘리베이터로 3층에 갑니다.",
+    "mnemonicText": "상하 버튼.",
+    "imageKey": "up",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "三階",
+        "reading": "さんがい"
+      },
+      {
+        "text": "行きます",
+        "reading": "いきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_269",
+    "level": "N5",
+    "word": "鍵",
+    "reading": "かぎ",
+    "meaningKo": "열쇠",
+    "exampleSentence": "鍵をかけました。",
+    "exampleTranslation": "문을 잠갔습니다.",
+    "mnemonicText": "열쇠 모양.",
+    "imageKey": "door",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "鍵",
+        "reading": "かぎ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_270",
+    "level": "N5",
+    "word": "傘",
+    "reading": "かさ",
+    "meaningKo": "우산",
+    "exampleSentence": "傘を持って出かけます。",
+    "exampleTranslation": "우산을 들고 외출합니다.",
+    "mnemonicText": "펼친 우산.",
+    "imageKey": "weather",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "傘",
+        "reading": "かさ"
+      },
+      {
+        "text": "持って",
+        "reading": "もって"
+      },
+      {
+        "text": "出かけます",
+        "reading": "でかけます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_271",
+    "level": "N5",
+    "word": "帽子",
+    "reading": "ぼうし",
+    "meaningKo": "모자",
+    "exampleSentence": "白い帽子をかぶります。",
+    "exampleTranslation": "하얀 모자를 씁니다.",
+    "mnemonicText": "챙 모자.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "옷"
+    ],
+    "exampleReadings": [
+      {
+        "text": "白い",
+        "reading": "しろい"
+      },
+      {
+        "text": "帽子",
+        "reading": "ぼうし"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_272",
+    "level": "N5",
+    "word": "靴",
+    "reading": "くつ",
+    "meaningKo": "신발",
+    "exampleSentence": "新しい靴を買いました。",
+    "exampleTranslation": "새 신발을 샀습니다.",
+    "mnemonicText": "운동화.",
+    "imageKey": "foot",
+    "tags": [
+      "명사",
+      "옷"
+    ],
+    "exampleReadings": [
+      {
+        "text": "新しい",
+        "reading": "あたらしい"
+      },
+      {
+        "text": "靴",
+        "reading": "くつ"
+      },
+      {
+        "text": "買いました",
+        "reading": "かいました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_273",
+    "level": "N5",
+    "word": "靴下",
+    "reading": "くつした",
+    "meaningKo": "양말",
+    "exampleSentence": "靴下を履きます。",
+    "exampleTranslation": "양말을 신습니다.",
+    "mnemonicText": "양말 한 켤레.",
+    "imageKey": "foot",
+    "tags": [
+      "명사",
+      "옷"
+    ],
+    "exampleReadings": [
+      {
+        "text": "靴下",
+        "reading": "くつした"
+      },
+      {
+        "text": "履きます",
+        "reading": "はきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_274",
+    "level": "N5",
+    "word": "服",
+    "reading": "ふく",
+    "meaningKo": "옷",
+    "exampleSentence": "服を洗濯します。",
+    "exampleTranslation": "옷을 빨래합니다.",
+    "mnemonicText": "옷걸이.",
+    "imageKey": "person",
+    "tags": [
+      "명사",
+      "옷"
+    ],
+    "exampleReadings": [
+      {
+        "text": "服",
+        "reading": "ふく"
+      },
+      {
+        "text": "洗濯",
+        "reading": "せんたく"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_275",
+    "level": "N5",
+    "word": "シャツ",
+    "reading": "シャツ",
+    "meaningKo": "셔츠",
+    "exampleSentence": "青いシャツを着ます。",
+    "exampleTranslation": "파란 셔츠를 입습니다.",
+    "mnemonicText": "셔츠.",
+    "imageKey": "blue",
+    "tags": [
+      "명사",
+      "옷"
+    ],
+    "exampleReadings": [
+      {
+        "text": "青い",
+        "reading": "あおい"
+      },
+      {
+        "text": "着ます",
+        "reading": "きます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_276",
+    "level": "N5",
+    "word": "眼鏡",
+    "reading": "めがね",
+    "meaningKo": "안경",
+    "exampleSentence": "眼鏡をかけて本を読みます。",
+    "exampleTranslation": "안경을 쓰고 책을 읽습니다.",
+    "mnemonicText": "안경.",
+    "imageKey": "eye",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "眼鏡",
+        "reading": "めがね"
+      },
+      {
+        "text": "本",
+        "reading": "ほん"
+      },
+      {
+        "text": "読みます",
+        "reading": "よみます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_277",
+    "level": "N5",
+    "word": "時計",
+    "reading": "とけい",
+    "meaningKo": "시계",
+    "exampleSentence": "時計を見てください。",
+    "exampleTranslation": "시계를 봐 주세요.",
+    "mnemonicText": "벽시계.",
+    "imageKey": "clock",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "時計",
+        "reading": "とけい"
+      },
+      {
+        "text": "見て",
+        "reading": "みて"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_278",
+    "level": "N5",
+    "word": "かばん",
+    "reading": "かばん",
+    "meaningKo": "가방",
+    "exampleSentence": "かばんが重いです。",
+    "exampleTranslation": "가방이 무겁습니다.",
+    "mnemonicText": "책가방.",
+    "imageKey": "heavy",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "重い",
+        "reading": "おもい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_279",
+    "level": "N5",
+    "word": "鏡",
+    "reading": "かがみ",
+    "meaningKo": "거울",
+    "exampleSentence": "鏡を見ます。",
+    "exampleTranslation": "거울을 봅니다.",
+    "mnemonicText": "손거울.",
+    "imageKey": "eye",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "鏡",
+        "reading": "かがみ"
+      },
+      {
+        "text": "見ます",
+        "reading": "みます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_280",
+    "level": "N5",
+    "word": "タオル",
+    "reading": "タオル",
+    "meaningKo": "수건",
+    "exampleSentence": "タオルで手を拭きます。",
+    "exampleTranslation": "수건으로 손을 닦습니다.",
+    "mnemonicText": "수건.",
+    "imageKey": "bathroom",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "手",
+        "reading": "て"
+      },
+      {
+        "text": "拭きます",
+        "reading": "ふきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_281",
+    "level": "N5",
+    "word": "シャワー",
+    "reading": "シャワー",
+    "meaningKo": "샤워",
+    "exampleSentence": "朝シャワーを浴びます。",
+    "exampleTranslation": "아침에 샤워를 합니다.",
+    "mnemonicText": "샤워기.",
+    "imageKey": "bathroom",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "朝",
+        "reading": "あさ"
+      },
+      {
+        "text": "浴びます",
+        "reading": "あびます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_282",
+    "level": "N5",
+    "word": "石鹸",
+    "reading": "せっけん",
+    "meaningKo": "비누",
+    "exampleSentence": "石鹸で手を洗います。",
+    "exampleTranslation": "비누로 손을 씻습니다.",
+    "mnemonicText": "비누 거품.",
+    "imageKey": "bathroom",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "石鹸",
+        "reading": "せっけん"
+      },
+      {
+        "text": "手",
+        "reading": "て"
+      },
+      {
+        "text": "洗います",
+        "reading": "あらいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_283",
+    "level": "N5",
+    "word": "電話",
+    "reading": "でんわ",
+    "meaningKo": "전화",
+    "exampleSentence": "母に電話をかけます。",
+    "exampleTranslation": "어머니에게 전화를 겁니다.",
+    "mnemonicText": "수화기.",
+    "imageKey": "speak",
+    "tags": [
+      "명사",
+      "통신"
+    ],
+    "exampleReadings": [
+      {
+        "text": "母",
+        "reading": "はは"
+      },
+      {
+        "text": "電話",
+        "reading": "でんわ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_284",
+    "level": "N5",
+    "word": "手紙",
+    "reading": "てがみ",
+    "meaningKo": "편지",
+    "exampleSentence": "友だちに手紙を書きます。",
+    "exampleTranslation": "친구에게 편지를 씁니다.",
+    "mnemonicText": "편지 봉투.",
+    "imageKey": "paper",
+    "tags": [
+      "명사",
+      "통신"
+    ],
+    "exampleReadings": [
+      {
+        "text": "友だち",
+        "reading": "ともだち"
+      },
+      {
+        "text": "手紙",
+        "reading": "てがみ"
+      },
+      {
+        "text": "書きます",
+        "reading": "かきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_285",
+    "level": "N5",
+    "word": "雑誌",
+    "reading": "ざっし",
+    "meaningKo": "잡지",
+    "exampleSentence": "雑誌を読みます。",
+    "exampleTranslation": "잡지를 읽습니다.",
+    "mnemonicText": "잡지 표지.",
+    "imageKey": "book",
+    "tags": [
+      "명사",
+      "취미"
+    ],
+    "exampleReadings": [
+      {
+        "text": "雑誌",
+        "reading": "ざっし"
+      },
+      {
+        "text": "読みます",
+        "reading": "よみます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_286",
+    "level": "N5",
+    "word": "漫画",
+    "reading": "まんが",
+    "meaningKo": "만화",
+    "exampleSentence": "漫画が好きです。",
+    "exampleTranslation": "만화를 좋아합니다.",
+    "mnemonicText": "말풍선 만화.",
+    "imageKey": "book",
+    "tags": [
+      "명사",
+      "취미"
+    ],
+    "exampleReadings": [
+      {
+        "text": "漫画",
+        "reading": "まんが"
+      },
+      {
+        "text": "好き",
+        "reading": "すき"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_287",
+    "level": "N5",
+    "word": "ニュース",
+    "reading": "ニュース",
+    "meaningKo": "뉴스",
+    "exampleSentence": "朝ニュースを見ます。",
+    "exampleTranslation": "아침에 뉴스를 봅니다.",
+    "mnemonicText": "TV 화면.",
+    "imageKey": "tv",
+    "tags": [
+      "명사",
+      "통신"
+    ],
+    "exampleReadings": [
+      {
+        "text": "朝",
+        "reading": "あさ"
+      },
+      {
+        "text": "見ます",
+        "reading": "みます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_288",
+    "level": "N5",
+    "word": "ラジオ",
+    "reading": "ラジオ",
+    "meaningKo": "라디오",
+    "exampleSentence": "ラジオを聞きます。",
+    "exampleTranslation": "라디오를 듣습니다.",
+    "mnemonicText": "라디오.",
+    "imageKey": "music",
+    "tags": [
+      "명사",
+      "통신"
+    ],
+    "exampleReadings": [
+      {
+        "text": "聞きます",
+        "reading": "ききます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_289",
+    "level": "N5",
+    "word": "カメラ",
+    "reading": "カメラ",
+    "meaningKo": "카메라",
+    "exampleSentence": "カメラで写真を撮ります。",
+    "exampleTranslation": "카메라로 사진을 찍습니다.",
+    "mnemonicText": "카메라.",
+    "imageKey": "photo",
+    "tags": [
+      "명사",
+      "취미"
+    ],
+    "exampleReadings": [
+      {
+        "text": "写真",
+        "reading": "しゃしん"
+      },
+      {
+        "text": "撮ります",
+        "reading": "とります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_290",
+    "level": "N5",
+    "word": "パソコン",
+    "reading": "パソコン",
+    "meaningKo": "컴퓨터",
+    "exampleSentence": "パソコンで勉強します。",
+    "exampleTranslation": "컴퓨터로 공부합니다.",
+    "mnemonicText": "노트북.",
+    "imageKey": "study",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "勉強",
+        "reading": "べんきょう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_291",
+    "level": "N5",
+    "word": "プレゼント",
+    "reading": "プレゼント",
+    "meaningKo": "선물",
+    "exampleSentence": "プレゼントをもらいました。",
+    "exampleTranslation": "선물을 받았습니다.",
+    "mnemonicText": "리본 상자.",
+    "imageKey": "sparkle",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": []
+  },
+  {
+    "id": "v_n5_292",
+    "level": "N5",
+    "word": "お土産",
+    "reading": "おみやげ",
+    "meaningKo": "기념품/선물",
+    "exampleSentence": "お土産を買いました。",
+    "exampleTranslation": "기념품을 샀습니다.",
+    "mnemonicText": "선물 봉투.",
+    "imageKey": "shopping",
+    "tags": [
+      "명사",
+      "여행"
+    ],
+    "exampleReadings": [
+      {
+        "text": "お土産",
+        "reading": "おみやげ"
+      },
+      {
+        "text": "買いました",
+        "reading": "かいました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_293",
+    "level": "N5",
+    "word": "ポスト",
+    "reading": "ポスト",
+    "meaningKo": "우체통",
+    "exampleSentence": "手紙をポストに入れます。",
+    "exampleTranslation": "편지를 우체통에 넣습니다.",
+    "mnemonicText": "빨간 우체통.",
+    "imageKey": "red",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "手紙",
+        "reading": "てがみ"
+      },
+      {
+        "text": "入れます",
+        "reading": "いれます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_294",
+    "level": "N5",
+    "word": "風邪",
+    "reading": "かぜ",
+    "meaningKo": "감기",
+    "exampleSentence": "風邪をひきました。",
+    "exampleTranslation": "감기에 걸렸습니다.",
+    "mnemonicText": "콧물과 체온계.",
+    "imageKey": "health",
+    "tags": [
+      "명사",
+      "건강"
+    ],
+    "exampleReadings": [
+      {
+        "text": "風邪",
+        "reading": "かぜ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_295",
+    "level": "N5",
+    "word": "気分",
+    "reading": "きぶん",
+    "meaningKo": "기분",
+    "exampleSentence": "今日は気分がいいです。",
+    "exampleTranslation": "오늘은 기분이 좋습니다.",
+    "mnemonicText": "웃는 얼굴.",
+    "imageKey": "fun",
+    "tags": [
+      "명사",
+      "감정"
+    ],
+    "exampleReadings": [
+      {
+        "text": "今日",
+        "reading": "きょう"
+      },
+      {
+        "text": "気分",
+        "reading": "きぶん"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_296",
+    "level": "N5",
+    "word": "心配",
+    "reading": "しんぱい",
+    "meaningKo": "걱정",
+    "exampleSentence": "心配しないでください。",
+    "exampleTranslation": "걱정하지 마세요.",
+    "mnemonicText": "찌푸린 눈썹.",
+    "imageKey": "mind",
+    "tags": [
+      "명사",
+      "감정"
+    ],
+    "exampleReadings": [
+      {
+        "text": "心配",
+        "reading": "しんぱい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_297",
+    "level": "N5",
+    "word": "大丈夫",
+    "reading": "だいじょうぶ",
+    "meaningKo": "괜찮음",
+    "exampleSentence": "大丈夫ですか。",
+    "exampleTranslation": "괜찮습니까?",
+    "mnemonicText": "OK 사인.",
+    "imageKey": "good",
+    "tags": [
+      "표현"
+    ],
+    "exampleReadings": [
+      {
+        "text": "大丈夫",
+        "reading": "だいじょうぶ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_298",
+    "level": "N5",
+    "word": "好き",
+    "reading": "すき",
+    "meaningKo": "좋아함",
+    "exampleSentence": "音楽が好きです。",
+    "exampleTranslation": "음악을 좋아합니다.",
+    "mnemonicText": "하트.",
+    "imageKey": "mind",
+    "tags": [
+      "형용사",
+      "감정"
+    ],
+    "exampleReadings": [
+      {
+        "text": "音楽",
+        "reading": "おんがく"
+      },
+      {
+        "text": "好き",
+        "reading": "すき"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_299",
+    "level": "N5",
+    "word": "嫌い",
+    "reading": "きらい",
+    "meaningKo": "싫어함",
+    "exampleSentence": "野菜が嫌いです。",
+    "exampleTranslation": "채소를 싫어합니다.",
+    "mnemonicText": "X 표시.",
+    "imageKey": "mind",
+    "tags": [
+      "형용사",
+      "감정"
+    ],
+    "exampleReadings": [
+      {
+        "text": "野菜",
+        "reading": "やさい"
+      },
+      {
+        "text": "嫌い",
+        "reading": "きらい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_300",
+    "level": "N5",
+    "word": "大好き",
+    "reading": "だいすき",
+    "meaningKo": "매우 좋아함",
+    "exampleSentence": "母の料理が大好きです。",
+    "exampleTranslation": "어머니의 요리를 매우 좋아합니다.",
+    "mnemonicText": "큰 하트.",
+    "imageKey": "yummy",
+    "tags": [
+      "형용사",
+      "감정"
+    ],
+    "exampleReadings": [
+      {
+        "text": "母",
+        "reading": "はは"
+      },
+      {
+        "text": "料理",
+        "reading": "りょうり"
+      },
+      {
+        "text": "大好き",
+        "reading": "だいすき"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_301",
+    "level": "N5",
+    "word": "昼",
+    "reading": "ひる",
+    "meaningKo": "낮/점심때",
+    "exampleSentence": "昼にパンを食べます。",
+    "exampleTranslation": "점심에 빵을 먹습니다.",
+    "mnemonicText": "정오의 해.",
+    "imageKey": "noon",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "昼",
+        "reading": "ひる"
+      },
+      {
+        "text": "食べます",
+        "reading": "たべます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_302",
+    "level": "N5",
+    "word": "夕方",
+    "reading": "ゆうがた",
+    "meaningKo": "저녁때",
+    "exampleSentence": "夕方に帰ります。",
+    "exampleTranslation": "저녁때 돌아갑니다.",
+    "mnemonicText": "노을.",
+    "imageKey": "evening",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "夕方",
+        "reading": "ゆうがた"
+      },
+      {
+        "text": "帰ります",
+        "reading": "かえります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_303",
+    "level": "N5",
+    "word": "夜中",
+    "reading": "よなか",
+    "meaningKo": "한밤중",
+    "exampleSentence": "夜中に目が覚めました。",
+    "exampleTranslation": "한밤중에 잠이 깼습니다.",
+    "mnemonicText": "깊은 밤.",
+    "imageKey": "night",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "夜中",
+        "reading": "よなか"
+      },
+      {
+        "text": "目",
+        "reading": "め"
+      },
+      {
+        "text": "覚めました",
+        "reading": "さめました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_304",
+    "level": "N5",
+    "word": "週末",
+    "reading": "しゅうまつ",
+    "meaningKo": "주말",
+    "exampleSentence": "週末は家でゆっくりします。",
+    "exampleTranslation": "주말은 집에서 느긋하게 보냅니다.",
+    "mnemonicText": "달력 끝.",
+    "imageKey": "week",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "週末",
+        "reading": "しゅうまつ"
+      },
+      {
+        "text": "家",
+        "reading": "いえ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_305",
+    "level": "N5",
+    "word": "平日",
+    "reading": "へいじつ",
+    "meaningKo": "평일",
+    "exampleSentence": "平日は忙しいです。",
+    "exampleTranslation": "평일은 바쁩니다.",
+    "mnemonicText": "달력 평일.",
+    "imageKey": "calendar",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "平日",
+        "reading": "へいじつ"
+      },
+      {
+        "text": "忙しい",
+        "reading": "いそがしい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_306",
+    "level": "N5",
+    "word": "誕生日",
+    "reading": "たんじょうび",
+    "meaningKo": "생일",
+    "exampleSentence": "明日は妹の誕生日です。",
+    "exampleTranslation": "내일은 여동생의 생일입니다.",
+    "mnemonicText": "케이크와 초.",
+    "imageKey": "cake",
+    "tags": [
+      "명사",
+      "행사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "明日",
+        "reading": "あした"
+      },
+      {
+        "text": "妹",
+        "reading": "いもうと"
+      },
+      {
+        "text": "誕生日",
+        "reading": "たんじょうび"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_307",
+    "level": "N5",
+    "word": "お正月",
+    "reading": "おしょうがつ",
+    "meaningKo": "설날",
+    "exampleSentence": "お正月に家族と会います。",
+    "exampleTranslation": "설날에 가족과 만납니다.",
+    "mnemonicText": "새해 해돋이.",
+    "imageKey": "sun",
+    "tags": [
+      "명사",
+      "행사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "お正月",
+        "reading": "おしょうがつ"
+      },
+      {
+        "text": "家族",
+        "reading": "かぞく"
+      },
+      {
+        "text": "会います",
+        "reading": "あいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_308",
+    "level": "N5",
+    "word": "祭り",
+    "reading": "まつり",
+    "meaningKo": "축제",
+    "exampleSentence": "夏の祭りに行きました。",
+    "exampleTranslation": "여름 축제에 갔습니다.",
+    "mnemonicText": "초롱불.",
+    "imageKey": "party",
+    "tags": [
+      "명사",
+      "행사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "夏",
+        "reading": "なつ"
+      },
+      {
+        "text": "祭り",
+        "reading": "まつり"
+      },
+      {
+        "text": "行きました",
+        "reading": "いきました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_309",
+    "level": "N5",
+    "word": "花見",
+    "reading": "はなみ",
+    "meaningKo": "꽃구경",
+    "exampleSentence": "春に花見をします。",
+    "exampleTranslation": "봄에 꽃구경을 합니다.",
+    "mnemonicText": "벚꽃.",
+    "imageKey": "flower",
+    "tags": [
+      "명사",
+      "행사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "春",
+        "reading": "はる"
+      },
+      {
+        "text": "花見",
+        "reading": "はなみ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_310",
+    "level": "N5",
+    "word": "練習",
+    "reading": "れんしゅう",
+    "meaningKo": "연습",
+    "exampleSentence": "ピアノを練習します。",
+    "exampleTranslation": "피아노를 연습합니다.",
+    "mnemonicText": "반복 화살표.",
+    "imageKey": "music",
+    "tags": [
+      "명사",
+      "학습"
+    ],
+    "exampleReadings": [
+      {
+        "text": "練習",
+        "reading": "れんしゅう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_311",
+    "level": "N5",
+    "word": "復習",
+    "reading": "ふくしゅう",
+    "meaningKo": "복습",
+    "exampleSentence": "家で復習します。",
+    "exampleTranslation": "집에서 복습합니다.",
+    "mnemonicText": "다시 읽기.",
+    "imageKey": "study",
+    "tags": [
+      "명사",
+      "학습"
+    ],
+    "exampleReadings": [
+      {
+        "text": "家",
+        "reading": "いえ"
+      },
+      {
+        "text": "復習",
+        "reading": "ふくしゅう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_312",
+    "level": "N5",
+    "word": "予習",
+    "reading": "よしゅう",
+    "meaningKo": "예습",
+    "exampleSentence": "明日の予習をしました。",
+    "exampleTranslation": "내일 예습을 했습니다.",
+    "mnemonicText": "미리 읽기.",
+    "imageKey": "study",
+    "tags": [
+      "명사",
+      "학습"
+    ],
+    "exampleReadings": [
+      {
+        "text": "明日",
+        "reading": "あした"
+      },
+      {
+        "text": "予習",
+        "reading": "よしゅう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_313",
+    "level": "N5",
+    "word": "次",
+    "reading": "つぎ",
+    "meaningKo": "다음",
+    "exampleSentence": "次のバスに乗ります。",
+    "exampleTranslation": "다음 버스를 탑니다.",
+    "mnemonicText": "다음 화살표.",
+    "imageKey": "arrow",
+    "tags": [
+      "명사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "次",
+        "reading": "つぎ"
+      },
+      {
+        "text": "乗ります",
+        "reading": "のります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_314",
+    "level": "N5",
+    "word": "音",
+    "reading": "おと",
+    "meaningKo": "소리",
+    "exampleSentence": "雨の音が聞こえます。",
+    "exampleTranslation": "빗소리가 들립니다.",
+    "mnemonicText": "음파.",
+    "imageKey": "listen",
+    "tags": [
+      "명사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "雨",
+        "reading": "あめ"
+      },
+      {
+        "text": "音",
+        "reading": "おと"
+      },
+      {
+        "text": "聞こえます",
+        "reading": "きこえます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_315",
+    "level": "N5",
+    "word": "ペン",
+    "reading": "ペン",
+    "meaningKo": "펜",
+    "exampleSentence": "ペンで書いてください。",
+    "exampleTranslation": "펜으로 써 주세요.",
+    "mnemonicText": "펜.",
+    "imageKey": "write",
+    "tags": [
+      "명사",
+      "학교"
+    ],
+    "exampleReadings": [
+      {
+        "text": "書いて",
+        "reading": "かいて"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_316",
+    "level": "N5",
+    "word": "ボールペン",
+    "reading": "ボールペン",
+    "meaningKo": "볼펜",
+    "exampleSentence": "ボールペンを貸してください。",
+    "exampleTranslation": "볼펜을 빌려 주세요.",
+    "mnemonicText": "볼펜.",
+    "imageKey": "write",
+    "tags": [
+      "명사",
+      "학교"
+    ],
+    "exampleReadings": [
+      {
+        "text": "貸して",
+        "reading": "かして"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_317",
+    "level": "N5",
+    "word": "消しゴム",
+    "reading": "けしゴム",
+    "meaningKo": "지우개",
+    "exampleSentence": "消しゴムを使います。",
+    "exampleTranslation": "지우개를 사용합니다.",
+    "mnemonicText": "지우개.",
+    "imageKey": "paper",
+    "tags": [
+      "명사",
+      "학교"
+    ],
+    "exampleReadings": [
+      {
+        "text": "消しゴム",
+        "reading": "けしゴム"
+      },
+      {
+        "text": "使います",
+        "reading": "つかいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_318",
+    "level": "N5",
+    "word": "教科書",
+    "reading": "きょうかしょ",
+    "meaningKo": "교과서",
+    "exampleSentence": "教科書を開いてください。",
+    "exampleTranslation": "교과서를 펴 주세요.",
+    "mnemonicText": "펼친 책.",
+    "imageKey": "book",
+    "tags": [
+      "명사",
+      "학교"
+    ],
+    "exampleReadings": [
+      {
+        "text": "教科書",
+        "reading": "きょうかしょ"
+      },
+      {
+        "text": "開いて",
+        "reading": "ひらいて"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_319",
+    "level": "N5",
+    "word": "黒板",
+    "reading": "こくばん",
+    "meaningKo": "칠판",
+    "exampleSentence": "黒板を見てください。",
+    "exampleTranslation": "칠판을 봐 주세요.",
+    "mnemonicText": "칠판과 분필.",
+    "imageKey": "classroom",
+    "tags": [
+      "명사",
+      "학교"
+    ],
+    "exampleReadings": [
+      {
+        "text": "黒板",
+        "reading": "こくばん"
+      },
+      {
+        "text": "見て",
+        "reading": "みて"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_320",
+    "level": "N5",
+    "word": "問題",
+    "reading": "もんだい",
+    "meaningKo": "문제",
+    "exampleSentence": "この問題は易しいです。",
+    "exampleTranslation": "이 문제는 쉽습니다.",
+    "mnemonicText": "물음표.",
+    "imageKey": "question",
+    "tags": [
+      "명사",
+      "학교"
+    ],
+    "exampleReadings": [
+      {
+        "text": "問題",
+        "reading": "もんだい"
+      },
+      {
+        "text": "易しい",
+        "reading": "やさしい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_321",
+    "level": "N5",
+    "word": "テスト",
+    "reading": "テスト",
+    "meaningKo": "시험(테스트)",
+    "exampleSentence": "明日テストがあります。",
+    "exampleTranslation": "내일 시험이 있습니다.",
+    "mnemonicText": "시험지.",
+    "imageKey": "exam",
+    "tags": [
+      "명사",
+      "학교"
+    ],
+    "exampleReadings": [
+      {
+        "text": "明日",
+        "reading": "あした"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_322",
+    "level": "N5",
+    "word": "クラス",
+    "reading": "クラス",
+    "meaningKo": "반(학급)",
+    "exampleSentence": "クラスに学生が二十人います。",
+    "exampleTranslation": "반에 학생이 20명 있습니다.",
+    "mnemonicText": "교실.",
+    "imageKey": "classroom",
+    "tags": [
+      "명사",
+      "학교"
+    ],
+    "exampleReadings": [
+      {
+        "text": "学生",
+        "reading": "がくせい"
+      },
+      {
+        "text": "二十人",
+        "reading": "にじゅうにん"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_323",
+    "level": "N5",
+    "word": "休み",
+    "reading": "やすみ",
+    "meaningKo": "휴일/쉼",
+    "exampleSentence": "日曜日は休みです。",
+    "exampleTranslation": "일요일은 휴일입니다.",
+    "mnemonicText": "휴식 의자.",
+    "imageKey": "chair",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "日曜日",
+        "reading": "にちようび"
+      },
+      {
+        "text": "休み",
+        "reading": "やすみ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_324",
+    "level": "N5",
+    "word": "夏休み",
+    "reading": "なつやすみ",
+    "meaningKo": "여름방학",
+    "exampleSentence": "夏休みは七月からです。",
+    "exampleTranslation": "여름방학은 7월부터입니다.",
+    "mnemonicText": "해변.",
+    "imageKey": "sea",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "夏休み",
+        "reading": "なつやすみ"
+      },
+      {
+        "text": "七月",
+        "reading": "しちがつ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_325",
+    "level": "N5",
+    "word": "冬休み",
+    "reading": "ふゆやすみ",
+    "meaningKo": "겨울방학",
+    "exampleSentence": "冬休みは短いです。",
+    "exampleTranslation": "겨울방학은 짧습니다.",
+    "mnemonicText": "눈사람.",
+    "imageKey": "winter",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "冬休み",
+        "reading": "ふゆやすみ"
+      },
+      {
+        "text": "短い",
+        "reading": "みじかい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_326",
+    "level": "N5",
+    "word": "春",
+    "reading": "はる",
+    "meaningKo": "봄",
+    "exampleSentence": "日本の春はきれいです。",
+    "exampleTranslation": "일본의 봄은 아름답습니다.",
+    "mnemonicText": "새싹.",
+    "imageKey": "flower",
+    "tags": [
+      "명사",
+      "계절"
+    ],
+    "exampleReadings": [
+      {
+        "text": "日本",
+        "reading": "にほん"
+      },
+      {
+        "text": "春",
+        "reading": "はる"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_327",
+    "level": "N5",
+    "word": "秋",
+    "reading": "あき",
+    "meaningKo": "가을",
+    "exampleSentence": "秋に旅行へ行きます。",
+    "exampleTranslation": "가을에 여행을 갑니다.",
+    "mnemonicText": "단풍잎.",
+    "imageKey": "tree",
+    "tags": [
+      "명사",
+      "계절"
+    ],
+    "exampleReadings": [
+      {
+        "text": "秋",
+        "reading": "あき"
+      },
+      {
+        "text": "旅行",
+        "reading": "りょこう"
+      },
+      {
+        "text": "行きます",
+        "reading": "いきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_328",
+    "level": "N5",
+    "word": "前",
+    "reading": "まえ",
+    "meaningKo": "앞",
+    "exampleSentence": "駅の前で待ちます。",
+    "exampleTranslation": "역 앞에서 기다립니다.",
+    "mnemonicText": "앞 화살표.",
+    "imageKey": "arrow",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "駅",
+        "reading": "えき"
+      },
+      {
+        "text": "前",
+        "reading": "まえ"
+      },
+      {
+        "text": "待ちます",
+        "reading": "まちます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_329",
+    "level": "N5",
+    "word": "右",
+    "reading": "みぎ",
+    "meaningKo": "오른쪽",
+    "exampleSentence": "右に曲がってください。",
+    "exampleTranslation": "오른쪽으로 돌아 주세요.",
+    "mnemonicText": "오른쪽 화살표.",
+    "imageKey": "arrow",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "右",
+        "reading": "みぎ"
+      },
+      {
+        "text": "曲がって",
+        "reading": "まがって"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_330",
+    "level": "N5",
+    "word": "左",
+    "reading": "ひだり",
+    "meaningKo": "왼쪽",
+    "exampleSentence": "左に銀行があります。",
+    "exampleTranslation": "왼쪽에 은행이 있습니다.",
+    "mnemonicText": "왼쪽 화살표.",
+    "imageKey": "arrow",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "左",
+        "reading": "ひだり"
+      },
+      {
+        "text": "銀行",
+        "reading": "ぎんこう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_331",
+    "level": "N5",
+    "word": "東",
+    "reading": "ひがし",
+    "meaningKo": "동쪽",
+    "exampleSentence": "東の空が明るいです。",
+    "exampleTranslation": "동쪽 하늘이 밝습니다.",
+    "mnemonicText": "해 뜨는 곳.",
+    "imageKey": "sun",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "東",
+        "reading": "ひがし"
+      },
+      {
+        "text": "空",
+        "reading": "そら"
+      },
+      {
+        "text": "明るい",
+        "reading": "あかるい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_332",
+    "level": "N5",
+    "word": "西",
+    "reading": "にし",
+    "meaningKo": "서쪽",
+    "exampleSentence": "西の海がきれいです。",
+    "exampleTranslation": "서쪽 바다가 아름답습니다.",
+    "mnemonicText": "해 지는 곳.",
+    "imageKey": "evening",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "西",
+        "reading": "にし"
+      },
+      {
+        "text": "海",
+        "reading": "うみ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_333",
+    "level": "N5",
+    "word": "南",
+    "reading": "みなみ",
+    "meaningKo": "남쪽",
+    "exampleSentence": "南の島は暑いです。",
+    "exampleTranslation": "남쪽 섬은 덥습니다.",
+    "mnemonicText": "야자수.",
+    "imageKey": "hot",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "南",
+        "reading": "みなみ"
+      },
+      {
+        "text": "島",
+        "reading": "しま"
+      },
+      {
+        "text": "暑い",
+        "reading": "あつい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_334",
+    "level": "N5",
+    "word": "北",
+    "reading": "きた",
+    "meaningKo": "북쪽",
+    "exampleSentence": "北の冬は寒いです。",
+    "exampleTranslation": "북쪽의 겨울은 춥습니다.",
+    "mnemonicText": "눈 내린 산.",
+    "imageKey": "snow",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "北",
+        "reading": "きた"
+      },
+      {
+        "text": "冬",
+        "reading": "ふゆ"
+      },
+      {
+        "text": "寒い",
+        "reading": "さむい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_335",
+    "level": "N5",
+    "word": "外",
+    "reading": "そと",
+    "meaningKo": "밖",
+    "exampleSentence": "外で遊びます。",
+    "exampleTranslation": "밖에서 놉니다.",
+    "mnemonicText": "문 밖.",
+    "imageKey": "exit",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "外",
+        "reading": "そと"
+      },
+      {
+        "text": "遊びます",
+        "reading": "あそびます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_336",
+    "level": "N5",
+    "word": "交差点",
+    "reading": "こうさてん",
+    "meaningKo": "교차로",
+    "exampleSentence": "交差点を渡ります。",
+    "exampleTranslation": "교차로를 건넙니다.",
+    "mnemonicText": "사거리.",
+    "imageKey": "street",
+    "tags": [
+      "명사",
+      "교통"
+    ],
+    "exampleReadings": [
+      {
+        "text": "交差点",
+        "reading": "こうさてん"
+      },
+      {
+        "text": "渡ります",
+        "reading": "わたります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_337",
+    "level": "N5",
+    "word": "橋",
+    "reading": "はし",
+    "meaningKo": "다리(교량)",
+    "exampleSentence": "橋の上から川を見ます。",
+    "exampleTranslation": "다리 위에서 강을 봅니다.",
+    "mnemonicText": "아치형 다리.",
+    "imageKey": "river",
+    "tags": [
+      "명사",
+      "교통"
+    ],
+    "exampleReadings": [
+      {
+        "text": "橋",
+        "reading": "はし"
+      },
+      {
+        "text": "上",
+        "reading": "うえ"
+      },
+      {
+        "text": "川",
+        "reading": "かわ"
+      },
+      {
+        "text": "見ます",
+        "reading": "みます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_338",
+    "level": "N5",
+    "word": "角",
+    "reading": "かど",
+    "meaningKo": "모퉁이",
+    "exampleSentence": "角の店でパンを買います。",
+    "exampleTranslation": "모퉁이 가게에서 빵을 삽니다.",
+    "mnemonicText": "길모퉁이.",
+    "imageKey": "street",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "角",
+        "reading": "かど"
+      },
+      {
+        "text": "店",
+        "reading": "みせ"
+      },
+      {
+        "text": "買います",
+        "reading": "かいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_339",
+    "level": "N5",
+    "word": "近く",
+    "reading": "ちかく",
+    "meaningKo": "근처",
+    "exampleSentence": "近くに公園があります。",
+    "exampleTranslation": "근처에 공원이 있습니다.",
+    "mnemonicText": "가까운 거리.",
+    "imageKey": "map",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "近く",
+        "reading": "ちかく"
+      },
+      {
+        "text": "公園",
+        "reading": "こうえん"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_340",
+    "level": "N5",
+    "word": "遠く",
+    "reading": "とおく",
+    "meaningKo": "멀리",
+    "exampleSentence": "遠くに山が見えます。",
+    "exampleTranslation": "멀리 산이 보입니다.",
+    "mnemonicText": "먼 산.",
+    "imageKey": "mountain",
+    "tags": [
+      "명사",
+      "위치"
+    ],
+    "exampleReadings": [
+      {
+        "text": "遠く",
+        "reading": "とおく"
+      },
+      {
+        "text": "山",
+        "reading": "やま"
+      },
+      {
+        "text": "見えます",
+        "reading": "みえます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_341",
+    "level": "N5",
+    "word": "朝ご飯",
+    "reading": "あさごはん",
+    "meaningKo": "아침밥",
+    "exampleSentence": "朝ご飯にパンを食べます。",
+    "exampleTranslation": "아침밥으로 빵을 먹습니다.",
+    "mnemonicText": "아침 식탁.",
+    "imageKey": "bread",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "朝ご飯",
+        "reading": "あさごはん"
+      },
+      {
+        "text": "食べます",
+        "reading": "たべます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_342",
+    "level": "N5",
+    "word": "昼ご飯",
+    "reading": "ひるごはん",
+    "meaningKo": "점심밥",
+    "exampleSentence": "昼ご飯は何ですか。",
+    "exampleTranslation": "점심밥은 무엇입니까?",
+    "mnemonicText": "점심 도시락.",
+    "imageKey": "rice",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "昼ご飯",
+        "reading": "ひるごはん"
+      },
+      {
+        "text": "何",
+        "reading": "なん"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_343",
+    "level": "N5",
+    "word": "晩ご飯",
+    "reading": "ばんごはん",
+    "meaningKo": "저녁밥",
+    "exampleSentence": "晩ご飯を作ります。",
+    "exampleTranslation": "저녁밥을 만듭니다.",
+    "mnemonicText": "저녁 식탁.",
+    "imageKey": "rice",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "晩ご飯",
+        "reading": "ばんごはん"
+      },
+      {
+        "text": "作ります",
+        "reading": "つくります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_344",
+    "level": "N5",
+    "word": "りんご",
+    "reading": "りんご",
+    "meaningKo": "사과",
+    "exampleSentence": "赤いりんごを食べます。",
+    "exampleTranslation": "빨간 사과를 먹습니다.",
+    "mnemonicText": "빨간 사과.",
+    "imageKey": "fruit",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "赤い",
+        "reading": "あかい"
+      },
+      {
+        "text": "食べます",
+        "reading": "たべます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_345",
+    "level": "N5",
+    "word": "みかん",
+    "reading": "みかん",
+    "meaningKo": "귤",
+    "exampleSentence": "みかんは甘いです。",
+    "exampleTranslation": "귤은 답니다.",
+    "mnemonicText": "주황 귤.",
+    "imageKey": "fruit",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "甘い",
+        "reading": "あまい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_346",
+    "level": "N5",
+    "word": "バナナ",
+    "reading": "バナナ",
+    "meaningKo": "바나나",
+    "exampleSentence": "朝バナナを食べます。",
+    "exampleTranslation": "아침에 바나나를 먹습니다.",
+    "mnemonicText": "노란 바나나.",
+    "imageKey": "fruit",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "朝",
+        "reading": "あさ"
+      },
+      {
+        "text": "食べます",
+        "reading": "たべます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_347",
+    "level": "N5",
+    "word": "いちご",
+    "reading": "いちご",
+    "meaningKo": "딸기",
+    "exampleSentence": "いちごのケーキが好きです。",
+    "exampleTranslation": "딸기 케이크를 좋아합니다.",
+    "mnemonicText": "딸기.",
+    "imageKey": "cake",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "好き",
+        "reading": "すき"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_348",
+    "level": "N5",
+    "word": "トマト",
+    "reading": "トマト",
+    "meaningKo": "토마토",
+    "exampleSentence": "トマトは野菜です。",
+    "exampleTranslation": "토마토는 채소입니다.",
+    "mnemonicText": "빨간 토마토.",
+    "imageKey": "vegetable",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "野菜",
+        "reading": "やさい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_349",
+    "level": "N5",
+    "word": "塩",
+    "reading": "しお",
+    "meaningKo": "소금",
+    "exampleSentence": "塩を少し入れます。",
+    "exampleTranslation": "소금을 조금 넣습니다.",
+    "mnemonicText": "소금통.",
+    "imageKey": "kitchen",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "塩",
+        "reading": "しお"
+      },
+      {
+        "text": "少し",
+        "reading": "すこし"
+      },
+      {
+        "text": "入れます",
+        "reading": "いれます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_350",
+    "level": "N5",
+    "word": "砂糖",
+    "reading": "さとう",
+    "meaningKo": "설탕",
+    "exampleSentence": "コーヒーに砂糖を入れます。",
+    "exampleTranslation": "커피에 설탕을 넣습니다.",
+    "mnemonicText": "각설탕.",
+    "imageKey": "coffee",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "砂糖",
+        "reading": "さとう"
+      },
+      {
+        "text": "入れます",
+        "reading": "いれます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_351",
+    "level": "N5",
+    "word": "お菓子",
+    "reading": "おかし",
+    "meaningKo": "과자",
+    "exampleSentence": "子供にお菓子をあげます。",
+    "exampleTranslation": "아이에게 과자를 줍니다.",
+    "mnemonicText": "과자 봉지.",
+    "imageKey": "yummy",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "子供",
+        "reading": "こども"
+      },
+      {
+        "text": "お菓子",
+        "reading": "おかし"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_352",
+    "level": "N5",
+    "word": "飴",
+    "reading": "あめ",
+    "meaningKo": "사탕",
+    "exampleSentence": "飴を一つください。",
+    "exampleTranslation": "사탕을 한 개 주세요.",
+    "mnemonicText": "막대사탕.",
+    "imageKey": "yummy",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "飴",
+        "reading": "あめ"
+      },
+      {
+        "text": "一つ",
+        "reading": "ひとつ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_353",
+    "level": "N5",
+    "word": "チョコレート",
+    "reading": "チョコレート",
+    "meaningKo": "초콜릿",
+    "exampleSentence": "チョコレートが大好きです。",
+    "exampleTranslation": "초콜릿을 매우 좋아합니다.",
+    "mnemonicText": "초콜릿 조각.",
+    "imageKey": "yummy",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "大好き",
+        "reading": "だいすき"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_354",
+    "level": "N5",
+    "word": "アイスクリーム",
+    "reading": "アイスクリーム",
+    "meaningKo": "아이스크림",
+    "exampleSentence": "夏にアイスクリームを食べます。",
+    "exampleTranslation": "여름에 아이스크림을 먹습니다.",
+    "mnemonicText": "아이스크림 콘.",
+    "imageKey": "summer",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "夏",
+        "reading": "なつ"
+      },
+      {
+        "text": "食べます",
+        "reading": "たべます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_355",
+    "level": "N5",
+    "word": "紅茶",
+    "reading": "こうちゃ",
+    "meaningKo": "홍차",
+    "exampleSentence": "紅茶を飲みますか。",
+    "exampleTranslation": "홍차를 마시겠습니까?",
+    "mnemonicText": "찻잔.",
+    "imageKey": "tea",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "紅茶",
+        "reading": "こうちゃ"
+      },
+      {
+        "text": "飲みます",
+        "reading": "のみます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_356",
+    "level": "N5",
+    "word": "おにぎり",
+    "reading": "おにぎり",
+    "meaningKo": "주먹밥",
+    "exampleSentence": "おにぎりを二つ買いました。",
+    "exampleTranslation": "주먹밥을 두 개 샀습니다.",
+    "mnemonicText": "삼각 주먹밥.",
+    "imageKey": "rice",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "二つ",
+        "reading": "ふたつ"
+      },
+      {
+        "text": "買いました",
+        "reading": "かいました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_357",
+    "level": "N5",
+    "word": "うどん",
+    "reading": "うどん",
+    "meaningKo": "우동",
+    "exampleSentence": "昼にうどんを食べました。",
+    "exampleTranslation": "점심에 우동을 먹었습니다.",
+    "mnemonicText": "우동 그릇.",
+    "imageKey": "ramen",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "昼",
+        "reading": "ひる"
+      },
+      {
+        "text": "食べました",
+        "reading": "たべました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_358",
+    "level": "N5",
+    "word": "牛肉",
+    "reading": "ぎゅうにく",
+    "meaningKo": "소고기",
+    "exampleSentence": "牛肉を買います。",
+    "exampleTranslation": "소고기를 삽니다.",
+    "mnemonicText": "고기 조각.",
+    "imageKey": "meat",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "牛肉",
+        "reading": "ぎゅうにく"
+      },
+      {
+        "text": "買います",
+        "reading": "かいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_359",
+    "level": "N5",
+    "word": "豚肉",
+    "reading": "ぶたにく",
+    "meaningKo": "돼지고기",
+    "exampleSentence": "豚肉の料理を作ります。",
+    "exampleTranslation": "돼지고기 요리를 만듭니다.",
+    "mnemonicText": "고기 요리.",
+    "imageKey": "meat",
+    "tags": [
+      "명사",
+      "음식"
+    ],
+    "exampleReadings": [
+      {
+        "text": "豚肉",
+        "reading": "ぶたにく"
+      },
+      {
+        "text": "料理",
+        "reading": "りょうり"
+      },
+      {
+        "text": "作ります",
+        "reading": "つくります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_360",
+    "level": "N5",
+    "word": "喫茶店",
+    "reading": "きっさてん",
+    "meaningKo": "찻집/카페",
+    "exampleSentence": "喫茶店でコーヒーを飲みます。",
+    "exampleTranslation": "찻집에서 커피를 마십니다.",
+    "mnemonicText": "커피잔 간판.",
+    "imageKey": "coffee",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "喫茶店",
+        "reading": "きっさてん"
+      },
+      {
+        "text": "飲みます",
+        "reading": "のみます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_361",
+    "level": "N5",
+    "word": "本屋",
+    "reading": "ほんや",
+    "meaningKo": "서점",
+    "exampleSentence": "本屋で雑誌を買います。",
+    "exampleTranslation": "서점에서 잡지를 삽니다.",
+    "mnemonicText": "책 진열대.",
+    "imageKey": "book",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "本屋",
+        "reading": "ほんや"
+      },
+      {
+        "text": "雑誌",
+        "reading": "ざっし"
+      },
+      {
+        "text": "買います",
+        "reading": "かいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_362",
+    "level": "N5",
+    "word": "八百屋",
+    "reading": "やおや",
+    "meaningKo": "채소 가게",
+    "exampleSentence": "八百屋で野菜を買います。",
+    "exampleTranslation": "채소 가게에서 채소를 삽니다.",
+    "mnemonicText": "채소 가판.",
+    "imageKey": "vegetable",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "八百屋",
+        "reading": "やおや"
+      },
+      {
+        "text": "野菜",
+        "reading": "やさい"
+      },
+      {
+        "text": "買います",
+        "reading": "かいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_363",
+    "level": "N5",
+    "word": "パン屋",
+    "reading": "パンや",
+    "meaningKo": "빵집",
+    "exampleSentence": "パン屋はあの角にあります。",
+    "exampleTranslation": "빵집은 저 모퉁이에 있습니다.",
+    "mnemonicText": "빵 진열.",
+    "imageKey": "bread",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "パン屋",
+        "reading": "パンや"
+      },
+      {
+        "text": "角",
+        "reading": "かど"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_364",
+    "level": "N5",
+    "word": "花屋",
+    "reading": "はなや",
+    "meaningKo": "꽃집",
+    "exampleSentence": "花屋で花を買いました。",
+    "exampleTranslation": "꽃집에서 꽃을 샀습니다.",
+    "mnemonicText": "꽃다발.",
+    "imageKey": "flower",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "花屋",
+        "reading": "はなや"
+      },
+      {
+        "text": "花",
+        "reading": "はな"
+      },
+      {
+        "text": "買いました",
+        "reading": "かいました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_365",
+    "level": "N5",
+    "word": "交番",
+    "reading": "こうばん",
+    "meaningKo": "파출소",
+    "exampleSentence": "交番で道を聞きます。",
+    "exampleTranslation": "파출소에서 길을 묻습니다.",
+    "mnemonicText": "경찰 표지.",
+    "imageKey": "street",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "交番",
+        "reading": "こうばん"
+      },
+      {
+        "text": "道",
+        "reading": "みち"
+      },
+      {
+        "text": "聞きます",
+        "reading": "ききます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_366",
+    "level": "N5",
+    "word": "動物園",
+    "reading": "どうぶつえん",
+    "meaningKo": "동물원",
+    "exampleSentence": "動物園でパンダを見ました。",
+    "exampleTranslation": "동물원에서 판다를 봤습니다.",
+    "mnemonicText": "동물 우리.",
+    "imageKey": "animal",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "動物園",
+        "reading": "どうぶつえん"
+      },
+      {
+        "text": "見ました",
+        "reading": "みました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_367",
+    "level": "N5",
+    "word": "映画館",
+    "reading": "えいがかん",
+    "meaningKo": "영화관",
+    "exampleSentence": "映画館は駅の前です。",
+    "exampleTranslation": "영화관은 역 앞입니다.",
+    "mnemonicText": "스크린.",
+    "imageKey": "movie",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "映画館",
+        "reading": "えいがかん"
+      },
+      {
+        "text": "駅",
+        "reading": "えき"
+      },
+      {
+        "text": "前",
+        "reading": "まえ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_368",
+    "level": "N5",
+    "word": "プール",
+    "reading": "プール",
+    "meaningKo": "수영장",
+    "exampleSentence": "夏はプールで泳ぎます。",
+    "exampleTranslation": "여름에는 수영장에서 헤엄칩니다.",
+    "mnemonicText": "수영장 물.",
+    "imageKey": "swim",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "夏",
+        "reading": "なつ"
+      },
+      {
+        "text": "泳ぎます",
+        "reading": "およぎます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_369",
+    "level": "N5",
+    "word": "ホテル",
+    "reading": "ホテル",
+    "meaningKo": "호텔",
+    "exampleSentence": "駅の近くのホテルに泊まります。",
+    "exampleTranslation": "역 근처 호텔에 묵습니다.",
+    "mnemonicText": "호텔 건물.",
+    "imageKey": "house",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "駅",
+        "reading": "えき"
+      },
+      {
+        "text": "近く",
+        "reading": "ちかく"
+      },
+      {
+        "text": "泊まります",
+        "reading": "とまります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_370",
+    "level": "N5",
+    "word": "神社",
+    "reading": "じんじゃ",
+    "meaningKo": "신사",
+    "exampleSentence": "お正月に神社へ行きます。",
+    "exampleTranslation": "설날에 신사에 갑니다.",
+    "mnemonicText": "신사 문.",
+    "imageKey": "travel",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "お正月",
+        "reading": "おしょうがつ"
+      },
+      {
+        "text": "神社",
+        "reading": "じんじゃ"
+      },
+      {
+        "text": "行きます",
+        "reading": "いきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_371",
+    "level": "N5",
+    "word": "お寺",
+    "reading": "おてら",
+    "meaningKo": "절",
+    "exampleSentence": "京都のお寺を見ました。",
+    "exampleTranslation": "교토의 절을 구경했습니다.",
+    "mnemonicText": "절 지붕.",
+    "imageKey": "travel",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "京都",
+        "reading": "きょうと"
+      },
+      {
+        "text": "お寺",
+        "reading": "おてら"
+      },
+      {
+        "text": "見ました",
+        "reading": "みました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_372",
+    "level": "N5",
+    "word": "美術館",
+    "reading": "びじゅつかん",
+    "meaningKo": "미술관",
+    "exampleSentence": "美術館で絵を見ます。",
+    "exampleTranslation": "미술관에서 그림을 봅니다.",
+    "mnemonicText": "액자 그림.",
+    "imageKey": "art",
+    "tags": [
+      "명사",
+      "장소"
+    ],
+    "exampleReadings": [
+      {
+        "text": "美術館",
+        "reading": "びじゅつかん"
+      },
+      {
+        "text": "絵",
+        "reading": "え"
+      },
+      {
+        "text": "見ます",
+        "reading": "みます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_373",
+    "level": "N5",
+    "word": "天気",
+    "reading": "てんき",
+    "meaningKo": "날씨",
+    "exampleSentence": "今日はいい天気です。",
+    "exampleTranslation": "오늘은 좋은 날씨입니다.",
+    "mnemonicText": "해와 구름.",
+    "imageKey": "sunny",
+    "tags": [
+      "명사",
+      "자연"
+    ],
+    "exampleReadings": [
+      {
+        "text": "今日",
+        "reading": "きょう"
+      },
+      {
+        "text": "天気",
+        "reading": "てんき"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_374",
+    "level": "N5",
+    "word": "台風",
+    "reading": "たいふう",
+    "meaningKo": "태풍",
+    "exampleSentence": "台風が来ています。",
+    "exampleTranslation": "태풍이 오고 있습니다.",
+    "mnemonicText": "소용돌이.",
+    "imageKey": "weather",
+    "tags": [
+      "명사",
+      "자연"
+    ],
+    "exampleReadings": [
+      {
+        "text": "台風",
+        "reading": "たいふう"
+      },
+      {
+        "text": "来て",
+        "reading": "きて"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_375",
+    "level": "N5",
+    "word": "雲",
+    "reading": "くも",
+    "meaningKo": "구름",
+    "exampleSentence": "白い雲が見えます。",
+    "exampleTranslation": "하얀 구름이 보입니다.",
+    "mnemonicText": "뭉게구름.",
+    "imageKey": "cloudy",
+    "tags": [
+      "명사",
+      "자연"
+    ],
+    "exampleReadings": [
+      {
+        "text": "白い",
+        "reading": "しろい"
+      },
+      {
+        "text": "雲",
+        "reading": "くも"
+      },
+      {
+        "text": "見えます",
+        "reading": "みえます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_376",
+    "level": "N5",
+    "word": "森",
+    "reading": "もり",
+    "meaningKo": "숲",
+    "exampleSentence": "森の中を歩きます。",
+    "exampleTranslation": "숲 속을 걷습니다.",
+    "mnemonicText": "울창한 나무.",
+    "imageKey": "tree",
+    "tags": [
+      "명사",
+      "자연"
+    ],
+    "exampleReadings": [
+      {
+        "text": "森",
+        "reading": "もり"
+      },
+      {
+        "text": "中",
+        "reading": "なか"
+      },
+      {
+        "text": "歩きます",
+        "reading": "あるきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_377",
+    "level": "N5",
+    "word": "島",
+    "reading": "しま",
+    "meaningKo": "섬",
+    "exampleSentence": "小さい島に住んでいます。",
+    "exampleTranslation": "작은 섬에 살고 있습니다.",
+    "mnemonicText": "바다 위 섬.",
+    "imageKey": "sea",
+    "tags": [
+      "명사",
+      "자연"
+    ],
+    "exampleReadings": [
+      {
+        "text": "小さい",
+        "reading": "ちいさい"
+      },
+      {
+        "text": "島",
+        "reading": "しま"
+      },
+      {
+        "text": "住んで",
+        "reading": "すんで"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_378",
+    "level": "N5",
+    "word": "湖",
+    "reading": "みずうみ",
+    "meaningKo": "호수",
+    "exampleSentence": "湖で写真を撮りました。",
+    "exampleTranslation": "호수에서 사진을 찍었습니다.",
+    "mnemonicText": "잔잔한 호수.",
+    "imageKey": "pond",
+    "tags": [
+      "명사",
+      "자연"
+    ],
+    "exampleReadings": [
+      {
+        "text": "湖",
+        "reading": "みずうみ"
+      },
+      {
+        "text": "写真",
+        "reading": "しゃしん"
+      },
+      {
+        "text": "撮りました",
+        "reading": "とりました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_379",
+    "level": "N5",
+    "word": "空気",
+    "reading": "くうき",
+    "meaningKo": "공기",
+    "exampleSentence": "山の空気はきれいです。",
+    "exampleTranslation": "산 공기는 깨끗합니다.",
+    "mnemonicText": "맑은 공기.",
+    "imageKey": "mountain",
+    "tags": [
+      "명사",
+      "자연"
+    ],
+    "exampleReadings": [
+      {
+        "text": "山",
+        "reading": "やま"
+      },
+      {
+        "text": "空気",
+        "reading": "くうき"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_380",
+    "level": "N5",
+    "word": "鳥",
+    "reading": "とり",
+    "meaningKo": "새",
+    "exampleSentence": "鳥が空を飛んでいます。",
+    "exampleTranslation": "새가 하늘을 날고 있습니다.",
+    "mnemonicText": "날아가는 새.",
+    "imageKey": "animal",
+    "tags": [
+      "명사",
+      "동물"
+    ],
+    "exampleReadings": [
+      {
+        "text": "鳥",
+        "reading": "とり"
+      },
+      {
+        "text": "空",
+        "reading": "そら"
+      },
+      {
+        "text": "飛んで",
+        "reading": "とんで"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_381",
+    "level": "N5",
+    "word": "馬",
+    "reading": "うま",
+    "meaningKo": "말(동물)",
+    "exampleSentence": "馬は速いです。",
+    "exampleTranslation": "말은 빠릅니다.",
+    "mnemonicText": "달리는 말.",
+    "imageKey": "animal",
+    "tags": [
+      "명사",
+      "동물"
+    ],
+    "exampleReadings": [
+      {
+        "text": "馬",
+        "reading": "うま"
+      },
+      {
+        "text": "速い",
+        "reading": "はやい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_382",
+    "level": "N5",
+    "word": "牛",
+    "reading": "うし",
+    "meaningKo": "소",
+    "exampleSentence": "牛が草を食べています。",
+    "exampleTranslation": "소가 풀을 먹고 있습니다.",
+    "mnemonicText": "풀밭의 소.",
+    "imageKey": "animal",
+    "tags": [
+      "명사",
+      "동물"
+    ],
+    "exampleReadings": [
+      {
+        "text": "牛",
+        "reading": "うし"
+      },
+      {
+        "text": "草",
+        "reading": "くさ"
+      },
+      {
+        "text": "食べて",
+        "reading": "たべて"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_383",
+    "level": "N5",
+    "word": "色",
+    "reading": "いろ",
+    "meaningKo": "색",
+    "exampleSentence": "どの色が好きですか。",
+    "exampleTranslation": "어느 색을 좋아합니까?",
+    "mnemonicText": "팔레트.",
+    "imageKey": "art",
+    "tags": [
+      "명사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "色",
+        "reading": "いろ"
+      },
+      {
+        "text": "好き",
+        "reading": "すき"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_384",
+    "level": "N5",
+    "word": "茶色",
+    "reading": "ちゃいろ",
+    "meaningKo": "갈색",
+    "exampleSentence": "茶色のかばんです。",
+    "exampleTranslation": "갈색 가방입니다.",
+    "mnemonicText": "갈색 견본.",
+    "imageKey": "art",
+    "tags": [
+      "명사",
+      "색"
+    ],
+    "exampleReadings": [
+      {
+        "text": "茶色",
+        "reading": "ちゃいろ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_385",
+    "level": "N5",
+    "word": "緑",
+    "reading": "みどり",
+    "meaningKo": "초록",
+    "exampleSentence": "緑の山がきれいです。",
+    "exampleTranslation": "초록 산이 아름답습니다.",
+    "mnemonicText": "초록 잎.",
+    "imageKey": "grass",
+    "tags": [
+      "명사",
+      "색"
+    ],
+    "exampleReadings": [
+      {
+        "text": "緑",
+        "reading": "みどり"
+      },
+      {
+        "text": "山",
+        "reading": "やま"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_386",
+    "level": "N5",
+    "word": "会う",
+    "reading": "あう",
+    "meaningKo": "만나다",
+    "exampleSentence": "駅で友だちに会います。",
+    "exampleTranslation": "역에서 친구를 만납니다.",
+    "mnemonicText": "악수하는 두 사람.",
+    "imageKey": "person",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "駅",
+        "reading": "えき"
+      },
+      {
+        "text": "友だち",
+        "reading": "ともだち"
+      },
+      {
+        "text": "会います",
+        "reading": "あいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_387",
+    "level": "N5",
+    "word": "着る",
+    "reading": "きる",
+    "meaningKo": "입다",
+    "exampleSentence": "コートを着ます。",
+    "exampleTranslation": "코트를 입습니다.",
+    "mnemonicText": "옷 입기.",
+    "imageKey": "person",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "着ます",
+        "reading": "きます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_388",
+    "level": "N5",
+    "word": "脱ぐ",
+    "reading": "ぬぐ",
+    "meaningKo": "벗다",
+    "exampleSentence": "ここで靴を脱いでください。",
+    "exampleTranslation": "여기서 신발을 벗어 주세요.",
+    "mnemonicText": "벗은 신발.",
+    "imageKey": "door",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "靴",
+        "reading": "くつ"
+      },
+      {
+        "text": "脱いで",
+        "reading": "ぬいで"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_389",
+    "level": "N5",
+    "word": "履く",
+    "reading": "はく",
+    "meaningKo": "신다",
+    "exampleSentence": "新しい靴を履きます。",
+    "exampleTranslation": "새 신발을 신습니다.",
+    "mnemonicText": "신발 신기.",
+    "imageKey": "foot",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "新しい",
+        "reading": "あたらしい"
+      },
+      {
+        "text": "靴",
+        "reading": "くつ"
+      },
+      {
+        "text": "履きます",
+        "reading": "はきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_390",
+    "level": "N5",
+    "word": "洗う",
+    "reading": "あらう",
+    "meaningKo": "씻다",
+    "exampleSentence": "手を洗ってください。",
+    "exampleTranslation": "손을 씻어 주세요.",
+    "mnemonicText": "비누 거품 손.",
+    "imageKey": "water",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "手",
+        "reading": "て"
+      },
+      {
+        "text": "洗って",
+        "reading": "あらって"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_391",
+    "level": "N5",
+    "word": "磨く",
+    "reading": "みがく",
+    "meaningKo": "닦다",
+    "exampleSentence": "歯を磨きます。",
+    "exampleTranslation": "이를 닦습니다.",
+    "mnemonicText": "칫솔.",
+    "imageKey": "bathroom",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "歯",
+        "reading": "は"
+      },
+      {
+        "text": "磨きます",
+        "reading": "みがきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_392",
+    "level": "N5",
+    "word": "掃除",
+    "reading": "そうじ",
+    "meaningKo": "청소",
+    "exampleSentence": "部屋を掃除します。",
+    "exampleTranslation": "방을 청소합니다.",
+    "mnemonicText": "빗자루.",
+    "imageKey": "room",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "部屋",
+        "reading": "へや"
+      },
+      {
+        "text": "掃除",
+        "reading": "そうじ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_393",
+    "level": "N5",
+    "word": "洗濯",
+    "reading": "せんたく",
+    "meaningKo": "빨래",
+    "exampleSentence": "週末に洗濯をします。",
+    "exampleTranslation": "주말에 빨래를 합니다.",
+    "mnemonicText": "세탁기.",
+    "imageKey": "water",
+    "tags": [
+      "명사",
+      "생활"
+    ],
+    "exampleReadings": [
+      {
+        "text": "週末",
+        "reading": "しゅうまつ"
+      },
+      {
+        "text": "洗濯",
+        "reading": "せんたく"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_394",
+    "level": "N5",
+    "word": "消す",
+    "reading": "けす",
+    "meaningKo": "끄다/지우다",
+    "exampleSentence": "寝る前にテレビを消します。",
+    "exampleTranslation": "자기 전에 텔레비전을 끕니다.",
+    "mnemonicText": "꺼진 전구.",
+    "imageKey": "night",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "寝る",
+        "reading": "ねる"
+      },
+      {
+        "text": "前",
+        "reading": "まえ"
+      },
+      {
+        "text": "消します",
+        "reading": "けします"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_395",
+    "level": "N5",
+    "word": "押す",
+    "reading": "おす",
+    "meaningKo": "누르다/밀다",
+    "exampleSentence": "ボタンを押します。",
+    "exampleTranslation": "버튼을 누릅니다.",
+    "mnemonicText": "버튼.",
+    "imageKey": "do",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "押します",
+        "reading": "おします"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_396",
+    "level": "N5",
+    "word": "切る",
+    "reading": "きる",
+    "meaningKo": "자르다",
+    "exampleSentence": "紙を切ります。",
+    "exampleTranslation": "종이를 자릅니다.",
+    "mnemonicText": "가위.",
+    "imageKey": "paper",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "紙",
+        "reading": "かみ"
+      },
+      {
+        "text": "切ります",
+        "reading": "きります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_397",
+    "level": "N5",
+    "word": "貼る",
+    "reading": "はる",
+    "meaningKo": "붙이다",
+    "exampleSentence": "壁にポスターを貼ります。",
+    "exampleTranslation": "벽에 포스터를 붙입니다.",
+    "mnemonicText": "테이프.",
+    "imageKey": "room",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "壁",
+        "reading": "かべ"
+      },
+      {
+        "text": "貼ります",
+        "reading": "はります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_398",
+    "level": "N5",
+    "word": "取る",
+    "reading": "とる",
+    "meaningKo": "집다/잡다",
+    "exampleSentence": "塩を取ってください。",
+    "exampleTranslation": "소금을 집어 주세요.",
+    "mnemonicText": "내미는 손.",
+    "imageKey": "hand",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "塩",
+        "reading": "しお"
+      },
+      {
+        "text": "取って",
+        "reading": "とって"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_399",
+    "level": "N5",
+    "word": "置く",
+    "reading": "おく",
+    "meaningKo": "두다/놓다",
+    "exampleSentence": "机にかばんを置きます。",
+    "exampleTranslation": "책상에 가방을 놓습니다.",
+    "mnemonicText": "놓인 물건.",
+    "imageKey": "desk",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "机",
+        "reading": "つくえ"
+      },
+      {
+        "text": "置きます",
+        "reading": "おきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_400",
+    "level": "N5",
+    "word": "並ぶ",
+    "reading": "ならぶ",
+    "meaningKo": "줄서다",
+    "exampleSentence": "店の前に人が並んでいます。",
+    "exampleTranslation": "가게 앞에 사람이 줄 서 있습니다.",
+    "mnemonicText": "줄 선 사람들.",
+    "imageKey": "person",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "店",
+        "reading": "みせ"
+      },
+      {
+        "text": "前",
+        "reading": "まえ"
+      },
+      {
+        "text": "人",
+        "reading": "ひと"
+      },
+      {
+        "text": "並んで",
+        "reading": "ならんで"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_401",
+    "level": "N5",
+    "word": "飛ぶ",
+    "reading": "とぶ",
+    "meaningKo": "날다",
+    "exampleSentence": "鳥が飛んでいます。",
+    "exampleTranslation": "새가 날고 있습니다.",
+    "mnemonicText": "날개.",
+    "imageKey": "animal",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "鳥",
+        "reading": "とり"
+      },
+      {
+        "text": "飛んで",
+        "reading": "とんで"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_402",
+    "level": "N5",
+    "word": "休む",
+    "reading": "やすむ",
+    "meaningKo": "쉬다",
+    "exampleSentence": "今日は学校を休みます。",
+    "exampleTranslation": "오늘은 학교를 쉽니다.",
+    "mnemonicText": "침대 휴식.",
+    "imageKey": "sleep",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "今日",
+        "reading": "きょう"
+      },
+      {
+        "text": "学校",
+        "reading": "がっこう"
+      },
+      {
+        "text": "休みます",
+        "reading": "やすみます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_403",
+    "level": "N5",
+    "word": "遊ぶ",
+    "reading": "あそぶ",
+    "meaningKo": "놀다",
+    "exampleSentence": "公園で遊びます。",
+    "exampleTranslation": "공원에서 놉니다.",
+    "mnemonicText": "공놀이.",
+    "imageKey": "park",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "公園",
+        "reading": "こうえん"
+      },
+      {
+        "text": "遊びます",
+        "reading": "あそびます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_404",
+    "level": "N5",
+    "word": "歩く",
+    "reading": "あるく",
+    "meaningKo": "걷다",
+    "exampleSentence": "駅まで歩きます。",
+    "exampleTranslation": "역까지 걷습니다.",
+    "mnemonicText": "걷는 발.",
+    "imageKey": "walk",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "駅",
+        "reading": "えき"
+      },
+      {
+        "text": "歩きます",
+        "reading": "あるきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_405",
+    "level": "N5",
+    "word": "働く",
+    "reading": "はたらく",
+    "meaningKo": "일하다",
+    "exampleSentence": "父は銀行で働いています。",
+    "exampleTranslation": "아버지는 은행에서 일하고 있습니다.",
+    "mnemonicText": "일하는 사람.",
+    "imageKey": "office",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "父",
+        "reading": "ちち"
+      },
+      {
+        "text": "銀行",
+        "reading": "ぎんこう"
+      },
+      {
+        "text": "働いて",
+        "reading": "はたらいて"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_406",
+    "level": "N5",
+    "word": "知る",
+    "reading": "しる",
+    "meaningKo": "알다",
+    "exampleSentence": "その人を知っています。",
+    "exampleTranslation": "그 사람을 알고 있습니다.",
+    "mnemonicText": "전구 아이디어.",
+    "imageKey": "mind",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "人",
+        "reading": "ひと"
+      },
+      {
+        "text": "知って",
+        "reading": "しって"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_407",
+    "level": "N5",
+    "word": "分かる",
+    "reading": "わかる",
+    "meaningKo": "이해하다",
+    "exampleSentence": "意味が分かりました。",
+    "exampleTranslation": "의미를 알았습니다.",
+    "mnemonicText": "끄덕이는 머리.",
+    "imageKey": "mind",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "意味",
+        "reading": "いみ"
+      },
+      {
+        "text": "分かりました",
+        "reading": "わかりました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_408",
+    "level": "N5",
+    "word": "あげる",
+    "reading": "あげる",
+    "meaningKo": "주다",
+    "exampleSentence": "友だちに本をあげます。",
+    "exampleTranslation": "친구에게 책을 줍니다.",
+    "mnemonicText": "건네는 손.",
+    "imageKey": "thanks",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "友だち",
+        "reading": "ともだち"
+      },
+      {
+        "text": "本",
+        "reading": "ほん"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_409",
+    "level": "N5",
+    "word": "もらう",
+    "reading": "もらう",
+    "meaningKo": "받다",
+    "exampleSentence": "姉にプレゼントをもらいました。",
+    "exampleTranslation": "언니에게 선물을 받았습니다.",
+    "mnemonicText": "받는 손.",
+    "imageKey": "thanks",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "姉",
+        "reading": "あね"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_410",
+    "level": "N5",
+    "word": "くれる",
+    "reading": "くれる",
+    "meaningKo": "(남이 나에게) 주다",
+    "exampleSentence": "兄がお菓子をくれました。",
+    "exampleTranslation": "형이 과자를 주었습니다.",
+    "mnemonicText": "선물 상자.",
+    "imageKey": "thanks",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "兄",
+        "reading": "あに"
+      },
+      {
+        "text": "お菓子",
+        "reading": "おかし"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_411",
+    "level": "N5",
+    "word": "触る",
+    "reading": "さわる",
+    "meaningKo": "만지다",
+    "exampleSentence": "絵に触らないでください。",
+    "exampleTranslation": "그림에 손대지 마세요.",
+    "mnemonicText": "손가락 끝.",
+    "imageKey": "hand",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "絵",
+        "reading": "え"
+      },
+      {
+        "text": "触らないで",
+        "reading": "さわらないで"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_412",
+    "level": "N5",
+    "word": "登る",
+    "reading": "のぼる",
+    "meaningKo": "오르다",
+    "exampleSentence": "山に登ります。",
+    "exampleTranslation": "산에 오릅니다.",
+    "mnemonicText": "등산.",
+    "imageKey": "mountain",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "山",
+        "reading": "やま"
+      },
+      {
+        "text": "登ります",
+        "reading": "のぼります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_413",
+    "level": "N5",
+    "word": "生まれる",
+    "reading": "うまれる",
+    "meaningKo": "태어나다",
+    "exampleSentence": "東京で生まれました。",
+    "exampleTranslation": "도쿄에서 태어났습니다.",
+    "mnemonicText": "아기.",
+    "imageKey": "baby",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "東京",
+        "reading": "とうきょう"
+      },
+      {
+        "text": "生まれました",
+        "reading": "うまれました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_414",
+    "level": "N5",
+    "word": "死ぬ",
+    "reading": "しぬ",
+    "meaningKo": "죽다",
+    "exampleSentence": "ペットが死にました。",
+    "exampleTranslation": "반려동물이 죽었습니다.",
+    "mnemonicText": "시든 꽃.",
+    "imageKey": "sad",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "死にました",
+        "reading": "しにました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_415",
+    "level": "N5",
+    "word": "泊まる",
+    "reading": "とまる",
+    "meaningKo": "묵다/숙박하다",
+    "exampleSentence": "ホテルに泊まります。",
+    "exampleTranslation": "호텔에 묵습니다.",
+    "mnemonicText": "침대.",
+    "imageKey": "bedroom",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "泊まります",
+        "reading": "とまります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_416",
+    "level": "N5",
+    "word": "呼ぶ",
+    "reading": "よぶ",
+    "meaningKo": "부르다",
+    "exampleSentence": "タクシーを呼びます。",
+    "exampleTranslation": "택시를 부릅니다.",
+    "mnemonicText": "손 흔들기.",
+    "imageKey": "taxi",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "呼びます",
+        "reading": "よびます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_417",
+    "level": "N5",
+    "word": "入れる",
+    "reading": "いれる",
+    "meaningKo": "넣다",
+    "exampleSentence": "かばんに本を入れます。",
+    "exampleTranslation": "가방에 책을 넣습니다.",
+    "mnemonicText": "넣는 손.",
+    "imageKey": "do",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "本",
+        "reading": "ほん"
+      },
+      {
+        "text": "入れます",
+        "reading": "いれます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_418",
+    "level": "N5",
+    "word": "出す",
+    "reading": "だす",
+    "meaningKo": "내다/꺼내다",
+    "exampleSentence": "手紙を出します。",
+    "exampleTranslation": "편지를 부칩니다.",
+    "mnemonicText": "내미는 손.",
+    "imageKey": "paper",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "手紙",
+        "reading": "てがみ"
+      },
+      {
+        "text": "出します",
+        "reading": "だします"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_419",
+    "level": "N5",
+    "word": "鳴く",
+    "reading": "なく",
+    "meaningKo": "(동물이) 울다",
+    "exampleSentence": "鳥が鳴いています。",
+    "exampleTranslation": "새가 울고 있습니다.",
+    "mnemonicText": "지저귀는 새.",
+    "imageKey": "animal",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "鳥",
+        "reading": "とり"
+      },
+      {
+        "text": "鳴いて",
+        "reading": "ないて"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_420",
+    "level": "N5",
+    "word": "吸う",
+    "reading": "すう",
+    "meaningKo": "피우다/들이마시다",
+    "exampleSentence": "ここでタバコを吸わないでください。",
+    "exampleTranslation": "여기서 담배를 피우지 마세요.",
+    "mnemonicText": "금연 표시.",
+    "imageKey": "mind",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "吸わないで",
+        "reading": "すわないで"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_421",
+    "level": "N5",
+    "word": "弾く",
+    "reading": "ひく",
+    "meaningKo": "(악기를) 치다",
+    "exampleSentence": "ピアノを弾きます。",
+    "exampleTranslation": "피아노를 칩니다.",
+    "mnemonicText": "건반.",
+    "imageKey": "music",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "弾きます",
+        "reading": "ひきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_422",
+    "level": "N5",
+    "word": "浴びる",
+    "reading": "あびる",
+    "meaningKo": "(샤워를) 하다",
+    "exampleSentence": "シャワーを浴びます。",
+    "exampleTranslation": "샤워를 합니다.",
+    "mnemonicText": "샤워 물줄기.",
+    "imageKey": "bathroom",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "浴びます",
+        "reading": "あびます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_423",
+    "level": "N5",
+    "word": "かける",
+    "reading": "かける",
+    "meaningKo": "걸다/쓰다",
+    "exampleSentence": "眼鏡をかけます。",
+    "exampleTranslation": "안경을 씁니다.",
+    "mnemonicText": "안경.",
+    "imageKey": "eye",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "眼鏡",
+        "reading": "めがね"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_424",
+    "level": "N5",
+    "word": "なる",
+    "reading": "なる",
+    "meaningKo": "되다",
+    "exampleSentence": "医者になりたいです。",
+    "exampleTranslation": "의사가 되고 싶습니다.",
+    "mnemonicText": "변신 화살표.",
+    "imageKey": "doctor",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "医者",
+        "reading": "いしゃ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_425",
+    "level": "N5",
+    "word": "晴れる",
+    "reading": "はれる",
+    "meaningKo": "(날씨가) 개다",
+    "exampleSentence": "明日は晴れるでしょう。",
+    "exampleTranslation": "내일은 맑겠지요.",
+    "mnemonicText": "갠 하늘.",
+    "imageKey": "sunny",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "明日",
+        "reading": "あした"
+      },
+      {
+        "text": "晴れる",
+        "reading": "はれる"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_426",
+    "level": "N5",
+    "word": "曇る",
+    "reading": "くもる",
+    "meaningKo": "흐리다",
+    "exampleSentence": "空が曇っています。",
+    "exampleTranslation": "하늘이 흐립니다.",
+    "mnemonicText": "흐린 하늘.",
+    "imageKey": "cloudy",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "空",
+        "reading": "そら"
+      },
+      {
+        "text": "曇って",
+        "reading": "くもって"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_427",
+    "level": "N5",
+    "word": "やる",
+    "reading": "やる",
+    "meaningKo": "하다",
+    "exampleSentence": "宿題をやりました。",
+    "exampleTranslation": "숙제를 했습니다.",
+    "mnemonicText": "체크 표시.",
+    "imageKey": "homework",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "宿題",
+        "reading": "しゅくだい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_428",
+    "level": "N5",
+    "word": "できる",
+    "reading": "できる",
+    "meaningKo": "할 수 있다",
+    "exampleSentence": "日本語ができます。",
+    "exampleTranslation": "일본어를 할 수 있습니다.",
+    "mnemonicText": "엄지손가락.",
+    "imageKey": "good",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "日本語",
+        "reading": "にほんご"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_429",
+    "level": "N5",
+    "word": "いただく",
+    "reading": "いただく",
+    "meaningKo": "받다(겸양)",
+    "exampleSentence": "お茶をいただきます。",
+    "exampleTranslation": "차를 마시겠습니다(받겠습니다).",
+    "mnemonicText": "공손한 두 손.",
+    "imageKey": "tea",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "お茶",
+        "reading": "おちゃ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_430",
+    "level": "N5",
+    "word": "引く",
+    "reading": "ひく",
+    "meaningKo": "당기다",
+    "exampleSentence": "ドアを引いてください。",
+    "exampleTranslation": "문을 당겨 주세요.",
+    "mnemonicText": "당기는 화살표.",
+    "imageKey": "door",
+    "tags": [
+      "동사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "引いて",
+        "reading": "ひいて"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_431",
+    "level": "N5",
+    "word": "悪い",
+    "reading": "わるい",
+    "meaningKo": "나쁘다",
+    "exampleSentence": "天気が悪いです。",
+    "exampleTranslation": "날씨가 나쁩니다.",
+    "mnemonicText": "우는 구름.",
+    "imageKey": "weather",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "天気",
+        "reading": "てんき"
+      },
+      {
+        "text": "悪い",
+        "reading": "わるい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_432",
+    "level": "N5",
+    "word": "強い",
+    "reading": "つよい",
+    "meaningKo": "강하다",
+    "exampleSentence": "風が強いです。",
+    "exampleTranslation": "바람이 강합니다.",
+    "mnemonicText": "강풍.",
+    "imageKey": "weather",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "風",
+        "reading": "かぜ"
+      },
+      {
+        "text": "強い",
+        "reading": "つよい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_433",
+    "level": "N5",
+    "word": "弱い",
+    "reading": "よわい",
+    "meaningKo": "약하다",
+    "exampleSentence": "弟は体が弱いです。",
+    "exampleTranslation": "남동생은 몸이 약합니다.",
+    "mnemonicText": "가는 팔.",
+    "imageKey": "health",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "弟",
+        "reading": "おとうと"
+      },
+      {
+        "text": "体",
+        "reading": "からだ"
+      },
+      {
+        "text": "弱い",
+        "reading": "よわい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_434",
+    "level": "N5",
+    "word": "速い",
+    "reading": "はやい",
+    "meaningKo": "(속도가) 빠르다",
+    "exampleSentence": "新幹線は速いです。",
+    "exampleTranslation": "신칸센은 빠릅니다.",
+    "mnemonicText": "스피드 선.",
+    "imageKey": "train",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "新幹線",
+        "reading": "しんかんせん"
+      },
+      {
+        "text": "速い",
+        "reading": "はやい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_435",
+    "level": "N5",
+    "word": "遅い",
+    "reading": "おそい",
+    "meaningKo": "늦다/느리다",
+    "exampleSentence": "バスが遅いです。",
+    "exampleTranslation": "버스가 느립니다.",
+    "mnemonicText": "느린 달팽이.",
+    "imageKey": "bus",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "遅い",
+        "reading": "おそい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_436",
+    "level": "N5",
+    "word": "長い",
+    "reading": "ながい",
+    "meaningKo": "길다",
+    "exampleSentence": "この川は長いです。",
+    "exampleTranslation": "이 강은 깁니다.",
+    "mnemonicText": "긴 선.",
+    "imageKey": "river",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "川",
+        "reading": "かわ"
+      },
+      {
+        "text": "長い",
+        "reading": "ながい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_437",
+    "level": "N5",
+    "word": "低い",
+    "reading": "ひくい",
+    "meaningKo": "낮다",
+    "exampleSentence": "机が低いです。",
+    "exampleTranslation": "책상이 낮습니다.",
+    "mnemonicText": "낮은 책상.",
+    "imageKey": "down",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "机",
+        "reading": "つくえ"
+      },
+      {
+        "text": "低い",
+        "reading": "ひくい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_438",
+    "level": "N5",
+    "word": "太い",
+    "reading": "ふとい",
+    "meaningKo": "굵다",
+    "exampleSentence": "太いペンで書きます。",
+    "exampleTranslation": "굵은 펜으로 씁니다.",
+    "mnemonicText": "굵은 선.",
+    "imageKey": "write",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "太い",
+        "reading": "ふとい"
+      },
+      {
+        "text": "書きます",
+        "reading": "かきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_439",
+    "level": "N5",
+    "word": "細い",
+    "reading": "ほそい",
+    "meaningKo": "가늘다",
+    "exampleSentence": "細い道を歩きます。",
+    "exampleTranslation": "좁은 길을 걷습니다.",
+    "mnemonicText": "가는 선.",
+    "imageKey": "street",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "細い",
+        "reading": "ほそい"
+      },
+      {
+        "text": "道",
+        "reading": "みち"
+      },
+      {
+        "text": "歩きます",
+        "reading": "あるきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_440",
+    "level": "N5",
+    "word": "丸い",
+    "reading": "まるい",
+    "meaningKo": "둥글다",
+    "exampleSentence": "月は丸いです。",
+    "exampleTranslation": "달은 둥급니다.",
+    "mnemonicText": "동그라미.",
+    "imageKey": "moon_month",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "月",
+        "reading": "つき"
+      },
+      {
+        "text": "丸い",
+        "reading": "まるい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_441",
+    "level": "N5",
+    "word": "若い",
+    "reading": "わかい",
+    "meaningKo": "젊다",
+    "exampleSentence": "母は若く見えます。",
+    "exampleTranslation": "어머니는 젊어 보입니다.",
+    "mnemonicText": "젊은 얼굴.",
+    "imageKey": "person",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "母",
+        "reading": "はは"
+      },
+      {
+        "text": "若く",
+        "reading": "わかく"
+      },
+      {
+        "text": "見えます",
+        "reading": "みえます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_442",
+    "level": "N5",
+    "word": "痛い",
+    "reading": "いたい",
+    "meaningKo": "아프다",
+    "exampleSentence": "歯が痛くて、病院へ行きました。",
+    "exampleTranslation": "이가 아파서 병원에 갔습니다.",
+    "mnemonicText": "번개 통증.",
+    "imageKey": "health",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "歯",
+        "reading": "は"
+      },
+      {
+        "text": "痛くて",
+        "reading": "いたくて"
+      },
+      {
+        "text": "病院",
+        "reading": "びょういん"
+      },
+      {
+        "text": "行きました",
+        "reading": "いきました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_443",
+    "level": "N5",
+    "word": "汚い",
+    "reading": "きたない",
+    "meaningKo": "더럽다",
+    "exampleSentence": "部屋が汚いです。",
+    "exampleTranslation": "방이 더럽습니다.",
+    "mnemonicText": "얼룩.",
+    "imageKey": "room",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "部屋",
+        "reading": "へや"
+      },
+      {
+        "text": "汚い",
+        "reading": "きたない"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_444",
+    "level": "N5",
+    "word": "きれい",
+    "reading": "きれい",
+    "meaningKo": "예쁘다/깨끗하다",
+    "exampleSentence": "きれいな花ですね。",
+    "exampleTranslation": "예쁜 꽃이네요.",
+    "mnemonicText": "반짝이는 꽃.",
+    "imageKey": "flower",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "花",
+        "reading": "はな"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_445",
+    "level": "N5",
+    "word": "静か",
+    "reading": "しずか",
+    "meaningKo": "조용하다",
+    "exampleSentence": "静かな町です。",
+    "exampleTranslation": "조용한 동네입니다.",
+    "mnemonicText": "조용한 마을.",
+    "imageKey": "house",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "静か",
+        "reading": "しずか"
+      },
+      {
+        "text": "町",
+        "reading": "まち"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_446",
+    "level": "N5",
+    "word": "にぎやか",
+    "reading": "にぎやか",
+    "meaningKo": "번화하다/북적이다",
+    "exampleSentence": "にぎやかな店です。",
+    "exampleTranslation": "북적이는 가게입니다.",
+    "mnemonicText": "북적이는 거리.",
+    "imageKey": "shop",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "店",
+        "reading": "みせ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_447",
+    "level": "N5",
+    "word": "便利",
+    "reading": "べんり",
+    "meaningKo": "편리하다",
+    "exampleSentence": "コンビニは便利です。",
+    "exampleTranslation": "편의점은 편리합니다.",
+    "mnemonicText": "체크 도구.",
+    "imageKey": "shop",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "便利",
+        "reading": "べんり"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_448",
+    "level": "N5",
+    "word": "不便",
+    "reading": "ふべん",
+    "meaningKo": "불편하다",
+    "exampleSentence": "ここはバスが少なくて不便です。",
+    "exampleTranslation": "여기는 버스가 적어서 불편합니다.",
+    "mnemonicText": "부서진 도구.",
+    "imageKey": "bus",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "少なくて",
+        "reading": "すくなくて"
+      },
+      {
+        "text": "不便",
+        "reading": "ふべん"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_449",
+    "level": "N5",
+    "word": "有名",
+    "reading": "ゆうめい",
+    "meaningKo": "유명하다",
+    "exampleSentence": "有名なお寺です。",
+    "exampleTranslation": "유명한 절입니다.",
+    "mnemonicText": "별 표시.",
+    "imageKey": "sparkle",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "有名",
+        "reading": "ゆうめい"
+      },
+      {
+        "text": "お寺",
+        "reading": "おてら"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_450",
+    "level": "N5",
+    "word": "親切",
+    "reading": "しんせつ",
+    "meaningKo": "친절하다",
+    "exampleSentence": "親切な人ですね。",
+    "exampleTranslation": "친절한 사람이네요.",
+    "mnemonicText": "따뜻한 미소.",
+    "imageKey": "thanks",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "親切",
+        "reading": "しんせつ"
+      },
+      {
+        "text": "人",
+        "reading": "ひと"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_451",
+    "level": "N5",
+    "word": "危ない",
+    "reading": "あぶない",
+    "meaningKo": "위험하다",
+    "exampleSentence": "ここで遊ぶのは危ないです。",
+    "exampleTranslation": "여기서 노는 것은 위험합니다.",
+    "mnemonicText": "경고 표지.",
+    "imageKey": "mind",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "遊ぶ",
+        "reading": "あそぶ"
+      },
+      {
+        "text": "危ない",
+        "reading": "あぶない"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_452",
+    "level": "N5",
+    "word": "軽い",
+    "reading": "かるい",
+    "meaningKo": "가볍다",
+    "exampleSentence": "このかばんは軽いです。",
+    "exampleTranslation": "이 가방은 가볍습니다.",
+    "mnemonicText": "깃털.",
+    "imageKey": "sparkle",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "軽い",
+        "reading": "かるい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_453",
+    "level": "N5",
+    "word": "狭い",
+    "reading": "せまい",
+    "meaningKo": "좁다",
+    "exampleSentence": "部屋が狭いです。",
+    "exampleTranslation": "방이 좁습니다.",
+    "mnemonicText": "좁은 방.",
+    "imageKey": "room",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "部屋",
+        "reading": "へや"
+      },
+      {
+        "text": "狭い",
+        "reading": "せまい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_454",
+    "level": "N5",
+    "word": "遠い",
+    "reading": "とおい",
+    "meaningKo": "멀다",
+    "exampleSentence": "学校は家から遠いです。",
+    "exampleTranslation": "학교는 집에서 멉니다.",
+    "mnemonicText": "먼 길.",
+    "imageKey": "map",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "学校",
+        "reading": "がっこう"
+      },
+      {
+        "text": "家",
+        "reading": "いえ"
+      },
+      {
+        "text": "遠い",
+        "reading": "とおい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_455",
+    "level": "N5",
+    "word": "近い",
+    "reading": "ちかい",
+    "meaningKo": "가깝다",
+    "exampleSentence": "駅はここから近いです。",
+    "exampleTranslation": "역은 여기서 가깝습니다.",
+    "mnemonicText": "가까운 표시.",
+    "imageKey": "map",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "駅",
+        "reading": "えき"
+      },
+      {
+        "text": "近い",
+        "reading": "ちかい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_456",
+    "level": "N5",
+    "word": "難しい",
+    "reading": "むずかしい",
+    "meaningKo": "어렵다",
+    "exampleSentence": "この歌は難しいです。",
+    "exampleTranslation": "이 노래는 어렵습니다.",
+    "mnemonicText": "복잡한 문제.",
+    "imageKey": "kanji",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "歌",
+        "reading": "うた"
+      },
+      {
+        "text": "難しい",
+        "reading": "むずかしい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_457",
+    "level": "N5",
+    "word": "易しい",
+    "reading": "やさしい",
+    "meaningKo": "쉽다",
+    "exampleSentence": "この本は易しいです。",
+    "exampleTranslation": "이 책은 쉽습니다.",
+    "mnemonicText": "간단한 체크.",
+    "imageKey": "answer",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "本",
+        "reading": "ほん"
+      },
+      {
+        "text": "易しい",
+        "reading": "やさしい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_458",
+    "level": "N5",
+    "word": "面白い",
+    "reading": "おもしろい",
+    "meaningKo": "재미있다",
+    "exampleSentence": "この漫画は面白いです。",
+    "exampleTranslation": "이 만화는 재미있습니다.",
+    "mnemonicText": "웃는 얼굴.",
+    "imageKey": "fun",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "漫画",
+        "reading": "まんが"
+      },
+      {
+        "text": "面白い",
+        "reading": "おもしろい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_459",
+    "level": "N5",
+    "word": "つまらない",
+    "reading": "つまらない",
+    "meaningKo": "재미없다",
+    "exampleSentence": "その映画はつまらなかったです。",
+    "exampleTranslation": "그 영화는 재미없었습니다.",
+    "mnemonicText": "하품.",
+    "imageKey": "sad",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "映画",
+        "reading": "えいが"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_460",
+    "level": "N5",
+    "word": "かわいい",
+    "reading": "かわいい",
+    "meaningKo": "귀엽다",
+    "exampleSentence": "かわいい猫ですね。",
+    "exampleTranslation": "귀여운 고양이네요.",
+    "mnemonicText": "하트 눈.",
+    "imageKey": "cat",
+    "tags": [
+      "형용사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "猫",
+        "reading": "ねこ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_461",
+    "level": "N5",
+    "word": "でも",
+    "reading": "でも",
+    "meaningKo": "하지만",
+    "exampleSentence": "高いです。でも、買います。",
+    "exampleTranslation": "비쌉니다. 하지만 삽니다.",
+    "mnemonicText": "반전 화살표.",
+    "imageKey": "mind",
+    "tags": [
+      "접속사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "高い",
+        "reading": "たかい"
+      },
+      {
+        "text": "買います",
+        "reading": "かいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_462",
+    "level": "N5",
+    "word": "そして",
+    "reading": "そして",
+    "meaningKo": "그리고",
+    "exampleSentence": "朝ご飯を食べます。そして、学校へ行きます。",
+    "exampleTranslation": "아침을 먹습니다. 그리고 학교에 갑니다.",
+    "mnemonicText": "이어진 점.",
+    "imageKey": "arrow",
+    "tags": [
+      "접속사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "朝ご飯",
+        "reading": "あさごはん"
+      },
+      {
+        "text": "食べます",
+        "reading": "たべます"
+      },
+      {
+        "text": "学校",
+        "reading": "がっこう"
+      },
+      {
+        "text": "行きます",
+        "reading": "いきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_463",
+    "level": "N5",
+    "word": "それから",
+    "reading": "それから",
+    "meaningKo": "그 다음에",
+    "exampleSentence": "宿題をします。それから、寝ます。",
+    "exampleTranslation": "숙제를 합니다. 그 다음에 잡니다.",
+    "mnemonicText": "순서 화살표.",
+    "imageKey": "arrow",
+    "tags": [
+      "접속사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "宿題",
+        "reading": "しゅくだい"
+      },
+      {
+        "text": "寝ます",
+        "reading": "ねます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_464",
+    "level": "N5",
+    "word": "だから",
+    "reading": "だから",
+    "meaningKo": "그래서",
+    "exampleSentence": "雨です。だから、家にいます。",
+    "exampleTranslation": "비가 옵니다. 그래서 집에 있습니다.",
+    "mnemonicText": "인과 화살표.",
+    "imageKey": "arrow",
+    "tags": [
+      "접속사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "雨",
+        "reading": "あめ"
+      },
+      {
+        "text": "家",
+        "reading": "いえ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_465",
+    "level": "N5",
+    "word": "一緒",
+    "reading": "いっしょ",
+    "meaningKo": "함께",
+    "exampleSentence": "一緒に帰りましょう。",
+    "exampleTranslation": "함께 돌아갑시다.",
+    "mnemonicText": "나란한 두 사람.",
+    "imageKey": "person",
+    "tags": [
+      "명사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "一緒",
+        "reading": "いっしょ"
+      },
+      {
+        "text": "帰りましょう",
+        "reading": "かえりましょう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_466",
+    "level": "N5",
+    "word": "とても",
+    "reading": "とても",
+    "meaningKo": "매우",
+    "exampleSentence": "とても美味しいです。",
+    "exampleTranslation": "매우 맛있습니다.",
+    "mnemonicText": "강조 별.",
+    "imageKey": "sparkle",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "美味しい",
+        "reading": "おいしい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_467",
+    "level": "N5",
+    "word": "ちょっと",
+    "reading": "ちょっと",
+    "meaningKo": "조금/잠깐",
+    "exampleSentence": "ちょっと待ってください。",
+    "exampleTranslation": "잠깐 기다려 주세요.",
+    "mnemonicText": "작은 점.",
+    "imageKey": "time",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "待って",
+        "reading": "まって"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_468",
+    "level": "N5",
+    "word": "きっと",
+    "reading": "きっと",
+    "meaningKo": "분명히",
+    "exampleSentence": "きっと来ます。",
+    "exampleTranslation": "분명히 옵니다.",
+    "mnemonicText": "확신의 체크.",
+    "imageKey": "mind",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "来ます",
+        "reading": "きます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_469",
+    "level": "N5",
+    "word": "まず",
+    "reading": "まず",
+    "meaningKo": "우선",
+    "exampleSentence": "まず手を洗います。",
+    "exampleTranslation": "우선 손을 씻습니다.",
+    "mnemonicText": "1번 표시.",
+    "imageKey": "num_one",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "手",
+        "reading": "て"
+      },
+      {
+        "text": "洗います",
+        "reading": "あらいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_470",
+    "level": "N5",
+    "word": "後で",
+    "reading": "あとで",
+    "meaningKo": "나중에",
+    "exampleSentence": "後で電話します。",
+    "exampleTranslation": "나중에 전화하겠습니다.",
+    "mnemonicText": "뒤 화살표.",
+    "imageKey": "time",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "後で",
+        "reading": "あとで"
+      },
+      {
+        "text": "電話",
+        "reading": "でんわ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_471",
+    "level": "N5",
+    "word": "本当",
+    "reading": "ほんとう",
+    "meaningKo": "정말",
+    "exampleSentence": "本当ですか。",
+    "exampleTranslation": "정말입니까?",
+    "mnemonicText": "느낌표.",
+    "imageKey": "question",
+    "tags": [
+      "명사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "本当",
+        "reading": "ほんとう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_472",
+    "level": "N5",
+    "word": "また",
+    "reading": "また",
+    "meaningKo": "또/다시",
+    "exampleSentence": "また明日会いましょう。",
+    "exampleTranslation": "내일 또 만납시다.",
+    "mnemonicText": "반복 화살표.",
+    "imageKey": "return",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "明日",
+        "reading": "あした"
+      },
+      {
+        "text": "会いましょう",
+        "reading": "あいましょう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_473",
+    "level": "N5",
+    "word": "すぐ",
+    "reading": "すぐ",
+    "meaningKo": "곧/바로",
+    "exampleSentence": "すぐ行きます。",
+    "exampleTranslation": "곧 갑니다.",
+    "mnemonicText": "번개.",
+    "imageKey": "arrow",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "行きます",
+        "reading": "いきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_474",
+    "level": "N5",
+    "word": "ゆっくり",
+    "reading": "ゆっくり",
+    "meaningKo": "천천히",
+    "exampleSentence": "ゆっくり話してください。",
+    "exampleTranslation": "천천히 말해 주세요.",
+    "mnemonicText": "달팽이.",
+    "imageKey": "time",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "話して",
+        "reading": "はなして"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_475",
+    "level": "N5",
+    "word": "たいてい",
+    "reading": "たいてい",
+    "meaningKo": "대개",
+    "exampleSentence": "朝はたいていパンです。",
+    "exampleTranslation": "아침은 대개 빵입니다.",
+    "mnemonicText": "자주 표시.",
+    "imageKey": "calendar",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "朝",
+        "reading": "あさ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_476",
+    "level": "N5",
+    "word": "時々",
+    "reading": "ときどき",
+    "meaningKo": "가끔",
+    "exampleSentence": "時々映画を見ます。",
+    "exampleTranslation": "가끔 영화를 봅니다.",
+    "mnemonicText": "드문 점.",
+    "imageKey": "calendar",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "時々",
+        "reading": "ときどき"
+      },
+      {
+        "text": "映画",
+        "reading": "えいが"
+      },
+      {
+        "text": "見ます",
+        "reading": "みます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_477",
+    "level": "N5",
+    "word": "いつも",
+    "reading": "いつも",
+    "meaningKo": "항상",
+    "exampleSentence": "いつも七時に起きます。",
+    "exampleTranslation": "항상 7시에 일어납니다.",
+    "mnemonicText": "반복 시계.",
+    "imageKey": "clock",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "七時",
+        "reading": "しちじ"
+      },
+      {
+        "text": "起きます",
+        "reading": "おきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_478",
+    "level": "N5",
+    "word": "毎日",
+    "reading": "まいにち",
+    "meaningKo": "매일",
+    "exampleSentence": "毎日日本語を聞きます。",
+    "exampleTranslation": "매일 일본어를 듣습니다.",
+    "mnemonicText": "연속 달력.",
+    "imageKey": "calendar",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "毎日",
+        "reading": "まいにち"
+      },
+      {
+        "text": "日本語",
+        "reading": "にほんご"
+      },
+      {
+        "text": "聞きます",
+        "reading": "ききます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_479",
+    "level": "N5",
+    "word": "毎朝",
+    "reading": "まいあさ",
+    "meaningKo": "매일 아침",
+    "exampleSentence": "毎朝パンを食べます。",
+    "exampleTranslation": "매일 아침 빵을 먹습니다.",
+    "mnemonicText": "아침 해.",
+    "imageKey": "morning",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "毎朝",
+        "reading": "まいあさ"
+      },
+      {
+        "text": "食べます",
+        "reading": "たべます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_480",
+    "level": "N5",
+    "word": "毎晩",
+    "reading": "まいばん",
+    "meaningKo": "매일 밤",
+    "exampleSentence": "毎晩十時に寝ます。",
+    "exampleTranslation": "매일 밤 10시에 잡니다.",
+    "mnemonicText": "밤 달.",
+    "imageKey": "night",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "毎晩",
+        "reading": "まいばん"
+      },
+      {
+        "text": "十時",
+        "reading": "じゅうじ"
+      },
+      {
+        "text": "寝ます",
+        "reading": "ねます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_481",
+    "level": "N5",
+    "word": "毎週",
+    "reading": "まいしゅう",
+    "meaningKo": "매주",
+    "exampleSentence": "毎週図書館へ行きます。",
+    "exampleTranslation": "매주 도서관에 갑니다.",
+    "mnemonicText": "주간 달력.",
+    "imageKey": "week",
+    "tags": [
+      "부사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "毎週",
+        "reading": "まいしゅう"
+      },
+      {
+        "text": "図書館",
+        "reading": "としょかん"
+      },
+      {
+        "text": "行きます",
+        "reading": "いきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_482",
+    "level": "N5",
+    "word": "今週",
+    "reading": "こんしゅう",
+    "meaningKo": "이번 주",
+    "exampleSentence": "今週はテストがあります。",
+    "exampleTranslation": "이번 주는 시험이 있습니다.",
+    "mnemonicText": "이번 주 표시.",
+    "imageKey": "week",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "今週",
+        "reading": "こんしゅう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_483",
+    "level": "N5",
+    "word": "来週",
+    "reading": "らいしゅう",
+    "meaningKo": "다음 주",
+    "exampleSentence": "来週テストがあります。",
+    "exampleTranslation": "다음 주에 시험이 있습니다.",
+    "mnemonicText": "다음 주 화살표.",
+    "imageKey": "week",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "来週",
+        "reading": "らいしゅう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_484",
+    "level": "N5",
+    "word": "先週",
+    "reading": "せんしゅう",
+    "meaningKo": "지난주",
+    "exampleSentence": "先週海へ行きました。",
+    "exampleTranslation": "지난주에 바다에 갔습니다.",
+    "mnemonicText": "지난 주 표시.",
+    "imageKey": "week",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "先週",
+        "reading": "せんしゅう"
+      },
+      {
+        "text": "海",
+        "reading": "うみ"
+      },
+      {
+        "text": "行きました",
+        "reading": "いきました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_485",
+    "level": "N5",
+    "word": "今月",
+    "reading": "こんげつ",
+    "meaningKo": "이번 달",
+    "exampleSentence": "今月は雨が多いです。",
+    "exampleTranslation": "이번 달은 비가 많습니다.",
+    "mnemonicText": "이번 달 달력.",
+    "imageKey": "moon_month",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "今月",
+        "reading": "こんげつ"
+      },
+      {
+        "text": "雨",
+        "reading": "あめ"
+      },
+      {
+        "text": "多い",
+        "reading": "おおい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_486",
+    "level": "N5",
+    "word": "来月",
+    "reading": "らいげつ",
+    "meaningKo": "다음 달",
+    "exampleSentence": "来月国へ帰ります。",
+    "exampleTranslation": "다음 달 고국에 돌아갑니다.",
+    "mnemonicText": "다음 달 화살표.",
+    "imageKey": "moon_month",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "来月",
+        "reading": "らいげつ"
+      },
+      {
+        "text": "国",
+        "reading": "くに"
+      },
+      {
+        "text": "帰ります",
+        "reading": "かえります"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_487",
+    "level": "N5",
+    "word": "今年",
+    "reading": "ことし",
+    "meaningKo": "올해",
+    "exampleSentence": "今年の冬は寒いです。",
+    "exampleTranslation": "올해 겨울은 춥습니다.",
+    "mnemonicText": "올해 달력.",
+    "imageKey": "year",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "今年",
+        "reading": "ことし"
+      },
+      {
+        "text": "冬",
+        "reading": "ふゆ"
+      },
+      {
+        "text": "寒い",
+        "reading": "さむい"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_488",
+    "level": "N5",
+    "word": "来年",
+    "reading": "らいねん",
+    "meaningKo": "내년",
+    "exampleSentence": "来年日本へ行きます。",
+    "exampleTranslation": "내년에 일본에 갑니다.",
+    "mnemonicText": "내년 화살표.",
+    "imageKey": "year",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "来年",
+        "reading": "らいねん"
+      },
+      {
+        "text": "日本",
+        "reading": "にほん"
+      },
+      {
+        "text": "行きます",
+        "reading": "いきます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_489",
+    "level": "N5",
+    "word": "去年",
+    "reading": "きょねん",
+    "meaningKo": "작년",
+    "exampleSentence": "去年の冬は寒かったです。",
+    "exampleTranslation": "작년 겨울은 추웠습니다.",
+    "mnemonicText": "지난해 달력.",
+    "imageKey": "year",
+    "tags": [
+      "명사",
+      "시간"
+    ],
+    "exampleReadings": [
+      {
+        "text": "去年",
+        "reading": "きょねん"
+      },
+      {
+        "text": "冬",
+        "reading": "ふゆ"
+      },
+      {
+        "text": "寒かった",
+        "reading": "さむかった"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_490",
+    "level": "N5",
+    "word": "一つ",
+    "reading": "ひとつ",
+    "meaningKo": "한 개",
+    "exampleSentence": "ケーキを一つ買いました。",
+    "exampleTranslation": "케이크를 한 개 샀습니다.",
+    "mnemonicText": "한 개.",
+    "imageKey": "num_one",
+    "tags": [
+      "수사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "一つ",
+        "reading": "ひとつ"
+      },
+      {
+        "text": "買いました",
+        "reading": "かいました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_491",
+    "level": "N5",
+    "word": "二つ",
+    "reading": "ふたつ",
+    "meaningKo": "두 개",
+    "exampleSentence": "卵を二つ使います。",
+    "exampleTranslation": "달걀을 두 개 사용합니다.",
+    "mnemonicText": "두 개.",
+    "imageKey": "num_two",
+    "tags": [
+      "수사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "卵",
+        "reading": "たまご"
+      },
+      {
+        "text": "二つ",
+        "reading": "ふたつ"
+      },
+      {
+        "text": "使います",
+        "reading": "つかいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_492",
+    "level": "N5",
+    "word": "三つ",
+    "reading": "みっつ",
+    "meaningKo": "세 개",
+    "exampleSentence": "飴を三つ買いました。",
+    "exampleTranslation": "사탕을 세 개 샀습니다.",
+    "mnemonicText": "세 개.",
+    "imageKey": "num_three",
+    "tags": [
+      "수사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "飴",
+        "reading": "あめ"
+      },
+      {
+        "text": "三つ",
+        "reading": "みっつ"
+      },
+      {
+        "text": "買いました",
+        "reading": "かいました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_493",
+    "level": "N5",
+    "word": "一人",
+    "reading": "ひとり",
+    "meaningKo": "한 명/혼자",
+    "exampleSentence": "一人で旅行しました。",
+    "exampleTranslation": "혼자 여행했습니다.",
+    "mnemonicText": "한 사람.",
+    "imageKey": "person",
+    "tags": [
+      "수사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "一人",
+        "reading": "ひとり"
+      },
+      {
+        "text": "旅行",
+        "reading": "りょこう"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_494",
+    "level": "N5",
+    "word": "二人",
+    "reading": "ふたり",
+    "meaningKo": "두 명",
+    "exampleSentence": "二人で散歩します。",
+    "exampleTranslation": "둘이서 산책합니다.",
+    "mnemonicText": "두 사람.",
+    "imageKey": "person",
+    "tags": [
+      "수사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "二人",
+        "reading": "ふたり"
+      },
+      {
+        "text": "散歩",
+        "reading": "さんぽ"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_495",
+    "level": "N5",
+    "word": "番号",
+    "reading": "ばんごう",
+    "meaningKo": "번호",
+    "exampleSentence": "電話番号を教えてください。",
+    "exampleTranslation": "전화번호를 알려 주세요.",
+    "mnemonicText": "숫자 패널.",
+    "imageKey": "num_seven",
+    "tags": [
+      "명사"
+    ],
+    "exampleReadings": [
+      {
+        "text": "電話番号",
+        "reading": "でんわばんごう"
+      },
+      {
+        "text": "教えて",
+        "reading": "おしえて"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_496",
+    "level": "N5",
+    "word": "いただきます",
+    "reading": "いただきます",
+    "meaningKo": "잘 먹겠습니다",
+    "exampleSentence": "「いただきます」と言ってから食べます。",
+    "exampleTranslation": "\"잘 먹겠습니다\"라고 말하고 먹습니다.",
+    "mnemonicText": "합장.",
+    "imageKey": "thanks",
+    "tags": [
+      "표현"
+    ],
+    "exampleReadings": [
+      {
+        "text": "言って",
+        "reading": "いって"
+      },
+      {
+        "text": "食べます",
+        "reading": "たべます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_497",
+    "level": "N5",
+    "word": "ごちそうさま",
+    "reading": "ごちそうさま",
+    "meaningKo": "잘 먹었습니다",
+    "exampleSentence": "「ごちそうさま」と言いました。",
+    "exampleTranslation": "\"잘 먹었습니다\"라고 말했습니다.",
+    "mnemonicText": "빈 그릇.",
+    "imageKey": "thanks",
+    "tags": [
+      "표현"
+    ],
+    "exampleReadings": [
+      {
+        "text": "言いました",
+        "reading": "いいました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_498",
+    "level": "N5",
+    "word": "おやすみなさい",
+    "reading": "おやすみなさい",
+    "meaningKo": "안녕히 주무세요",
+    "exampleSentence": "寝る前に「おやすみなさい」と言います。",
+    "exampleTranslation": "자기 전에 \"안녕히 주무세요\"라고 말합니다.",
+    "mnemonicText": "달과 별.",
+    "imageKey": "night",
+    "tags": [
+      "표현"
+    ],
+    "exampleReadings": [
+      {
+        "text": "寝る",
+        "reading": "ねる"
+      },
+      {
+        "text": "前",
+        "reading": "まえ"
+      },
+      {
+        "text": "言います",
+        "reading": "いいます"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_499",
+    "level": "N5",
+    "word": "さようなら",
+    "reading": "さようなら",
+    "meaningKo": "안녕히 가세요",
+    "exampleSentence": "先生に「さようなら」と言いました。",
+    "exampleTranslation": "선생님께 \"안녕히 가세요\"라고 말했습니다.",
+    "mnemonicText": "흔드는 손.",
+    "imageKey": "apology",
+    "tags": [
+      "표현"
+    ],
+    "exampleReadings": [
+      {
+        "text": "先生",
+        "reading": "せんせい"
+      },
+      {
+        "text": "言いました",
+        "reading": "いいました"
+      }
+    ]
+  },
+  {
+    "id": "v_n5_500",
+    "level": "N5",
+    "word": "お願いします",
+    "reading": "おねがいします",
+    "meaningKo": "부탁합니다",
+    "exampleSentence": "「コーヒーをお願いします」。",
+    "exampleTranslation": "\"커피를 부탁합니다.\"",
+    "mnemonicText": "공손한 인사.",
+    "imageKey": "thanks",
+    "tags": [
+      "표현"
+    ],
+    "exampleReadings": [
+      {
+        "text": "お願いします",
+        "reading": "おねがいします"
+      }
+    ]
+  }
+]

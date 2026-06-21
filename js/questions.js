@@ -66,13 +66,18 @@ export function buildQuestion(itemType, itemId) {
     const ex = g.examples[0];
     // distractor 우선순위: 같은 레벨 → 그래도 모자라면 다른 레벨에서 보충.
     // N3/N2 처럼 같은 레벨 항목이 2개뿐인 경우를 위한 폴백.
-    const sameLevel = grammar.filter(x => x.level === g.level && x.id !== g.id && x.meaningKo !== g.meaningKo);
-    let pool = shuffled(sameLevel).slice(0, 3);
-    if (pool.length < 3) {
-      const other = grammar.filter(x => x.id !== g.id && x.meaningKo !== g.meaningKo && !pool.some(p => p.id === x.id));
-      pool = pool.concat(shuffled(other).slice(0, 3 - pool.length));
-    }
-    const distractors = pool.map(x => x.meaningKo);
+    // meaningKo 가 정답과 같거나 distractor 끼리 겹치면 선택지 중복이 되므로 meaningKo 기준 dedupe.
+    const usedG = new Set([g.meaningKo]);
+    const distractors = [];
+    const addFrom = (list) => {
+      for (const x of shuffled(list)) {
+        if (distractors.length === 3) break;
+        if (x.id === g.id || usedG.has(x.meaningKo)) continue;
+        distractors.push(x.meaningKo); usedG.add(x.meaningKo);
+      }
+    };
+    addFrom(grammar.filter(x => x.level === g.level));   // 같은 레벨 우선
+    if (distractors.length < 3) addFrom(grammar);          // 모자라면 다른 레벨 보충
     const choices = shuffled([g.meaningKo, ...distractors]);
     return {
       itemType, itemId,

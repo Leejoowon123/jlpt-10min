@@ -264,12 +264,102 @@ N5 1차 임계치 패턴 재사용:
 
 🎉 **N5 / N4 / N3 콘텐츠 완성** — 세 레벨 모두 시드→확장→안정화 사이클 종료.
 
-다음: **N2 0차 시드** (N5/N4/N3 와 동일한 패턴)
-- vocab 100 / kanji 100 / grammar 20 / reading·listening 각 8 / sentenceBank 50 / topics 3 / stories 3.
-- 처음부터 explicit readings(후리가나 100%) + romaji 호환 + 의존성 태깅(N5~N2 참조 가능,
-  단 N1 금지) + 준비도/추천 구조를 갖춘 상태로 시드.
-- N2 는 최상위 레벨이므로 의존성은 N5/N4/N3/N2 모두 참조 가능 — gen-deps 신규 생성기 필요.
-- 그 후 N2 1차 확장 → 안정화 사이클 반복.
+✅ **N2 0차 시드 완료 (라운드 40)** — vocab 100(누적 2807) / kanji 100(누적 700) /
+   grammar 20(+pairs 4) / reading·listening 각 8 / sentenceBank 50(회화 50) / 토픽 3 /
+   이야기 2+단편 1. 처음부터 explicit readings(후리가나 100%)+romaji+의존성 전수 태깅
+   (신규 `gen-deps-n2.mjs`, N5~N2 참조·N1 금지)+준비도/추천 구조. 기존 g_n2_1/2 의 N3/N4
+   패턴 중복 해소(のみならず/にともなって 재정의), N1급 패턴 스캔 0, grammar distractor
+   flaky 영구 수정. **N2 는 구조 검증 단계 — 완성 아님.** qa [212]~[216].
+
+✅ **N2 0차 안정화 완료 (라운드 41)** — 전수 감사(이슈 1건: 청해 verbatim 수정). N1급
+   금지 패턴 스캔 강화(전 영역 blocking, 踏まえ/なりに 등 오탐 제거) + N2 허용 N3 HARD
+   문형(べきだ·つつある) 기준 문서화. 추천 회귀·매칭 검증. qa [217]~[221].
+   **N2 는 구조 검증 단계 — 완성 아님.**
+
+✅ **N2 1차 확장 완료 (라운드 42)** — vocab 105→300(누적 3002) / kanji 100→200(누적 800) /
+   grammar 22→40(+pairs 4→10) / reading·listening 각 9→20 / sentenceBank 50→120(회화 120) /
+   topics 3→6 / stories 3→6(short_story 2). 신규 kanji exampleWords 실존 vocab 참조,
+   N1급 0, 후리가나 100%, imageKey 9.0%, 전역 중복 0, 핵심 의존성 0건 없음. qa [222]~[225].
+   gen-deps-n2 에 g_n2_23~40 패턴 추가해 의존성 자동 태깅. **N2 는 구조 검증 단계 — 완성 아님.**
+
+✅ **N2 1차 안정화 완료 (라운드 43)** — 콘텐츠 추가 0, 품질 감사·잠금만. 라운드 42 git checkout
+   사고로 삭제됐다 복구된 v_n2_6~105 전수 검증(복구 아티팩트 1건: v_n2_77 reading 괄호 → 복원).
+   v_n2_181 meaningKo 차별화, gen-deps 가 **본문만** 으로 의존성 도출하도록 수정(질문어 누출 차단).
+   레거시 N5↔N4 동일 문형 4종 reviewed 문서화(잠금 하위 미수정). smoke 복구 무결성/괄호 reading/
+   질문어 누출/N2 패턴 유일 blocking 추가. qa [226]~[227]. unreviewed 0. **N2 는 1차 확장 안정화
+   단계 — 완성 아님.**
+   ⚠️ **destructive git(`checkout`/`reset`/`restore`) 사용 금지** — 라운드 콘텐츠는 미커밋
+   working tree 에 있을 수 있어 데이터 손실 위험. 확인은 read-only(`git show`/`diff`/`status`)만.
+
+✅ **N2 2차 확장 완료 (라운드 44)** — vocab 300→900(누적 3602) / kanji 200→300(누적 900) /
+   grammar 40→80(+pairs 10→20) / reading·listening 각 20→50(장문 3) / sentenceBank 120→320(회화 320) /
+   topics 6→10 / stories 6→10(short_story 4). 비파괴 생성기+충돌 가드(배치별 11~29건 차단),
+   신규 kanji exampleWords 실존 vocab 참조, N1급 0, 후리가나 100%, imageKey 9.6%, 전역 중복 0,
+   reading+meaningKo 조합 중복 0(신규 잠금), 핵심 의존성 0건 없음. qa [228]~[230]. unreviewed 0.
+   **destructive git 미사용. N2 는 2차 확장 안정화 단계 — 완성 아님.**
+
+✅ **N2 2차 안정화 완료 (라운드 45)** — 콘텐츠 추가 0, 전수 감사 결과 blocking 0. imageKey
+   tool 9.6%→7.1% 분산(22건 재배치, 최다 mind 8.4%, 전부 ≤10%). gen-deps-n2 를 유지보수 도구로
+   문서화(베이크 vs 생성기 mismatch 0 재검증). N1PAT 과차단 없음 확인. qa [231]~[232]. unreviewed 0.
+   **destructive git 미사용. N2 는 2차 확장 안정화 단계 — 완성 아님.**
+
+✅ **N2 3차 마무리 확장 완료 (라운드 46)** — vocab 900→2300(누적 **5002/5000 — 100% 달성**) /
+   kanji 300→400(누적 **1000/1000 — 100% 달성**) / grammar 80→180(+pairs 20→45) /
+   reading·listening 각 50→120(장문 200자+ 18편) / sentenceBank 320→600(회화 600) /
+   topics 10→18 / stories 10→18(short_story 4→8). 비파괴 배치 생성기(_vbatch+_vdata)+충돌 가드로
+   1400 신규 단어 전역 중복 0, 신규 kanji exampleWords 실존 vocab 참조, N1급 0, 후리가나 100%,
+   imageKey 최다 tool 8.8%(전부 ≤10%), vocab 예문 중복 0, reading+meaningKo 조합 중복 0,
+   핵심 의존성 0건 없음(gen-deps-n2 재베이크 120/120/18), unreviewed 0. smoke 라운드 46 sentinel +
+   qa [233]. **destructive git 미사용(gen-deps-n2.mjs 추적 포함). N2 는 3차 확장 단계 — 완성 아님.**
+
+✅ **N2 3차 안정화/최종 품질 잠금 완료 (라운드 47)** — 콘텐츠 수량 추가 0, 7개 영역 전수 감사.
+   grammar 신규 100문형 중 **N1급 29문형을 검증된 N2 문형으로 교체**(같은 id 유지·참조 재매핑) + 영향
+   pairs 8건 재작성. 필수 6문형(てやまない·を皮切りに·ないではおかない·たら最後·ずじまい·が関の山) 전부
+   N1 판정→교체, 경계 7문형(にしたところで·と思いきや·てからというもの·うが〜うが·はさておき·ともなれば·
+   生まれながらに) reviewed 유지. stories 3편 keyVocab ≥5 보강, conversationTopics 전 질문 sentenceBank
+   연계 ≥1. smoke `N1PAT` 확장(영구 차단) + smoke 라운드 47 **N2 완성 선언 기준 블록**(blocking) + qa [234].
+   gen-deps mismatch 0(추적 포함). blocking 0 / unreviewed 0 / 추천 회귀 0. **destructive git 미사용.**
+   **→ N2 완성 선언 충족. N5·N4·N3·N2 전 레벨 콘텐츠 완성.**
+
+✅ **릴리스 후보 안정화 완료 (라운드 48)** — 콘텐츠 추가 0. 전체 상태/성능/Firebase/UX 감사. **코드 블로커 0.**
+   Firebase 로그 보안(web config 만·userKey=uid·sanitizeMeta allowlist·민감정보 0·로그인 없이 학습·로그 실패 비차단)
+   검증, 성능 실측(js/data ~2.9MB/gzip ~0.79MB, 큐·추천 ~3ms — 병목은 초기 다운로드뿐). 신규 문서
+   docs/release-checklist.md·docs/pwa-plan.md, data-loading-plan 병목 우선순위표, firebase-logging App Check 분류.
+   smoke 라운드 48 구조 가드(jsonPathFor PWA 경로·로그 payload allowlist) + qa [235]. README 슬림화.
+   **→ 수동 브라우저 QA + Firebase 운영 rules Publish 확인만 거치면 공개 베타 가능.**
+
+✅ **PWA 최소 구현 완료 (라운드 49)** — manifest.json + service-worker.js(앱 shell cache-first, `data/*.json` SWR,
+   Firebase/Web Speech network-only) + 아이콘 4종(순수 Node 생성) + `js/pwa.js` 방어적 등록. smoke 라운드 49 PWA 가드 + qa [236].
+
+✅ **이메일 로그인 필수화 + 인증 게이트 완료 (라운드 50)** — `js/views/authGate.js`(로딩+로그인/회원가입) + router 게이트
+   (`setAuthGate`/`pendingRoute` 복귀) + app.js 배선 + `auth-locked`(헤더/탭 숨김). 로그 signed-in 전용 전환
+   (anonymousActivity 폐기·userKey=uid). smoke 라운드 50 + qa [237].
+
+✅ **공개 베타 준비 / 운영 확인 완료 (라운드 51)** — firebase-logging payload↔rules 정합 최종 확인표, 사용자용
+   설치 안내 docs/pwa-install.md, release-checklist/browser-qa 로그인+PWA 항목 확정, 로그인 UX 보완 후보 분류(아래).
+   smoke pwa-install/문서 가드 + 기존 게이트/프라이버시 가드 유지. **→ 운영 rules Publish + Authorized domains 등록 + 수동 QA 1회 = 공개 베타.**
+
+### 로그인 UX 보완 후보 (라운드 51 판정)
+
+| 항목 | 판정 | 근거 |
+| --- | --- | --- |
+| 이메일/비밀번호 로그인만 유지(소셜 없음) | **즉시(현행 유지)** | 무료·정적 호스팅·범위 최소화. 베타에 충분. |
+| 비밀번호 재설정("비밀번호를 잊으셨나요?" + `sendPasswordResetEmail`) | **베타 후(1순위)** | 베타 사용자 실분실 대비 필요. Firebase 무료·구현 작음(authService 함수 + 게이트 링크 1개). 콘솔 이메일 템플릿 설정 필요. |
+| 이메일 인증(verifyEmail) 요구 | **보류** | 베타 마찰↑·이탈↑. 스팸/남용 관측 시 도입. App Check 와 함께 재검토. |
+| 회원가입 시 동의/약관 | **베타 후** | 공개 범위 확대 시. MVP 베타엔 과함. |
+
+## 다음 단계 (제품화 트랙 — 전 레벨 완성 후)
+
+> 상세: [release-checklist.md](release-checklist.md) · [pwa-plan.md](pwa-plan.md) · [data-loading-plan.md](data-loading-plan.md)
+
+1. **실제 브라우저 전체 QA** — `docs/browser-qa-checklist.md` N5~N2 전 항목을 GitHub Pages 실제 URL +
+   Chrome/Edge/Android Chrome + 모바일 360px 에서 수동 검증(콘텐츠 자동 테스트는 smoke/qa 로 잠금됨).
+2. **PWA / 오프라인** (1순위 제품화) — manifest + service worker. 앱 shell cache-first,
+   `data/**/*.json` stale-while-revalidate. 재방문 비용 0 + 오프라인 학습. (docs/pwa-plan.md)
+3. **데이터 경량화 / JSON 분리** (2순위) — vocab.js(1.2MB) → `data/<lv>/vocab.json` 분리부터.
+   `jsonPathFor`/`VALID_LEVELS`/`VALID_TYPES` 재사용. (docs/data-loading-plan.md 우선순위표)
+4. **모바일 앱 패키징 검토** — PWA/Capacitor 등 배포 경로 검토.
+5. **(운영 중) App Check** — 익명 write 남용 관측 시 reCAPTCHA v3 적용(지금 필수 아님). (docs/firebase-logging.md)
 
 (이전 항목) 1. **N3 0차 시드** — 현재 grammar 2 / reading·listening 각 1 (사실상 샘플).
    vocab 100 + grammar 20 + 독해·청해 8 수준의 구조 검증 시드부터.

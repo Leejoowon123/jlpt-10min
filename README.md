@@ -5,20 +5,18 @@
 
 ## 현재 상태
 
-- **N5 콘텐츠 완성 (검수 완료)** — 후리가나 100%, 품질 감사 unreviewed 경고 0.
-- **N4 콘텐츠 완성 (완성 D)** — 어휘·한자·문법·독해·청해 핵심 5개 영역 모두
-  최종 목표 달성 (누적 어휘 1402/1400 · 한자 300/300). 후리가나 100% + 전역 중복 0 잠금.
-- **N5/N4 추천 구조 잠금** — 독해/청해/이야기 학습 의존성 태깅 + 준비도(ready/good_next/locked)
-  배지·추천 엔진이 두 레벨 모두 동작. 단어 발음은 히라가나 + romaji 보조 표기.
-- **N3 콘텐츠 완성 (검수 완료)** — 단어 1300(**누적 2702/2700**)·한자 600/600·
-  문법 120(+비교 페어 24)·독해 80(장문 200자+ 10편)·청해 80·문장 350(회화 350)·
-  회화 12주제·이야기 14편(이야기 10+단편 4). **5개 핵심 영역 최종 목표 100% 달성.**
-  후리가나 100% + 전역 중복 0 + 교차 meaningKo/패턴 0 + N2 참조 0 + unreviewed 0 잠금,
-  전수 의존성 태깅 + 데이터 손상 회귀 방지 검증 ([docs/content-status.md](docs/content-status.md)).
-  **N5·N4·N3 전 레벨 콘텐츠 완성** — 다음은 N2 0차 시드.
-- **상세 수량과 최종 목표 대비 현황**: [docs/content-status.md](docs/content-status.md) ·
-  자동 리포트: `npm run content:report`
-- 테스트: smoke(정적·데이터) + qa(jsdom 1030+ 어서션) + GitHub Actions CI
+**N5·N4·N3·N2 전 레벨 콘텐츠 완성 — 릴리스 후보(공개 베타 가능).**
+누적 어휘 5002 / 한자 1000, 레벨별 문법·독해·청해·문장·회화·이야기 목표 100% 달성.
+후리가나 100% · 의존성 전수 태깅 · N1급 혼입 0 · 전역 중복 0 · unreviewed 경고 0.
+
+**앱 사용에는 이메일 로그인이 필요합니다(라운드 50).** 첫 진입 시 로그인/회원가입 화면이 표시되며,
+로그인 후 홈·학습·복습·이야기·단편·설정에 접근할 수 있습니다. 학습 콘텐츠(N5~N2)는 앱에 포함되어 있고,
+Firebase 는 **인증과 최소 행동 로그** 용도로만 쓰입니다(이메일/비밀번호/답변 원문은 저장하지 않음).
+
+- 상세 현황: [docs/content-status.md](docs/content-status.md) (자동 리포트 `npm run content:report`)
+- 배포 전 점검: [docs/release-checklist.md](docs/release-checklist.md)
+- 데이터는 레벨별 JSON 분리 진행 중(`data/<레벨>/vocab.json` + `dataLoader` fallback, 1차 인프라 완료 — [docs/data-loading-plan.md](docs/data-loading-plan.md))
+- 다음 단계(제품화): 브라우저 전체 QA → 데이터 경량화(정적 import 제거) → 모바일 패키징
 
 ## 주요 기능
 
@@ -29,9 +27,17 @@
 - **한자 카드 / 가나(50음도) 표** — 음·훈독, 예시 단어, 셀 클릭 TTS
 - **회화 모듈 (오프라인)** — sentenceBank 기반 피드백, Web Speech STT 프로토타입
 - **라이트/다크/시스템 테마** + 모바일 360px 대응
-- **Firebase (선택)** — 이메일 로그인 + 최소 행동 로그. 로그인 없이 전 기능 사용 가능
+- **PWA 설치 가능** — 모바일 홈 화면에 추가, 재방문 시 앱 shell 오프라인 로드
+- **이메일 로그인 필수** — Firebase Email/Password 인증 게이트 + 최소 행동 로그(signed-in 전용)
 
 상세: [docs/features.md](docs/features.md)
+
+## PWA 설치
+
+모바일 Chrome(Android) / 데스크톱 Chrome·Edge에서 **홈 화면에 추가 / 설치** 가능.
+- `manifest.json` + `service-worker.js`(앱 shell **cache-first**) — 첫 방문은 온라인 필요, **재방문 시 오프라인에서도 앱 로드**.
+- 콘텐츠는 현재 정적 import 라 shell 캐시에 포함 → 오프라인 학습 동작. Firebase 로그인/로그·TTS/STT는 온라인/브라우저 지원에 의존(오프라인 시 학습은 계속).
+- 아이콘은 `assets/icons/`(`node tools/gen-icons.mjs` 로 재생성). 설계: [docs/pwa-plan.md](docs/pwa-plan.md).
 
 ## 빠른 실행
 
@@ -49,32 +55,36 @@ npx serve .
 
 VSCode Live Server 등도 동일하게 동작.
 
+## 배포 (GitHub Pages)
+
+- 저장소: <https://github.com/Leejoowon123/jlpt-10min>
+- 공개 URL: <https://leejoowon123.github.io/jlpt-10min/> (repo Settings → Pages, `main` 브랜치 기준)
+- 빌드 도구 없음 — 정적 파일 그대로 서빙. hash 라우팅이라 SPA 리라이트 설정 불필요.
+- `main` 머지 = 배포. smoke+qa CI 게이트 통과 필수. 상세: [docs/development-workflow.md](docs/development-workflow.md)
+
 ## 테스트
 
 ```bash
 npm install        # jsdom (최초 1회)
-node smoke.mjs     # 데이터 무결성 + 후리가나 커버율 + 정적/보안 검사
-node qa.mjs        # jsdom DOM 시나리오 (211 시나리오)
+node smoke.mjs     # 데이터 무결성 + 후리가나 커버율 + 정적/보안 검사 + 완성/릴리스 sentinel
+node qa.mjs        # jsdom DOM 시나리오 (239 시나리오)
+npm run content:report   # 최종 목표 대비 콘텐츠 현황
 ```
 
-둘 다 통과해야 PR 가능 — CI 가 동일 명령을 자동 실행.
-상세: [docs/qa-and-review.md](docs/qa-and-review.md)
+셋 다 통과해야 PR 가능 — CI 가 동일 명령을 자동 실행. 상세: [docs/qa-and-review.md](docs/qa-and-review.md)
 
-## 브랜치 / 배포 (요약)
+## Firebase (인증 필수 + 행동 로그)
 
-| 브랜치 | 역할 |
-| --- | --- |
-| `main` | GitHub Pages 배포 — smoke+qa CI 게이트 |
-| `N4` 등 | 개발 브랜치 → PR 로 머지 |
+이메일 로그인 게이트 + 최소 행동 로그(`app_open`, `login_success`, `logout`, `study_start`, `story_open`,
+`story_complete`, `vocab_card_answered`, `grammar_answered` 화이트리스트, **signed-in 전용**).
+**앱 사용에 로그인이 필요합니다.** 비밀번호/이메일 원문/답변 원문/STT 원문은 어디에도 저장하지 않음
+(로그 meta 는 itemType/itemId/storyId/correct/method allowlist, userKey=Firebase uid).
+테스트 전용 버튼은 배포 UI 에 없음. Web config 는 public 가능 — service account/Admin key 는 절대 커밋 금지.
 
-상세 (CI 설정·branch protection·public repo 주의): [docs/development-workflow.md](docs/development-workflow.md)
-
-## Firebase (선택 기능 — 행동 로그용)
-
-이메일 로그인 + 최소 행동 로그(`app_open`, `study_start` 등 화이트리스트).
-**로그인 없이 모든 기능 사용 가능.** 비밀번호/이메일 원문/답변 원문은 어디에도 저장하지 않음.
-테스트 전용 버튼은 배포 UI 에 없음 (검증은 문서의 수동 QA 절차).
-Web config 는 public 가능 — service account/Admin key 는 절대 커밋 금지.
+**공개 베타 가입 방법**: 배포 URL 접속 → 로그인 화면에서 이메일/비밀번호(6자 이상) 입력 → **회원가입** →
+바로 로그인됨. (소셜 로그인 없음. Firebase Console → Authentication → Authorized domains 에 배포 도메인 등록 필요.)
+**비밀번호 재설정**: 로그인 화면의 **"비밀번호를 잊으셨나요?"** → 이메일 입력 → 재설정 메일 발송(Firebase
+`sendPasswordResetEmail`). 재설정 요청은 로그에 기록하지 않으며 이메일은 저장하지 않음.
 
 **운영 rules 적용 위치**: Firebase Console → Build → **Realtime Database → Rules 탭** → 붙여넣기 → Publish.
 (Firestore Rules 아님 주의. 테스트 모드 rules 로 main 배포 금지 — 머지 전 Publish 필수.)
@@ -91,7 +101,10 @@ Web config 는 public 가능 — service account/Admin key 는 절대 커밋 금
 | [docs/development-workflow.md](docs/development-workflow.md) | 브랜치 운영·CI·Pages 배포·public repo 보안 |
 | [docs/qa-and-review.md](docs/qa-and-review.md) | 테스트 체계·회귀 위험 영역·PR 체크리스트·리뷰 포인트 |
 | [docs/firebase-logging.md](docs/firebase-logging.md) | Firebase 로그인·행동 로그·운영 rules |
-| [docs/data-loading-plan.md](docs/data-loading-plan.md) | JSON 분리·dataLoader·contentRepository 점진 이전 |
+| [docs/data-loading-plan.md](docs/data-loading-plan.md) | JSON 분리·dataLoader 점진 이전 + 성능 병목 우선순위 |
+| [docs/pwa-plan.md](docs/pwa-plan.md) | PWA/오프라인 최소 구현 계획(캐시 전략·precache 도출) |
+| [docs/pwa-install.md](docs/pwa-install.md) | 사용자용 앱 설치 안내(Android/PC/iPhone) + 로그인·오프라인 한계 |
+| [docs/release-checklist.md](docs/release-checklist.md) | 공개 베타 배포 전 릴리스 체크리스트 |
 | [docs/browser-qa-checklist.md](docs/browser-qa-checklist.md) | 실제 브라우저 수동 QA 체크리스트 |
 | [docs/asset-licenses.md](docs/asset-licenses.md) | 이미지 자산 라이선스 기록 |
 | [docs/content-authoring-guide.md](docs/content-authoring-guide.md) | 콘텐츠 작성 실무 가이드 |
