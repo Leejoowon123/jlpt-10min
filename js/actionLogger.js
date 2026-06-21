@@ -59,10 +59,12 @@ export function getAnonymousVisitorId() {
   }
 }
 
+// 로그인 필수 정책(라운드 50): signed-in 사용자만 기록. 비로그인이면 null → logAction noop.
+// userKey 는 Firebase uid 만 사용. (익명 userKey / anonymous 활동 경로는 폐기 — 신규 쓰기 없음)
 function resolveUser() {
   const u = getCurrentUser();
   if (u && u.uid) return { userKey: u.uid, userType: 'signed-in' };
-  return { userKey: getAnonymousVisitorId(), userType: 'anonymous' };
+  return null;
 }
 
 function todayKeyUtc() {
@@ -97,6 +99,9 @@ export function logAction(type, meta = {}) {
   try {
     if (!ALLOWED_EVENTS.includes(type)) return;
     if (!writerOverride && !isFirebaseConfigured()) return;   // 미설정 → noop
+    const resolved = resolveUser();
+    if (!resolved) return;                                    // 로그인 필수 — 비로그인이면 기록 안 함
+    const { userKey, userType } = resolved;
 
     // app_open: 하루 1회
     if (type === 'app_open' && APP_OPEN_LOG_ONCE_PER_DAY) {
@@ -115,7 +120,6 @@ export function logAction(type, meta = {}) {
     if (now - prev < ACTION_LOG_MIN_INTERVAL_MS) return;
     lastLoggedAt.set(throttleKey, now);
 
-    const { userKey, userType } = resolveUser();
     const level = (() => {
       try { return getState().userProgress.targetLevel || 'N5'; } catch { return 'N5'; }
     })();
@@ -138,15 +142,12 @@ export function logAction(type, meta = {}) {
 
     // fire-and-forget — 실패는 조용히 무시.
     write(`actionLogs/${date}/${eventId}`, event).catch(() => {});
-    // 활동 노드 — 로그인/비로그인 분리 (운영 rules 와 일치).
-    const activityPath = userType === 'signed-in'
-      ? `userActivity/${userKey}`
-      : `anonymousActivity/${userKey}`;
-    write(activityPath, {
+    // 활동 노드 — 로그인 사용자만 (signed-in 전용 정책). 익명 활동 경로는 폐기.
+    write(`userActivity/${userKey}`, {
       firstSeenAt: now,    // 운영 rules 에서 기존값 보존하려면 transaction — MVP 는 단순 set
       lastSeenAt: now,
       lastEventType: type,
-      signedIn: userType === 'signed-in',
+      signedIn: true,
     }).catch(() => {});
   } catch {
     /* 어떤 실패도 앱 기능을 막지 않는다 */
@@ -163,7 +164,8 @@ export async function _sendTestLogForTest() {
     if (!writerOverride && !isFirebaseConfigured()) {
       return { ok: false, error: 'Firebase 설정이 필요합니다.' };
     }
-    const { userKey, userType } = resolveUser();
+    // 테스트 전용 — 비로그인 상태에서도 연결 점검이 되도록 fallback(운영 UI 에는 노출 안 됨).
+    const { userKey, userType } = resolveUser() || { userKey: 'test', userType: 'signed-in' };
     const now = Date.now();
     const event = {
       type: 'firebase_test',

@@ -46,3 +46,16 @@ _find_missing.mjs
 *.tmp
 *.bak
 .scratch/
+
+# ── 콘텐츠 일회성 생성기 / 중간 산출물 (라운드 49: tools/archive 로 이동) ──
+#   콘텐츠 동결 후 런타임/CI 미사용. tools/archive/ 에 보관(설명: tools/archive/README.md).
+#   패턴은 basename 기준이라 tools/archive/ 내 동일 파일도 추적 제외된다(README.md 만 추적).
+#   gen-deps-n2.mjs 재실행 시 _deps2_*.json 이 루트에 재생성되어도 무시됨.
+#   영속 유지보수 도구 scripts/gen-deps-n2.mjs 는 추적 대상 — 무시하지 않음.
+_gen_*.py
+_vdata_*.py
+_vbatch.py
+_allpats.json
+_deps2_*.json
+__pycache__/
+*.pyc

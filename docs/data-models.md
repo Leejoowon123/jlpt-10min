@@ -217,3 +217,64 @@ actionLogs / userActivity / anonymousActivity 스키마와 rules 는
   sourceId 전수 무결성(7개 sourceType), 필드 시프트(sourceId 타입), scriptReadings⊆script,
   선택지 N2 패턴 0. 이는 데이터 일괄 편집(특히 전역 문자열 치환)이 일으키는 필드 손상을
   CI 단계에서 잡는다. N2 시드부터도 동일 검증을 레벨별로 둔다.
+- 라운드 40 (N2 0차 시드): `READING_DEPS_N2`/`LISTENING_DEPS_N2`/`STORY_DEPS_N2` 베이크
+  (`scripts/gen-deps-n2.mjs`, N5~N2 참조 허용·N1 미등록 자동 배제). 레벨 누적 참조 규칙 확장:
+  | 콘텐츠 레벨 | 참조 가능 | 추천 풀(levelPool) |
+  | --- | --- | --- |
+  | N2 | N5+N4+N3+N2 (N1 금지) | N5~N2 누적 |
+  N3 마스터 기준 N2 분포: reading ready 2/good_next 7/locked 0 — 추천에 N2+하위 복습 공존.
+  grammar distractor 의 meaningKo dedup 누락(flaky)을 buildQuestion 에서 영구 수정.
+- 라운드 41 (N2 0차 안정화): 데이터 변동 없음(품질 잠금). smoke `N1PAT` 를 N2 전 영역
+  blocking 스캔으로 확정(오탐 패턴 제거), 청해 verbatim 10자+·N2 meaningKo 동일 warning
+  추가. l_n2_8 청해 정답 verbatim 1건 paraphrase. N2 는 구조 검증 단계 유지.
+- 라운드 42 (N2 1차 확장): vocab 300/kanji 200/grammar 40(+pairs 10)/reading·listening 각 20/
+  sentenceBank 120/topics 6/stories 6 로 확장. `gen-deps-n2.mjs` 의 `N2_GRAMMAR_PATTERNS` 에
+  g_n2_23~40 추가 후 READING/LISTENING/STORY_DEPS_N2 재베이크(핵심 의존성 0건 없음). 신규
+  kanji exampleWords 는 vocab 전수 char→word 맵에서 검증해 실존 단어만 참조. N2 sentinel
+  floor 를 1차 수치로 상향(smoke 라운드 42 블록). N2 는 구조 검증 단계 유지.
+- 라운드 43 (N2 1차 안정화): 데이터 변동 최소(품질 잠금). **gen-deps-n2 가 의존성을 본문
+  (passage/script)에서만 도출**하도록 변경 — 질문(question)의 일반어(正しい/どれ 등)가 핵심
+  vocabId 로 새던 것을 차단하고 전 영역 재베이크(핵심 0건 없음, 질문어 누출 0). 복구된
+  v_n2_77 reading 괄호 아티팩트 복원, v_n2_181 meaningKo 차별화. smoke 라운드 43 블록 추가
+  (복구 v_n2_6~105 무결성 / N2 reading 괄호 금지 / N2 grammar.pattern 전역 유일 / 핵심 vocab
+  본문 등장 / exampleSentence 중복 0). 레거시 N5↔N4 동일 문형 4종은 reviewedWarning 으로 추적.
+
+- 라운드 44 (N2 2차 확장): vocab 900/kanji 300/grammar 80(+pairs 20)/reading·listening 각 50/
+  sentenceBank 320/topics 10/stories 10 로 확장. 600개 어휘 확장은 배치 생성기(_vbatch.py +
+  _vdata_F~K)로 수행하며, 각 배치가 라이브 vocab.js 의 word 집합과 충돌을 검사(0 보장)한다.
+  신규 smoke blocking: **vocab reading+meaningKo 조합 중복 0**(전역 — 동철동의 중복 차단).
+  smoke 라운드 44 sentinel(2차 floor) + 장문 200자+ ≥3 추가. N2 는 안정화 단계 유지.
+
+- 라운드 46 (N2 3차 마무리 확장): vocab 2300(누적 5002)/kanji 400(누적 1000)/grammar 180(+pairs 45)/
+  reading·listening 각 120(장문 200자+ 18편)/sentenceBank 600(회화 600)/topics 18/stories 18
+  (short_story 8) 로 확장 — 핵심 5개 영역 + 누적(vocab 5000·kanji 1000) 목표 100% 달성.
+  어휘 확장은 배치 생성기(_vbatch.py + _vdata_L~Y)로 수행(배치별 충돌 가드, 전역 word 중복 0).
+  reading/listening/story 의존성은 `scripts/gen-deps-n2.mjs` 재실행→재베이크로 120/120/18 전수 갱신
+  (이전 베이크가 50/50/10 으로 stale 했던 것을 전량 최신화, 핵심 의존성 0건 없음). 동철동의 동음어
+  glose 차별화 7건(規程↔規定·受給↔需給·景観↔警官·試行↔施行·校外↔郊外·肩書き↔肩書·申込↔申し込み),
+  활용형 readings 정합 5건(持ち越し 등 명사형 예문화), 예문 중복 2건 해소, "이사" 3중복(取締役→이사(임원)).
+  smoke 라운드 46 sentinel(3차 floor + 누적 5000/1000 + short_story ≥6 + 장문 ≥15) + qa [233] 추가.
+  ⚠️ grammar 80→180 신규 100문형은 smoke `N1PAT` 0 통과 — 단 일부 N2/N1 경계 문형(てやまない·を皮切りに·
+  ないではおかない 등)은 레퍼런스별 판정이 갈려 **3차 안정화 라운드에서 재분류 검토 대상**으로 표시.
+
+- 라운드 47 (N2 3차 안정화/최종 품질 잠금): 콘텐츠 수량 추가 0. grammar 신규 100문형 중 **N1급 29문형을
+  검증된 N2 문형으로 교체**(같은 id 유지·참조 재매핑) + 영향 pairs 8건 재작성 — `_gen_n1fix.py` 로
+  (a)신규 패턴이 **전 레벨**(N3 포함) 부재인지, (b)`N1PAT` 비매치인지, (c)readings 정합인지 검증 후 in-place
+  치환. 교체 N2 문형은 deck/N3에 없는 さえ〜ば·上に·ないかぎり·に関する·に対する·をめぐる·をきっかけとして·
+  きる·ぬく·ほどだ 등. stories 3편 keyVocab ≥5 보강 후 gen-deps 재베이크(mismatch 0). conversationTopics
+  전 질문 sentenceBank 연계 ≥1(policy_debate Q1 → sent_n2_055). smoke `N1PAT` 확장(てやまない·を皮切り·
+  ないではおか·たら最後·ずじまい·が関の山·はおろか·ようものなら 등 영구 차단) + smoke 라운드 47 **N2 완성
+  선언 기준 블록**(blocking, stale bake 차단 포함) + qa [234]. **N5~N2 전 레벨 콘텐츠 완성.**
+
+## gen-deps-n2.mjs — N2 의존성 생성기 (유지보수 도구)
+
+`scripts/gen-deps-n2.mjs` 는 **임시 파일이 아니라 버전 관리에 포함되는 유지보수 도구**다.
+N2 reading/listening/stories 의 의존성(vocabIds/grammarIds/optional*/requiredCoverage)을
+**본문(passage/script)에서만** 자동 도출한다(질문어 누출 방지).
+
+- 실행: `node scripts/gen-deps-n2.mjs` → `_deps2_{reading,listening,stories}.json` 출력.
+- 베이크: 출력 JSON 을 각 데이터 파일의 `const READING_DEPS_N2 / LISTENING_DEPS_N2 /
+  STORY_DEPS_N2 = {...}` 에 교체. 파일 하단의 `Object.assign` 루프가 런타임에 주입한다.
+- 검증: 베이크된 테이블은 항상 생성기 출력과 일치해야 한다(라운드 45 재검증 결과 mismatch 0).
+- N2 콘텐츠를 추가/수정하면 반드시 재실행 → 재베이크 → `node smoke.mjs` 로 핵심 의존성 0건 없음 확인.
+- (N3 용은 `scripts/gen-deps-n3.mjs`, 같은 정책.)

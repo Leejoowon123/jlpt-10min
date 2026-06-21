@@ -73,6 +73,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   position: relative;
   background: var(--bg);
 }
+/* 인증 게이트 — 로그인 전에는 상단 헤더/하단 탭 숨김(깔끔한 단일 로그인 화면) */
+body.auth-locked .top-bar,
+body.auth-locked .tab-bar { display: none !important; }
+
 .top-bar {
   position: sticky;
   top: 0;

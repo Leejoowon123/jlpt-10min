@@ -2,6 +2,23 @@
 const routes = new Map();
 let currentRoute = '';
 
+// ── 인증 게이트 (라운드 50) ──────────────────────────────────────────────
+// guard() === true 면 통과, false 면 gateRenderer 로 로그인 화면을 렌더하고 의도 route 를 보관.
+let authGuard = null;       // () => boolean
+let gateRenderer = null;    // ({ screen }) => void
+let pendingRoute = null;    // 로그인 후 복귀할 route
+
+export function setAuthGate(guardFn, renderFn) {
+  authGuard = guardFn;
+  gateRenderer = renderFn;
+}
+/** 로그인 후 복귀용 — 보관된 route 를 꺼내고 비운다. */
+export function consumePendingRoute() {
+  const r = pendingRoute;
+  pendingRoute = null;
+  return r;
+}
+
 export function register(name, handler) {
   routes.set(name, handler);
 }
@@ -28,8 +45,22 @@ export function currentName() {
 function render(route) {
   currentRoute = route;
   const [name, ...rest] = route.split('/');
-  const handler = routes.get(name) || routes.get('home');
   const screen = document.getElementById('screen');
+
+  // 인증 게이트 — 비로그인이면 의도 route 보관 후 로그인 화면만 렌더, 앱 UI(탭/헤더) 숨김.
+  if (authGuard && !authGuard()) {
+    if (name && name !== 'authgate') pendingRoute = route;
+    try { document.body.classList.add('auth-locked'); } catch { /* */ }
+    if (screen) screen.innerHTML = '';
+    if (gateRenderer) gateRenderer({ screen });
+    updateTabs('');
+    const back = document.getElementById('backBtn');
+    if (back) back.hidden = true;
+    return;
+  }
+  try { document.body.classList.remove('auth-locked'); } catch { /* */ }
+
+  const handler = routes.get(name) || routes.get('home');
   if (screen) screen.innerHTML = '';
   if (handler) handler({ screen, params: rest });
   updateTabs(name);

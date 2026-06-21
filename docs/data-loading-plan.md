@@ -186,3 +186,52 @@ IndexedDB 가 필요해지는 시점:
 
 → 콘텐츠가 4배가 되어도 **초기 로드는 오히려 1/7 로 감소**.
 smoke 의 `=== 데이터 용량 리포트 ===` 가 매 실행마다 현황을 출력한다.
+
+## 8. 실측 현황 + 병목 우선순위 (라운드 48 — N5~N2 완성 후)
+
+실측: `js/data` 정적 import 합계 **~2.9MB(raw) / ~0.79MB(gzip)**, js 전체 ~3.3MB. 컴퓨트는 빠름 —
+모듈 import+parse ~104ms(Node), 오늘의 10분 큐 생성 ~3ms, 추천 생성 ~3ms. **병목은 초기 다운로드/파싱뿐.**
+hot path(`contentRepository`/`contentReadiness`/`curriculum`)가 전부 정적 import 라 dataLoader 미적용.
+분리된 JSON 은 `data/n4/stories.json` 1개뿐.
+
+| 파일/영역 | 크기(raw/gzip) | 병목 위험도 | 즉시 수정 | 추천 개선안 |
+| --- | --- | --- | :---: | --- |
+| `js/data/vocab.js` | 1.2MB / ~343KB | **높음**(단일 최대) | 아니오 | `data/<lv>/vocab.json` 분리 + 레벨별 lazy — 1순위 |
+| `js/data/sentenceBank.js` | 408KB | 중간 | 아니오 | 회화 진입 시 lazy — 2순위 |
+| `js/data/reading.js` | 368KB | 중간 | 아니오 | 레벨별 분리(독해 진입 시) |
+| `js/data/listening.js` | 272KB | 중간 | 아니오 | 레벨별 분리(청해 진입 시) |
+| `js/data/grammar.js` | 228KB | 낮음 | 아니오 | 자주 참조 — 후순위 |
+| `js/data/stories.js` | 196KB | 낮음 | 아니오 | story 진입 시 lazy(n4 이미 JSON) |
+| `js/data/kanji.js` | 156KB | 낮음 | 아니오 | 한자 화면 진입 시 |
+| 초기 import+parse | ~104ms(Node) | 낮음 | 아니오 | 네트워크가 실질 비용 — SW 캐시(PWA)로 재방문 0 |
+| 큐/추천/검색 컴퓨트 | ~3ms | **낮음** | 아니오 | 현 구조 유지 — N2 2300 에서도 빠름 |
+| `contentRepository` 정적 import | 전량 로드 | 중간 | 아니오 | `loadLevelData` 점진 전환(회귀 위험 → 베타 후) |
+
+**판정**: 성능은 **공개 베타 블로커 아님**(기능 정상·컴퓨트 빠름·gzip 0.8MB). 우선순위 1) PWA SW 캐시(재방문 비용 0,
+docs/pwa-plan.md) → 2) vocab.js JSON 분리(첫 로드 최대 절감) → 3) reading/listening/sentenceBank 레벨별 lazy.
+`jsonPathFor`/`VALID_LEVELS`/`VALID_TYPES`(dataLoader)로 PWA precache 목록·분리 경로를 코드 재사용(smoke 라운드 48 가드).
+
+## 9. vocab JSON 분리 — 1차 인프라 완료 (라운드 53)
+
+**완료한 것 (안전·무회귀):**
+- `data/{n5,n4,n3,n2}/vocab.json` 생성(`tools/gen-vocab-json.mjs`, 단일 진실원 `js/data/vocab.js` 에서 추출).
+  레벨별 count **500 / 902 / 1300 / 2300 = 5002**, gzip **34 / 74 / 132 / 175 KB**(활성 레벨만 전송).
+- `dataLoader.loadVocab(level)` — JSON 우선 fetch → 실패/404/비배열/오프라인 시 `js/data/vocab.js` **fallback**, Promise 캐시. (구조는 기존 `loadLevelData` 그대로)
+- **drift 잠금**: smoke 라운드 53 가 JSON ≡ JS 를 매 실행 검증 — 총합/레벨 count/id 순서·값/word·reading·meaningKo/전역 중복 0/imageKey palette. JSON 이 JS 와 어긋나면 CI 실패.
+- SW `CACHE_VERSION` v2 — `data/*.json` 은 기존 stale-while-revalidate 로 캐시(앱 shell 과 분리, precache 아님).
+- qa [239]: JSON 경로 로드·렌더·romaji 유지 + fetch 실패/비배열 → fallback.
+
+**이번 라운드에서 하지 않은 것 (의도적 — 다음 단계):**
+- **`js/data/vocab.js` 정적 import 제거 안 함.** 현재 8개 모듈이 정적 import
+  (`contentRepository`/`contentStats`/`curriculum`/`furigana`/`localEvaluator`/`questions` + view 2) +
+  `study.js` 가 모듈 init 에 `SECTIONS.vocab.data = vocab` 로 동기 바인딩. 따라서 **초기 로딩 절감은 아직 0**
+  (정적 import 가 vocab.js 를 그대로 파싱). JSON 경로·fallback·drift 잠금만 선 구축.
+- **실제 절감(~343KB gzip 첫 로드)** 은 정적 import 를 제거하고 위 소비자들을 `loadVocab(level)` 비동기/지연으로
+  전환하는 **다음 라운드**에 발생. 그때 큐/추천/의존성의 동기 결합을 함께 async 화해야 하므로 범위가 크다.
+
+**다음 단계(우선순위):**
+1. **vocab 정적 import 제거** — `contentRepository` 를 `loadLevelData` 부트스트랩으로 전환(레벨 진입 시 로드 + 로딩 상태), 동기 소비자(curriculum/questions/furigana/localEvaluator)에 await 전파. **이것이 실제 첫 로드 절감 라운드.**
+2. **sentenceBank(408KB)** → 회화 진입 시 lazy(`data/<lv>/sentenceBank.json`).
+3. **reading(368KB)/listening(272KB)** → 독해/청해 진입 시 레벨별 lazy.
+- 각 단계는 본 라운드와 동일하게 JSON 생성 → dataLoader → drift smoke → SW → qa fallback 순으로 진행.
+- smoke/qa/content-report 는 **JS import 기반 유지**(단일 진실원). JSON 은 런타임 로드용 사본 + drift 로 잠금.

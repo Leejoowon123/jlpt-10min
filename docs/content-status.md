@@ -1,6 +1,6 @@
 # 콘텐츠 현황 — 최종 목표 대비
 
-**기준일: 2026-06-16** (라운드 39 — N3 3차 안정화 / N3 완성 선언) · 갱신: `npm run content:report` 출력을 아래 표에 교체
+**기준일: 2026-06-17** (라운드 47 — N2 3차 안정화/최종 품질 잠금 완료 · **N2 완성 선언 → N5~N2 전 레벨 완성**) · 갱신: `npm run content:report` 출력을 아래 표에 교체
 
 > **N5 상태: 완료 (콘텐츠 + 품질 검수)** — 핵심 5개 영역 목표 달성, 후리가나 6개 영역 100%.
 > **N4 상태: 완성 D — 핵심 5개 영역 최종 목표(min) 전부 달성** —
@@ -34,6 +34,53 @@
 > 학습범위 밖 한자 재판정(N2권 한자 예문 7건 재작성 → 46건, 정책 한도 60 확정),
 > 청해 장문 verbatim 2건 paraphrase, 장문 독해 long-passage UX. qa [197]~[200].
 > **N3 는 2차 안정화 단계 — 아직 최종 완성 아님.** 다음은 N3 3차 마무리 확장.
+> **라운드 46 — N2 3차 마무리 확장 완료**: vocab 2300(누적 **5002/5000 — 누적 목표 100% 달성**) /
+> kanji 400(누적 **1000/1000 — 100% 달성**) / grammar 180(+pairs 45) / reading 120(장문 200자+ 18편) /
+> listening 120 / sentenceBank 600(회화 600) / 회화 주제 18 / 이야기 10+단편 8(short_story 8).
+> 후리가나 100%·전역 word/kanji/pattern 중복 0·vocab 예문 중복 0·sentenceBank.ja 중복 0·
+> reading+meaningKo 조합 중복 0·N1급 문법 0·핵심 의존성 0건 없음·unreviewed 0 유지.
+> 신규 reading/listening/story 의존성 `scripts/gen-deps-n2.mjs` 재베이크(120/120/18 전수),
+> smoke 라운드 46 sentinel + qa [233] 추가. **N2 는 3차 확장 단계 — 다음은 N2 3차 안정화 후 완성 선언.**
+> **라운드 47 — N2 3차 안정화/최종 품질 잠금 완료**: 콘텐츠 수량 추가 0, 7개 영역 전수 감사.
+> grammar 신규 100문형 중 **N1급 29문형을 검증된 N2 문형으로 교체**(아래 경계 판정표) + 영향 pairs 8건
+> 재작성. stories 3편 keyVocab ≥5 보강, conversationTopics 전 질문 sentenceBank 연계 ≥1 확보,
+> 동철동의/활용형 정합은 라운드 46에서 해소 완료. gen-deps 재베이크(mismatch 0). smoke `N1PAT`
+> 확장(てやまない·を皮切り·ないではおか·たら最後·ずじまい·が関の山·はおろか 등 영구 차단) +
+> smoke 라운드 47 **N2 완성 선언 기준 블록**(blocking) + qa [234]. blocking 0 / unreviewed 0 /
+> 추천 회귀 0. **→ N2 완성 선언 충족. N5·N4·N3·N2 전 레벨 콘텐츠 완성.** 다음은 실제 브라우저 전체
+> QA / PWA·오프라인 / 데이터 경량화(JSON 분리) / 모바일 앱 패키징 검토(콘텐츠 외 트랙).
+> **라운드 48 — 릴리스 후보 안정화 완료(콘텐츠 추가 0)**: 전체 상태/성능/Firebase/UX 감사. **코드 블로커 0.**
+> Firebase 로그 보안 검증(web config 만·userKey=uid·sanitizeMeta allowlist·민감정보 0·로그인 없이 학습 가능·
+> 로그 실패 비차단). 성능 실측(js/data ~2.9MB/gzip ~0.79MB, 큐·추천 ~3ms — 병목은 초기 다운로드뿐, 블로커 아님,
+> 우선순위표 docs/data-loading-plan.md). PWA 최소 구현 계획 docs/pwa-plan.md, 릴리스 체크리스트 docs/release-checklist.md.
+> smoke 라운드 48 구조 가드(jsonPathFor PWA 경로 도출·로그 payload allowlist) + qa [235]. App Check=「지금 필수 아님 /
+> 나중에 권장」. **→ 수동 브라우저 QA + Firebase 운영 rules Publish 확인만 거치면 공개 베타 가능.**
+
+### N2/N1 경계 문형 최종 판정 (라운드 47)
+
+신규 100문형(g_n2_81~180) 전수 재검토. 레퍼런스(신칸젠/소마토메) 합의 기준 **N1급 29문형을 N2로 교체**(같은 id 유지·참조 재매핑), 경계상 N2 방어 가능 7문형은 reviewed 유지.
+
+| 문형 | 판정 | 근거 | 조치 |
+| --- | --- | --- | --- |
+| 〜てやまない | **교체→N2** | 신칸젠 N1. 감정 강조 문어체 | g_n2_129 → 〜というより |
+| 〜を皮切りに | **교체→N2** | 신칸젠 N1. 시작점 강조 | g_n2_161 → 〜をきっかけとして |
+| 〜ないではおかない | **교체→N2** | 신칸젠 N1. 필연·사역 | g_n2_130 → 〜に関する |
+| 〜たら最後 | **교체→N2** | 소마토메 N1 | g_n2_175 → 〜にとっては |
+| 〜ずじまい | **교체→N2** | 신칸젠 N1. 미완 결말 | g_n2_117 → 〜きる |
+| 〜が関の山だ | **교체→N2** | 신칸젠 N1. 한계 평가 | g_n2_153 → 〜ほどだ |
+| 〜はおろか·べく·やいなや·ときたら·いかんで(は)·ようものなら·ばそれまでだ·めく·ぶる·ふしがある·といったらない·ものを·手前·始末だ·あっての·限りだ·なり(즉시)·つ〜つ·随一の·もさることながら·にかたくない·ないではすまない·運びとなる | **교체→N2** (23문형) | 모두 신칸젠/소마토메 N1 | 검증된 N2 문형으로 교체(아래) |
+| 〜にしたところで·と思いきや·てからというもの·うが〜うが·はさておき·ともなれば·ながらに(生まれながらに) | **유지(reviewed)** | 소마토메/신칸젠 N2 수록·생산적 N2 용법 | N2 유지 |
+
+> 교체 투입 N2 문형(전 레벨 부재 확인): さえ〜ば·上に·ないかぎり·としたら·恐れがある·かけだ·にしたら·に関して·を中心として·つもりで·を込めて·ものか·きる·とおりだ·をはじめとして·というより·に関する·に対する·につけ·ほどだ·気味だ·ぬく·をめぐる·をきっかけとして·ようによっては·からして·ことだろう·にとっては·ものではない.
+> 교체 후 smoke `N1PAT`(확장) 0 / qa [234] 확장 N1 스캔 0 / grammar.pattern 전역 중복 0(레거시 N5↔N4 4쌍 reviewed 제외) / pairs 참조·선택지 무결성 0.
+
+### N2 완성 선언 기준 (smoke 라운드 47 블록 — blocking)
+
+누적 vocab ≥5000(5002) · 누적 kanji ≥1000(1000) · grammar ≥180(180) · grammarPairs ≥45(45) ·
+reading ≥120(120) · listening ≥120(120) · sentenceBank ≥600(600, 회화 600) · conversationTopics ≥18(18) ·
+stories ≥18(18) · short_story ≥6(8) · 후리가나 100% · 의존성 전수(stale bake 0) · 전역 word/kanji/pattern 중복 0 ·
+vocab 예문·reading+meaningKo 조합·sentenceBank.ja 중복 0 · reading/listening choices 중복 0 · readings 정합 0 ·
+sourceId 참조 0 · N1PAT 0 · imageKey 최다 ≤10%(tool 8.8%) · unreviewed 0 · gen-deps mismatch 0. **전부 통과 → N2 완성.**
 
 ## 기준 설명
 
@@ -50,7 +97,7 @@
   grammar 45 / reading 40 / listening 40. smoke sentinel 도 동일 수치로 상향되어
   이 아래로 줄어들면 CI 가 실패한다.
 
-<!-- 자동 생성: npm run content:report (기준일 2026-06-16) -->
+<!-- 자동 생성: npm run content:report (기준일 2026-06-17) -->
 
 ### 표 1 — 핵심 학습 콘텐츠 (최종 목표 대비)
 
@@ -71,11 +118,11 @@
 | N3 | grammar | 120 | 120~180 | 0 | ██████████ 100% |
 | N3 | reading | 80 | 80~140 | 0 | ██████████ 100% |
 | N3 | listening | 80 | 80~140 | 0 | ██████████ 100% |
-| N2 | vocab(누적) | 2707 | 5000 | 2293 | █████░░░░░ 54% |
-| N2 | kanji(누적) | 600 | 1000 | 400 | ██████░░░░ 60% |
-| N2 | grammar | 2 | 180~250 | 178 | ░░░░░░░░░░ 1% |
-| N2 | reading | 1 | 120~200 | 119 | ░░░░░░░░░░ 1% |
-| N2 | listening | 1 | 120~200 | 119 | ░░░░░░░░░░ 1% |
+| N2 | vocab(누적) | 5002 | 5000 | 0 | ██████████ 100% |
+| N2 | kanji(누적) | 1000 | 1000 | 0 | ██████████ 100% |
+| N2 | grammar | 180 | 180~250 | 0 | ██████████ 100% |
+| N2 | reading | 120 | 120~200 | 0 | ██████████ 100% |
+| N2 | listening | 120 | 120~200 | 0 | ██████████ 100% |
 
 진행률은 범위 목표의 경우 **min 기준**. 100% 초과는 100%로 표시하지 않고 실값 유지.
 
@@ -86,7 +133,7 @@
 | N5 | 220 (220) | 5 | 3 | 10 | 8 |
 | N4 | 300 (299) | 6 | 4 | 10 | 13 |
 | N3 | 350 (350) | 10 | 4 | 12 | 24 |
-| N2 | 0 (0) | 0 | 0 | 0 | 1 |
+| N2 | 600 (600) | 10 | 8 | 18 | 45 |
 
 후리가나 커버율은 `node smoke.mjs` 의 `=== N5/N4 후리가나 커버율 ===` 섹션 참조.
 (N5·N4·N3 모두 전 영역 — vocab 예문 / grammar 예문 / reading 지문 / listening 스크립트 /
@@ -327,3 +374,277 @@ N2 한자 대량 유입(예: 한 라운드에 +13 초과)을 막는 안전선.
 누적 vocab ≥2700 · 누적 kanji ≥600 · grammar ≥120 · reading ≥80 · listening ≥80 ·
 후리가나 100% · 의존성 전수 태깅 · 전역 중복 0 · N2 참조 0 · unreviewed 0 ·
 smoke/qa/content-report 통과 — **전 항목 충족. N3 완성.**
+
+## N2 0차 시드 (라운드 40)
+
+N5/N4/N3 에서 확립한 구조(explicit readings·romaji·의존성·추천)를 N2 에 처음부터 적용한
+0차 시드. 대량 완성이 아니라 "구조 검증" 단계.
+
+### 추가 수량
+
+| 영역 | 이전 | 추가 | 현재 |
+| --- | ---: | ---: | ---: |
+| vocab | 5 | +100 | 105 (누적 2807) |
+| kanji | 0 | +100 | 100 (누적 700) |
+| grammar | 2 | +20 | 22 (+pairs 4) |
+| reading | 1 | +8 | 9 |
+| listening | 1 | +8 | 9 |
+| sentenceBank | 0 | +50 | 50 (회화 50) |
+| conversationTopics | 0 | +3 | 3 |
+| stories | 0 | +3 | 3 (이야기 2+단편 1) |
+
+### 구조 / 품질
+
+- N2 의존성은 N5/N4/N3/N2 모두 참조 가능 (N2 는 최상위 목표 레벨). N1 금지.
+  신규 `scripts/gen-deps-n2.mjs` 로 reading/listening/story 의존성 전수 태깅.
+- 후리가나 100% (vocab 105/grammar 22/reading 9/listening 9/sentence 50, story 전 문단).
+  처음부터 explicit readings — V2/k2/r2/l2/s2 빌더 사용.
+- imageKey 최다 money 9.5% (≤10%). N1급 문법 패턴 스캔 0 (smoke blocking).
+- N2 readiness/추천 동작 확인 — N3 마스터 기준 reading ready 2/good_next 7/locked 0,
+  추천에 N2 + 하위 복습 공존, 큐 10개 유지.
+
+### 작성 중 잡힌 이슈 (수정)
+
+| 항목 | 판정 |
+| --- | --- |
+| 기존 g_n2_1 〜によって / g_n2_2 〜によると 가 N3(g_n3_43)·N4(g_n4_69)와 패턴 중복 | N2 0차에서 g_n2_1→「〜のみならず」, g_n2_2→「〜にともなって」로 재정의 + gp_n2_1 재작성. grammar 패턴 레벨 내 중복 0 유지 |
+| 신규 vocab imageKey money 15.2% 초과 | money 6건을 transport/up/office/down/house 로, mind 2건을 tool/paper 로 분산 → 9.5% |
+| sentenceBank vocabId 오매핑 3건 / reading verbatim·N1 스캔 | 라인 단위 안전 수정 (라운드 38 전역 replace 손상 교훈 적용) |
+| grammar 문제 distractor 가 meaningKo 기준 dedup 안 됨 (flaky) | buildQuestion grammar 분기도 vocab 분기처럼 meaningKo dedup — N2 추가로 표면화된 잠재 버그 영구 해결 (smoke 3회 연속 통과 확인) |
+
+### N2 conversationTopics별 sentenceBank 매칭
+
+social_issue 17 · meeting_proposal 12 · news_discussion 10 (전부 ≥5).
+
+### 다음 단계
+
+N2 1차 확장 (vocab 250~300 / kanji 200 / grammar 40 / r·l 각 20 / sentenceBank 120 /
+topics 6 / stories 6+) — N3 와 동일한 확장→안정화 사이클. kanji 는 누적 700/1000.
+
+## N2 0차 안정화 / 품질 잠금 (라운드 41)
+
+전수 감사 결과 **이슈 1건**(청해 verbatim) 외 0. 콘텐츠 추가 없이 N1급 경계 강화 +
+회귀 방지 잠금만 수행. **N2 는 여전히 구조 검증 단계 — 완성 아님.**
+
+### 감사 범위 (전수)
+vocab 105 / kanji 100 / grammar 22 + pairs 4 / reading 9 / listening 9 / sentenceBank 50 /
+conversationTopics 3 / stories 3 — 프로그램 전수 감사.
+
+### 난이도 판정
+- vocab: N2급 사회·경제·업무·추상·논리어 중심. N1급 혼입 0, N3 이하 과다 0.
+  reading 핵심 vocabIds 레벨 분포 N2 21 / N3 4 / N4 4 / N5 1 — N2 중심 + 하위 보조(적정).
+- grammar: 22개 전부 N2 핵심 문형, N1급 패턴 0. によって/によると 중복은 라운드 40에서 해소됨.
+- reading/listening: N3보다 추론·문어체 비중↑, N1급 어휘·문형 0.
+
+### 수정한 품질 이슈
+
+| 항목 | 판정 |
+| --- | --- |
+| l_n2_8 청해 정답 11자 verbatim | 「買い物を手伝う仕組み」→「買い物の手助けをする取り組み」로 paraphrase (선택지 전체도 자연스럽게 보강) |
+
+### N1급 금지 / N2 허용 N3 HARD 문형 기준
+
+- **N1급 금지 (smoke blocking, N2 전 영역 스캔)**: んばかり · ものともせず · べからず · まじき ·
+  ずくめ · きらいがある · をよそに · んがため · まみれ · や否や · が早いか · そばから · ごとき ·
+  に至って · たるもの · たりとも · ずにはおかない/すまない · いかんによらず · を禁じ得ない ·
+  ではあるまいし · を余儀なく · うる限り · ないまでも · であれ(、。) · ともなると · とあって ·
+  涙ながらに · きっての · の極み.
+- **N2 에서 허용하는 N3 HARD 문형**: べきだ · つつある · ことだ 등 — N3 레벨 문형이므로 N2
+  콘텐츠에서는 정상 사용. (N3 콘텐츠용 HARD 스캔과 명확히 구분.) 踏まえ(N3)·なりに(N2)는
+  오탐 방지로 N1 스캔에서 제외.
+
+### reviewed/unreviewed warning 현황 — unreviewed 0
+청해 verbatim 10자+ 감시(현재 0, l_n2_8 수정 완료) · N2 meaningKo 동일 감시(0) ·
+학습범위 밖 한자(N2 한자 100자 추가로 N3 분포 60→감소) — 전부 reviewed/clean.
+
+### 추천 회귀 (N3 마스터 기준)
+reading ready 2 / good_next 7 / locked 0 · listening 동일 · stories ready 1/good_next 2/locked 0.
+추천에 N2(r_n2_1/3) + 하위 복습(r_n5_*) 공존, 큐 10개. 부분 학습 시 ready 상위 진입(qa [221]).
+
+### conversationTopics별 sentenceBank 매칭
+social_issue 17 · meeting_proposal 12 · news_discussion 10 (전부 ≥5).
+
+### 다음 단계
+N2 1차 확장 (vocab 250~300 / kanji 200 / grammar 40 / r·l 각 20 / sentenceBank 120 /
+topics 6 / stories 6) — N3 1차 확장과 동일 패턴.
+
+## N2 1차 확장 (라운드 42)
+
+N2 를 1차 학습 가능 규모로 확장. **안정화는 다음 라운드.** N2 는 여전히 구조 검증 단계.
+
+### 추가 수량
+
+| 영역 | 0차 | → 1차 | 추가 | 비고 |
+| --- | --- | --- | --- | --- |
+| vocab | 105 | **300** | +195 | 누적 3002 / 최종 5000 (60%) |
+| kanji | 100 | **200** | +100 | 누적 800 / 최종 1000 (80%) |
+| grammar | 22 | **40** | +18 | g_n2_23~40 |
+| grammarPairs | 4 | **10** | +6 | gp_n2_5~10 |
+| reading | 9 | **20** | +11 | r_n2_10~20 |
+| listening | 9 | **20** | +11 | l_n2_10~20 |
+| sentenceBank | 50 | **120** | +70 | 회화 가능 120 (≥100 목표) |
+| conversationTopics | 3 | **6** | +3 | 반대 의견 / 해결책 제안 / 서비스 요청 |
+| stories | 3 | **6** | +3 | news/daily/short 각 +1 (short_story 2) |
+
+### 품질/검증
+- 전역 vocab.word 중복 0 (3002 전부 유일) · kanji 문자 중복 0 (800) · grammar.pattern 중복 0.
+- N2 후리가나 vocab/grammar/reading/listening/sentence **전부 100%**.
+- 신규 kanji 100자 exampleWords 는 **실존 vocab 단어** 참조(문자 포함 검증).
+- N1급 문법/어휘 패턴 스캔 **0** (전 영역 blocking). reading/listening 핵심 의존성 0건 없음.
+- reading/listening 선택지 중복 0 · 정답 verbatim(10자+) 0 (paraphrase).
+- imageKey 최다 사용률 **9.0%** (mind 27/300) ≤10%.
+- conversationTopics별 sentenceBank 매칭: social 40 / proposal 28 / news 18 / objection 28 / solution 30 / service 8 (전부 ≥5).
+- **unreviewed warning 0** / reviewed 4.
+
+### 추천/준비도 (N3 마스터 기준)
+reading ready 2 / good_next 18 / locked 0 · listening ready 3 / good_next 17 / locked 0 ·
+stories ready 2 / good_next 2 / locked 2. 추천에 N2(r_n2_1/3) + 하위 복습(r_n5_*) 공존, 오늘의 10분 큐 10개.
+
+### 다음 단계
+N2 1차 **안정화/품질 잠금** (전수 감사·난이도 경계 재확인) → 이후 N2 2차 확장.
+
+## N2 1차 안정화 / 품질 잠금 (라운드 43)
+
+콘텐츠 추가 없이 복구 데이터 무결성 + 1차 전체 품질 감사·잠금만 수행.
+**N2 는 1차 확장 안정화 단계 — 완성 아님.**
+
+### ⚠️ 라운드 42 git checkout 사고 — 복구 완료 확인
+라운드 42 초기에 `git checkout js/data/vocab.js` 로 **커밋되지 않은 N2 0차 vocab(v_n2_6~105) 100개**가
+삭제되었다가 트랜스크립트(.jsonl)에서 복구되었다. 이번 라운드에서 복구 데이터를 전수 검증:
+- id 연속(6~105)/중복 0, 필드 누락 0, exampleReadings text 본문 정합 0오류, 인코딩 손상(U+FFFD) 0.
+- **복구 아티팩트 1건 발견·수정**: `v_n2_77 核心` 의 reading 이 `かくしん(核心)`(수정 전 버전)으로
+  복구되어 romaji 가 `kakushin(核心)` 로 깨졌다 → bare `かくしん` 로 복원(romaji `kakushin`).
+- 그 외 99개는 R41 최종본과 일치. sentenceBank/reading/listening/story/topics 참조 무결.
+
+**앞으로 destructive git 명령(`checkout`/`reset`/`restore`/파일 단위 되돌리기) 사용 금지.**
+기존 버전 확인은 `git show`/`git diff`/`git status`/`rg`/`Get-Content` 등 read-only 만 사용.
+
+### 감사 범위 (전수)
+vocab 300 / kanji 200 / grammar 40 + pairs 10 / reading 20 / listening 20 / sentenceBank 120 /
+conversationTopics 6 / stories 6 — 프로그램 전수 감사.
+
+### 수정한 품질 이슈
+
+| 항목 | 판정 |
+| --- | --- |
+| v_n2_77 reading 괄호(`かくしん(核心)`) | 복구 아티팩트 → bare `かくしん` 복원, romaji 정상화 |
+| v_n2_181(隔たり) meaningKo `격차, 거리감` | v_n2_157(格差 `격차`)와 첫뜻 충돌 → `(생각·세대의) 차이, 거리감` 으로 차별화 |
+| l_n2_1 핵심 vocab `正しい`(v_n4_618) | 질문어가 핵심 vocab 으로 누출(0차 dep 오류) → gen-deps-n2 가 **본문만** 으로 의존성 도출하도록 수정 후 전 영역 재베이크 |
+
+### N1급 / 난이도 / 레거시 문형
+- N1급 문법/어휘 패턴 스캔 **0** (smoke `N1PAT`, 전 영역 blocking). 신규 g_n2_23~40 포함 0.
+- 난이도: vocab 300 N2급(사회·경제·업무·추상·논리), N1 0·N3 이하 과다 0. reading/listening 추론·문어체
+  비중 N3보다↑, N1급 장문 아님.
+- **레거시 N5↔N4 동일 문형 4종**(〜方/〜ながら/〜まで/〜でしょう) — 동일 문형을 N5(도입)·N4(심화)에서
+  단계별로 반복하는 **의도적 설계**. 잠금된 하위 레벨 콘텐츠이며 N2 와 무관(N2 도입 패턴 중복 0).
+  smoke 에 reviewedWarning 으로 추적, 하위 레벨은 수정하지 않음.
+
+### reviewed/unreviewed — unreviewed 0
+reviewed 5: N3 학습범위 밖 한자 59건 · vocab 유사 예문 · (기타 3) · **신규** 레거시 N5↔N4 동일 문형 4종.
+
+### 추천 회귀 (N3 마스터 기준)
+reading ready 2 / good_next 18 / locked 0 · listening ready 3 / good_next 17 / locked 0 ·
+stories ready 2 / good_next 2 / locked 2. N2 일부 학습 시 N2(r_n2_1/2/3)가 ready 상위로 올라오고
+하위 복습(r_n5_*) 공존. 오늘의 10분 큐 10개.
+
+### conversationTopics별 sentenceBank 매칭
+social 40 / proposal 28 / news 18 / objection 28 / solution 30 / service 8 (전부 ≥5).
+
+### 다음 단계
+**N2 2차 확장** — vocab 700~1000 / kanji 300 / grammar 80 / reading·listening 각 50 /
+sentenceBank 280~350 / topics 10 / stories 10+.
+
+## N2 2차 확장 (라운드 44)
+
+N2 를 2차 규모로 확장. **안정화는 다음 라운드.** destructive git 명령 미사용(비파괴 생성기+충돌 가드).
+
+### 추가 수량
+
+| 영역 | 1차 → 2차 | 추가 | 진행률(최종 목표) |
+| --- | --- | --- | --- |
+| vocab | 300 → **900** | +600 | 누적 3602/5000 (72%) |
+| kanji | 200 → **300** | +100 | 누적 900/1000 (90%) |
+| grammar | 40 → **80** | +40 | 80/180~250 (44%) |
+| grammarPairs | 10 → **20** | +10 | 20/40+ (50%) |
+| reading | 20 → **50** | +30 | 50/120~200 (42%) · 장문 3 |
+| listening | 20 → **50** | +30 | 50/120~200 (42%) |
+| sentenceBank | 120 → **320** | +200 | 회화 가능 320 (≥280 목표) |
+| conversationTopics | 6 → **10** | +4 | 10/15~20 |
+| stories | 6 → **10** | +4 | short_story 4 (6~8 목표) |
+
+### 품질/검증
+- 전역 vocab.word 중복 0(3602 유일) · kanji 문자 0(900) · grammar.pattern N2 도입 중복 0 ·
+  vocab.exampleSentence 0 · sentenceBank.ja 0(전역 유일) · reading/listening choices 0 ·
+  **vocab reading+meaningKo 조합 중복 0**(신규 잠금).
+- N2 후리가나 vocab/grammar/reading/listening/sentence **전부 100%**.
+- 신규 kanji 100자 exampleWords 는 실존 vocab 단어(한자 포함) 참조.
+- N1급 문법/어휘 패턴 스캔 **0**(N1PAT 전 영역 blocking, g_n2_41~80 자가검사 통과).
+- reading/listening 핵심 vocab 본문 등장(질문어 누출 0) · 정답 verbatim(10자+) 0.
+- imageKey 최다 사용률 **9.6%**(tool 86/900) ≤10%.
+- **unreviewed warning 0** / reviewed 5.
+
+### 2차 확장에서 학습한 충돌 패턴
+600개 어휘 확장 중 흔한 한자어가 N3 이하와 대량 충돌(배치별 11~29건) → 생성기 충돌 가드로
+전수 차단 후 더 전문적/희소한 N2 어휘로 교체. 동철동의(reading+meaningKo) 9건은 gloss 차별화로 해소.
+
+### 추천/준비도 (N3 마스터 기준)
+reading ready 2 / good_next 48 / locked 0 · listening ready 9 / good_next 41 / locked 0 ·
+stories ready 3 / good_next 4 / locked 3. 추천에 N2(r_n2_3/37) + 하위 복습(r_n5_*) 공존, 큐 10개.
+
+### conversationTopics별 sentenceBank 매칭 (전부 ≥5)
+social 69 · proposal 55 · news 24 · objection 55 · solution 44 · service 13 ·
+policy 48 · conflict 55 · tech 23 · env 12.
+
+### 다음 단계
+**N2 2차 안정화/품질 잠금** — 7개 영역 전수 감사, 난이도 경계 재확인, 추천 회귀.
+이후 N2 3차 확장으로 최종 목표(vocab 1500~/kanji 1000/grammar 120+/r·l 각 80~)에 접근.
+
+## N2 2차 안정화 / 품질 잠금 (라운드 45)
+
+콘텐츠 추가 없이 라운드 44 대량 N2 콘텐츠를 전수 감사·잠금. **N2 는 2차 확장 안정화 단계 — 완성 아님.**
+destructive git 명령 미사용(read-only 조회만).
+
+### 감사 범위 (전수)
+vocab 900 / kanji 300 / grammar 80 + pairs 20 / reading 50 / listening 50 / sentenceBank 320 /
+conversationTopics 10 / stories 10 — 전수 감사 결과 **blocking 이슈 0건**.
+
+### 수정한 품질 이슈
+
+| 항목 | 판정 |
+| --- | --- |
+| imageKey `tool` 9.6%(86건) — 한도 근접 | 의미에 더 맞는 키로 22건 분산(司法→book·暗号→eye·駆動→up·触媒→water 등) → **tool 7.1%(64건)**. 최다는 mind 8.4%(76건), 전부 ≤10% |
+
+그 외 word/kanji/pattern/exampleSentence/ja/choices/readings/sourceId/N1/romaji/reading+meaningKo
+조합 — 전부 깨끗(수정 불필요).
+
+### imageKey 집중도 판정
+mind 8.4% · tool 7.1% · arrow 6.0% · paper 5.6% · book 5.1% · money 5.1% — 전부 ≤10%(통과).
+3차 확장 시 mind/arrow 키에 추가 집중되지 않도록 주의(여유 충분).
+
+### gen-deps-n2 관리 상태
+`scripts/gen-deps-n2.mjs` 는 **유지보수 도구**(임시 아님)로 헤더에 사용법 명기 + data-models 문서화.
+베이크된 READING/LISTENING/STORY_DEPS_N2 테이블이 생성기 출력과 **mismatch 0**(완전 일치) 재검증.
+의존성은 본문(passage/script)에서만 도출 — 질문어 누출 0.
+(아직 git untracked 상태 — 이번 라운드 커밋 시 함께 추적 대상에 포함할 것.)
+
+### 난이도 / N1 경계
+- vocab 900 N2급(정치·경제·사회·과학·문화·심리 등), N1급 0·N3 이하 과다 0.
+- grammar 80: g_n2_41~80 신규 포함 전부 N2 핵심, N1PAT 자가검사 0. N1PAT 금지 목록은
+  N2 허용 문형(g_n2_1~80)을 한 건도 막지 않음(과차단 없음 확인).
+- reading/listening: N2 추론·문어체, 장문 3건 long-passage. N1급 장문 아님.
+
+### reviewed/unreviewed — unreviewed 0
+reviewed 5(N3 학습범위 밖 한자·유사 예문·레거시 N5↔N4 동일 문형 등 — 검토 후 유지).
+
+### 추천 회귀 (N3 마스터 기준)
+reading ready 2 / good_next 48 / locked 0 · listening ready 9 / good_next 41 / locked 0 ·
+stories ready 3 / good_next 4 / locked 3. N2 일부 학습 시 N2 ready 상위 진입 + 하위 복습(r_n5_*) 공존,
+큐 10개. N2 단독 편중 없음.
+
+### conversationTopics별 sentenceBank 매칭 (전부 ≥5)
+social 69 · proposal 55 · news 24 · objection 55 · solution 44 · service 13 ·
+policy 48 · conflict 55 · tech 23 · env 12.
+
+### 다음 단계
+**N2 3차 마무리 확장** — 누적 vocab 5000 / kanji 1000 / grammar 180 / reading·listening 각 120 /
+sentenceBank 500~600 / topics 15~20 / stories 14~18(short_story 6~8).

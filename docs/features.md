@@ -3,6 +3,21 @@
 앱의 모든 화면/학습 동작의 source of truth. (README 에서 이동)
 데이터 스키마는 [data-models.md](./data-models.md), 콘텐츠 규칙은 [content-policy.md](./content-policy.md) 참조.
 
+## 로그인 필수 정책 (라운드 50)
+
+- **앱 사용에 이메일 로그인이 필요하다.** 진입 시 `app.js` 가 `initAuth()`/`observeAuth()` 로 인증 상태를
+  확인하고, 확인 중에는 로딩 화면(`renderAuthLoading`), 비로그인이면 로그인/회원가입 화면(`renderAuthGate`,
+  [js/views/authGate.js](../js/views/authGate.js))만 노출한다. 상단 헤더/하단 탭은 `body.auth-locked` 로 숨김.
+- **라우팅 게이트**: `router.js` 의 `setAuthGate(guard, gateRenderer)` — `guard()===false`(비로그인)면 어떤
+  hash route(`#study` 등 직접 접근 포함)도 로그인 화면으로 막고, 의도 route 를 `pendingRoute` 에 보관한다.
+  로그인 성공 시 `consumePendingRoute()` 로 원래 route 복귀(없으면 home).
+- **로그아웃**: 설정 화면의 로그아웃 → 즉시 로그인 화면으로 전환(이후 hash 접근도 게이트가 차단).
+- **인증 수단**: 이메일/비밀번호만. Google/소셜 로그인 없음. 비밀번호는 입력 후 즉시 비우고 저장하지 않음.
+- **미설정/오프라인**: Firebase 미설정/초기화 실패 시 로그인 화면이 안내만 표시(앱 크래시 없음). 오프라인이면
+  "온라인 연결 필요" 안내. 단, 이미 로그인 세션이 Auth persistence 에 남아 있으면 오프라인에서도 앱 진입 가능.
+- **행동 로그**: signed-in 사용자만 기록(`actionLogger`), userKey=Firebase uid, anonymousActivity 폐기.
+  상세: [firebase-logging.md](./firebase-logging.md).
+
 ## 구현된 기능
 
 | 요구사항 | 구현 위치 |

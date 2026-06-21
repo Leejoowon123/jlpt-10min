@@ -2092,20 +2092,32 @@ ok('금지: Google 로그인 API 없음',
    !/GoogleAuthProvider|signInWithPopup|signInWithRedirect/.test(fbAll));
 ok('금지: 비밀번호 localStorage 저장 없음',
    !/localStorage[\s\S]{0,40}password/i.test(fbAll));
-// logAction 단위 — mock writer 로 기록/스로틀/하루1회 검증
-logger._setWriterForTest(async () => {});
+// logAction 단위 — 로그인 필수 정책(라운드 50): 비로그인 noop / 로그인 시 signed-in 만 기록
 logger._resetThrottleForTest();
 const _logWrites = [];
 logger._setWriterForTest(async (path, value) => { _logWrites.push({ path, value }); });
+// (1) 비로그인 → 기록 안 함
 logger.logAction('study_start', { itemType: 'vocab', method: 'image' });
 await new Promise(r => setTimeout(r, 10));
-ok('logAction: actionLogs + 활동 노드 2건 기록 (비로그인 → anonymousActivity)',
+ok('logAction: 비로그인 시 기록 안 함(noop)', _logWrites.length === 0,
+   `writes=${_logWrites.map(w=>w.path).join(',')}`);
+// (2) 로그인(mock) 후 → actionLogs + userActivity (anonymousActivity 없음)
+authSvc._setAuthImplForTest({ signIn: async () => ({ uid: 'uTest1', email: 'qa@example.com' }), observe() {} });
+await authSvc.signInWithEmail('qa@example.com', 'pw123456');
+logger._resetThrottleForTest();
+logger.logAction('study_start', { itemType: 'vocab', method: 'image' });
+await new Promise(r => setTimeout(r, 10));
+ok('logAction: 로그인 시 actionLogs+userActivity 2건',
    _logWrites.length === 2 &&
    _logWrites.some(w => w.path.startsWith('actionLogs/')) &&
-   _logWrites.some(w => w.path.startsWith('anonymousActivity/')),
+   _logWrites.some(w => w.path.startsWith('userActivity/')),
    `writes=${_logWrites.map(w=>w.path).join(',')}`);
-ok('logAction: userType anonymous (비로그인)',
-   _logWrites.find(w => w.path.startsWith('actionLogs/'))?.value.userType === 'anonymous');
+ok('logAction: anonymousActivity 미기록 (정책: signed-in 전용)',
+   !_logWrites.some(w => w.path.startsWith('anonymousActivity')));
+ok('logAction: userType signed-in',
+   _logWrites.find(w => w.path.startsWith('actionLogs/'))?.value.userType === 'signed-in');
+ok('logAction: userKey = uid (이메일 아님)',
+   _logWrites.find(w => w.path.startsWith('actionLogs/'))?.value.userKey === 'uTest1');
 // 스로틀 — 같은 이벤트 즉시 재호출은 무시
 logger.logAction('study_start', { itemType: 'vocab', method: 'image' });
 await new Promise(r => setTimeout(r, 10));
@@ -2123,6 +2135,7 @@ ok('logAction: meta 화이트리스트 외 키 제거 (answerText/sttText)',
    _storyEv && !('answerText' in _storyEv.value.meta) && !('sttText' in _storyEv.value.meta));
 logger._resetWriterForTest();
 logger._resetThrottleForTest();
+authSvc._resetAuthImplForTest();
 
 // ── 라운드 20: public repo 보안 정적 검증 + 실연결 준비 ───────────────────
 const fbCfgSrc = _fs.readFileSync(new URL('./js/firebaseConfig.js', import.meta.url), 'utf8');
@@ -2159,11 +2172,17 @@ ok('firebaseConfig: 실제 config 입력됨 (isFirebaseConfigured true)',
 ok('firebaseConfig: databaseURL 존재',
    typeof fbCfg.firebaseConfig.databaseURL === 'string' &&
    fbCfg.firebaseConfig.databaseURL.startsWith('https://'));
-// 테스트 전용 export + anonymousActivity 분리 (라운드 21: 공개 sendTestLog 제거)
+// 테스트 전용 export + 공개 sendTestLog 제거 (라운드 21)
 ok('actionLogger: _sendTestLogForTest (테스트 전용) export',
    typeof logger._sendTestLogForTest === 'function');
 ok('actionLogger: 공개 sendTestLog 제거됨', logger.sendTestLog === undefined);
-ok('actionLogger: anonymousActivity/ 경로 분리', /anonymousActivity\//.test(loggerSrc));
+// 라운드 50 — 로그인 필수 정책: anonymousActivity 신규 쓰기 코드 없음
+ok('actionLogger: anonymousActivity 쓰기 경로 폐기(신규 write 없음)',
+   !/write\(\s*[`'"]anonymousActivity/.test(loggerSrc) && !/anonymousActivity\/\$\{/.test(loggerSrc));
+ok('actionLogger: resolveUser 비로그인 → null (signed-in 전용)',
+   /return null;/.test(loggerSrc.match(/function resolveUser[\s\S]*?\n\}/)?.[0] || ''));
+ok('actionLogger: userActivity signedIn:true 고정',
+   /signedIn:\s*true/.test(loggerSrc));
 // firebaseClient 상태 추적
 const fbCl = await import('./js/firebaseClient.js');
 ok('firebaseClient: getInitStatus export', typeof fbCl.getInitStatus === 'function');
@@ -2925,6 +2944,482 @@ ok('data/n4/stories.json — sourceType 모두 original',
   };
   for (const [k, v] of Object.entries(criteria)) ok(`N3 완성 기준 — ${k}`, v);
   console.log('  ★ N3 완성 선언 기준: 위 항목 + (전역 중복 0 / N2 참조 0 / unreviewed 0) 전부 통과 시 완성');
+}
+
+// ── 라운드 40: N2 0차 시드 검증 ─────────────────────────────────────────
+{
+  const N2v = vocab.filter(v => v.level === 'N2');
+  const { kanji: _k40 } = await import('./js/data/kanji.js');
+  const { grammarPairs: _gp40 } = await import('./js/data/grammarPairs.js');
+  const { conversationTopics: _t40 } = await import('./js/data/conversationTopics.js');
+  const { stories: _s40 } = await import('./js/data/stories.js');
+
+  // 수량 sentinel — N2 0차
+  ok('N2 vocab ≥ 100 (0차)', N2v.length >= 100, `actual=${N2v.length}`);
+  ok('N2 kanji ≥ 100 (0차)', _k40.filter(k => k.level === 'N2').length >= 100,
+     `actual=${_k40.filter(k => k.level === 'N2').length}`);
+  ok('N2 grammar ≥ 20 (0차)', grammar.filter(g => g.level === 'N2').length >= 20,
+     `actual=${grammar.filter(g => g.level === 'N2').length}`);
+  ok('N2 grammarPairs ≥ 3 (0차)', _gp40.filter(p => p.level === 'N2').length >= 3);
+  ok('N2 reading ≥ 8 (0차)', reading.filter(r => r.level === 'N2').length >= 8);
+  ok('N2 listening ≥ 8 (0차)', listening.filter(l => l.level === 'N2').length >= 8);
+  ok('N2 sentenceBank ≥ 50 (0차)', sentenceBank.filter(s => s.level === 'N2').length >= 50);
+  ok('N2 sentenceBank 회화 가능 ≥ 40', sentenceBank.filter(s => s.level === 'N2' && s.canUseInConversation).length >= 40);
+  ok('N2 conversationTopics ≥ 3 (0차)', _t40.filter(t => t.level === 'N2').length >= 3);
+  ok('N2 stories ≥ 3 (0차)', _s40.filter(s => s.level === 'N2').length >= 3);
+
+  // N2 후리가나 — 전 영역 (목표 100%, sentinel 90%)
+  const cV2 = coverageFor('N2', vocab, v => v.exampleSentence, v => v.exampleReadings);
+  const cG2 = coverageFor('N2', grammar, g => g.examples?.[0]?.ja, g => g.examples?.[0]?.readings);
+  const cR2 = coverageFor('N2', reading, r => r.passage, r => r.passageReadings);
+  const cL2 = coverageFor('N2', listening, l => l.script, l => l.scriptReadings);
+  const cS2 = coverageFor('N2', sentenceBank, s => s.ja, s => s.readings);
+  console.log(`\n=== N2 후리가나 커버율 ===`);
+  console.log(`  vocab ${cV2.covered}/${cV2.withKanji} grammar ${cG2.covered}/${cG2.withKanji} reading ${cR2.covered}/${cR2.withKanji} listening ${cL2.covered}/${cL2.withKanji} sentence ${cS2.covered}/${cS2.withKanji}`);
+  for (const [name, c] of [['vocab', cV2], ['grammar', cG2], ['reading', cR2], ['listening', cL2], ['sentence', cS2]])
+    ok(`N2 ${name} furigana ≥ 90%`, pct(c) >= 90, `pct=${pct(c)}%`);
+
+  // N2 의존성 — 전수/무결성/N1 금지(N1 데이터 없으므로 미등록=N1 취급)/핵심≥1
+  const _vL40 = new Map(vocab.map(v => [v.id, v.level]));
+  const _gL40 = new Map(grammar.map(g => [g.id, g.level]));
+  let tag2 = 0, bad2 = 0, core02 = 0;
+  for (const [label, items] of [['reading', reading], ['listening', listening]]) {
+    for (const it of items.filter(x => x.level === 'N2')) {
+      if (it.vocabIds || it.grammarIds) tag2++;
+      for (const id of [...(it.vocabIds || []), ...(it.optionalVocabIds || [])])
+        if (!_vL40.has(id)) { ok(`N2 ${label} ${it.id}: dep ${id} 존재`, false); bad2++; }
+      for (const id of [...(it.grammarIds || []), ...(it.optionalGrammarIds || [])])
+        if (!_gL40.has(id)) { ok(`N2 ${label} ${it.id}: dep ${id} 존재`, false); bad2++; }
+      if (((it.vocabIds || []).length + (it.grammarIds || []).length) === 0) { ok(`N2 ${label} ${it.id}: 핵심 ≥ 1`, false); core02++; }
+    }
+  }
+  ok('N2 reading/listening 의존성 전수 태깅', tag2 === reading.filter(r => r.level === 'N2').length + listening.filter(l => l.level === 'N2').length, `tagged=${tag2}`);
+  ok('N2 의존성 무결성 0 오류', bad2 === 0);
+  ok('N2 핵심 의존성 0건 없음', core02 === 0);
+
+  // N1급 문법 패턴 혼입 0 (blocking) — N2 콘텐츠 전 영역 스캔 (라운드 41 보강)
+  //   N2 에서 허용하는 N3 HARD 문형(べきだ·つつある 등)과 구분해, N1 전용 표지만 금지.
+  const N1PAT = /(んばかり|ものともせず|べからず|まじき|ずくめ|きらいがある|をよそに|んがため|まみれ|や否や|が早いか|そばから|ごとき|に至って|たるもの|たりとも|ずにはおかない|ずにはすまない|いかんによらず|いかんに(関|かか)わらず|を禁じ得ない|ではあるまいし|を余儀なく|うる限り|ないまでも|であれ[、。]|ともなると|とあって|涙ながらに|きっての|の極み|てやまない|を皮切り|ないではおか|ないではすま|たら最後|ずじまい|が関の山|はおろか|ようものなら|ばそれまで|もさることながら|にかたくない|運びとなる|といったらない)/;
+  let n1hit = 0;
+  const scanN1 = (id, text) => { if (N1PAT.test(text)) { n1hit++; ok(`${id}: N1급 패턴 없음`, false, text.slice(0, 30)); } };
+  for (const v of N2v) scanN1(v.id, v.exampleSentence);
+  for (const r of reading.filter(x => x.level === 'N2')) scanN1(r.id, r.passage + ' ' + r.choices.join(' '));
+  for (const l of listening.filter(x => x.level === 'N2')) scanN1(l.id, l.script + ' ' + l.choices.join(' '));
+  for (const s of sentenceBank.filter(x => x.level === 'N2')) scanN1(s.id, s.ja);
+  for (const g of grammar.filter(x => x.level === 'N2')) for (const e of (g.examples || [])) scanN1(g.id, e.ja);
+  for (const s of _s40.filter(x => x.level === 'N2')) for (const p of s.bodyJa) scanN1(s.id, p);
+  ok('N2 콘텐츠 N1급 문법 패턴 0 (전 영역)', n1hit === 0, `hits=${n1hit}`);
+  // N2 청해 정답 verbatim — 10자+ 면 unreviewed (청해 표준 형식이라 짧은 건 허용)
+  for (const l of listening.filter(x => x.level === 'N2')) {
+    const a = l.choices[l.answerIndex];
+    if (a.length >= 10 && l.script.includes(a)) warn(`N2 listening ${l.id}: 정답(${a.length}자) 스크립트 verbatim`);
+  }
+  // N2 vocab meaningKo 동일/유사 — 발생 시 표면화 (현재 0)
+  const seenM2 = new Map();
+  for (const v of N2v) { const k = v.meaningKo.trim(); if (seenM2.has(k)) warn(`N2 meaningKo 동일: ${v.id} ↔ ${seenM2.get(k)} (${k})`); seenM2.set(k, v.id); }
+
+  // 전역 word/kanji/pattern 중복 (N2 포함 재확인)
+  const allW40 = new Map();
+  let wdup40 = 0;
+  for (const v of vocab) { if (allW40.has(v.word)) wdup40++; allW40.set(v.word, 1); }
+  ok('전역 vocab.word 중복 0 (N2 포함)', wdup40 === 0);
+  const allK40 = new Map();
+  let kdup40 = 0;
+  for (const k of _k40) { if (allK40.has(k.kanji)) kdup40++; allK40.set(k.kanji, 1); }
+  ok('전역 kanji 문자 중복 0 (N2 포함)', kdup40 === 0);
+
+  // N2 토픽별 sentenceBank 매칭 ≥ 5
+  for (const t of _t40.filter(x => x.level === 'N2')) {
+    const m = sentenceBank.filter(s => s.level === 'N2' && s.canUseInConversation
+      && (s.situationTags || []).some(tag => t.situationTags.includes(tag)));
+    ok(`N2 topic ${t.id}: 관련 문장 ≥ 5`, m.length >= 5, `match=${m.length}`);
+  }
+
+  // readiness — N2 분류/추천 동작
+  const cr40 = await import('./js/contentReadiness.js');
+  for (const [name, fn] of [['reading', cr40.getRecommendedReading], ['listening', cr40.getRecommendedListening], ['stories', cr40.getRecommendedStories]]) {
+    const rec = fn('N2', {}, { count: 5 });
+    ok(`N2 추천(${name}): 빈 배열 아님`, rec.length > 0, `len=${rec.length}`);
+  }
+  // imageKey 집중도
+  const ik40 = {};
+  N2v.forEach(v => { ik40[v.imageKey] = (ik40[v.imageKey] || 0) + 1; });
+  const top40 = Object.entries(ik40).sort((a, b) => b[1] - a[1])[0];
+  ok('N2 imageKey 최다 사용률 ≤ 10%', top40[1] / N2v.length <= 0.10, `top=${top40[0]}x${top40[1]}`);
+}
+
+// ── 라운드 42: N2 1차 확장 sentinel (회귀 방지 floor) ─────────────────────
+{
+  const { kanji: _k42 } = await import('./js/data/kanji.js');
+  const { grammarPairs: _gp42 } = await import('./js/data/grammarPairs.js');
+  const { conversationTopics: _t42 } = await import('./js/data/conversationTopics.js');
+  const { stories: _s42 } = await import('./js/data/stories.js');
+  ok('N2 vocab ≥ 300 (1차)', vocab.filter(v => v.level === 'N2').length >= 300, `actual=${vocab.filter(v => v.level === 'N2').length}`);
+  ok('N2 kanji ≥ 200 (1차)', _k42.filter(k => k.level === 'N2').length >= 200, `actual=${_k42.filter(k => k.level === 'N2').length}`);
+  ok('N2 grammar ≥ 40 (1차)', grammar.filter(g => g.level === 'N2').length >= 40, `actual=${grammar.filter(g => g.level === 'N2').length}`);
+  ok('N2 grammarPairs ≥ 10 (1차)', _gp42.filter(p => p.level === 'N2').length >= 10);
+  ok('N2 reading ≥ 20 (1차)', reading.filter(r => r.level === 'N2').length >= 20);
+  ok('N2 listening ≥ 20 (1차)', listening.filter(l => l.level === 'N2').length >= 20);
+  ok('N2 sentenceBank ≥ 120 (1차)', sentenceBank.filter(s => s.level === 'N2').length >= 120);
+  ok('N2 sentenceBank 회화 가능 ≥ 100 (1차)', sentenceBank.filter(s => s.level === 'N2' && s.canUseInConversation).length >= 100);
+  ok('N2 conversationTopics ≥ 6 (1차)', _t42.filter(t => t.level === 'N2').length >= 6);
+  ok('N2 stories ≥ 6 (1차)', _s42.filter(s => s.level === 'N2').length >= 6);
+  ok('N2 short_story ≥ 2 (1차)', _s42.filter(s => s.level === 'N2' && s.type === 'short_story').length >= 2);
+}
+
+// ── 라운드 43: N2 1차 안정화 (복구 무결성 + 품질 잠금) ────────────────────
+{
+  const N2v43 = vocab.filter(v => v.level === 'N2');
+  // 1) 복구된 v_n2_6~105 무결성 (필드/readings 정합/인코딩/괄호 reading)
+  const recovered = N2v43.filter(v => { const n = +v.id.split('_')[2]; return n >= 6 && n <= 105; });
+  ok('복구 v_n2_6~105 = 100개', recovered.length === 100, `actual=${recovered.length}`);
+  let recBad = 0;
+  for (const v of recovered) {
+    for (const f of ['word', 'reading', 'meaningKo', 'exampleSentence', 'exampleTranslation', 'mnemonicText', 'imageKey']) {
+      if (!v[f] || !String(v[f]).trim()) { recBad++; ok(`복구 ${v.id}: ${f} 존재`, false); }
+    }
+    if (!Array.isArray(v.tags) || !v.tags.length) { recBad++; ok(`복구 ${v.id}: tags`, false); }
+    for (const r of (v.exampleReadings || [])) if (!v.exampleSentence.includes(r.text)) { recBad++; ok(`복구 ${v.id}: readings "${r.text}" 본문`, false); }
+    for (const f of ['word', 'reading', 'meaningKo', 'exampleSentence', 'exampleTranslation']) if (String(v[f]).includes('�')) { recBad++; ok(`복구 ${v.id}: ${f} 인코딩 손상`, false); }
+  }
+  ok('복구 v_n2_6~105 무결성 0 오류', recBad === 0);
+  // 2) N2 vocab reading 괄호 금지 (romaji 깨짐 방지 — 복구 아티팩트 차단)
+  let parenR = 0;
+  for (const v of N2v43) if (/[()（）]/.test(v.reading)) { parenR++; ok(`N2 ${v.id}: reading 괄호 없음 (${v.reading})`, false); }
+  ok('N2 vocab reading 괄호 0', parenR === 0);
+  // 3) N2 grammar.pattern 전역 유일 (N2 가 도입한 중복 0)
+  const _gp43 = new Map();
+  for (const g of grammar) { if (!_gp43.has(g.pattern)) _gp43.set(g.pattern, []); _gp43.get(g.pattern).push(g.id); }
+  let n2patDup = 0;
+  for (const g of grammar.filter(x => x.level === 'N2')) if (_gp43.get(g.pattern).length > 1) { n2patDup++; ok(`N2 grammar ${g.id}: pattern 전역 유일`, false); }
+  ok('N2 grammar.pattern 전역 유일 (N2 도입 중복 0)', n2patDup === 0);
+  // 레거시 N5↔N4 동일 문형(〜方/〜ながら/〜まで/〜でしょう) — 의도적 단계별 반복, reviewed
+  const legacyDup = [...(_gp43)].filter(([p, ids]) => ids.length > 1 && !ids.some(id => /_n2_/.test(id)));
+  if (legacyDup.length) warnReviewed(`레거시 N5↔N4 동일 문형 ${legacyDup.length}종 (단계별 반복, 검토 후 유지): ${legacyDup.map(([p]) => p).join(', ')}`);
+  // 4) N2 reading/listening 핵심 vocabIds 가 본문/스크립트에 실제 등장 (질문어 누출 차단)
+  const _wmap = new Map(vocab.map(v => [v.id, v.word]));
+  let leak = 0;
+  for (const [items, key] of [[reading, 'passage'], [listening, 'script']]) {
+    for (const it of items.filter(x => x.level === 'N2')) {
+      const t = it[key] || '';
+      for (const id of (it.vocabIds || [])) {
+        const w = _wmap.get(id); if (!w || !containsKanji(w)) continue;
+        const stem = w.length >= 2 ? w.slice(0, -1) : w;
+        if (!t.includes(w) && !(stem.length >= 2 && t.includes(stem))) { leak++; ok(`N2 ${it.id}: 핵심 vocab ${id}(${w}) 본문 등장`, false); }
+      }
+    }
+  }
+  ok('N2 독해/청해 핵심 vocab 본문 등장 (질문어 누출 0)', leak === 0);
+  // 5) N2 vocab.exampleSentence 완전 중복 0
+  const _es = new Map(); let esDup = 0;
+  for (const v of N2v43) { if (_es.has(v.exampleSentence)) { esDup++; ok(`N2 exampleSentence 중복 ${v.id} vs ${_es.get(v.exampleSentence)}`, false); } else _es.set(v.exampleSentence, v.id); }
+  ok('N2 vocab.exampleSentence 완전 중복 0', esDup === 0);
+  // 6) N2 vocab reading+meaningKo 조합 중복 0 (전역) — 동철동의 중복 차단
+  const _combo = new Map(); let comboDup = 0;
+  for (const v of vocab) { const k = v.reading + '|' + v.meaningKo; if (_combo.has(k)) { comboDup++; ok(`vocab reading+meaningKo 조합 중복 ${v.id} vs ${_combo.get(k)}`, false); } else _combo.set(k, v.id); }
+  ok('vocab reading+meaningKo 조합 중복 0 (전역)', comboDup === 0);
+}
+
+// ── 라운드 44: N2 2차 확장 sentinel (회귀 방지 floor) ────────────────────
+{
+  const { kanji: _k44 } = await import('./js/data/kanji.js');
+  const { grammarPairs: _gp44 } = await import('./js/data/grammarPairs.js');
+  const { conversationTopics: _t44 } = await import('./js/data/conversationTopics.js');
+  const { stories: _s44 } = await import('./js/data/stories.js');
+  ok('N2 vocab ≥ 900 (2차)', vocab.filter(v => v.level === 'N2').length >= 900, `actual=${vocab.filter(v => v.level === 'N2').length}`);
+  ok('N2 kanji ≥ 300 (2차)', _k44.filter(k => k.level === 'N2').length >= 300, `actual=${_k44.filter(k => k.level === 'N2').length}`);
+  ok('N2 grammar ≥ 80 (2차)', grammar.filter(g => g.level === 'N2').length >= 80, `actual=${grammar.filter(g => g.level === 'N2').length}`);
+  ok('N2 grammarPairs ≥ 20 (2차)', _gp44.filter(p => p.level === 'N2').length >= 20);
+  ok('N2 reading ≥ 50 (2차)', reading.filter(r => r.level === 'N2').length >= 50);
+  ok('N2 listening ≥ 50 (2차)', listening.filter(l => l.level === 'N2').length >= 50);
+  ok('N2 sentenceBank ≥ 320 (2차)', sentenceBank.filter(s => s.level === 'N2').length >= 320);
+  ok('N2 sentenceBank 회화 가능 ≥ 280 (2차)', sentenceBank.filter(s => s.level === 'N2' && s.canUseInConversation).length >= 280);
+  ok('N2 conversationTopics ≥ 10 (2차)', _t44.filter(t => t.level === 'N2').length >= 10);
+  ok('N2 stories ≥ 10 (2차)', _s44.filter(s => s.level === 'N2').length >= 10);
+  ok('N2 reading 장문(200자+) ≥ 3', reading.filter(r => r.level === 'N2' && (r.passage || '').length >= 200).length >= 3);
+}
+
+// ── 라운드 46: N2 3차 마무리 확장 sentinel (회귀 방지 floor + 누적 목표) ──────
+{
+  const { kanji: _k46 } = await import('./js/data/kanji.js');
+  const { grammarPairs: _gp46 } = await import('./js/data/grammarPairs.js');
+  const { conversationTopics: _t46 } = await import('./js/data/conversationTopics.js');
+  const { stories: _s46 } = await import('./js/data/stories.js');
+  const _n2v46 = vocab.filter(v => v.level === 'N2').length;
+  ok('N2 vocab ≥ 2300 (3차)', _n2v46 >= 2300, `actual=${_n2v46}`);
+  ok('N2 vocab 누적 ≥ 5000 (3차)', vocab.length >= 5000, `actual=${vocab.length}`);
+  ok('N2 kanji ≥ 400 (3차)', _k46.filter(k => k.level === 'N2').length >= 400, `actual=${_k46.filter(k => k.level === 'N2').length}`);
+  ok('N2 kanji 누적 ≥ 1000 (3차)', _k46.length >= 1000, `actual=${_k46.length}`);
+  ok('N2 grammar ≥ 180 (3차)', grammar.filter(g => g.level === 'N2').length >= 180, `actual=${grammar.filter(g => g.level === 'N2').length}`);
+  ok('N2 grammarPairs ≥ 45 (3차)', _gp46.filter(p => p.level === 'N2').length >= 45, `actual=${_gp46.filter(p => p.level === 'N2').length}`);
+  ok('N2 reading ≥ 120 (3차)', reading.filter(r => r.level === 'N2').length >= 120);
+  ok('N2 listening ≥ 120 (3차)', listening.filter(l => l.level === 'N2').length >= 120);
+  ok('N2 sentenceBank ≥ 600 (3차)', sentenceBank.filter(s => s.level === 'N2').length >= 600);
+  ok('N2 sentenceBank 회화 가능 ≥ 500 (3차)', sentenceBank.filter(s => s.level === 'N2' && s.canUseInConversation).length >= 500);
+  ok('N2 conversationTopics ≥ 18 (3차)', _t46.filter(t => t.level === 'N2').length >= 18);
+  ok('N2 stories ≥ 18 (3차)', _s46.filter(s => s.level === 'N2').length >= 18);
+  ok('N2 short_story ≥ 6 (3차)', _s46.filter(s => s.level === 'N2' && s.type === 'short_story').length >= 6,
+    `actual=${_s46.filter(s => s.level === 'N2' && s.type === 'short_story').length}`);
+  ok('N2 reading 장문(200자+) ≥ 15', reading.filter(r => r.level === 'N2' && (r.passage || '').length >= 200).length >= 15,
+    `actual=${reading.filter(r => r.level === 'N2' && (r.passage || '').length >= 200).length}`);
+  ok('N2 reading 의존성 핵심 전수 (3차 포함)', reading.filter(r => r.level === 'N2').every(r => (r.vocabIds || []).length > 0));
+  ok('N2 listening 의존성 핵심 전수 (3차 포함)', listening.filter(l => l.level === 'N2').every(l => (l.vocabIds || []).length > 0));
+  ok('N2 story 의존성 전수 (3차 포함)', _s46.filter(s => s.level === 'N2').every(s => (s.vocabularyIds || []).length > 0));
+}
+
+// ── 라운드 47: N2 3차 안정화 / 완성 선언 기준 (최종 품질 잠금) ──────────────
+{
+  const { kanji: _k47 } = await import('./js/data/kanji.js');
+  const { grammarPairs: _gp47 } = await import('./js/data/grammarPairs.js');
+  const { conversationTopics: _t47 } = await import('./js/data/conversationTopics.js');
+  const { stories: _s47 } = await import('./js/data/stories.js');
+  const n2v = vocab.filter(v => v.level === 'N2');
+  const n2r = reading.filter(r => r.level === 'N2');
+  const n2l = listening.filter(l => l.level === 'N2');
+  const n2sb = sentenceBank.filter(s => s.level === 'N2');
+  const n2st = _s47.filter(s => s.level === 'N2');
+  // deps 적용 전수 (stale bake 차단 — 신규 항목이 베이크 누락이면 vocabIds 필드 부재)
+  const depsApplied = n2r.every(r => Array.isArray(r.vocabIds))
+    && n2l.every(l => Array.isArray(l.vocabIds))
+    && n2st.every(s => Array.isArray(s.vocabularyIds));
+  const completion = {
+    '누적 vocab ≥ 5000': vocab.length >= 5000,
+    '누적 kanji ≥ 1000': _k47.length >= 1000,
+    'N2 grammar ≥ 180': grammar.filter(g => g.level === 'N2').length >= 180,
+    'N2 grammarPairs ≥ 45': _gp47.filter(p => p.level === 'N2').length >= 45,
+    'N2 reading ≥ 120': n2r.length >= 120,
+    'N2 listening ≥ 120': n2l.length >= 120,
+    'N2 sentenceBank ≥ 600': n2sb.length >= 600,
+    'N2 회화 가능 ≥ 500': n2sb.filter(s => s.canUseInConversation).length >= 500,
+    'N2 conversationTopics ≥ 18': _t47.filter(t => t.level === 'N2').length >= 18,
+    'N2 stories ≥ 18': n2st.length >= 18,
+    'N2 short_story ≥ 6': n2st.filter(s => s.type === 'short_story').length >= 6,
+    'N2 reading/listening/story 의존성 전수(stale bake 0)': depsApplied,
+  };
+  for (const [k, v] of Object.entries(completion)) ok(`N2 완성 기준 — ${k}`, v);
+  console.log('  ★ N2 완성 선언 기준: 위 항목 + (전역 word/kanji/pattern 중복 0 / vocab 예문·reading+meaningKo 조합·sentenceBank.ja 중복 0 / N1PAT 0 / imageKey ≤10% / unreviewed 0) 전부 통과 시 N2 완성. → 통과 시 N5~N2 전 레벨 콘텐츠 완성.');
+}
+
+// ── 라운드 48: 릴리스 후보 안정화 — 구조 가드 (PWA 캐시 목록 도출 가능성) ──────
+{
+  const dl = await import('./js/dataLoader.js');
+  // jsonPathFor 가 모든 level×type 조합에 대해 data/<lv>/<type>.json 을 반환 → PWA precache 목록 재사용 가능
+  let pathBad = 0;
+  const pwaPaths = [];
+  for (const lv of dl.VALID_LEVELS) for (const ty of dl.VALID_TYPES) {
+    const p = dl.jsonPathFor(lv, ty);
+    if (p !== `data/${lv.toLowerCase()}/${ty}.json`) pathBad++;
+    pwaPaths.push(p);
+  }
+  ok('릴리스 — jsonPathFor 전 조합 PWA 경로 도출', pathBad === 0, `bad=${pathBad}`);
+  ok('릴리스 — PWA precache 후보 경로 수 = level×type', pwaPaths.length === dl.VALID_LEVELS.length * dl.VALID_TYPES.length);
+  // actionLogger sanitizeMeta 가 allowlist 외 키(민감정보)를 제거하는지 — 로그 payload 보안 가드
+  const logger = await import('./js/actionLogger.js');
+  logger._resetThrottleForTest();
+  let captured = null;
+  logger._setWriterForTest(async (path, value) => { if (path.startsWith('actionLogs/')) captured = value; });
+  logger.logAction('vocab_card_answered', {
+    itemType: 'vocab', itemId: 'v_n2_1', correct: true,
+    email: 'user@example.com', password: 'secret123', userText: '원문답변', transcript: 'STT원문', name: '홍길동',
+  });
+  logger._resetWriterForTest();
+  const metaKeys = captured ? Object.keys(captured.meta) : [];
+  const leak = captured ? JSON.stringify(captured).match(/user@example|secret123|원문답변|STT원문|홍길동/) : null;
+  ok('릴리스 — 로그 meta allowlist 외 키 제거', metaKeys.every(k => ['itemType', 'itemId', 'storyId', 'correct', 'method'].includes(k)), `keys=${metaKeys.join(',')}`);
+  ok('릴리스 — 로그 payload 민감정보(이메일/비번/답변/STT/이름) 0', !leak);
+
+  // 임시 생성기/중간 산출물이 런타임 코드에서 import/참조되지 않는지 (배포 코드 격리)
+  const fs48 = await import('node:fs');
+  const FORBIDDEN = /(_gen_[a-z0-9]+|_vdata_[A-Z]|_vbatch|_deps2_[a-z]+|_allpats)/;
+  const scanDir = (dir) => {
+    let bad = [];
+    for (const ent of fs48.readdirSync(new URL(dir, import.meta.url), { withFileTypes: true })) {
+      if (ent.name === 'data') continue; // 데이터 모듈은 별도(콘텐츠) — 검사 대상은 로직 코드
+      const rel = `${dir}${ent.name}`;
+      if (ent.isDirectory()) { bad = bad.concat(scanDir(`${rel}/`)); continue; }
+      if (!ent.name.endsWith('.js')) continue;
+      const src = fs48.readFileSync(new URL(rel, import.meta.url), 'utf8');
+      for (const line of src.split('\n')) {
+        if ((line.includes('import') || line.includes('require') || line.includes('fetch')) && FORBIDDEN.test(line)) bad.push(`${rel}: ${line.trim().slice(0, 60)}`);
+      }
+    }
+    return bad;
+  };
+  const tempRefs = scanDir('./js/');
+  const idxSrc = fs48.readFileSync(new URL('./index.html', import.meta.url), 'utf8');
+  if (FORBIDDEN.test(idxSrc)) tempRefs.push('index.html');
+  ok('릴리스 — 임시 생성기/중간산출물 런타임 import 0', tempRefs.length === 0, tempRefs.join(' | '));
+}
+
+// ── 라운드 49: PWA 최소 구현 정적 검증 ───────────────────────────────────────
+{
+  const fs49 = await import('node:fs');
+  const read = (p) => { try { return fs49.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return null; } };
+  const exists = (p) => { try { fs49.accessSync(new URL(p, import.meta.url)); return true; } catch { return false; } };
+
+  // manifest.json 존재 + 유효 + 상대경로 + 아이콘 연결
+  const mfRaw = read('./manifest.json');
+  ok('PWA — manifest.json 존재', !!mfRaw);
+  let mf = null; try { mf = JSON.parse(mfRaw); } catch { /* */ }
+  ok('PWA — manifest 유효 JSON', !!mf);
+  if (mf) {
+    ok('PWA — start_url 상대경로', typeof mf.start_url === 'string' && !mf.start_url.startsWith('/'), `start_url=${mf.start_url}`);
+    ok('PWA — scope 상대경로', typeof mf.scope === 'string' && !mf.scope.startsWith('/'), `scope=${mf.scope}`);
+    ok('PWA — display standalone', mf.display === 'standalone');
+    ok('PWA — theme/background_color 앱 색상(#0f172a)', mf.theme_color === '#0f172a' && mf.background_color === '#0f172a');
+    const icons = mf.icons || [];
+    ok('PWA — manifest 아이콘 192/512 연결', icons.some(i => /192/.test(i.sizes)) && icons.some(i => /512/.test(i.sizes)));
+    ok('PWA — manifest 아이콘 경로 상대', icons.every(i => typeof i.src === 'string' && !i.src.startsWith('/')));
+    ok('PWA — maskable 아이콘 포함', icons.some(i => (i.purpose || '').includes('maskable')));
+  }
+  // 아이콘 파일 실제 존재 + PNG 시그니처
+  for (const ic of ['icon-192.png', 'icon-512.png', 'icon-192-maskable.png', 'icon-512-maskable.png']) {
+    const buf = (() => { try { return fs49.readFileSync(new URL(`./assets/icons/${ic}`, import.meta.url)); } catch { return null; } })();
+    const sigOk = buf && buf.length > 8 && buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47;
+    ok(`PWA — 아이콘 ${ic} 존재(PNG)`, !!sigOk);
+  }
+  // index.html 에 manifest 연결
+  const idx = read('./index.html') || '';
+  ok('PWA — index.html manifest 연결', /<link[^>]+rel=["']manifest["'][^>]+href=["']\.\/manifest\.json/.test(idx));
+  // service-worker.js 존재 + 핵심 구조
+  const sw = read('./service-worker.js');
+  ok('PWA — service-worker.js 존재', !!sw);
+  if (sw) {
+    ok('PWA — SW 캐시 버전 상수', /CACHE_VERSION\s*=/.test(sw));
+    ok('PWA — SW activate 구버전 캐시 정리', /activate/.test(sw) && /caches\.delete/.test(sw));
+    ok('PWA — SW same-origin GET 만 처리', /method\s*!==\s*['"]GET['"]/.test(sw) && /url\.origin\s*!==\s*self\.location\.origin/.test(sw));
+    // Firebase/gstatic 캐시 금지 — cross-origin 은 fetch 핸들러에서 early-return(network-only)
+    ok('PWA — SW Firebase/gstatic 캐시 안 함(네트워크 통과)', /firebaseio|googleapis|gstatic/.test(sw) && /url\.origin\s*!==\s*self\.location\.origin\)\s*return/.test(sw));
+    ok('PWA — SW 방어적(실패 무시 .catch)', (sw.match(/\.catch\(/g) || []).length >= 3);
+  }
+  // SW 등록 모듈
+  const pwa = read('./js/pwa.js') || '';
+  ok('PWA — 등록 모듈 미지원 환경 방어', /serviceWorker' in n|'serviceWorker'\s*in\s*n/.test(pwa) && /return false/.test(pwa));
+  ok('PWA — app.js 가 SW 등록 호출', /registerServiceWorker\(\)/.test(read('./js/app.js') || ''));
+}
+
+// ── 라운드 50: 로그인 필수 / 인증 게이트 정적 검증 ───────────────────────────
+{
+  const fs50 = await import('node:fs');
+  const read = (p) => { try { return fs50.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return null; } };
+  // router 게이트 API
+  const routerSrc = read('./js/router.js') || '';
+  ok('인증 — router setAuthGate/consumePendingRoute export', /export function setAuthGate/.test(routerSrc) && /export function consumePendingRoute/.test(routerSrc));
+  ok('인증 — router render 가 authGuard 로 게이트', /authGuard\s*&&\s*!authGuard\(\)/.test(routerSrc) && /gateRenderer/.test(routerSrc));
+  ok('인증 — 비통과 시 의도 route 보관(pendingRoute)', /pendingRoute\s*=\s*route/.test(routerSrc));
+  // authGate 뷰
+  const gateSrc = read('./js/views/authGate.js') || '';
+  ok('인증 — authGate renderAuthGate/renderAuthLoading export', /export function renderAuthGate/.test(gateSrc) && /export function renderAuthLoading/.test(gateSrc));
+  ok('인증 — 로그인/회원가입 버튼 존재', /id="loginBtn"/.test(gateSrc) && /id="signupBtn"/.test(gateSrc));
+  ok('인증 — 비밀번호 입력 후 비움(저장 금지)', /pwEl\.value\s*=\s*''/.test(gateSrc));
+  ok('인증 — 미설정/오프라인 안내', /authAvailable\(\)/.test(gateSrc) && /오프라인/.test(gateSrc));
+  ok('인증 — Google/소셜 로그인 API 미사용', !/GoogleAuthProvider|signInWithPopup|signInWithRedirect|OAuthProvider/.test(gateSrc));
+  ok('인증 — 테스트 로그 버튼 없음', !/로그 테스트|sendTestLog|testLog/.test(gateSrc));
+  // app.js 배선
+  const appSrc = read('./js/app.js') || '';
+  ok('인증 — app.js setAuthGate(getCurrentUser) 배선', /setAuthGate\(\s*\(\)\s*=>\s*!!getCurrentUser\(\)/.test(appSrc));
+  ok('인증 — app.js initAuth 후 부팅(start)', /initAuth\(\)\.then/.test(appSrc) && /start\(\)/.test(appSrc));
+  ok('인증 — app.js auth-locked 토글', /auth-locked/.test(appSrc));
+  ok('인증 — app.js app_open 은 로그인 시점', /signedIn\s*&&\s*!_prevSignedIn\)\s*logAction\('app_open'\)/.test(appSrc));
+  // "로그인 없이 사용 가능" 문구 제거 확인 (게이트/설정)
+  ok('인증 — 게이트/설정에 "로그인 없이" 문구 없음', !/로그인 없이도/.test(gateSrc) && !/로그인 없이도/.test(read('./js/views/settings.js') || ''));
+  // CSS — auth-locked 헤더/탭 숨김
+  ok('인증 — styles.css auth-locked 헤더/탭 숨김', /auth-locked\s+\.top-bar/.test(read('./styles.css') || '') && /auth-locked\s+\.tab-bar/.test(read('./styles.css') || ''));
+  // firebase-logging 문서 — auth required rules 정책
+  const fbDoc = read('./docs/firebase-logging.md') || '';
+  ok('문서 — firebase-logging auth required rules', /auth\s*!=\s*null/.test(fbDoc) && /로그인 필수|signed-in only|signed-in 전용/.test(fbDoc));
+  ok('문서 — firebase-logging anonymousActivity deprecated', /anonymousActivity[\s\S]{0,80}(deprecated|폐기|false)/i.test(fbDoc));
+  ok('문서 — firebase-logging payload↔rules 정합 확인표(라운드 51)', /payload\s*↔\s*rules 정합|payload ↔ rules/.test(fbDoc));
+}
+
+// ── 라운드 51: 공개 베타 준비 — 설치 안내 + 체크리스트 문서 가드 ────────────
+{
+  const fs51 = await import('node:fs');
+  const read = (p) => { try { return fs51.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return null; } };
+  const exists = (p) => { try { fs51.accessSync(new URL(p, import.meta.url)); return true; } catch { return false; } };
+  // 사용자용 PWA 설치 안내 문서
+  const install = read('./docs/pwa-install.md');
+  ok('베타 — docs/pwa-install.md 존재', !!install);
+  if (install) {
+    ok('베타 — 설치 안내: Android/PC/iPhone 모두 포함', /Android/.test(install) && /(PC|데스크톱|Edge)/.test(install) && /(iPhone|iPad|Safari)/.test(install));
+    ok('베타 — 설치 안내: 첫 사용 온라인 로그인 필요 명시', /온라인 로그인|온라인 연결/.test(install) && /로그인/.test(install));
+  }
+  // release-checklist 로그인 필수 + PWA 설치 QA 항목
+  const rc = read('./docs/release-checklist.md') || '';
+  ok('베타 — release-checklist 로그인 필수 QA(4-c)', /로그인 필수 \/ 인증 게이트|인증 게이트/.test(rc) && /Authorized domains/.test(rc) && /운영 rules Publish/.test(rc));
+  ok('베타 — release-checklist PWA 설치/오프라인 항목', /Service Worker|설치 가능|오프라인 새로고침/.test(rc));
+  // browser-qa-checklist 로그인+PWA 수동 항목
+  const bq = read('./docs/browser-qa-checklist.md') || '';
+  ok('베타 — browser-qa 로그인/PWA 수동 항목', /로그인 필수 \+ PWA 설치 수동 QA|Android Chrome PWA 설치/.test(bq) && /#study.*차단|직접 접근.*차단/.test(bq));
+  // README 에 설치 안내 + 로그인 필수 안내
+  const rm = read('./README.md') || '';
+  ok('베타 — README 로그인 필수 + 설치 안내 링크', /이메일 로그인이 필요|로그인 필수/.test(rm) && /pwa-install\.md/.test(rm));
+}
+
+// ── 라운드 52: 비밀번호 재설정 정적 검증 ────────────────────────────────────
+{
+  const authSvc52 = await import('./js/authService.js');
+  const fs52 = await import('node:fs');
+  const read = (p) => { try { return fs52.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  // resetPassword export + sendPasswordResetEmail 사용
+  ok('재설정 — authService.resetPassword export', typeof authSvc52.resetPassword === 'function');
+  const authSrc = read('./js/authService.js');
+  ok('재설정 — sendPasswordResetEmail 사용', /sendPasswordResetEmail/.test(authSrc));
+  ok('재설정 — user-not-found 중립 성공(enumeration 방지)', /user-not-found[\s\S]{0,160}ok:\s*true/.test(authSrc));
+  // 동작: 미주입 mock 으로 export 호출이 throw 하지 않고 객체 반환
+  const r0 = await authSvc52.resetPassword('');
+  ok('재설정 — 빈 이메일 → 안내(throw 없음)', r0 && r0.ok === false && /이메일을 입력/.test(r0.error));
+  // authGate reset UI + reset 핸들러가 logAction 호출 안 함
+  const gateSrc = read('./js/views/authGate.js');
+  ok('재설정 — authGate 에 #forgotBtn(잊으셨나요) UI', /id="forgotBtn"/.test(gateSrc) && /잊으셨나요/.test(gateSrc));
+  ok('재설정 — authGate reset 핸들러가 resetPassword 호출', /resetPassword\(/.test(gateSrc));
+  // reset 흐름은 로그 미기록: ALLOWED_EVENTS 에 password/reset 이벤트 없음 + authGate forgot 핸들러에 logAction 없음
+  const loggerSrc52 = read('./js/actionLogger.js');
+  ok('재설정 — 로그 이벤트에 reset/password 없음', !/password_reset|reset_password|'reset'|"reset"/.test(loggerSrc52.match(/ALLOWED_EVENTS[\s\S]*?\]/)?.[0] || loggerSrc52));
+  const forgotHandler = gateSrc.match(/forgotBtn\.addEventListener[\s\S]*?\}\);/)?.[0] || '';
+  ok('재설정 — forgot 핸들러에 logAction 없음(이메일 미기록)', !/logAction/.test(forgotHandler));
+  // 이메일/비밀번호 localStorage 저장 패턴 없음(재확인)
+  ok('재설정 — authGate localStorage 에 email/password 저장 없음',
+     !/localStorage[\s\S]{0,40}(email|password|비밀번호)/i.test(gateSrc));
+}
+
+// ── 라운드 53: vocab JSON 분리 drift 검증 (JSON ≡ JS 단일 진실원) ────────────
+{
+  const fs53 = await import('node:fs');
+  const LEVELS = ['N5', 'N4', 'N3', 'N2'];
+  let jsonTotal = 0;
+  const allIds = new Set(), allWords = new Set();
+  let dupId = 0, dupWord = 0, badImg = 0, parseFail = 0, fieldMismatch = 0, countMismatch = 0, idOrderMismatch = 0;
+  for (const lv of LEVELS) {
+    let arr = null;
+    try { arr = JSON.parse(fs53.readFileSync(new URL(`./data/${lv.toLowerCase()}/vocab.json`, import.meta.url), 'utf8')); }
+    catch { parseFail++; continue; }
+    const js = vocab.filter(v => v.level === lv);
+    if (!Array.isArray(arr) || arr.length !== js.length) { countMismatch++; continue; }
+    for (let i = 0; i < arr.length; i++) {
+      const a = arr[i], b = js[i];
+      if (a.id !== b.id) { idOrderMismatch++; }
+      if (a.word !== b.word || a.reading !== b.reading || a.meaningKo !== b.meaningKo) fieldMismatch++;
+      if (allIds.has(a.id)) dupId++; else allIds.add(a.id);
+      if (allWords.has(a.word)) dupWord++; else allWords.add(a.word);
+      if (!_palette.has(a.imageKey) && a.imageKey !== 'default') badImg++;
+    }
+    jsonTotal += arr.length;
+  }
+  ok('JSON drift — 4개 레벨 파일 parse 성공', parseFail === 0, `parseFail=${parseFail}`);
+  ok('JSON drift — 레벨별 count == JS', countMismatch === 0, `mismatch=${countMismatch}`);
+  ok('JSON drift — 총합 == JS vocab.length', jsonTotal === vocab.length, `json=${jsonTotal} js=${vocab.length}`);
+  ok('JSON drift — id 순서/값 일치', idOrderMismatch === 0, `mismatch=${idOrderMismatch}`);
+  ok('JSON drift — word/reading/meaningKo 일치', fieldMismatch === 0, `mismatch=${fieldMismatch}`);
+  ok('JSON drift — 전역 id 중복 0', dupId === 0, `dup=${dupId}`);
+  ok('JSON drift — 전역 word 중복 0', dupWord === 0, `dup=${dupWord}`);
+  ok('JSON drift — imageKey 가 palette/default', badImg === 0, `bad=${badImg}`);
+  ok('JSON drift — id/word 고유 합계 == 총합', allIds.size === jsonTotal && allWords.size === jsonTotal);
+  // dataLoader.loadVocab: JSON 우선 + 실패 시 JS fallback (구조 정적 검증)
+  const dlSrc = fs53.readFileSync(new URL('./js/dataLoader.js', import.meta.url), 'utf8');
+  ok('JSON drift — dataLoader.loadVocab export', /export const loadVocab\b/.test(dlSrc));
+  ok('JSON drift — dataLoader JSON-first + JS fallback', /fetchJson\(level, type\)/.test(dlSrc) && /loadFromJsFallback/.test(dlSrc));
+  ok('JSON drift — jsonPathFor data/<lv>/<type>.json', /data\/\$\{level\.toLowerCase\(\)\}\/\$\{type\}\.json/.test(dlSrc));
 }
 
 if (errs.length) {
