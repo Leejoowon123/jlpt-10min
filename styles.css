@@ -1,53 +1,55 @@
-/* 기본(:root) = 다크 팔레트. [data-theme="light"] 가 라이트 오버라이드.
-   index.html head 인라인 스크립트가 첫 페인트 전 data-theme 설정 (플래시 방지). */
+/* JLPT10M 디자인 토큰 — 먹색(ink) + 주홍(vermilion) + 종이(washi) 팔레트.
+   기본(:root) = 다크(먹) 팔레트. [data-theme="light"] = 종이 라이트 오버라이드.
+   index.html head 인라인 스크립트가 첫 페인트 전 data-theme 설정 (플래시 방지).
+   브랜드 강조색(--accent)은 라이트/다크 공통 주홍 계열로 "일본 학습 카드" 느낌을 은은하게 유지. */
 :root {
-  --bg: #0f172a;
-  --bg-soft: #1e293b;
-  --card: #1e293b;
-  --card-2: #273349;
-  --line: #334155;
-  --text: #e2e8f0;
-  --text-dim: #94a3b8;
-  --accent: #38bdf8;
-  --accent-2: #22d3ee;
-  --good: #34d399;
-  --bad: #f87171;
-  --warn: #fbbf24;
-  --shadow: 0 6px 24px rgba(0,0,0,.25);
-  --radius: 14px;
-  --bar-bg: rgba(15,23,42,.92);
-  --bar-bg-solid: rgba(15,23,42,.96);
-  --hl-panel-bg: rgba(255,255,255,.06);
-  --on-accent: #04263b;
+  --bg: #1b1815;          /* 먹색(warm ink) */
+  --bg-soft: #232019;
+  --card: #262219;
+  --card-2: #302b22;
+  --line: #3d372d;
+  --text: #efe9dd;        /* 따뜻한 오프화이트 */
+  --text-dim: #a79e8c;
+  --accent: #e2533f;      /* 주홍(vermilion) */
+  --accent-2: #caa24a;    /* 보조: 은은한 금/황토 */
+  --good: #5fb98a;
+  --bad: #e8736a;
+  --warn: #e0a83e;
+  --shadow: 0 8px 28px rgba(0,0,0,.34);
+  --radius: 16px;
+  --bar-bg: rgba(27,24,21,.92);
+  --bar-bg-solid: rgba(27,24,21,.97);
+  --hl-panel-bg: rgba(226,83,63,.10);   /* 주홍 톤 하이라이트 패널 */
+  --on-accent: #fff7f2;
 }
 [data-theme="dark"] {
   /* :root 와 동일 — 명시적 다크 선택 시에도 일관 보장 */
-  --bg: #0f172a; --bg-soft: #1e293b; --card: #1e293b; --card-2: #273349;
-  --line: #334155; --text: #e2e8f0; --text-dim: #94a3b8;
-  --accent: #38bdf8; --accent-2: #22d3ee;
-  --good: #34d399; --bad: #f87171; --warn: #fbbf24;
-  --shadow: 0 6px 24px rgba(0,0,0,.25);
-  --bar-bg: rgba(15,23,42,.92); --bar-bg-solid: rgba(15,23,42,.96);
-  --hl-panel-bg: rgba(255,255,255,.06);
-  --on-accent: #04263b;
+  --bg: #1b1815; --bg-soft: #232019; --card: #262219; --card-2: #302b22;
+  --line: #3d372d; --text: #efe9dd; --text-dim: #a79e8c;
+  --accent: #e2533f; --accent-2: #caa24a;
+  --good: #5fb98a; --bad: #e8736a; --warn: #e0a83e;
+  --shadow: 0 8px 28px rgba(0,0,0,.34);
+  --bar-bg: rgba(27,24,21,.92); --bar-bg-solid: rgba(27,24,21,.97);
+  --hl-panel-bg: rgba(226,83,63,.10);
+  --on-accent: #fff7f2;
 }
 [data-theme="light"] {
-  --bg: #f1f5f9;
-  --bg-soft: #e2e8f0;
-  --card: #ffffff;
-  --card-2: #f1f5f9;
-  --line: #cbd5e1;
-  --text: #0f172a;
-  --text-dim: #64748b;
-  --accent: #0284c7;
-  --accent-2: #0e7490;
-  --good: #059669;
-  --bad: #dc2626;
-  --warn: #b45309;
-  --shadow: 0 4px 16px rgba(15,23,42,.10);
-  --bar-bg: rgba(241,245,249,.92);
-  --bar-bg-solid: rgba(241,245,249,.97);
-  --hl-panel-bg: rgba(15,23,42,.05);
+  --bg: #f6f1e7;          /* 종이(washi) 따뜻한 배경 */
+  --bg-soft: #efe7d8;
+  --card: #fffdf8;
+  --card-2: #f3ecde;
+  --line: #e0d7c5;
+  --text: #2a2620;        /* 먹색 텍스트 */
+  --text-dim: #877e6e;
+  --accent: #d8432e;      /* 주홍 */
+  --accent-2: #b07d23;
+  --good: #2f8f63;
+  --bad: #c63a2c;
+  --warn: #a96a14;
+  --shadow: 0 4px 18px rgba(60,46,30,.12);
+  --bar-bg: rgba(246,241,231,.93);
+  --bar-bg-solid: rgba(246,241,231,.98);
+  --hl-panel-bg: rgba(216,67,46,.08);
   --on-accent: #ffffff;
 }
 * { box-sizing: border-box; }
@@ -89,7 +91,13 @@ body.auth-locked .tab-bar { display: none !important; }
   backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--line);
 }
-.brand { margin: 0; font-size: 16px; font-weight: 700; flex: 1; }
+.brand { margin: 0; font-size: 16px; font-weight: 800; letter-spacing: .02em; flex: 1; }
+/* JLPT10M 워드마크 — "10M" 부분만 주홍 강조 (텍스트 로고). */
+.brand .wm-accent { color: var(--accent); }
+/* 로그인 화면 로고 */
+.auth-brand { font-weight: 800; letter-spacing: .02em; }
+.auth-brand .wm-accent { color: var(--accent); }
+.auth-card { box-shadow: var(--shadow); border: 1px solid var(--line); }
 .back-btn {
   background: transparent; border: none; font-size: 20px;
   width: 32px; height: 32px; border-radius: 8px;
@@ -167,10 +175,11 @@ body.auth-locked .tab-bar { display: none !important; }
   border-radius: 12px;
   font-weight: 700; font-size: 14px;
 }
-.btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: var(--on-accent); border-color: transparent; }
+.btn.primary { background: var(--accent); color: var(--on-accent); border-color: transparent; box-shadow: 0 2px 8px rgba(216,67,46,.25); }
+.btn.primary:hover { filter: brightness(1.05); }
 .btn.ghost { background: transparent; }
-.btn.danger { background: rgba(248,113,113,.12); color: var(--bad); border-color: rgba(248,113,113,.35); }
-.btn.good { background: rgba(52,211,153,.12); color: var(--good); border-color: rgba(52,211,153,.35); }
+.btn.danger { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, transparent); }
+.btn.good { background: color-mix(in srgb, var(--good) 14%, transparent); color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, transparent); }
 .btn-row { display: flex; gap: 8px; }
 .btn-row .btn { flex: 1; }
 
@@ -510,7 +519,7 @@ rt {
   font-size: 12px; font-weight: 600;
   color: var(--text-dim);
 }
-.chip.active { color: var(--bg); background: var(--accent-2); border-color: transparent; }
+.chip.active { color: var(--on-accent); background: var(--accent); border-color: transparent; box-shadow: 0 1px 6px rgba(216,67,46,.22); }
 
 /* Progress */
 .bar { width: 100%; height: 6px; background: var(--card-2); border-radius: 999px; overflow: hidden; }

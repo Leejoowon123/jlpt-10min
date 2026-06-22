@@ -3,6 +3,13 @@
 앱의 모든 화면/학습 동작의 source of truth. (README 에서 이동)
 데이터 스키마는 [data-models.md](./data-models.md), 콘텐츠 규칙은 [content-policy.md](./content-policy.md) 참조.
 
+## 브랜딩 / 테마 (라운드 54)
+
+- **브랜드명**: **JLPT10M** (텍스트 워드마크 — "JLPT" + 주홍 강조 "10M", `.wm-accent`). 공식 JLPT/일본 정부/국기 로고와 무관한 비공식 학습 앱.
+- **팔레트**: 먹색(ink) + 주홍(vermilion `--accent`) + 종이(washi) 톤. 다크=먹 배경(`#1b1815`), 라이트=종이 배경(`#f6f1e7`). 디자인 토큰은 `styles.css` `:root`/`[data-theme]` 변수로 관리(한 가지 네이비 단색 탈피).
+- **컴포넌트 통일**: `.btn.primary`(주홍 솔리드)·`.chip.active`(주홍 선택 강조)·카드/여백 정돈. 모바일 360px 밀도 고려.
+- **아이콘**: 먹 배경 + 종이 원 + 주홍 점(印/seal 느낌). `tools/gen-icons.mjs` 로 재생성. manifest theme/background = `#1b1815`.
+
 ## 로그인 필수 정책 (라운드 50)
 
 - **앱 사용에 이메일 로그인이 필요하다.** 진입 시 `app.js` 가 `initAuth()`/`observeAuth()` 로 인증 상태를

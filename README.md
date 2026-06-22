@@ -1,7 +1,8 @@
-# JLPT 10분 — 무료 일본어 학습 MVP
+# JLPT10M — 무료 일본어 학습 앱
 
-하루 10분, JLPT N5~N2 학습 흐름을 **완전 무료**로 구현한 모바일 우선 SPA.
+하루 10분, JLPT N5~N2 학습 흐름을 **완전 무료**로 구현한 모바일 우선 SPA. (브랜드명 **JLPT10M**)
 빌드 도구 없음 · 유료 API 없음 · 서버 없음 — 정적 호스팅(GitHub Pages)만으로 동작.
+디자인: 먹색(ink) + 주홍(vermilion) + 종이(washi) 팔레트, 라이트/다크 테마. (비공식 학습 앱 — JLPT 주관 기관과 무관)
 
 ## 현재 상태
 
@@ -39,6 +40,23 @@ Firebase 는 **인증과 최소 행동 로그** 용도로만 쓰입니다(이메
 - 콘텐츠는 현재 정적 import 라 shell 캐시에 포함 → 오프라인 학습 동작. Firebase 로그인/로그·TTS/STT는 온라인/브라우저 지원에 의존(오프라인 시 학습은 계속).
 - 아이콘은 `assets/icons/`(`node tools/gen-icons.mjs` 로 재생성). 설계: [docs/pwa-plan.md](docs/pwa-plan.md).
 
+## Android APK (개발 빌드 — Capacitor)
+
+정적 웹앱을 Capacitor 로 Android 패키징할 수 있게 1차 구성 완료(`capacitor.config.json`, `appId=com.jlpt10m.app`, `webDir=www`).
+**JDK17+ / Android Studio·SDK 환경**에서:
+
+```bash
+npm i -D @capacitor/cli@^6 && npm i @capacitor/core@^6 @capacitor/android@^6   # 최초 1회(네트워크)
+node tools/build-www.mjs && npx cap add android        # android/ 생성
+npm run cap:sync && (cd android && ./gradlew assembleDebug)   # 디버그 APK
+```
+
+**Android Studio 없이** 빌드하려면 → GitHub **Actions** 탭 → **"Android APK (debug)"** → **Run workflow** →
+완료 후 **Artifacts → `jlpt10m-debug-apk`** 다운로드(서버에서 빌드, `.github/workflows/android-apk.yml`).
+
+`www/`·`android/` 는 빌드 산출물(.gitignore). debug APK 는 테스트용(release/Play 배포는 별도 서명 키 필요).
+빌드 절차·실기기 설치·Firebase/TTS/STT 확인·한계: [docs/apk-plan.md](docs/apk-plan.md).
+
 ## 빠른 실행
 
 ES Module 사용으로 `file://` 직접 열기 불가 — 아무 정적 서버나 OK.
@@ -67,7 +85,7 @@ VSCode Live Server 등도 동일하게 동작.
 ```bash
 npm install        # jsdom (최초 1회)
 node smoke.mjs     # 데이터 무결성 + 후리가나 커버율 + 정적/보안 검사 + 완성/릴리스 sentinel
-node qa.mjs        # jsdom DOM 시나리오 (239 시나리오)
+node qa.mjs        # jsdom DOM 시나리오 (241 시나리오)
 npm run content:report   # 최종 목표 대비 콘텐츠 현황
 ```
 
@@ -105,6 +123,7 @@ npm run content:report   # 최종 목표 대비 콘텐츠 현황
 | [docs/pwa-plan.md](docs/pwa-plan.md) | PWA/오프라인 최소 구현 계획(캐시 전략·precache 도출) |
 | [docs/pwa-install.md](docs/pwa-install.md) | 사용자용 앱 설치 안내(Android/PC/iPhone) + 로그인·오프라인 한계 |
 | [docs/release-checklist.md](docs/release-checklist.md) | 공개 베타 배포 전 릴리스 체크리스트 |
+| [docs/apk-plan.md](docs/apk-plan.md) | APK 패키징 계획(Capacitor 추천·사전 점검) — **계획 중** |
 | [docs/browser-qa-checklist.md](docs/browser-qa-checklist.md) | 실제 브라우저 수동 QA 체크리스트 |
 | [docs/asset-licenses.md](docs/asset-licenses.md) | 이미지 자산 라이선스 기록 |
 | [docs/content-authoring-guide.md](docs/content-authoring-guide.md) | 콘텐츠 작성 실무 가이드 |

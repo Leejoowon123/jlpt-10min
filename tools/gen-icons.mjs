@@ -5,9 +5,11 @@
 import { deflateSync } from 'node:zlib';
 import { writeFileSync, mkdirSync } from 'node:fs';
 
-const BG = [15, 23, 42, 255];      // #0f172a navy
-const WHITE = [248, 250, 252, 255]; // #f8fafc
-const RED = [239, 68, 68, 255];     // #ef4444
+// JLPT10M 브랜드 아이콘 — 먹(ink) 배경 + 종이(washi) 원 + 주홍(vermilion) 점 (印/seal 느낌).
+// 공식 JLPT/일본 국기/후지산/벚꽃 사용 안 함 — 추상 도형만.
+const BG = [27, 24, 21, 255];       // #1b1815 먹색
+const WHITE = [241, 232, 214, 255]; // #f1e8d6 종이
+const RED = [216, 67, 46, 255];     // #d8432e 주홍
 const CLEAR = [0, 0, 0, 0];
 
 function lerp(a, b, t) { return a.map((v, i) => Math.round(v + (b[i] - v) * t)); }

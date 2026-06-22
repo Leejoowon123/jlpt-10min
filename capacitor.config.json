@@ -1,0 +1,12 @@
+{
+  "appId": "com.jlpt10m.app",
+  "appName": "JLPT10M",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}

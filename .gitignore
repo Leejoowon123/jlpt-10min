@@ -59,3 +59,13 @@ _allpats.json
 _deps2_*.json
 __pycache__/
 *.pyc
+
+# ── Capacitor / APK 빌드 산출물 (라운드 55) ──────────────────────────────────
+#   www/ = webDir 빌드 사본(node tools/build-www.mjs 로 재생성), android/ = cap add android 산출물.
+#   둘 다 소스(루트 정적 파일 + capacitor.config.json)에서 재생성되므로 커밋하지 않는다.
+www/
+android/
+.gradle/
+*.apk
+*.keystore
+*.jks

@@ -39,8 +39,9 @@ jobs:
 
       # package-lock.json 은 .gitignore 에 들어 있으므로 npm ci 대신 npm install 사용.
       # devDependencies(jsdom) 만 설치하면 충분 — 실제 앱 코드는 의존성 없음.
+      # --omit=optional: Capacitor(optionalDependencies)는 APK 빌드 전용이라 테스트 CI 에선 건너뜀(경량 유지).
       - name: Install dependencies
-        run: npm install --no-audit --no-fund
+        run: npm install --omit=optional --no-audit --no-fund
 
       - name: Syntax check (node --check)
         run: |
