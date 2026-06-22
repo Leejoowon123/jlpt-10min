@@ -3474,17 +3474,15 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('APK — tools/build-www.mjs 존재', !!bw);
   ok('APK — build-www 필수 자산 복사(index/js/data/assets/manifest/sw/styles)',
      /index\.html/.test(bw) && /'js'/.test(bw) && /'data'/.test(bw) && /'assets'/.test(bw) && /manifest\.json/.test(bw) && /service-worker\.js/.test(bw) && /styles\.css/.test(bw));
-  // package.json scripts + lock-safe(의존성에 capacitor 미기재)
+  // package.json scripts + Capacitor devDependencies(APK 빌드/로컬 sync에 필요)
   const pkg = JSON.parse(read('./package.json') || '{}');
   const sc = pkg.scripts || {};
   ok('APK — npm scripts cap:copy/sync/open/build', !!sc['cap:copy'] && !!sc['cap:sync'] && !!sc['cap:open'] && !!sc['cap:build:android']);
-  // Capacitor 는 optionalDependencies(APK 빌드 전용) — devDeps/deps 에는 없어 테스트 CI 경량 유지.
-  const optCap = Object.keys(pkg.optionalDependencies || {});
-  ok('APK — capacitor optionalDependencies(core/android/cli)',
-     optCap.includes('@capacitor/core') && optCap.includes('@capacitor/android') && optCap.includes('@capacitor/cli'));
-  ok('APK — capacitor 가 deps/devDeps 에는 없음(qa CI 경량)',
-     !(pkg.dependencies && Object.keys(pkg.dependencies).some(k => k.startsWith('@capacitor'))) &&
-     !(pkg.devDependencies && Object.keys(pkg.devDependencies).some(k => k.startsWith('@capacitor'))));
+  const devCap = Object.keys(pkg.devDependencies || {});
+  ok('APK — capacitor devDependencies(core/android/cli)',
+     devCap.includes('@capacitor/core') && devCap.includes('@capacitor/android') && devCap.includes('@capacitor/cli'));
+  ok('APK — capacitor 는 runtime dependencies 가 아님',
+     !(pkg.dependencies && Object.keys(pkg.dependencies).some(k => k.startsWith('@capacitor'))));
   // pwa.js Capacitor 가드
   const pwaSrc = read('./js/pwa.js');
   ok('APK — pwa.js isCapacitor 감지 + SW 건너뜀', /export function isCapacitor/.test(pwaSrc) && /if \(isCapacitor\(\)\) return false/.test(pwaSrc));
@@ -3553,12 +3551,12 @@ ok('data/n4/stories.json — sourceType 모두 original',
   // 설정 화면 네이티브 안내 문구
   const setSrc = read('./js/views/settings.js');
   ok('TTS — settings native-ready/native-unavailable 매핑 + Android TTS 안내', /native-ready/.test(setSrc) && /native-unavailable/.test(setSrc) && /텍스트 음성 변환|네이티브 TTS/.test(setSrc));
-  // 플러그인 optionalDependencies(APK 빌드 전용) + qa CI 무영향
+  // 플러그인 devDependencies(APK 빌드/로컬 sync에 필요)
   const pkg = JSON.parse(read('./package.json') || '{}');
-  ok('TTS — @capacitor-community/text-to-speech optionalDependencies', !!(pkg.optionalDependencies && pkg.optionalDependencies['@capacitor-community/text-to-speech']));
-  ok('TTS — TTS 플러그인이 deps/devDeps 에는 없음(qa CI 경량)',
+  ok('TTS — @capacitor-community/text-to-speech devDependencies', !!(pkg.devDependencies && pkg.devDependencies['@capacitor-community/text-to-speech']));
+  ok('TTS — TTS 플러그인이 runtime dependencies 에는 없음',
      !(pkg.dependencies && pkg.dependencies['@capacitor-community/text-to-speech']) &&
-     !(pkg.devDependencies && pkg.devDependencies['@capacitor-community/text-to-speech']));
+     !!(pkg.devDependencies && pkg.devDependencies['@capacitor-community/text-to-speech']));
   // APK 워크플로는 full npm install(optional 포함) — 플러그인 설치됨
   const apkWf = read('./.github/workflows/android-apk.yml');
   ok('TTS — android-apk.yml npm install(optional 포함, --omit 아님)', /npm install --no-audit --no-fund/.test(apkWf) && !/--omit=optional/.test(apkWf));

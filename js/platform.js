@@ -27,10 +27,24 @@ export function isAndroidCapacitor() {
   return isCapacitor() && String(capacitorPlatform()).toLowerCase() === 'android';
 }
 
+let registeredTextToSpeech = null;
+
 /** 주입된 Capacitor TextToSpeech 플러그인 핸들(없으면 null). */
 export function nativeTtsPlugin() {
-  try { return (globalThis.Capacitor && globalThis.Capacitor.Plugins && globalThis.Capacitor.Plugins.TextToSpeech) || null; }
-  catch { return null; }
+  try {
+    const cap = globalThis.Capacitor;
+    if (!cap) return null;
+    const direct = cap.Plugins && cap.Plugins.TextToSpeech;
+    if (direct) return direct;
+    // Capacitor v3+ often exposes native plugins through registerPlugin()
+    // instead of pre-populating Capacitor.Plugins, especially in non-bundled
+    // static apps. Cache the proxy so repeated diagnostics/speak calls use the
+    // same bridge object.
+    if (!registeredTextToSpeech && typeof cap.registerPlugin === 'function') {
+      registeredTextToSpeech = cap.registerPlugin('TextToSpeech');
+    }
+    return registeredTextToSpeech || null;
+  } catch { return null; }
 }
 
 /** 네이티브 TTS 사용 조건 — Capacitor + TextToSpeech 플러그인 주입됨. */
@@ -40,11 +54,12 @@ export function useNativeTts() {
 
 /** Capacitor 진단 스냅샷 — 설정 화면/로그에서 원인 파악용. (방어적) */
 export function getCapacitorDiagnostics() {
-  const out = { hasCapacitor: false, platform: 'web', pluginKeys: [], hasPlugins: false };
+  const out = { hasCapacitor: false, platform: 'web', pluginKeys: [], hasPlugins: false, hasRegisterPlugin: false };
   try {
     const cap = globalThis.Capacitor;
     out.hasCapacitor = !!cap;
     out.platform = capacitorPlatform();
+    out.hasRegisterPlugin = !!(cap && typeof cap.registerPlugin === 'function');
     if (cap && cap.Plugins) {
       out.hasPlugins = true;
       try { out.pluginKeys = Object.keys(cap.Plugins); } catch { out.pluginKeys = []; }
@@ -64,5 +79,6 @@ export function getNativeTtsDiagnostics() {
     hasStop: !!(p && typeof p.stop === 'function'),
     hasGetLanguages: !!(p && typeof p.getSupportedLanguages === 'function'),
     pluginKeys: getCapacitorDiagnostics().pluginKeys,
+    hasRegisterPlugin: getCapacitorDiagnostics().hasRegisterPlugin,
   };
 }
