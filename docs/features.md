@@ -80,7 +80,19 @@
 
 독해는 지문 자체에 답이 들어있는 게 정상이므로 "정답 텍스트 없음" 검증을 의도적으로 스킵.
 
-## TTS 폴백 정책
+## TTS 어댑터 정책 (라운드 57)
+
+`js/tts.js` 는 **어댑터 구조** — 공개 API(`speak`/`stopSpeaking`/`ttsAvailable`/`hasJaVoice`/`refreshVoices`/`getVoiceStatus`/`onVoiceStatusChange`)는 동일하고 환경에 따라 내부 어댑터를 선택(`js/platform.js` `useNativeTts()`):
+
+| 환경 | 어댑터 | 음성 상태값 |
+| --- | --- | --- |
+| 웹 / PWA | Web Speech API(기존 라운드 30 감지 로직 그대로) | `ja-found` / `no-ja` / `detecting` / `unsupported` |
+| Capacitor Android(APK) | **네이티브 `@capacitor-community/text-to-speech`** 우선 | `native-ready` / `native-unavailable` |
+
+- APK 에서 WebView Web Speech 가 일본어 voice 를 못 잡는 문제 → 네이티브 TTS(`TextToSpeech.speak({lang:'ja-JP'})`)로 우회. 설정 화면이 환경별 문구(웹: 음성 감지 / APK: 네이티브 TTS + Android TTS 설치 안내)로 표시.
+- 네이티브 speak 실패 시 web 가능하면 web, 아니면 `{ok:false, reason:'native-error'}`. 외부 유료 TTS/API 미사용. 상세: [apk-plan.md](./apk-plan.md) §0-C.
+
+## TTS 폴백 정책 (Web 어댑터)
 
 | 상황 | 결과 | UI |
 | --- | --- | --- |
