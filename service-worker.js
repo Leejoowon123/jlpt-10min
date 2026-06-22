@@ -7,7 +7,7 @@
  *   - 어떤 실패도 학습 흐름을 막지 않도록 방어 — 캐시 미스 시 네트워크, 둘 다 실패해도 throw 전파 안 함.
  * GitHub Pages 하위 경로 호환: 모든 경로는 SW 스코프 기준 상대(`./`) — 절대경로(`/`) 미사용.
  */
-const CACHE_VERSION = 'jlpt10min-v2';   // v2: 레벨별 data/<lv>/vocab.json 도입(SWR 대상)
+const CACHE_VERSION = 'jlpt10min-v3';   // v3: JLPT10M 브랜드 아이콘/테마 교체(shell 재캐시) · v2: data/<lv>/vocab.json SWR
 
 // 스코프 기준 상대 경로 (서브패스 배포 안전). registration.scope 가 base.
 const SHELL = [

@@ -5570,6 +5570,70 @@ console.log('\n[239] vocab JSON 분리 — dataLoader JSON 경로 로드/렌더 
   dl._resetFetchForTest(); dl.clearDataCache();
 }
 
+// ── 라운드 54: JLPT10M 브랜딩 + 렌더 회귀 ────────────────────────────────────
+console.log('\n[240] 브랜딩 — JLPT10M 로고 + 홈/학습/스토리 렌더 + 라이트/다크 + 버튼/플레이어');
+{
+  const { renderAuthGate } = await import('./js/views/authGate.js');
+  // (1) 로그인 화면 JLPT10M 표시
+  bootstrap();
+  let screen = shell();
+  renderAuthGate({ screen });
+  ok('240: 로그인 화면 JLPT10M 로고', screen.textContent.includes('JLPT10M') && !!screen.querySelector('.wm-accent'));
+  ok('240: 로그인 화면 로그인/회원가입/재설정 버튼', !!screen.querySelector('#loginBtn') && !!screen.querySelector('#signupBtn') && !!screen.querySelector('#forgotBtn'));
+  // (2) 홈/학습/스토리 렌더 회귀
+  setLevel('N2');
+  screen = shell(); renderHome({ screen });
+  ok('240: 홈 렌더(버튼/카드)', screen.textContent.length > 0 && !!screen.querySelector('button,.card,a'));
+  screen = shell(); renderStudy({ screen, params: [] });
+  ok('240: 학습 랜딩 분야 칩', !!screen.querySelector('#studyTypeChips .chip'));
+  screen = shell(); renderStoryDetail({ screen, params: ['story_n2_001'] });
+  ok('240: 스토리 본문 + compact 플레이어', !!screen.querySelector('#storyBody') && !!screen.querySelector('#storyPlayer') && !!screen.querySelector('#storyControlsRow'));
+  // (3) 라이트/다크 모드에서 주요 텍스트 존재 (테마 속성 변경이 렌더를 깨지 않음)
+  for (const theme of ['light', 'dark']) {
+    document.documentElement.dataset.theme = theme;
+    screen = shell(); renderHome({ screen });
+    ok(`240: ${theme} 모드 홈 텍스트 존재`, screen.textContent.trim().length > 0);
+  }
+  // (4) 단어 카드 직접 진입 — 발음/romaji/다음 버튼류 존재
+  state.setVocabWarmupEnabled(false);
+  screen = shell();
+  renderStudy({ screen, params: ['vocab', 'card', 'v_n2_1'] });
+  ok('240: 단어 카드 렌더(선택지/버튼)', screen.querySelectorAll('.choice').length === 4 || !!screen.querySelector('button'));
+}
+
+// ── 라운드 55: Capacitor APK — SW 가드 + 웹 실행 회귀 ────────────────────────
+console.log('\n[241] Capacitor — SW 등록 가드 + 웹 실행 회귀(로그인/홈/학습)');
+{
+  const { registerServiceWorker, isCapacitor } = await import('./js/pwa.js');
+  const { renderAuthGate } = await import('./js/views/authGate.js');
+  // (1) 일반(웹) 환경 — Capacitor 아님, 지원 nav → 등록 시도(true)
+  delete globalThis.Capacitor;
+  ok('241: 웹 환경 isCapacitor=false', isCapacitor() === false);
+  let called = 0;
+  const nav = { serviceWorker: { register: () => { called++; return Promise.resolve({}); } } };
+  ok('241: 웹에서 SW 등록 시도', registerServiceWorker(nav) === true && called === 1);
+  // (2) Capacitor 환경 — SW 등록 건너뜀(false), register 미호출, throw 없음
+  globalThis.Capacitor = { isNativePlatform: () => true };
+  called = 0;
+  let threw = false, r;
+  try { r = registerServiceWorker(nav); } catch { threw = true; }
+  ok('241: Capacitor isCapacitor=true', isCapacitor() === true);
+  ok('241: Capacitor 에서 SW 등록 건너뜀(false, 미호출)', r === false && called === 0 && !threw);
+  // (3) Capacitor/SW 미동작 환경에서도 로그인 화면 렌더(웹앱 깨짐 없음)
+  bootstrap();
+  globalThis.Capacitor = { isNativePlatform: () => true };   // bootstrap 이 globalThis 재설정하므로 재지정
+  let screen = shell();
+  renderAuthGate({ screen });
+  ok('241: Capacitor 환경 로그인 화면 렌더', screen.textContent.includes('JLPT10M') && !!screen.querySelector('#loginBtn'));
+  // (4) 홈/학습 렌더 회귀(네이티브 환경 가정에서도 웹 코드 정상)
+  setLevel('N2');
+  screen = shell(); renderHome({ screen });
+  ok('241: 홈 렌더 회귀', screen.textContent.length > 0 && !!screen.querySelector('button,.card,a'));
+  screen = shell(); renderStudy({ screen, params: [] });
+  ok('241: 학습 랜딩 렌더 회귀', !!screen.querySelector('#studyTypeChips .chip'));
+  delete globalThis.Capacitor;   // 정리 — 이후 시나리오 비간섭
+}
+
 if (errs.length) {
   console.log('\nQA ERRORS:');
   for (const e of errs) console.log(' -', e);

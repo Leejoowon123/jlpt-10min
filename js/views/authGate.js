@@ -15,7 +15,7 @@ export function renderAuthLoading({ screen }) {
   if (!screen) return;
   screen.innerHTML = `
     <section class="card auth-card" style="max-width:420px;margin:14vh auto 0;text-align:center">
-      <div class="auth-brand" style="font-size:28px;font-weight:800;margin-bottom:6px">JLPT 10분</div>
+      <div class="auth-brand" style="font-size:28px;font-weight:800;margin-bottom:6px">JLPT<span class="wm-accent">10M</span></div>
       <p class="muted" id="authLoadingMsg">로그인 상태 확인 중…</p>
     </section>`;
 }
@@ -33,7 +33,7 @@ export function renderAuthGate({ screen }) {
   if (!authAvailable()) {
     screen.innerHTML = `
       <section class="card auth-card" style="max-width:420px;margin:12vh auto 0;text-align:center">
-        <div class="auth-brand" style="font-size:28px;font-weight:800;margin-bottom:6px">JLPT 10분</div>
+        <div class="auth-brand" style="font-size:28px;font-weight:800;margin-bottom:6px">JLPT<span class="wm-accent">10M</span></div>
         <p style="margin:0 0 8px"><span class="badge" data-status="unconfigured">로그인 불가</span></p>
         <p class="muted" style="font-size:13px;margin:0">
           인증 서비스가 설정되지 않아 로그인할 수 없습니다.<br>
@@ -49,7 +49,7 @@ export function renderAuthGate({ screen }) {
 
   screen.innerHTML = `
     <section class="card auth-card" style="max-width:420px;margin:10vh auto 0">
-      <div class="auth-brand" style="font-size:28px;font-weight:800;text-align:center;margin-bottom:2px">JLPT 10분</div>
+      <div class="auth-brand" style="font-size:28px;font-weight:800;text-align:center;margin-bottom:2px">JLPT<span class="wm-accent">10M</span></div>
       <p class="muted" style="text-align:center;margin:0 0 14px;font-size:13px">
         하루 10분 일본어 학습 · 이메일 로그인 후 이용
       </p>

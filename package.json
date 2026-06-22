@@ -6,9 +6,19 @@
     "smoke": "node smoke.mjs",
     "qa": "node qa.mjs",
     "test": "node smoke.mjs && node qa.mjs",
-    "content:report": "node scripts/content-report.mjs"
+    "content:report": "node scripts/content-report.mjs",
+    "cap:copy": "node tools/build-www.mjs",
+    "cap:sync": "node tools/build-www.mjs && npx cap sync android",
+    "cap:open": "npx cap open android",
+    "cap:build:android": "node tools/build-www.mjs && npx cap sync android && cd android && ./gradlew assembleDebug"
   },
   "devDependencies": {
     "jsdom": "^29.1.1"
+  },
+  "//capacitor": "Capacitor 는 optionalDependencies — APK 빌드(android-apk.yml / 로컬 npm install)에서만 설치. 경량 테스트 CI(qa.yml)는 npm install --omit=optional 로 jsdom 만 받는다. 빌드: docs/apk-plan.md",
+  "optionalDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/android": "^6.2.0"
   }
 }

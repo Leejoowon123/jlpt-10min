@@ -65,6 +65,27 @@
 - [ ] (Lighthouse) PWA: installable / offline 통과 — 선택
 - [ ] **배포 후 `data/n5/vocab.json` ~ `data/n2/vocab.json` 200 응답 확인**(DevTools Network 또는 직접 URL) — 404 면 dataLoader 가 JS fallback 으로 동작하나, JSON 경로 활성화를 위해 200 권장
 
+## 4-d. 디자인 / 브랜딩 (라운드 54 — 수동)
+
+- [ ] 로그인/헤더에 **JLPT10M** 워드마크 표시(주홍 "10M" 강조)
+- [ ] **라이트(종이) / 다크(먹) 모드** 둘 다 텍스트 대비·카드·버튼 정상(깨짐 없음)
+- [ ] **360px 모바일** — 버튼/카드/하단 탭/스토리 플레이어 답답하지 않고 겹침 없음
+- [ ] 주요 버튼(`.btn.primary`)·선택 칩(`.chip.active`) 주홍 강조 일관
+- [ ] **PWA 아이콘**(먹+종이+주홍 印) — 홈 화면/설치 시 식별 가능, 공식 JLPT/국기처럼 보이지 않음
+- [ ] 단어 카드/스토리 플레이어 위계(발음·romaji·후리가나·다음) 정돈
+
+## 4-e. Android APK (Capacitor — 실기기 수동, 빌드 환경 필요)
+
+- [ ] `npm i` capacitor + `npx cap add android` + `gradlew assembleDebug` → `app-debug.apk` 생성
+- [ ] APK **설치**(adb 또는 기기 전송) → 앱 실행, 스플래시/아이콘(JLPT10M) 정상
+- [ ] **로그인** — 이메일/비번 로그인·회원가입 동작(WebView + Firebase Auth)
+      - 실패 시: Firebase Authorized domains 에 `localhost`(androidScheme https) 확인 / 인터넷 권한 / 네트워크
+- [ ] **학습 시작** — 홈→오늘의 10분→단어/문법/독해/청해 렌더(번들 자산)
+- [ ] **PWA/SW** — `isCapacitor()` 로 SW 미등록, 그래도 앱 정상(번들 자산 로드)
+- [ ] **TTS** 재생 / **STT** 인식 — 동작 여부(미지원 시 텍스트 폴백 동작 확인 → 다음 라운드 네이티브 검토)
+- [ ] **Firebase 로그** — 온라인 시 actionLogs/userActivity 기록(원문 미기록 유지)
+- [ ] **오프라인 실행** — 로그인 세션 있으면 앱 shell+학습 동작 / 로그 실패 비차단
+
 ## 5. 성능 (블로커 아님 — 모니터링)
 
 - [ ] 첫 로딩: 정적 import JS ~3.3MB(gzip ~0.8MB) — 모바일 4G 체감 확인

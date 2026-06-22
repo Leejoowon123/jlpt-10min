@@ -3266,7 +3266,7 @@ ok('data/n4/stories.json — sourceType 모두 original',
     ok('PWA — start_url 상대경로', typeof mf.start_url === 'string' && !mf.start_url.startsWith('/'), `start_url=${mf.start_url}`);
     ok('PWA — scope 상대경로', typeof mf.scope === 'string' && !mf.scope.startsWith('/'), `scope=${mf.scope}`);
     ok('PWA — display standalone', mf.display === 'standalone');
-    ok('PWA — theme/background_color 앱 색상(#0f172a)', mf.theme_color === '#0f172a' && mf.background_color === '#0f172a');
+    ok('PWA — theme/background_color 앱 색상(먹색 #1b1815)', mf.theme_color === '#1b1815' && mf.background_color === '#1b1815');
     const icons = mf.icons || [];
     ok('PWA — manifest 아이콘 192/512 연결', icons.some(i => /192/.test(i.sizes)) && icons.some(i => /512/.test(i.sizes)));
     ok('PWA — manifest 아이콘 경로 상대', icons.every(i => typeof i.src === 'string' && !i.src.startsWith('/')));
@@ -3420,6 +3420,110 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('JSON drift — dataLoader.loadVocab export', /export const loadVocab\b/.test(dlSrc));
   ok('JSON drift — dataLoader JSON-first + JS fallback', /fetchJson\(level, type\)/.test(dlSrc) && /loadFromJsFallback/.test(dlSrc));
   ok('JSON drift — jsonPathFor data/<lv>/<type>.json', /data\/\$\{level\.toLowerCase\(\)\}\/\$\{type\}\.json/.test(dlSrc));
+}
+
+// ── 라운드 54: JLPT10M 브랜딩 + APK 계획 정적 검증 ──────────────────────────
+{
+  const fs54 = await import('node:fs');
+  const read = (p) => { try { return fs54.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  // 브랜드명 JLPT10M 반영 (manifest / index / README)
+  const mf = JSON.parse(read('./manifest.json') || '{}');
+  ok('브랜드 — manifest short_name=JLPT10M', mf.short_name === 'JLPT10M');
+  ok('브랜드 — manifest name 에 JLPT10M', /JLPT10M/.test(mf.name || ''));
+  ok('브랜드 — index.html 헤더/타이틀 JLPT10M', /JLPT10M|JLPT<span class="wm-accent">10M/.test(read('./index.html')));
+  ok('브랜드 — authGate 로그인 화면 JLPT10M', /JLPT10M|wm-accent">10M/.test(read('./js/views/authGate.js')));
+  ok('브랜드 — README JLPT10M', /JLPT10M/.test(read('./README.md')));
+  // 디자인 토큰 — 먹/주홍/종이 팔레트 (한 가지 네이비만 아님)
+  const css = read('./styles.css');
+  ok('브랜드 — styles.css 주홍 accent 토큰', /--accent:\s*#e2533f/.test(css) && /--accent:\s*#d8432e/.test(css));
+  ok('브랜드 — styles.css 라이트=종이/다크=먹 배경', /--bg:\s*#f6f1e7/.test(css) && /--bg:\s*#1b1815/.test(css));
+  ok('브랜드 — 구 네이비(#0f172a) 잔존 토큰 없음', !/--bg:\s*#0f172a/.test(css));
+  // 공식 JLPT/일본 정부 로고 사칭 문구 없음
+  const brandFiles = [read('./index.html'), read('./js/views/authGate.js'), read('./manifest.json'), read('./README.md')].join('\n');
+  ok('브랜드 — 공식 JLPT/정부 로고 사칭 문구 없음', !/공식 JLPT|official JLPT|JLPT 공식|일본 정부|文部科学省|国際交流基金/.test(brandFiles));
+  // 아이콘 brand 팔레트(먹 배경) — gen-icons 색상
+  ok('브랜드 — gen-icons 먹/종이/주홍 팔레트', /#1b1815 먹색/.test(read('./tools/gen-icons.mjs')) && /#d8432e 주홍/.test(read('./tools/gen-icons.mjs')));
+  // APK 계획 문서
+  const apk = read('./docs/apk-plan.md');
+  ok('문서 — docs/apk-plan.md 존재', !!apk);
+  ok('문서 — apk-plan Capacitor/TWA 비교 + package id', /Capacitor/.test(apk) && /TWA/.test(apk) && /com\.jlpt10m\.app/.test(apk));
+  ok('문서 — apk-plan Firebase/STT/SW 사전점검', /Authorized domains/.test(apk) && /SpeechRecognition|STT/.test(apk) && /Service Worker|SW/.test(apk));
+  // 로그인 필수 정책 문구 유지 (회귀 방지)
+  ok('브랜드 — 로그인 필수 문구 유지', /로그인 후 이용|이메일 로그인/.test(read('./js/views/authGate.js')) && !/로그인 없이도/.test(read('./js/views/authGate.js')));
+}
+
+// ── 라운드 55: Capacitor APK 패키징 구성 정적 검증 ──────────────────────────
+{
+  const fs55 = await import('node:fs');
+  const read = (p) => { try { return fs55.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const exists = (p) => { try { fs55.accessSync(new URL(p, import.meta.url)); return true; } catch { return false; } };
+  // capacitor.config.json
+  const capRaw = read('./capacitor.config.json');
+  ok('APK — capacitor.config.json 존재', !!capRaw);
+  let cap = null; try { cap = JSON.parse(capRaw); } catch { /* */ }
+  ok('APK — config 유효 JSON', !!cap);
+  if (cap) {
+    ok('APK — appId com.jlpt10m.app', cap.appId === 'com.jlpt10m.app');
+    ok('APK — appName JLPT10M', cap.appName === 'JLPT10M');
+    ok('APK — webDir www', cap.webDir === 'www');
+    ok('APK — bundledWebRuntime false', cap.bundledWebRuntime === false);
+    ok('APK — androidScheme https(로컬 origin)', cap.server && cap.server.androidScheme === 'https');
+  }
+  // www 빌드 스크립트가 필수 자산을 포함
+  const bw = read('./tools/build-www.mjs');
+  ok('APK — tools/build-www.mjs 존재', !!bw);
+  ok('APK — build-www 필수 자산 복사(index/js/data/assets/manifest/sw/styles)',
+     /index\.html/.test(bw) && /'js'/.test(bw) && /'data'/.test(bw) && /'assets'/.test(bw) && /manifest\.json/.test(bw) && /service-worker\.js/.test(bw) && /styles\.css/.test(bw));
+  // package.json scripts + lock-safe(의존성에 capacitor 미기재)
+  const pkg = JSON.parse(read('./package.json') || '{}');
+  const sc = pkg.scripts || {};
+  ok('APK — npm scripts cap:copy/sync/open/build', !!sc['cap:copy'] && !!sc['cap:sync'] && !!sc['cap:open'] && !!sc['cap:build:android']);
+  // Capacitor 는 optionalDependencies(APK 빌드 전용) — devDeps/deps 에는 없어 테스트 CI 경량 유지.
+  const optCap = Object.keys(pkg.optionalDependencies || {});
+  ok('APK — capacitor optionalDependencies(core/android/cli)',
+     optCap.includes('@capacitor/core') && optCap.includes('@capacitor/android') && optCap.includes('@capacitor/cli'));
+  ok('APK — capacitor 가 deps/devDeps 에는 없음(qa CI 경량)',
+     !(pkg.dependencies && Object.keys(pkg.dependencies).some(k => k.startsWith('@capacitor'))) &&
+     !(pkg.devDependencies && Object.keys(pkg.devDependencies).some(k => k.startsWith('@capacitor'))));
+  // pwa.js Capacitor 가드
+  const pwaSrc = read('./js/pwa.js');
+  ok('APK — pwa.js isCapacitor 감지 + SW 건너뜀', /export function isCapacitor/.test(pwaSrc) && /if \(isCapacitor\(\)\) return false/.test(pwaSrc));
+  // .gitignore 빌드 산출물 제외
+  const gi = read('./.gitignore');
+  ok('APK — .gitignore www/ + android/ 제외', /^www\/$/m.test(gi) && /^android\/$/m.test(gi));
+  // android/ 는 사용자 생성 산출물 — 있으면 build.gradle 유효, 없으면 user 단계(비차단)
+  const androidExists = exists('./android');
+  ok('APK — android/ (있으면) capacitor 프로젝트 / 없으면 user 빌드 단계',
+     !androidExists || exists('./android/app/build.gradle') || exists('./android/build.gradle'));
+  // 문서
+  const apk = read('./docs/apk-plan.md');
+  ok('APK — apk-plan 1차 구현 상태 + 설정/빌드 절차', /webDir|capacitor\.config/.test(apk) && /assembleDebug|cap add android|gradlew/.test(apk));
+}
+
+// ── 라운드 56: GitHub Actions APK 빌드 워크플로 정적 검증 ────────────────────
+{
+  const fs56 = await import('node:fs');
+  const read = (p) => { try { return fs56.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const wf = read('./.github/workflows/android-apk.yml');
+  ok('CI — android-apk.yml 존재', !!wf);
+  ok('CI — workflow_dispatch 수동 실행', /workflow_dispatch:/.test(wf));
+  ok('CI — ubuntu-latest 러너', /runs-on:\s*ubuntu-latest/.test(wf));
+  ok('CI — setup-java JDK 17', /setup-java/.test(wf) && /java-version:\s*'?17'?/.test(wf));
+  ok('CI — setup-node', /setup-node/.test(wf));
+  ok('CI — webDir 빌드(build-www) 단계', /tools\/build-www\.mjs/.test(wf));
+  ok('CI — cap sync android 단계', /cap sync android/.test(wf));
+  ok('CI — gradlew assembleDebug', /gradlew assembleDebug/.test(wf));
+  ok('CI — upload-artifact', /upload-artifact/.test(wf));
+  ok('CI — artifact 이름 jlpt10m-debug-apk', /name:\s*jlpt10m-debug-apk/.test(wf));
+  ok('CI — debug APK 경로(app-debug.apk)', /app\/build\/outputs\/apk\/debug\/app-debug\.apk/.test(wf));
+  ok('CI — APK rename(JLPT10M-debug.apk)', /JLPT10M-debug\.apk/.test(wf));
+  ok('CI — android/ 있으면 사용/없으면 cap add(Option A/B)', /if \[ ! -d android \]/.test(wf) && /cap add android/.test(wf));
+  // 보안 — keystore/jks/release 서명키가 워크플로/저장소에 커밋되지 않음
+  ok('CI — keystore/jks 파일 미커밋', !fs56.existsSync(new URL('./release.keystore', import.meta.url)) && !fs56.existsSync(new URL('./app.keystore', import.meta.url)));
+  ok('CI — .gitignore 가 *.keystore/*.jks 제외', /\*\.keystore/.test(read('./.gitignore')) && /\*\.jks/.test(read('./.gitignore')));
+  ok('CI — 워크플로에 평문 서명키/비밀번호 없음', !/storePassword|keyPassword|signingConfig[\s\S]{0,80}password/i.test(wf));
+  // qa(테스트) CI 는 optional 생략으로 경량 유지
+  ok('CI — qa.yml 이 --omit=optional 로 경량 설치', /--omit=optional/.test(read('./.github/workflows/qa.yml')));
 }
 
 if (errs.length) {
