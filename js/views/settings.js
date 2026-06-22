@@ -197,8 +197,11 @@ function draw(screen) {
     try {
       const d = getTtsDiagnostics();
       if (d.mode === 'native') {
+        const srcLabel = d.pluginSource === 'plugins-map' ? '확정등록'
+          : d.pluginSource === 'register-plugin' ? '프록시(테스트 재생으로 확인)'
+          : '없음';
         vsDiag.style.display = '';
-        vsDiag.textContent = `진단: 플러그인 ${d.pluginPresent ? '있음' : '없음'} · speak ${d.hasSpeak ? '있음' : '없음'}`
+        vsDiag.textContent = `진단: 플러그인 ${d.pluginPresent ? '있음' : '없음'}(${srcLabel}) · speak ${d.hasSpeak ? '있음' : '없음'}`
           + ` · registerPlugin ${d.hasRegisterPlugin ? '있음' : '없음'} · 플랫폼 ${d.platform}`
           + (d.pluginKeys?.length ? ` · keys ${d.pluginKeys.join(',')}` : '')
           + (d.lastError ? ` · 마지막 오류: ${d.lastError}` : '');
@@ -222,6 +225,7 @@ function draw(screen) {
     } else {
       const why = r.reason === 'native-plugin-missing' ? '네이티브 TTS 플러그인 미등록(앱 빌드 확인 필요)'
         : r.reason === 'native-method-missing' ? '플러그인 speak 메서드 없음'
+        : r.reason === 'native-error' ? `엔진/음성 데이터 확인 필요${r.message ? ' — ' + r.message : ''} (Android 설정 → 텍스트 음성 변환 → 일본어 음성 설치)`
         : r.reason === 'no-ja-voice' ? '일본어 음성 없음'
         : r.reason === 'unsupported' ? '이 환경은 TTS 미지원'
         : `재생 실패${r.message ? ' — ' + r.message : ''}`;

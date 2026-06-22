@@ -86,7 +86,8 @@
 - [ ] **TTS(네이티브)** — 음성 상태 **"네이티브 TTS 사용 가능"** / 단어 발음 / 예문 발음 / 이야기 전체 재생 / 청해 듣기 / 속도 조절
 - [ ] **TTS 실패 시 진단** — 테스트 재생 실패 시 reason(플러그인 미등록/메서드 없음/오류 message)·진단(플러그인·speak·마지막 오류) 표시
 - [ ] **TTS 일본어 음성 미설치 시** — Android 설정 → 텍스트 음성 변환에서 일본어 음성 설치 안내가 보이고, 설치 후 재생되는지
-- [ ] **(빌드 로그) 플러그인 등록 확인** — Actions run 의 Diagnostics step 에서 `npm ls @capacitor-community/text-to-speech` / `npx cap ls` 출력 확인
+- [ ] **(빌드 로그) 플러그인 등록 확인** — Actions run 의 Diagnostics step 에서 `npm ls @capacitor-community/text-to-speech` / `npx cap ls` 출력 + **`capacitor.plugins.json` 에 `TextToSpeech` 포함**(`OK: …등록됨` 줄) 확인 — 미등록(`WARN`)이면 APK 에 네이티브 TTS 가 빠진 것
+- [ ] **(설정 진단) 플러그인 경로** — 음성 상태 진단 줄의 플러그인 경로가 `확정등록`(`plugins-map`) 또는 `프록시`(`register-plugin`) 로 보이고, 「테스트 재생」으로 실제 소리를 확정
 - [ ] **STT** 인식 — 동작 여부(미지원 시 텍스트 폴백 동작 확인 → 다음 라운드 네이티브 검토)
 - [ ] **Firebase 로그** — 온라인 시 actionLogs/userActivity 기록(원문 미기록 유지)
 - [ ] **오프라인 실행** — 로그인 세션 있으면 앱 shell+학습 동작 / 로그 실패 비차단

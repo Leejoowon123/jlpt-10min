@@ -3589,6 +3589,16 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('TTSfix — Web reason 유지(no-ja-voice/playback-error/unsupported)', /no-ja-voice/.test(ttsSrc) && /playback-error/.test(ttsSrc) && /'unsupported'/.test(ttsSrc));
   // android-apk.yml 진단 step
   ok('TTSfix — android-apk.yml npm ls / cap ls 진단 step', /npm ls @capacitor-community\/text-to-speech/.test(apkWf) && /npx cap ls/.test(apkWf));
+  // (라운드 59) CI 가 "설치/감지" 뿐 아니라 "APK 에 실제 등록"까지 증명 — capacitor.plugins.json + gradle 출력
+  ok('TTSfix — android-apk.yml 가 capacitor.plugins.json/gradle 등록 증명',
+     /capacitor\.plugins\.json/.test(apkWf) && /capacitor\.settings\.gradle|capacitor\.build\.gradle/.test(apkWf));
+  // (라운드 59) 플러그인 해석 경로(plugins-map vs register-plugin) — 프록시 존재 ≠ 동작 구분
+  ok('TTSfix — platform.js pluginSource(plugins-map/register-plugin) 노출',
+     /export function nativeTtsPluginSource/.test(platSrc) && /'plugins-map'/.test(platSrc) && /'register-plugin'/.test(platSrc));
+  ok('TTSfix — getNativeTtsDiagnostics 가 pluginSource 포함', /pluginSource:/.test(platSrc));
+  ok('TTSfix — tts/settings 가 pluginSource 전달/표시', /pluginSource:/.test(ttsSrc) && /pluginSource/.test(setSrc));
+  // (라운드 59) native-error 실패 시 Android 음성 데이터 안내
+  ok('TTSfix — settings native-error → 음성 데이터 안내', /native-error[\s\S]{0,120}텍스트 음성 변환/.test(setSrc));
 }
 
 if (errs.length) {

@@ -74,12 +74,24 @@ jobs:
         run: npx cap sync android
 
       # 진단 — 네이티브 TTS 플러그인 설치/등록 확인(음성 안 날 때 로그에서 점검).
+      # npm ls/cap ls 는 "설치/감지" 만 보여준다. 실제 APK 에 컴파일되려면 cap sync 가
+      # android 프로젝트에 등록해야 하므로, 동기화 산출물(capacitor.plugins.json + gradle)을
+      # 직접 출력해 "이 빌드의 APK 에 TextToSpeech 가 들어갔는지" 를 로그에서 확정한다.
       - name: Diagnostics (plugins)
         run: |
           echo "== npm ls @capacitor-community/text-to-speech =="
           npm ls @capacitor-community/text-to-speech || true
           echo "== npx cap ls =="
           npx cap ls || true
+          echo "== android 등록 플러그인 (capacitor.plugins.json) =="
+          cat android/app/src/main/assets/capacitor.plugins.json || echo "capacitor.plugins.json 없음 — cap sync 가 플러그인을 등록하지 못함"
+          echo "== gradle 플러그인 모듈 등록 =="
+          grep -n "text-to-speech" android/capacitor.settings.gradle android/app/capacitor.build.gradle || echo "gradle 에 text-to-speech 모듈 없음 — APK 에 네이티브 TTS 가 빠짐"
+          if grep -q "TextToSpeech" android/app/src/main/assets/capacitor.plugins.json 2>/dev/null; then
+            echo "OK: TextToSpeech 가 android 프로젝트에 등록됨 → APK 에 포함됨"
+          else
+            echo "WARN: TextToSpeech 미등록 — 발음이 안 나면 이 단계가 원인"
+          fi
 
       - name: Build debug APK
         run: |

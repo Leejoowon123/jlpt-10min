@@ -5702,12 +5702,14 @@ console.log('\n[243] 네이티브 TTS 수정 — reason 구분/테스트 재생/
   bootstrap(); globalThis.Capacitor = mkCap(null); tts._resetVoiceStateForTest();
   ok('243: 플러그인 없음 status', tts.getVoiceStatus() === 'native-unavailable');
   ok('243: 플러그인 없음 speak reason', (await tts.speak('あ')).reason === 'native-plugin-missing');
+  ok('243: 플러그인 없음 pluginSource=none', tts.getTtsDiagnostics().pluginSource === 'none');
   // (2) 플러그인 있지만 speak 없음 → native-method-missing
   bootstrap(); globalThis.Capacitor = mkCap({ stop: () => {} }); tts._resetVoiceStateForTest();
   ok('243: speak 메서드 없음 reason', (await tts.speak('あ')).reason === 'native-method-missing');
   // (3) speak 성공 → native-ready + 테스트 재생 ok
   bootstrap(); const c3 = []; globalThis.Capacitor = mkCap({ speak: (o) => { c3.push(o); return Promise.resolve(); }, stop: () => {} }); tts._resetVoiceStateForTest();
   ok('243: speak 성공 status', tts.getVoiceStatus() === 'native-ready');
+  ok('243: 확정등록 pluginSource=plugins-map', tts.getTtsDiagnostics().pluginSource === 'plugins-map');
   ok('243: speak 성공', (await tts.speak('日本語')).ok === true && c3.length >= 1);
   ok('243: speakTest 성공', (await tts.speakTest('こんにちは')).ok === true);
   // (4) speak 실패(reject) → speakTest native-error + message, 진단 lastError
