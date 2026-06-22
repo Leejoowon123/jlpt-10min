@@ -37,3 +37,32 @@ export function nativeTtsPlugin() {
 export function useNativeTts() {
   return isCapacitor() && !!nativeTtsPlugin();
 }
+
+/** Capacitor 진단 스냅샷 — 설정 화면/로그에서 원인 파악용. (방어적) */
+export function getCapacitorDiagnostics() {
+  const out = { hasCapacitor: false, platform: 'web', pluginKeys: [], hasPlugins: false };
+  try {
+    const cap = globalThis.Capacitor;
+    out.hasCapacitor = !!cap;
+    out.platform = capacitorPlatform();
+    if (cap && cap.Plugins) {
+      out.hasPlugins = true;
+      try { out.pluginKeys = Object.keys(cap.Plugins); } catch { out.pluginKeys = []; }
+    }
+  } catch { /* noop */ }
+  return out;
+}
+
+/** 네이티브 TTS 진단 — 플러그인/메서드 존재 여부. (방어적) */
+export function getNativeTtsDiagnostics() {
+  const p = nativeTtsPlugin();
+  return {
+    capacitor: isCapacitor(),
+    platform: capacitorPlatform(),
+    pluginPresent: !!p,
+    hasSpeak: !!(p && typeof p.speak === 'function'),
+    hasStop: !!(p && typeof p.stop === 'function'),
+    hasGetLanguages: !!(p && typeof p.getSupportedLanguages === 'function'),
+    pluginKeys: getCapacitorDiagnostics().pluginKeys,
+  };
+}

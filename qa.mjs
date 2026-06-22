@@ -5693,6 +5693,51 @@ console.log('\n[242] TTS 어댑터 — Web Speech 회귀 + Capacitor Native TTS 
   tts._resetRetryDelaysForTest();
 }
 
+// ── 라운드 58: 네이티브 TTS 상태/재생 수정 ──────────────────────────────────
+console.log('\n[243] 네이티브 TTS 수정 — reason 구분/테스트 재생/언어목록 무관/설정 버튼/웹 회귀');
+{
+  const tts = await import('./js/tts.js');
+  function mkCap(plugin) { return { isNativePlatform: () => true, getPlatform: () => 'android', Plugins: plugin ? { TextToSpeech: plugin } : {} }; }
+  // (1) 플러그인 없음 → native-plugin-missing
+  bootstrap(); globalThis.Capacitor = mkCap(null); tts._resetVoiceStateForTest();
+  ok('243: 플러그인 없음 status', tts.getVoiceStatus() === 'native-unavailable');
+  ok('243: 플러그인 없음 speak reason', (await tts.speak('あ')).reason === 'native-plugin-missing');
+  // (2) 플러그인 있지만 speak 없음 → native-method-missing
+  bootstrap(); globalThis.Capacitor = mkCap({ stop: () => {} }); tts._resetVoiceStateForTest();
+  ok('243: speak 메서드 없음 reason', (await tts.speak('あ')).reason === 'native-method-missing');
+  // (3) speak 성공 → native-ready + 테스트 재생 ok
+  bootstrap(); const c3 = []; globalThis.Capacitor = mkCap({ speak: (o) => { c3.push(o); return Promise.resolve(); }, stop: () => {} }); tts._resetVoiceStateForTest();
+  ok('243: speak 성공 status', tts.getVoiceStatus() === 'native-ready');
+  ok('243: speak 성공', (await tts.speak('日本語')).ok === true && c3.length >= 1);
+  ok('243: speakTest 성공', (await tts.speakTest('こんにちは')).ok === true);
+  // (4) speak 실패(reject) → speakTest native-error + message, 진단 lastError
+  bootstrap(); globalThis.Capacitor = mkCap({ speak: () => Promise.reject(new Error('engine dead')), stop: () => {} }); tts._resetVoiceStateForTest();
+  const r4 = await tts.speakTest('こんにちは');
+  ok('243: speak 실패 → native-error + message', r4.ok === false && r4.reason === 'native-error' && /engine dead/.test(r4.message || ''));
+  ok('243: 진단 lastError 기록', /engine dead/.test(tts.getTtsDiagnostics().lastError || ''));
+  // (5) getSupportedLanguages 실패해도 speak 성공이면 ok (언어목록에 의존하지 않음)
+  bootstrap(); globalThis.Capacitor = mkCap({ speak: () => Promise.resolve(), stop: () => {}, getSupportedLanguages: () => Promise.reject(new Error('no list')) }); tts._resetVoiceStateForTest();
+  ok('243: 언어목록 실패해도 status ready', tts.getVoiceStatus() === 'native-ready');
+  ok('243: 언어목록 실패해도 speakTest ok', (await tts.speakTest()).ok === true);
+  // (6) 설정 테스트 재생 버튼 → speak 호출 + 결과 표시
+  bootstrap(); const c6 = []; globalThis.Capacitor = mkCap({ speak: (o) => { c6.push(o); return Promise.resolve(); }, stop: () => {}, getSupportedLanguages: () => Promise.resolve({ languages: ['ja-JP'] }) });
+  tts._resetVoiceStateForTest(); authSvc._setAuthImplForTest(mockAuthImpl());
+  const screen = shell(); renderSettings({ screen });
+  const testBtn = screen.querySelector('#voiceTestBtn');
+  ok('243: 설정 테스트 재생 버튼 존재', !!testBtn);
+  testBtn.click();
+  await new Promise(r => setTimeout(r, 10));
+  ok('243: 테스트 재생이 native speak 호출', c6.some(o => o.text === '日本語' || o.text === 'こんにちは' || /日本|こんにち/.test(o.text || '')));
+  ok('243: 테스트 결과 문구 표시', /성공|실패/.test(screen.querySelector('#voiceTestResult')?.textContent || ''));
+  authSvc._resetAuthImplForTest();
+  // (7) 웹/PWA 회귀 — Capacitor 없음 + voice 있음 → ja-found, speak ok
+  delete globalThis.Capacitor;
+  bootstrap({ withTTS: true }); delete globalThis.Capacitor; tts._setRetryDelaysForTest([0]); tts._resetVoiceStateForTest();
+  ok('243: 웹 ja-found 회귀', await tts.refreshVoices() === 'ja-found');
+  ok('243: 웹 speak ok 회귀', (await tts.speak('テスト')).ok === true);
+  tts._resetRetryDelaysForTest(); tts._resetVoiceStateForTest();
+}
+
 if (errs.length) {
   console.log('\nQA ERRORS:');
   for (const e of errs) console.log(' -', e);

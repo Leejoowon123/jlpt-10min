@@ -3542,8 +3542,8 @@ ok('data/n4/stories.json — sourceType 모두 original',
   // tts.js 어댑터 구조
   const ttsSrc = read('./js/tts.js');
   ok('TTS — tts.js native/web 어댑터(nativeSpeak/webSpeak)', /async function nativeSpeak/.test(ttsSrc) && /async function webSpeak/.test(ttsSrc));
-  ok('TTS — speak/stop 가 useNativeTts 로 분기', /if \(useNativeTts\(\)\) return nativeSpeak/.test(ttsSrc) && /if \(useNativeTts\(\)\) \{ nativeStop\(\)/.test(ttsSrc));
-  ok('TTS — Capacitor 에서 Web Speech 만 의존하지 않음(plugin 사용)', /nativeTtsPlugin\(\)/.test(ttsSrc) && /\.speak\(\{ text/.test(ttsSrc));
+  ok('TTS — speak/stop 가 Capacitor 로 분기', /if \(isCapacitor\(\)\) return nativeSpeak/.test(ttsSrc) && /if \(isCapacitor\(\)\) \{ nativeStop\(\)/.test(ttsSrc));
+  ok('TTS — Capacitor 에서 Web Speech 만 의존하지 않음(plugin 사용)', /nativeTtsPlugin\(\)/.test(ttsSrc) && /p\.speak\(/.test(ttsSrc));
   ok('TTS — 네이티브 상태값 native-ready/native-unavailable', /native-ready/.test(ttsSrc) && /native-unavailable/.test(ttsSrc));
   ok('TTS — 기존 web reason 유지(no-ja-voice/unsupported)', /no-ja-voice/.test(ttsSrc) && /'unsupported'/.test(ttsSrc));
   ok('TTS — 공개 API 유지(speak/stopSpeaking/hasJaVoice/refreshVoices/getVoiceStatus/onVoiceStatusChange/ttsAvailable)',
@@ -3562,6 +3562,35 @@ ok('data/n4/stories.json — sourceType 모두 original',
   // APK 워크플로는 full npm install(optional 포함) — 플러그인 설치됨
   const apkWf = read('./.github/workflows/android-apk.yml');
   ok('TTS — android-apk.yml npm install(optional 포함, --omit 아님)', /npm install --no-audit --no-fund/.test(apkWf) && !/--omit=optional/.test(apkWf));
+}
+
+// ── 라운드 58: 네이티브 TTS 상태/재생 수정 정적 검증 ──────────────────────────
+{
+  const fs58 = await import('node:fs');
+  const read = (p) => { try { return fs58.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const ttsSrc = read('./js/tts.js');
+  const platSrc = read('./js/platform.js');
+  const setSrc = read('./js/views/settings.js');
+  const apkWf = read('./.github/workflows/android-apk.yml');
+  // 상태가 getSupportedLanguages 성공에만 의존하지 않음 — plugin/speak 존재 기준
+  ok('TTSfix — 상태는 plugin/speak 존재 기준(nativeStatusCode)', /function nativeStatusCode/.test(ttsSrc) && /typeof p\.speak !== 'function'/.test(ttsSrc));
+  ok('TTSfix — getVoiceStatus 가 getSupportedLanguages 에 의존 안 함', !/getSupportedLanguages[\s\S]{0,200}getVoiceStatus/.test(ttsSrc) && /getVoiceStatus[\s\S]{0,80}nativeStatusCode\(\)/.test(ttsSrc));
+  // reason 구분 문자열
+  ok('TTSfix — native reason: plugin-missing/method-missing/native-error', /native-plugin-missing/.test(ttsSrc) && /native-method-missing/.test(ttsSrc) && /'native-error'/.test(ttsSrc));
+  ok('TTSfix — native-language-unknown 상태 구분', /native-language-unknown/.test(ttsSrc) && /native-language-unknown/.test(setSrc));
+  // 테스트 재생 / 진단 export
+  ok('TTSfix — speakTest / getTtsDiagnostics export', /export async function speakTest/.test(ttsSrc) && /export function getTtsDiagnostics/.test(ttsSrc));
+  // speak 옵션 키 호환(lang/language/locale) fallback
+  ok('TTSfix — speak 옵션키 호환(lang/language/locale)', /'language'/.test(ttsSrc) && /'locale'/.test(ttsSrc) && /nativeLangKey/.test(ttsSrc));
+  // platform 진단
+  ok('TTSfix — platform 진단 함수', /export function getCapacitorDiagnostics/.test(platSrc) && /export function getNativeTtsDiagnostics/.test(platSrc));
+  // 설정 테스트 재생 버튼 + 진단 표시
+  ok('TTSfix — settings 테스트 재생 버튼(#voiceTestBtn)', /id="voiceTestBtn"/.test(setSrc) && /speakTest\(/.test(setSrc));
+  ok('TTSfix — settings 진단/실패 reason 표시', /getTtsDiagnostics/.test(setSrc) && /native-plugin-missing/.test(setSrc));
+  // Web Speech 기존 reason 유지(회귀)
+  ok('TTSfix — Web reason 유지(no-ja-voice/playback-error/unsupported)', /no-ja-voice/.test(ttsSrc) && /playback-error/.test(ttsSrc) && /'unsupported'/.test(ttsSrc));
+  // android-apk.yml 진단 step
+  ok('TTSfix — android-apk.yml npm ls / cap ls 진단 step', /npm ls @capacitor-community\/text-to-speech/.test(apkWf) && /npx cap ls/.test(apkWf));
 }
 
 if (errs.length) {

@@ -86,7 +86,7 @@ VSCode Live Server 등도 동일하게 동작.
 ```bash
 npm install        # jsdom (최초 1회)
 node smoke.mjs     # 데이터 무결성 + 후리가나 커버율 + 정적/보안 검사 + 완성/릴리스 sentinel
-node qa.mjs        # jsdom DOM 시나리오 (242 시나리오)
+node qa.mjs        # jsdom DOM 시나리오 (243 시나리오)
 npm run content:report   # 최종 목표 대비 콘텐츠 현황
 ```
 

@@ -73,6 +73,14 @@ jobs:
       - name: Capacitor sync
         run: npx cap sync android
 
+      # 진단 — 네이티브 TTS 플러그인 설치/등록 확인(음성 안 날 때 로그에서 점검).
+      - name: Diagnostics (plugins)
+        run: |
+          echo "== npm ls @capacitor-community/text-to-speech =="
+          npm ls @capacitor-community/text-to-speech || true
+          echo "== npx cap ls =="
+          npx cap ls || true
+
       - name: Build debug APK
         run: |
           cd android

@@ -8,7 +8,10 @@
 // 라운드 30(웹 음성 감지 안정화) 로직은 web 어댑터로 보존:
 //   getVoices() 지연 로드 대비 — 즉시 확인 + voiceschanged + 재시도 루프 + 수동 refresh + 캐시.
 
-import { useNativeTts, nativeTtsPlugin, isCapacitor } from './platform.js';
+import { useNativeTts, nativeTtsPlugin, isCapacitor, getNativeTtsDiagnostics } from './platform.js';
+
+let lastNativeError = null;      // 마지막 네이티브 오류 message (진단용)
+let nativeLangKey = 'lang';      // speak 옵션 키 — 테스트 재생이 작동하는 키를 학습(lang|language|locale)
 
 let cachedVoice = null;          // (web) 감지된 일본어 voice
 // 상태: web = 'detecting'|'ja-found'|'no-ja'|'unsupported' / native = 'native-ready'|'native-unavailable'
@@ -48,54 +51,90 @@ function setStatus(next) {
 }
 
 // ── 네이티브(Capacitor) 어댑터 ───────────────────────────────────────────────
-/** 네이티브 TTS 가 ja-JP 를 지원하는지 — 언어목록 API 있으면 확인, 없으면 ready 로 간주. */
-async function nativeHasJa() {
+// 상태는 "플러그인 + speak 메서드 존재" 기준으로 판단(getSupportedLanguages 결과에 의존하지 않음 —
+// 실기기에서 언어목록 형식/누락으로 false negative 가 났던 라운드 57 문제 수정). 실제 발화 검증은 테스트 재생.
+
+/** ja-JP speak 옵션 후보 — 플러그인별 키 차이(lang/language/locale) 호환. */
+function nativeSpeakOpts(text, rate, langKey) {
+  const o = { text: String(text == null ? '' : text) };
+  o[langKey] = 'ja-JP';
+  if (rate != null) o.rate = rate;
+  return o;
+}
+
+/** 네이티브 상태 코드 산출 — plugin/speak 존재 여부 기준. */
+function nativeStatusCode() {
   const p = nativeTtsPlugin();
-  if (!p) return false;
+  if (!p) return 'native-unavailable';                 // reason: native-plugin-missing
+  if (typeof p.speak !== 'function') return 'native-unavailable'; // reason: native-method-missing
+  return 'native-ready';
+}
+
+/** 비동기 감지(음성 다시 감지 버튼) — plugin/speak 우선, 그 다음 언어목록을 '정보성'으로 확인.
+ *  언어목록이 ja 를 확인 못 해도 전체 실패로 보지 않고 native-language-unknown(테스트 재생 권유)로 표시. */
+async function nativeDetect() {
+  setStatus('detecting');
+  const base = nativeStatusCode();          // native-ready | native-unavailable (plugin/speak 기준)
+  if (base !== 'native-ready') { setStatus(base); return base; }
+  // plugin+speak 는 있음 → 언어목록은 보조 신호로만.
+  const p = nativeTtsPlugin();
   try {
-    if (typeof p.getSupportedLanguages === 'function') {
+    if (p && typeof p.getSupportedLanguages === 'function') {
       const res = await p.getSupportedLanguages();
       const langs = (res && (res.languages || res)) || [];
-      if (Array.isArray(langs) && langs.length) {
-        return langs.some(l => /^ja([-_]|$)/i.test(String(l)));
+      if (Array.isArray(langs) && langs.length && !langs.some(l => /^ja([-_]|$)/i.test(String(l)))) {
+        setStatus('native-language-unknown');   // 목록에 ja 없음 — 테스트 재생으로 확인 권유
+        return 'native-language-unknown';
       }
     }
-  } catch { /* 언어목록 확인 실패 → ready 로 간주(speak 시 실패하면 안내) */ }
-  return true; // 목록 API 없음/실패 → native-ready 로 간주
+  } catch { /* 목록 확인 실패 → ready 유지(speak 테스트가 진실) */ }
+  setStatus('native-ready');
+  return 'native-ready';
 }
 
-async function nativeDetect() {
+/**
+ * 네이티브 speak. awaitDone=true 면 발화 완료까지 await + 옵션키 후보를 순차 시도(테스트 재생용, 신뢰도↑).
+ * @returns {Promise<{ok:boolean, reason?:string, message?:string}>}
+ */
+async function nativeSpeak(text, opts = {}, awaitDone = false) {
   const p = nativeTtsPlugin();
-  if (!p) { setStatus('native-unavailable'); return 'native-unavailable'; }
-  setStatus('detecting');
-  const ok = await nativeHasJa();
-  const st = ok ? 'native-ready' : 'native-unavailable';
-  setStatus(st);
-  return st;
-}
+  // 플러그인/메서드 부재는 원인을 명확히 — web 폴백으로 가리지 않는다(APK WebView Web Speech 는 불안정).
+  if (!p) { lastNativeError = 'TextToSpeech 플러그인 미등록'; setStatus('native-unavailable'); return { ok: false, reason: 'native-plugin-missing' }; }
+  if (typeof p.speak !== 'function') { lastNativeError = 'speak 메서드 없음'; setStatus('native-unavailable'); return { ok: false, reason: 'native-method-missing' }; }
+  try { await Promise.resolve(p.stop && p.stop()); } catch { /* 이전 발화 정지 무시 */ }
 
-async function nativeSpeak(text, opts = {}) {
-  const p = nativeTtsPlugin();
-  if (!p) {
-    if (webTtsAvailable()) return webSpeak(text, opts); // 플러그인 없으면 web 폴백
-    return { ok: false, reason: 'native-unavailable' };
+  // 학습된 키 우선, 그 외 후보. awaitDone 일 때만 여러 키를 시도(완료까지 await 가능).
+  const keys = awaitDone ? [nativeLangKey, 'lang', 'language', 'locale'].filter((k, i, a) => a.indexOf(k) === i) : [nativeLangKey];
+  let lastErr = null;
+  for (const key of keys) {
+    const optObj = nativeSpeakOpts(text, opts.rate, key);
+    try {
+      const pr = Promise.resolve(p.speak(optObj));
+      if (awaitDone) {
+        await pr;                       // 완료까지 대기 — 실패 시 catch 로 다음 키 시도
+        nativeLangKey = key;            // 작동 키 학습
+        lastNativeError = null;
+        setStatus('native-ready');
+        return { ok: true };
+      }
+      // 일반 재생: fire-and-forget. 완료 시 onEnd, 실패 시 onPlaybackError + 진단 기록.
+      pr.then(() => { try { opts.onEnd?.(); } catch {} })
+        .catch((e) => {
+          lastNativeError = (e && e.message) || 'native speak error';
+          try { opts.onEnd?.(); } catch {}
+          try { opts.onPlaybackError?.({ reason: 'native-error', message: lastNativeError }); } catch {}
+        });
+      setStatus('native-ready');
+      return { ok: true };
+    } catch (e) {
+      lastErr = e;                       // sync throw(또는 await reject) → 다음 키
+    }
   }
-  try {
-    try { await Promise.resolve(p.stop && p.stop()); } catch { /* 이전 발화 정지 실패 무시 */ }
-    const speakP = p.speak({ text, lang: 'ja-JP', rate: opts.rate ?? 1.0, pitch: opts.pitch ?? 1.0 });
-    // speak 는 발화 완료 시 resolve — onEnd 연결(스토리 연속 재생 등).
-    Promise.resolve(speakP)
-      .then(() => { try { opts.onEnd?.(); } catch {} })
-      .catch(() => {
-        try { opts.onEnd?.(); } catch {}
-        try { opts.onPlaybackError?.({ reason: 'native-error' }); } catch {}
-      });
-    return { ok: true };
-  } catch (e) {
-    // 네이티브 speak 실패 → web 폴백 시도, 없으면 안내.
-    if (webTtsAvailable()) return webSpeak(text, opts);
-    return { ok: false, reason: 'native-error', error: e };
-  }
+  // 전 키 실패
+  lastNativeError = (lastErr && lastErr.message) || 'native speak 실패';
+  if (!awaitDone && webTtsAvailable()) return webSpeak(text, opts);   // 일반 재생은 web 폴백 시도
+  setStatus('native-unavailable');
+  return { ok: false, reason: 'native-error', message: lastNativeError };
 }
 
 function nativeStop() {
@@ -111,6 +150,12 @@ function findJaVoice() {
     || voices.find(v => /^ja/i.test(v.lang || ''))
     || voices.find(v => isJaVoice(v))
     || null;
+}
+
+function webVoiceListEmpty() {
+  if (!webTtsAvailable()) return false;
+  try { return (window.speechSynthesis.getVoices() || []).length === 0; }
+  catch { return false; }
 }
 
 function bindVoicesChanged() {
@@ -158,14 +203,20 @@ async function webSpeak(text, opts = {}) {
     let v = cachedVoice || findJaVoice();
     if (v) { cachedVoice = v; setStatus('ja-found'); }
     else v = await pickJaVoice();
-    if (!v) return { ok: false, reason: 'no-ja-voice' };
+    // Some mobile browsers expose an empty getVoices() list even though
+    // speechSynthesis can still route by utterance.lang. If the list is merely
+    // empty, try a lang-only utterance instead of declaring failure. If voices
+    // exist but none are Japanese, keep the stricter no-ja-voice result.
+    const allowLangFallback = !v && webVoiceListEmpty();
+    if (!v && !allowLangFallback) return { ok: false, reason: 'no-ja-voice' };
 
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'ja-JP';
     u.rate = opts.rate ?? 0.95;
     u.pitch = opts.pitch ?? 1;
-    u.voice = v;
+    if (v) u.voice = v;
+    else setStatus('web-language-fallback');
     if (typeof opts.onEnd === 'function') {
       u.onend = () => { try { opts.onEnd(); } catch {} };
     }
@@ -184,22 +235,52 @@ async function webSpeak(text, opts = {}) {
 
 /** 수동 "음성 다시 감지" — 네이티브: 플러그인/언어 재확인 / 웹: 캐시 비우고 감지 루프. */
 export async function refreshVoices() {
-  if (useNativeTts()) { await nativeDetect(); return getVoiceStatus(); }
+  if (isCapacitor()) { return await nativeDetect(); }   // 세부 상태(native-language-unknown 포함) 반환
   cachedVoice = null;
   detectPromise = null;
   await detectLoop();
   return getVoiceStatus();
 }
 
-/** 현재 상태 스냅샷(동기). 네이티브 환경은 native-ready / native-unavailable. */
+/** 현재 상태 스냅샷(동기). Capacitor 는 plugin/speak 존재 기준(native-ready/native-unavailable). */
 export function getVoiceStatus() {
-  if (useNativeTts()) {
-    if (voiceStatus !== 'native-ready' && voiceStatus !== 'native-unavailable') return 'native-ready';
-    return voiceStatus;
-  }
-  if (isCapacitor()) return 'native-unavailable';   // Capacitor 인데 플러그인 미주입
+  if (isCapacitor()) return nativeStatusCode();
   if (!webTtsAvailable()) return 'unsupported';
   return voiceStatus;
+}
+
+/**
+ * 테스트 재생 — 실제 speak 가 동작하는지 확인(상태 감지보다 신뢰도 높음).
+ * 네이티브: 발화 완료까지 await + 옵션키 후보 시도. 웹: speak 결과.
+ * @returns {Promise<{ok:boolean, reason?:string, message?:string}>}
+ */
+export async function speakTest(text = '日本語') {
+  if (isCapacitor()) {
+    const r = await nativeSpeak(text, { rate: 1.0 }, true);   // awaitDone
+    setStatus(r.ok ? 'native-ready' : 'native-unavailable');
+    return r;
+  }
+  return webSpeak(text, {});
+}
+
+/** TTS 진단 스냅샷 — 설정 화면 "진단 정보" 표시용. */
+export function getTtsDiagnostics() {
+  if (isCapacitor()) {
+    const d = getNativeTtsDiagnostics();
+    return {
+      mode: 'native',
+      status: nativeStatusCode(),
+      pluginPresent: d.pluginPresent,
+      hasSpeak: d.hasSpeak,
+      hasStop: d.hasStop,
+      hasGetLanguages: d.hasGetLanguages,
+      pluginKeys: d.pluginKeys,
+      platform: d.platform,
+      langKey: nativeLangKey,
+      lastError: lastNativeError,
+    };
+  }
+  return { mode: 'web', status: getVoiceStatus(), webAvailable: webTtsAvailable(), lastError: null };
 }
 
 export function onVoiceStatusChange(cb) {
@@ -208,18 +289,18 @@ export function onVoiceStatusChange(cb) {
 }
 
 export async function speak(text, opts = {}) {
-  if (useNativeTts()) return nativeSpeak(text, opts);
+  if (isCapacitor()) return nativeSpeak(text, opts);
   return webSpeak(text, opts);
 }
 
 export function stopSpeaking() {
-  if (useNativeTts()) { nativeStop(); return; }
+  if (isCapacitor()) { nativeStop(); return; }
   if (webTtsAvailable()) window.speechSynthesis.cancel();
 }
 
-/** ja-JP 음성/언어 지원 확인. 네이티브: 언어목록(또는 ready 간주) / 웹: voice 설치 확인. */
+/** ja-JP 음성/언어 지원 확인. 네이티브: plugin+speak 존재 / 웹: voice 설치 확인. */
 export async function hasJaVoice() {
-  if (useNativeTts()) return nativeHasJa();
+  if (isCapacitor()) return nativeStatusCode() === 'native-ready';
   if (!webTtsAvailable()) return false;
   const v = await pickJaVoice();
   return !!v;
