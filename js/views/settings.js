@@ -10,7 +10,7 @@
 // 데이터 초기화 같은 위험한 액션은 이번 버전에 포함하지 않는다.
 
 import { getState } from '../storage.js';
-import { getVoiceStatus, refreshVoices, onVoiceStatusChange, ttsAvailable } from '../tts.js';
+import { getVoiceStatus, refreshVoices, onVoiceStatusChange, ttsAvailable, speakTest, getTtsDiagnostics } from '../tts.js';
 import { getHelpEnabled, setHelpEnabled } from '../state.js';
 import {
   getFuriganaEnabled, setFuriganaEnabled,
@@ -112,8 +112,11 @@ function draw(screen) {
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <span style="flex:0 0 auto;font-size:13px">음성 상태</span>
           <span id="voiceStatusText" class="muted" style="flex:1;font-size:12px">확인 중…</span>
+          <button class="btn" id="voiceTestBtn" type="button" style="font-size:12px;padding:4px 10px">테스트 재생</button>
           <button class="btn" id="voiceRefreshBtn" type="button" style="font-size:12px;padding:4px 10px">음성 다시 감지</button>
         </div>
+        <p class="muted" id="voiceTestResult" style="margin:6px 0 0;font-size:11px;display:none"></p>
+        <p class="muted" id="voiceDiag" style="margin:4px 0 0;font-size:10px;display:none"></p>
         <p class="muted" id="voiceStatusHint" style="margin:6px 0 0;font-size:11px;display:none">
           브라우저가 설치된 일본어 음성을 늦게 불러올 수 있습니다.
           「음성 다시 감지」를 눌러보세요. 계속 안 되면 Chrome/Edge/Safari 의 음성 설정을 확인하세요.
@@ -172,8 +175,9 @@ function draw(screen) {
       'no-ja':              ['일본어 음성 없음', 'voice-status-bad', true, WEB_HINT],
       'detecting':          ['감지 중…', 'voice-status-wait', false, WEB_HINT],
       'unsupported':        ['브라우저 미지원', 'voice-status-bad', true, WEB_HINT],
-      'native-ready':       ['네이티브 TTS 사용 가능 ✓', 'voice-status-ok', false, NATIVE_HINT],
-      'native-unavailable': ['네이티브 TTS 확인 실패', 'voice-status-bad', true, NATIVE_HINT],
+      'native-ready':            ['네이티브 TTS 사용 가능 ✓', 'voice-status-ok', false, NATIVE_HINT],
+      'native-unavailable':      ['네이티브 TTS 확인 실패', 'voice-status-bad', true, NATIVE_HINT],
+      'native-language-unknown': ['네이티브 TTS 사용 가능 · 일본어 음성 미확인', 'voice-status-wait', true, NATIVE_HINT],
     };
     const [label, cls, showHint, hint] = map[st] || map['detecting'];
     vsText.textContent = label;
@@ -183,12 +187,53 @@ function draw(screen) {
   }
   paintVoiceStatus(getVoiceStatus());
   const unsubVoice = onVoiceStatusChange(paintVoiceStatus);
+
+  // 진단 정보(네이티브 환경에서 원인 파악 — 플러그인/메서드/마지막 오류).
+  const vsDiag = screen.querySelector('#voiceDiag');
+  const vsTestResult = screen.querySelector('#voiceTestResult');
+  function paintDiag() {
+    try {
+      const d = getTtsDiagnostics();
+      if (d.mode === 'native') {
+        vsDiag.style.display = '';
+        vsDiag.textContent = `진단: 플러그인 ${d.pluginPresent ? '있음' : '없음'} · speak ${d.hasSpeak ? '있음' : '없음'}`
+          + ` · 플랫폼 ${d.platform}` + (d.lastError ? ` · 마지막 오류: ${d.lastError}` : '');
+      } else {
+        vsDiag.style.display = 'none';
+      }
+    } catch { vsDiag.style.display = 'none'; }
+  }
+  paintDiag();
+
+  // 테스트 재생 — 실제 speak 동작 확인(상태 감지보다 신뢰도 높음).
+  screen.querySelector('#voiceTestBtn').addEventListener('click', async () => {
+    vsTestResult.style.display = '';
+    vsTestResult.textContent = '재생 중…';
+    const r = await speakTest('日本語');
+    paintVoiceStatus(getVoiceStatus());
+    paintDiag();
+    if (r.ok) {
+      vsTestResult.textContent = '테스트 재생 성공 — 소리가 들리면 정상입니다.';
+      showToast('테스트 재생 성공');
+    } else {
+      const why = r.reason === 'native-plugin-missing' ? '네이티브 TTS 플러그인 미등록(앱 빌드 확인 필요)'
+        : r.reason === 'native-method-missing' ? '플러그인 speak 메서드 없음'
+        : r.reason === 'no-ja-voice' ? '일본어 음성 없음'
+        : r.reason === 'unsupported' ? '이 환경은 TTS 미지원'
+        : `재생 실패${r.message ? ' — ' + r.message : ''}`;
+      vsTestResult.textContent = `테스트 재생 실패: ${why}`;
+      showToast('테스트 재생 실패');
+    }
+  });
+
   screen.querySelector('#voiceRefreshBtn').addEventListener('click', async () => {
     paintVoiceStatus('detecting');
     const st = await refreshVoices();
     paintVoiceStatus(st);
+    paintDiag();
     const toast = st === 'ja-found' ? '일본어 음성을 찾았습니다'
       : st === 'native-ready' ? '네이티브 TTS 를 확인했습니다'
+      : st === 'native-language-unknown' ? '네이티브 TTS 는 있으나 일본어 음성은 테스트 재생으로 확인하세요'
       : st === 'native-unavailable' ? '네이티브 TTS 를 확인하지 못했습니다'
       : '음성 감지를 다시 시도했습니다';
     showToast(toast);
