@@ -160,16 +160,25 @@ function draw(screen) {
   // ── 음성 상태 (라운드 30) ──
   const vsText = screen.querySelector('#voiceStatusText');
   const vsHint = screen.querySelector('#voiceStatusHint');
+  // 웹/PWA = Web Speech 감지 상태, APK/Capacitor = 네이티브 TTS 상태.
+  const WEB_HINT = '일본어 음성이 감지되지 않습니다. 「음성 다시 감지」를 눌러보세요. '
+    + '계속 안 되면 Chrome/Edge/Safari 의 음성 설정을 확인하세요.';
+  const NATIVE_HINT = '앱(APK)은 Android 네이티브 TTS 를 사용합니다(WebView 음성 감지는 쓰지 않음). '
+    + '소리가 안 나면 Android 설정 → 시스템 → 언어 및 입력 → 텍스트 음성 변환(TTS) 에서 '
+    + '엔진과 일본어 음성 데이터를 설치/활성화하세요.';
   function paintVoiceStatus(st) {
     const map = {
-      'ja-found':    ['일본어 음성 감지됨 ✓', 'voice-status-ok', false],
-      'no-ja':       ['일본어 음성 없음', 'voice-status-bad', true],
-      'detecting':   ['감지 중…', 'voice-status-wait', false],
-      'unsupported': ['브라우저 미지원', 'voice-status-bad', true],
+      'ja-found':           ['일본어 음성 감지됨 ✓', 'voice-status-ok', false, WEB_HINT],
+      'no-ja':              ['일본어 음성 없음', 'voice-status-bad', true, WEB_HINT],
+      'detecting':          ['감지 중…', 'voice-status-wait', false, WEB_HINT],
+      'unsupported':        ['브라우저 미지원', 'voice-status-bad', true, WEB_HINT],
+      'native-ready':       ['네이티브 TTS 사용 가능 ✓', 'voice-status-ok', false, NATIVE_HINT],
+      'native-unavailable': ['네이티브 TTS 확인 실패', 'voice-status-bad', true, NATIVE_HINT],
     };
-    const [label, cls, showHint] = map[st] || map['detecting'];
+    const [label, cls, showHint, hint] = map[st] || map['detecting'];
     vsText.textContent = label;
     vsText.className = cls;
+    vsHint.textContent = hint;
     vsHint.style.display = showHint ? '' : 'none';
   }
   paintVoiceStatus(getVoiceStatus());
@@ -178,7 +187,11 @@ function draw(screen) {
     paintVoiceStatus('detecting');
     const st = await refreshVoices();
     paintVoiceStatus(st);
-    showToast(st === 'ja-found' ? '일본어 음성을 찾았습니다' : '음성 감지를 다시 시도했습니다');
+    const toast = st === 'ja-found' ? '일본어 음성을 찾았습니다'
+      : st === 'native-ready' ? '네이티브 TTS 를 확인했습니다'
+      : st === 'native-unavailable' ? '네이티브 TTS 를 확인하지 못했습니다'
+      : '음성 감지를 다시 시도했습니다';
+    showToast(toast);
   });
 
   screen.querySelector('#translationToggle').addEventListener('change', (e) => {

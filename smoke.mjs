@@ -3526,6 +3526,44 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('CI — qa.yml 이 --omit=optional 로 경량 설치', /--omit=optional/.test(read('./.github/workflows/qa.yml')));
 }
 
+// ── 라운드 57: 네이티브 TTS 어댑터 정적 검증 ───────────────────────────────
+{
+  const fs57 = await import('node:fs');
+  const read = (p) => { try { return fs57.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  // platform.js 공용 감지
+  const plat = read('./js/platform.js');
+  ok('TTS — platform.js isCapacitor/isAndroidCapacitor/useNativeTts/nativeTtsPlugin', !!plat &&
+     /export function isCapacitor/.test(plat) && /export function isAndroidCapacitor/.test(plat) &&
+     /export function useNativeTts/.test(plat) && /export function nativeTtsPlugin/.test(plat));
+  const platMod = await import('./js/platform.js');
+  ok('TTS — 웹 환경 useNativeTts=false(Capacitor 미주입)', platMod.useNativeTts() === false && platMod.isCapacitor() === false);
+  // pwa.js 가 platform 공용 감지 사용(회귀 없음)
+  ok('TTS — pwa.js platform.isCapacitor 공용 사용', /from '\.\/platform\.js'/.test(read('./js/pwa.js')) && /export function isCapacitor/.test(read('./js/pwa.js')));
+  // tts.js 어댑터 구조
+  const ttsSrc = read('./js/tts.js');
+  ok('TTS — tts.js native/web 어댑터(nativeSpeak/webSpeak)', /async function nativeSpeak/.test(ttsSrc) && /async function webSpeak/.test(ttsSrc));
+  ok('TTS — speak/stop 가 useNativeTts 로 분기', /if \(useNativeTts\(\)\) return nativeSpeak/.test(ttsSrc) && /if \(useNativeTts\(\)\) \{ nativeStop\(\)/.test(ttsSrc));
+  ok('TTS — Capacitor 에서 Web Speech 만 의존하지 않음(plugin 사용)', /nativeTtsPlugin\(\)/.test(ttsSrc) && /\.speak\(\{ text/.test(ttsSrc));
+  ok('TTS — 네이티브 상태값 native-ready/native-unavailable', /native-ready/.test(ttsSrc) && /native-unavailable/.test(ttsSrc));
+  ok('TTS — 기존 web reason 유지(no-ja-voice/unsupported)', /no-ja-voice/.test(ttsSrc) && /'unsupported'/.test(ttsSrc));
+  ok('TTS — 공개 API 유지(speak/stopSpeaking/hasJaVoice/refreshVoices/getVoiceStatus/onVoiceStatusChange/ttsAvailable)',
+     ['export async function speak', 'export function stopSpeaking', 'export async function hasJaVoice',
+      'export async function refreshVoices', 'export function getVoiceStatus', 'export function onVoiceStatusChange',
+      'export function ttsAvailable'].every(s => ttsSrc.includes(s)));
+  // 설정 화면 네이티브 안내 문구
+  const setSrc = read('./js/views/settings.js');
+  ok('TTS — settings native-ready/native-unavailable 매핑 + Android TTS 안내', /native-ready/.test(setSrc) && /native-unavailable/.test(setSrc) && /텍스트 음성 변환|네이티브 TTS/.test(setSrc));
+  // 플러그인 optionalDependencies(APK 빌드 전용) + qa CI 무영향
+  const pkg = JSON.parse(read('./package.json') || '{}');
+  ok('TTS — @capacitor-community/text-to-speech optionalDependencies', !!(pkg.optionalDependencies && pkg.optionalDependencies['@capacitor-community/text-to-speech']));
+  ok('TTS — TTS 플러그인이 deps/devDeps 에는 없음(qa CI 경량)',
+     !(pkg.dependencies && pkg.dependencies['@capacitor-community/text-to-speech']) &&
+     !(pkg.devDependencies && pkg.devDependencies['@capacitor-community/text-to-speech']));
+  // APK 워크플로는 full npm install(optional 포함) — 플러그인 설치됨
+  const apkWf = read('./.github/workflows/android-apk.yml');
+  ok('TTS — android-apk.yml npm install(optional 포함, --omit 아님)', /npm install --no-audit --no-fund/.test(apkWf) && !/--omit=optional/.test(apkWf));
+}
+
 if (errs.length) {
   console.log('\nERRORS:');
   for (const e of errs) console.log(' -', e);

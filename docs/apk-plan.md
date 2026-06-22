@@ -61,6 +61,25 @@ npm run cap:open
 - **release APK/AAB**(추후): 자체 **release keystore** 로 서명 필요. keystore/비밀번호는 **절대 저장소·워크플로 평문 커밋 금지** → GitHub **Secrets** + `signingConfigs` 로 주입. `.gitignore` 가 `*.keystore`·`*.jks`·`*.apk` 제외.
 - 본 워크플로는 `assembleDebug` 만 수행 — 서명 키를 다루지 않는다.
 
+## 0-C. 네이티브 TTS 브릿지 (라운드 57)
+
+**문제**: APK(Capacitor Android WebView)에서 Web Speech `speechSynthesis.getVoices()` 가 일본어 voice 를 감지하지 못해(폰에 일본어 TTS 설치돼 있어도) 설정의 "음성 상태" 가 안 잡히고 발음이 안 됨 — Android WebView 의 Web Speech 구현이 불안정/제한적이기 때문.
+
+**해결**: TTS 를 **어댑터 구조**로 분리(`js/tts.js` 공개 API 동일, 호출부 변경 0).
+- 웹/PWA → 기존 **Web Speech API**(회귀 없음).
+- Capacitor(`globalThis.Capacitor.Plugins.TextToSpeech` 주입 시) → **네이티브 TTS 플러그인** `@capacitor-community/text-to-speech` 우선. `TextToSpeech.speak({text, lang:'ja-JP', rate})` / `.stop()` / `.getSupportedLanguages()`.
+- 환경 감지는 `js/platform.js`(`isCapacitor`/`isAndroidCapacitor`/`useNativeTts`/`nativeTtsPlugin`) — `pwa.js` 와 공용.
+- 상태값 확장: `native-ready`(사용 가능) / `native-unavailable`(플러그인 미주입·ja 미지원). 설정 화면이 환경별 문구로 표시.
+- 폴백: 네이티브 speak 실패 시 web 가능하면 web, 아니면 `{ok:false, reason:'native-error'}` 안내.
+
+**설치(빌드 환경)**: `@capacitor-community/text-to-speech` 는 `optionalDependencies` → APK 빌드의 `npm install` + `npx cap sync android` 가 Android 플러그인을 등록. 경량 테스트 CI(`--omit=optional`)는 영향 없음.
+
+**Android 일본어 음성 설치 안내**(앱 내 설정에도 표시): Android **설정 → 시스템 → 언어 및 입력 → 텍스트 음성 변환 출력(TTS)** → 엔진(예: Google TTS) + **일본어 음성 데이터 설치/다운로드**.
+
+**권한**: TTS 는 별도 권한 불필요(플러그인 문서 기준). RECORD_AUDIO 등은 이번 라운드 미변경(STT 네이티브는 다음).
+
+**한계**: 네이티브 `getSupportedLanguages` 가 ja 를 반환 안 하거나 음성 데이터 미설치면 `native-unavailable` 또는 speak 무음 → 안내. 일부 기기/엔진 편차 존재 → 실기기 검증 필요.
+
 ## 9. 알려진 한계 / 실기기 확인 항목 (라운드 55)
 - **Firebase Email Auth**: WebView 에서 동작 예상(REST 기반)이나 실기기 검증 필요. Authorized domains 에 `localhost`(androidScheme https → `https://localhost`) 가 있어야 함.
 - **Service Worker**: `isCapacitor()` 로 등록 건너뜀 → 번들 자산이 첫 로드 제공. SW 미동작이 앱을 깨지 않음(가드).

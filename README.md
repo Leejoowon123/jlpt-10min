@@ -30,6 +30,7 @@ Firebase 는 **인증과 최소 행동 로그** 용도로만 쓰입니다(이메
 - **라이트/다크/시스템 테마** + 모바일 360px 대응
 - **PWA 설치 가능** — 모바일 홈 화면에 추가, 재방문 시 앱 shell 오프라인 로드
 - **이메일 로그인 필수** — Firebase Email/Password 인증 게이트 + 최소 행동 로그(signed-in 전용)
+- **TTS 어댑터** — 웹/PWA 는 Web Speech, **APK(Capacitor)는 Android 네이티브 TTS 우선**(WebView 음성 감지 한계 우회)
 
 상세: [docs/features.md](docs/features.md)
 
@@ -85,7 +86,7 @@ VSCode Live Server 등도 동일하게 동작.
 ```bash
 npm install        # jsdom (최초 1회)
 node smoke.mjs     # 데이터 무결성 + 후리가나 커버율 + 정적/보안 검사 + 완성/릴리스 sentinel
-node qa.mjs        # jsdom DOM 시나리오 (241 시나리오)
+node qa.mjs        # jsdom DOM 시나리오 (242 시나리오)
 npm run content:report   # 최종 목표 대비 콘텐츠 현황
 ```
 

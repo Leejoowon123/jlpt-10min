@@ -6,13 +6,11 @@
 // - 경로는 상대(`./service-worker.js`, scope `./`) — GitHub Pages 하위 경로 안전.
 // - 테스트용으로 nav 를 주입할 수 있다(미지원 환경 mock 검증).
 
-/** Capacitor/네이티브 WebView 환경 감지 — SW/PWA 분기용. */
+import { isCapacitor as _isCapacitor } from './platform.js';
+
+/** Capacitor/네이티브 WebView 환경 감지 — SW/PWA 분기용. (공용 감지: platform.js) */
 export function isCapacitor() {
-  try {
-    if (typeof globalThis !== 'undefined' && globalThis.Capacitor) return true;
-    if (typeof location !== 'undefined' && location.protocol === 'capacitor:') return true;
-    return false;
-  } catch { return false; }
+  return _isCapacitor();
 }
 
 export function registerServiceWorker(nav) {
