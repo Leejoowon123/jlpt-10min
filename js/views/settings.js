@@ -175,6 +175,8 @@ function draw(screen) {
       'no-ja':              ['일본어 음성 없음', 'voice-status-bad', true, WEB_HINT],
       'detecting':          ['감지 중…', 'voice-status-wait', false, WEB_HINT],
       'unsupported':        ['브라우저 미지원', 'voice-status-bad', true, WEB_HINT],
+      'web-language-fallback': ['브라우저 TTS 테스트 필요 · 음성 목록 미확인', 'voice-status-wait', true,
+        '브라우저가 음성 목록을 비워두었지만 ja-JP 재생을 시도했습니다. 「테스트 재생」에서 실제 소리가 나는지 확인하세요.'],
       'native-ready':            ['네이티브 TTS 사용 가능 ✓', 'voice-status-ok', false, NATIVE_HINT],
       'native-unavailable':      ['네이티브 TTS 확인 실패', 'voice-status-bad', true, NATIVE_HINT],
       'native-language-unknown': ['네이티브 TTS 사용 가능 · 일본어 음성 미확인', 'voice-status-wait', true, NATIVE_HINT],

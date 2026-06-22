@@ -152,6 +152,12 @@ function findJaVoice() {
     || null;
 }
 
+function webVoiceListEmpty() {
+  if (!webTtsAvailable()) return false;
+  try { return (window.speechSynthesis.getVoices() || []).length === 0; }
+  catch { return false; }
+}
+
 function bindVoicesChanged() {
   if (listenersBound || !webTtsAvailable()) return;
   listenersBound = true;
@@ -197,14 +203,20 @@ async function webSpeak(text, opts = {}) {
     let v = cachedVoice || findJaVoice();
     if (v) { cachedVoice = v; setStatus('ja-found'); }
     else v = await pickJaVoice();
-    if (!v) return { ok: false, reason: 'no-ja-voice' };
+    // Some mobile browsers expose an empty getVoices() list even though
+    // speechSynthesis can still route by utterance.lang. If the list is merely
+    // empty, try a lang-only utterance instead of declaring failure. If voices
+    // exist but none are Japanese, keep the stricter no-ja-voice result.
+    const allowLangFallback = !v && webVoiceListEmpty();
+    if (!v && !allowLangFallback) return { ok: false, reason: 'no-ja-voice' };
 
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = 'ja-JP';
     u.rate = opts.rate ?? 0.95;
     u.pitch = opts.pitch ?? 1;
-    u.voice = v;
+    if (v) u.voice = v;
+    else setStatus('web-language-fallback');
     if (typeof opts.onEnd === 'function') {
       u.onend = () => { try { opts.onEnd(); } catch {} };
     }
