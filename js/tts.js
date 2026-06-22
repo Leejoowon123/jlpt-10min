@@ -276,6 +276,7 @@ export function getTtsDiagnostics() {
       hasGetLanguages: d.hasGetLanguages,
       hasRegisterPlugin: d.hasRegisterPlugin,
       pluginKeys: d.pluginKeys,
+      pluginSource: d.pluginSource,
       platform: d.platform,
       langKey: nativeLangKey,
       lastError: lastNativeError,

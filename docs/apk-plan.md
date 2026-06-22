@@ -87,9 +87,15 @@ npm run cap:open
    - `native-error` + message → 엔진/음성 데이터 문제(보통 2~3번).
 2. **진단 정보** 확인(설정에 표시) — 플러그인 있음/없음 · speak 있음/없음 · 마지막 오류 message.
 3. **Android TTS 설정** — 설정 → 시스템 → 언어 및 입력 → **텍스트 음성 변환(TTS)** → 엔진(Google TTS 등) + **일본어 음성 데이터 설치/다운로드**, 기본 엔진/언어 확인.
-4. **빌드 로그(GitHub Actions)** — 해당 run 의 **Diagnostics step** 에서 `npm ls @capacitor-community/text-to-speech`(설치됨?) / `npx cap ls`(android 에 TextToSpeech 등록됨?) 확인. 누락이면 재빌드(워크플로가 `npm install` → `cap sync` 로 등록).
+4. **빌드 로그(GitHub Actions)** — 해당 run 의 **Diagnostics step** 에서 아래 3가지를 확인:
+   - `npm ls @capacitor-community/text-to-speech` — node_modules 에 **설치**됐는가.
+   - `npx cap ls` — Capacitor 가 플러그인을 **감지**하는가.
+   - `capacitor.plugins.json` 출력 + gradle grep — **이 빌드의 APK 에 실제로 등록**됐는가(가장 결정적). `TextToSpeech` 항목과 `OK: …등록됨` 줄이 보이면 APK 에 네이티브 TTS 가 포함된 것. `WARN: …미등록` 이면 `cap sync` 가 등록에 실패한 것(재빌드 또는 `android/` 재생성).
+   > `android/` 는 `.gitignore`(미커밋) — CI 가 매 실행 `npx cap add android` 로 새로 만들고 `cap sync` 로 플러그인을 등록한다. 이 step 이 그 결과를 증명한다.
 
 > 상태 감지는 `getSupportedLanguages` 결과에 **의존하지 않는다**(플러그인+speak 존재 = `native-ready`). 언어목록이 ja 를 확인 못 해도 곧바로 실패로 보지 않고 `native-language-unknown` 으로 두며, **실제 발화 검증은 「테스트 재생」**(speak 완료까지 await + lang/language/locale 옵션키 후보 시도)이 담당한다.
+>
+> **플러그인 해석 경로(진단의 `pluginSource`)**: `plugins-map`(네이티브가 `Capacitor.Plugins` 에 확정 등록 — 신뢰) vs `register-plugin`(JS 가 `registerPlugin('TextToSpeech')` 로 만든 프록시 — **존재 ≠ 동작**, 네이티브 미등록이어도 프록시는 생김). 정적 앱은 보통 후자이므로, 설정 진단에 경로를 표시하고 **실제 동작은 「테스트 재생」으로만 확정**한다. 테스트 재생이 `native-error` 면 플러그인은 있으나 엔진/일본어 데이터 문제 → 3번.
 
 ## 9. 알려진 한계 / 실기기 확인 항목 (라운드 55)
 - **Firebase Email Auth**: WebView 에서 동작 예상(REST 기반)이나 실기기 검증 필요. Authorized domains 에 `localhost`(androidScheme https → `https://localhost`) 가 있어야 함.
