@@ -199,7 +199,9 @@ function draw(screen) {
       if (d.mode === 'native') {
         vsDiag.style.display = '';
         vsDiag.textContent = `진단: 플러그인 ${d.pluginPresent ? '있음' : '없음'} · speak ${d.hasSpeak ? '있음' : '없음'}`
-          + ` · 플랫폼 ${d.platform}` + (d.lastError ? ` · 마지막 오류: ${d.lastError}` : '');
+          + ` · registerPlugin ${d.hasRegisterPlugin ? '있음' : '없음'} · 플랫폼 ${d.platform}`
+          + (d.pluginKeys?.length ? ` · keys ${d.pluginKeys.join(',')}` : '')
+          + (d.lastError ? ` · 마지막 오류: ${d.lastError}` : '');
       } else {
         vsDiag.style.display = 'none';
       }

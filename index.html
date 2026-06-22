@@ -40,6 +40,9 @@ try {
     </nav>
   </div>
 
+  <!-- Capacitor injects/serves this file inside the Android WebView.
+       On GitHub Pages it 404s harmlessly, while the app continues as web/PWA. -->
+  <script src="./capacitor.js"></script>
   <script type="module" src="./js/app.js"></script>
 </body>
 </html>
