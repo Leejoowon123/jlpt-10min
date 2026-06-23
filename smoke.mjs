@@ -3911,6 +3911,71 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('R67 — isAdmin 이메일 비교 아님(admins/{uid} 읽기)', /admins\/\$\{u\.uid\}/.test(fbSrc) && !/\.email\s*===/.test(fbSrc));
 }
 
+// ── 라운드 68: Play Store 등록 자료(store-listing.md) 정적 검증 ────────────────
+{
+  const fs68 = await import('node:fs');
+  const read = (p) => { try { return fs68.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const exists = (p) => { try { fs68.accessSync(new URL(p, import.meta.url)); return true; } catch { return false; } };
+
+  const store = read('./docs/store-listing.md');
+  const readme = read('./README.md');
+  const relChk = read('./docs/release-checklist.md');
+
+  ok('R68 — docs/store-listing.md 존재', exists('./docs/store-listing.md') && /JLPT10M/.test(store));
+
+  // 짧은/긴 설명 길이 — 첫 코드블록 추출
+  const shortBlk = (store.split('## 2.')[1] || '').split('```')[1]?.trim() || '';
+  const longBlk = (store.split('## 3.')[1] || '').split('```')[1]?.trim() || '';
+  ok('R68 — 짧은 설명 ≤80자(존재)', shortBlk.length > 0 && shortBlk.length <= 80, `len=${shortBlk.length}`);
+  ok('R68 — 긴 설명 ≤4000자(존재)', longBlk.length > 100 && longBlk.length <= 4000, `len=${longBlk.length}`);
+
+  // 비공식 disclaimer 존재 + 공식 앱 사칭 표현 금지
+  ok('R68 — 비공식/무관 안내 포함', /비공식/.test(store) && /무관|관련이 없/.test(store));
+  ok('R68 — 공식 앱 사칭 표현 없음', !/공식\s*(JLPT\s*)?(앱|어플|애플리케이션)/.test(store));
+
+  // 카테고리 교육
+  ok('R68 — 카테고리 교육', /교육/.test(store));
+
+  // 광고/결제/권한 오기재 금지(없음/미사용으로 일관)
+  ok('R68 — 광고 없음 명시', /광고\s*(가\s*)?없/.test(store));
+  ok('R68 — 인앱 결제 없음 명시', /인앱\s*결제[\s가|]*없/.test(store));
+  ok('R68 — 위치/연락처/사진/파일 미사용 명시',
+     /위치[\s\S]{0,80}(사용하지 않|미사용|아니오)/.test(store) && /연락처/.test(store) && /사진/.test(store) && /파일/.test(store));
+  ok('R68 — STT/답변 원문/비번 미저장 명시', /음성 인식 원문|STT/.test(store) && /답변 원문/.test(store) && /비밀번호/.test(store) && /저장하지 않|저장 안 함/.test(store));
+
+  // 개발자 연락처 = jlpt10m@gmail.com (joowon582 미잔존)
+  ok('R68 — 개발자 연락처 jlpt10m@gmail.com', /개발자 연락처[\s\S]{0,60}jlpt10m@gmail\.com/.test(store) || /jlpt10m@gmail\.com/.test(store));
+  ok('R68 — store-listing 에 joowon582 미잔존', !/joowon582/.test(store));
+
+  // Data Safety ↔ privacy 일치 안내 + 스크린샷에서 관리자 화면 제외
+  ok('R68 — Data Safety 표 + privacy 일치 안내', /Data Safety|데이터 보안/.test(store) && /privacy\.html/.test(store));
+  ok('R68 — 스크린샷에서 관리자 화면 제외 명시', /관리자 화면[\s\S]{0,40}(포함하지 않|제외)/.test(store) && /#admin/.test(store));
+
+  // 링크 연결
+  ok('R68 — README + release-checklist 에 store-listing 링크', /store-listing\.md/.test(readme) && /store-listing\.md/.test(relChk));
+}
+
+// ── 라운드 69: Play 제출 직전 패키지(play-submit-pack.md) 정적 검증 ────────────
+{
+  const fs69 = await import('node:fs');
+  const read = (p) => { try { return fs69.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const exists = (p) => { try { fs69.accessSync(new URL(p, import.meta.url)); return true; } catch { return false; } };
+
+  const pack = read('./docs/play-submit-pack.md');
+  const readme = read('./README.md');
+  const relChk = read('./docs/release-checklist.md');
+
+  ok('R69 — play-submit-pack.md 존재', exists('./docs/play-submit-pack.md') && /JLPT10M/.test(pack));
+  ok('R69 — 입력값/파일/테스트계정/Firebase/DataSafety 섹션', /com\.jlpt10m\.app/.test(pack) && /JLPT10M-release\.aab/.test(pack) && /테스트 계정/.test(pack) && /Data Safety|데이터/.test(pack));
+  ok('R69 — 인증 후 1~20단계', /진행 순서/.test(pack) && /\n1\. /.test(pack) && /\n20\. /.test(pack));
+  ok('R69 — 최종 확인 게이트', /최종 확인|제출 게이트/.test(pack));
+  ok('R69 — 관리자 UID 2개 + Boolean true', /SifCVwklMhMX36YhaC9jke2kosr2/.test(pack) && /QF4R89i3FQb0bMYe3uwXsxGddc72/.test(pack) && /Boolean `?true`?/.test(pack));
+  ok('R69 — 개발자 연락처 jlpt10m, joowon582 미잔존', /jlpt10m@gmail\.com/.test(pack) && !/joowon582/.test(pack));
+  ok('R69 — 관리자 화면 스크린샷 금지 명시', /관리자 화면[\s\S]{0,30}(금지|제외|포함하지)/.test(pack));
+  ok('R69 — debug APK Play 업로드 금지 명시', /debug[\s\S]{0,40}(업로드 금지|배포 금지|개발용)/.test(pack));
+  ok('R69 — README + release-checklist 에 play-submit-pack 링크', /play-submit-pack\.md/.test(readme) && /play-submit-pack\.md/.test(relChk));
+}
+
 if (errs.length) {
   console.log('\nERRORS:');
   for (const e of errs) console.log(' -', e);

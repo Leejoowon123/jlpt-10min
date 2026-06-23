@@ -133,6 +133,8 @@ npm run content:report   # 최종 목표 대비 콘텐츠 현황
 | [docs/apk-plan.md](docs/apk-plan.md) | APK 패키징 계획(Capacitor 추천·사전 점검) — **계획 중** |
 | [docs/android-release.md](docs/android-release.md) | release 서명 빌드(AAB/APK·GitHub Secrets)+Play 내부 테스트 배포 절차 |
 | [docs/play-console-checklist.md](docs/play-console-checklist.md) | Play 내부 테스트 제출 체크리스트(데이터 보안 신고·테스트 계정·콘텐츠 등급) |
+| [docs/store-listing.md](docs/store-listing.md) | Play Store 등록 자료(짧은/긴 설명·태그·Data Safety·스크린샷 가이드) |
+| [docs/play-submit-pack.md](docs/play-submit-pack.md) | Play 제출 직전 패키지(입력값 요약·파일 목록·인증 후 1~20단계·최종 게이트) |
 | [privacy.html](privacy.html) | 개인정보처리방침(정적 페이지 · GitHub Pages 게시) |
 | [docs/browser-qa-checklist.md](docs/browser-qa-checklist.md) | 실제 브라우저 수동 QA 체크리스트 |
 | [docs/asset-licenses.md](docs/asset-licenses.md) | 이미지 자산 라이선스 기록 |

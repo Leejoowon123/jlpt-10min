@@ -151,6 +151,8 @@
 - [ ] **Android 런처 아이콘 정책** — **기본(Capacitor) 아이콘 유지**(강제 주입 제거 확인). PWA 아이콘은 기존 유지
 - [ ] **release APK 실기기 테스트** — `build_apk=true` 로 빌드한 release APK 설치 → 로그인/학습/TTS 테스트 재생/피드백/관리자/삭제 요청 경로 확인
 - [ ] **release AAB 내부 테스트 업로드** — Play Console 내부 테스트 트랙에 AAB 업로드(versionCode 단조 증가 확인)
+- [ ] **스토어 등록 자료** — [docs/store-listing.md](store-listing.md)의 짧은/긴 설명·태그·Data Safety·스크린샷(관리자 화면 제외) 준비, 개발자 연락처 jlpt10m@gmail.com
+- [ ] **제출 직전 패키지** — [docs/play-submit-pack.md](play-submit-pack.md)로 입력값·파일·테스트계정·Firebase·인증 후 1~20단계·최종 게이트 일괄 확인
 - [ ] **Firebase 확인** — 운영 Rules Publish / `admins/{uid}` 존재 / 로그인 후 `userActivity/{uid}` 갱신 / 피드백 `feedback/{id}` 생성
 - [ ] **actionLogs 미생성** — 학습·피드백 후 Console 에 `actionLogs` 신규 노드가 **생기지 않음**(폐지 유지), `anonymousActivity` 도 없음
 
