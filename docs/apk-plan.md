@@ -60,6 +60,7 @@ npm run cap:open
 - **debug APK**(이번 라운드): Android **디버그 키**로 자동 서명되는 **테스트 전용**. 사이드로드 설치/내부 검증용. **공개/Play 배포 금지**.
 - **release APK/AAB**(추후): 자체 **release keystore** 로 서명 필요. keystore/비밀번호는 **절대 저장소·워크플로 평문 커밋 금지** → GitHub **Secrets** + `signingConfigs` 로 주입. `.gitignore` 가 `*.keystore`·`*.jks`·`*.apk` 제외.
 - 본 워크플로는 `assembleDebug` 만 수행 — 서명 키를 다루지 않는다.
+- **release 서명 빌드(AAB/APK) + Play 내부 테스트 배포**(라운드 62): GitHub Secrets 기반 서명 워크플로([android-release.yml](../.github/workflows/android-release.yml))와 절차는 **[docs/android-release.md](android-release.md)** 참조. keystore 비밀값은 저장소에 커밋하지 않는다.
 
 ## 0-C. 네이티브 TTS 브릿지 (라운드 57)
 
@@ -96,6 +97,17 @@ npm run cap:open
 > 상태 감지는 `getSupportedLanguages` 결과에 **의존하지 않는다**(플러그인+speak 존재 = `native-ready`). 언어목록이 ja 를 확인 못 해도 곧바로 실패로 보지 않고 `native-language-unknown` 으로 두며, **실제 발화 검증은 「테스트 재생」**(speak 완료까지 await + lang/language/locale 옵션키 후보 시도)이 담당한다.
 >
 > **플러그인 해석 경로(진단의 `pluginSource`)**: `plugins-map`(네이티브가 `Capacitor.Plugins` 에 확정 등록 — 신뢰) vs `register-plugin`(JS 가 `registerPlugin('TextToSpeech')` 로 만든 프록시 — **존재 ≠ 동작**, 네이티브 미등록이어도 프록시는 생김). 정적 앱은 보통 후자이므로, 설정 진단에 경로를 표시하고 **실제 동작은 「테스트 재생」으로만 확정**한다. 테스트 재생이 `native-error` 면 플러그인은 있으나 엔진/일본어 데이터 문제 → 3번.
+
+### Android TTS 설정 화면 이동 (라운드 59 — 안내만, 네이티브 이동은 다음 라운드)
+
+**원칙**: 앱이 **자동으로 음성팩을 설치하거나 TTS 설정을 바꿀 수는 없다**(Android 보안). 사용자의 명시적 버튼으로 **TTS 설정 화면을 여는 것**은 가능하지만, WebView 에서 임의 시스템 Intent 를 던지려면 네이티브 플러그인이 필요하다.
+
+**이번 라운드 구현**: 설정 → 음성 상태 영역에 **「Android TTS 설정 안내」** 버튼 추가 — 누르면 단계별 안내(설정 → 시스템 → 언어 및 입력 → 텍스트 음성 변환 출력 → Google 음성 서비스 + 일본어 음성 데이터 설치 → 「테스트 재생」)를 펼친다. **네이티브 설정 화면으로의 직접 이동은 보류**(플러그인 추가 = 네이티브 재빌드/검증 비용, 불확실 → 다음 라운드).
+
+**다음 라운드 후보(네이티브 이동)** — 무료 Capacitor 플러그인:
+- `@capacitor/app-launcher` — `openUrl()` 로 스킴/Intent URL 열기(범용, 공식). Android TTS 설정은 표준 공개 Intent 가 아니므로 동작 편차 가능.
+- `@capawesome/capacitor-android-intent` 류 커뮤니티 Intent 플러그인 — `android.settings.TTS_SETTINGS` 액션을 직접 던질 수 있으나 기기/버전 편차 검증 필요.
+- 도입 시: optional/dev 의존성 추가 → `cap sync` → 버튼에서 `isAndroidCapacitor()` 가드 + try/catch(실패 시 기존 안내 폴백). 권한 추가 불필요 예상.
 
 ## 9. 알려진 한계 / 실기기 확인 항목 (라운드 55)
 - **Firebase Email Auth**: WebView 에서 동작 예상(REST 기반)이나 실기기 검증 필요. Authorized domains 에 `localhost`(androidScheme https → `https://localhost`) 가 있어야 함.

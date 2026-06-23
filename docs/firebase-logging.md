@@ -75,7 +75,10 @@ anonymousActivity/{anonKey}     ← 비로그인 사용자 (분리 — rules 와
 - answer 로그는 vocab/grammar 만 (영역 샘플 한정).
 - Firebase 미설정/실패 시 즉시 noop — 호출 비용 0.
 
-## 운영 rules 초안 (main 머지 전 교체 — 라운드 20 보강판)
+## 운영 rules 초안 (라운드 20 보강판 — ⚠ 폐기, 아래 "라운드 60 현행" 으로 대체)
+
+> ⚠ 이 블록은 **역사적 기록**이다(actionLogs 쓰기 허용 시절). **적용하지 말 것** — 현행 rules 는
+> 아래 "운영 rules — actionLogs 폐지 + userActivity 단일화 (라운드 60, 현행)" 을 사용한다.
 
 ```json
 {
@@ -115,31 +118,44 @@ anonymousActivity/{anonKey}     ← 비로그인 사용자 (분리 — rules 와
 - `anonymousActivity` — 비로그인 로그용. 스키마 검증만 (익명 특성상 본인 확인 불가).
 - 루트 기본 `.read/.write: false` — 위 노드 외 전부 차단.
 
-## 운영 rules — 로그인 필수 정책 (라운드 50, **현행**)
+## 운영 rules — actionLogs 폐지 + userActivity 단일화 (라운드 60, **현행**)
 
-라운드 50부터 **로그인 필수(signed-in only)** 정책. 클라이언트는 비로그인 시 로그를 쓰지 않으며(actionLogger
-`resolveUser()`→null→noop), `anonymousActivity` 신규 쓰기는 **폐기**되었다. rules 도 이에 맞춰 강화한다.
+**라운드 60 정책 전환**: 상세 행동 로그(`actionLogs`)를 **폐지**한다 — 무료 **Spark** 운영(쓰기/저장 절감)과 프라이버시를 위해
+사용자당 `userActivity/{uid}` **한 노드만** 갱신한다(가입/접속/세션/이용시간 요약). `actionLogs`·`anonymousActivity`
+모두 **read/write false**. 클라이언트(`actionLogger.logAction`)도 더 이상 `actionLogs` 에 쓰지 않는다.
+
 아래 JSON 을 **Firebase Console → Build → Realtime Database → Rules 탭**에 붙여넣고 Publish (Firestore Rules 아님,
 테스트 모드 rules 금지):
 
 ```json
 {
   "rules": {
-    "actionLogs": {
-      "$date": {
-        "$eventId": {
-          ".read": false,
-          ".write": "auth != null && newData.exists() && newData.child('userType').val() === 'signed-in' && newData.child('userKey').val() === auth.uid",
-          ".validate": "newData.hasChildren(['type','at','userKey','userType'])"
-        }
+    "admins": {
+      ".read": "auth != null && root.child('admins').child(auth.uid).val() === true",
+      ".write": false,
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('admins').child(auth.uid).val() === true)"
+      }
+    },
+    "feedback": {
+      ".read": "auth != null && root.child('admins').child(auth.uid).val() === true",
+      ".write": false,
+      "$feedbackId": {
+        ".write": "auth != null && !data.exists() && newData.child('uid').val() === auth.uid",
+        ".validate": "newData.hasChildren(['createdAt','uid'])"
       }
     },
     "userActivity": {
+      ".read": "auth != null && root.child('admins').child(auth.uid).val() === true",
       "$userKey": {
-        ".read": false,
+        ".read": "auth != null && auth.uid === $userKey",
         ".write": "auth != null && auth.uid === $userKey",
         ".validate": "newData.hasChildren(['lastSeenAt','lastEventType','signedIn'])"
       }
+    },
+    "actionLogs": {
+      ".read": false,
+      ".write": false
     },
     "anonymousActivity": {
       ".read": false,
@@ -152,22 +168,25 @@ anonymousActivity/{anonKey}     ← 비로그인 사용자 (분리 — rules 와
 ```
 
 설명:
-- `actionLogs` — **`auth != null` 인 로그인 사용자만** 쓰기. payload 의 `userKey` 가 본인 uid 와 일치하고 `userType==='signed-in'` 이어야 통과(익명/위장 쓰기 차단). 읽기 전면 차단.
-- `userActivity` — 로그인 본인(uid 일치)만 쓰기.
-- `anonymousActivity` — **deprecated**: `.write: false` 로 신규 쓰기 차단. 기존 데이터는 삭제하지 않고 보존(코드에서 더 이상 쓰지 않음).
+- `admins` — **Console 에서만 관리**(`.write:false`). 관리자 식별은 **UID 기준**(`admins/{uid}===true`). 각 사용자는 자기 노드만, 관리자는 전체를 읽는다. 설정 절차는 [admin.md](admin.md).
+- `feedback` — 로그인 사용자가 **자기 uid 로 신규 작성만**(`!data.exists()` → 수정/삭제 불가). 읽기는 **admin only**. 저장 필드는 `rating, good, bad, wish, bug, contactOk, appVersion, platform, createdAt, uid` (필수 검증은 `createdAt`/`uid` 만 — 나머지는 선택값이라 강제하지 않아 쓰기 실패를 막는다). 이메일/비밀번호는 저장하지 않음.
+- `userActivity` — 로그인 **본인(uid 일치)만 쓰기/읽기** + **admin 전체 읽기**(대시보드 집계). 저장 필드는 `firstSeenAt, createdAt, lastSeenAt, lastEventType, signedIn, sessionCount, totalActiveMs, lastRoute, platform, appVersion`. `.validate` 는 `lastSeenAt/lastEventType/signedIn` 만 요구.
+- `actionLogs` — **폐지(read/write false)**. 상세 행동 로그를 저장/조회하지 않는다(Spark 절감 + 프라이버시). 관리자 페이지도 읽지 않는다.
+- `anonymousActivity` — **폐지(read/write false)**. 기존 데이터는 삭제하지 않고 보존(코드에서 더 이상 쓰지 않음).
 - 루트 기본 `.read/.write: false`.
 
-#### payload ↔ rules 정합 최종 확인 (라운드 51)
-실제 `actionLogger.logAction` 출력과 위 rules 를 대조 — **일치 확인**:
+#### payload ↔ rules 정합 최종 확인 (라운드 60)
+실제 코드 출력과 위 rules 를 대조 — **일치 확인**:
 
-| 노드 | 실제 payload(로그인 시) | rules 요구 | 정합 |
+| 노드 | 실제 payload | rules 요구 | 정합 |
 | --- | --- | --- | --- |
-| actionLogs | `{type, at, userKey:<uid>, userType:'signed-in', level, route, meta}` | `auth!=null` · `userKey===auth.uid` · `userType==='signed-in'` · `.validate [type,at,userKey,userType]` | ✅ |
-| userActivity | `{firstSeenAt, lastSeenAt, lastEventType, signedIn:true}` | `auth.uid===$userKey` · `.validate [lastSeenAt,lastEventType,signedIn]` | ✅ |
-| anonymousActivity | (신규 write 없음 — 코드에서 폐기) | `.write:false` | ✅ |
+| userActivity | `{firstSeenAt, createdAt, lastSeenAt, lastEventType, signedIn:true, sessionCount, totalActiveMs, lastRoute, platform, appVersion}` | `auth.uid===$userKey` · `.validate [lastSeenAt,lastEventType,signedIn]` | ✅ |
+| feedback | `{rating, good, bad, wish, bug, contactOk, appVersion, platform, createdAt, uid}` | `!data.exists()` · `uid===auth.uid` · `.validate [createdAt,uid]` | ✅ |
+| actionLogs | (쓰기 없음 — 폐지) | `.write:false` | ✅ |
+| anonymousActivity | (쓰기 없음 — 폐지) | `.write:false` | ✅ |
 
-> 비로그인 시 `resolveUser()→null→logAction noop` 이므로 클라이언트가 위 조건을 위반하는 write 를 시도하지 않는다.
-> smoke(`logAction: userKey = uid` / `anonymousActivity 미기록`) + qa [134]/[235] 가 이 정합을 상시 잠근다.
+> 비로그인 시 `resolveUser()→null→logAction noop`. `logAction` 은 `userActivity/{uid}` 한 노드만 갱신하며 `actionLogs` 에 쓰지 않는다.
+> smoke(`actionLogs 미기록` / `userActivity allowlist`) + qa [134]/[235]/[245] 가 이 정합을 상시 잠근다.
 
 ### Authorized domains (로그인 필수 → 필수 확인)
 Firebase Console → Authentication → Settings → **Authorized domains** 에 배포 도메인이 있어야 이메일 로그인이 동작한다:

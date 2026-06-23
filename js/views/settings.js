@@ -11,6 +11,9 @@
 
 import { getState } from '../storage.js';
 import { getVoiceStatus, refreshVoices, onVoiceStatusChange, ttsAvailable, speakTest, getTtsDiagnostics } from '../tts.js';
+import { submitFeedback } from '../feedbackService.js';
+import { APP_VERSION, getPlatformLabel } from '../appMeta.js';
+import { navigate } from '../router.js';
 import { getHelpEnabled, setHelpEnabled } from '../state.js';
 import {
   getFuriganaEnabled, setFuriganaEnabled,
@@ -123,11 +126,52 @@ function draw(screen) {
           (재생이 안 되는 경우는 음성 없음과 달리, 브라우저의 자동 재생 정책 때문일 수 있습니다 —
           화면을 한 번 탭한 뒤 다시 시도하세요.)
         </p>
+        <button class="btn" id="ttsGuideBtn" type="button" style="font-size:12px;padding:4px 10px;margin-top:6px">Android TTS 설정 안내</button>
+        <div id="ttsGuideBox" class="muted" style="display:none;margin:6px 0 0;font-size:11px;line-height:1.5">
+          앱이 <b>자동으로 음성팩을 설치하거나 설정을 바꿀 수는 없습니다.</b> 아래 순서로 직접 확인해 주세요:
+          <ol style="margin:4px 0 0;padding-left:18px">
+            <li>Android 설정 → 시스템 → 언어 및 입력 → <b>텍스트 음성 변환 출력(TTS)</b></li>
+            <li>기본 엔진을 <b>Google 음성 서비스</b> 등으로 설정</li>
+            <li><b>일본어 음성 데이터</b>를 설치/다운로드</li>
+            <li>기기 설정에서 일본어 예시 재생이 들리는지 확인</li>
+            <li>앱으로 돌아와 「음성 다시 감지」 또는 「테스트 재생」 실행</li>
+          </ol>
+        </div>
       </div>
 
       <p class="muted" style="margin:10px 0 0;font-size:11px">
         설정은 자동 저장됩니다 · 데이터 초기화는 추후 별도 화면에서 제공 예정
       </p>
+      <p class="muted" id="appVersionLine" style="margin:6px 0 0;font-size:10px;cursor:default;user-select:none"
+         title="JLPT10M">버전 ${escape(APP_VERSION)} · ${escape(getPlatformLabel())}</p>
+      <p style="margin:4px 0 0">
+        <a href="./privacy.html" id="privacyLink" class="muted" style="font-size:11px;text-decoration:underline">개인정보처리방침</a>
+      </p>
+    </section>
+
+    <section class="card" id="feedbackSection">
+      <h2 style="margin:0 0 6px;font-size:14px">의견 보내기</h2>
+      <p class="muted" style="margin:0 0 10px;font-size:11px">
+        베타 사용 소감을 남겨주세요. <b>비밀번호·전화번호 등 개인정보는 적지 마세요.</b>
+        (입력 내용은 개선을 위해 저장되며, 이메일은 저장하지 않습니다.)
+      </p>
+      <div class="settings-row" style="display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap">
+        <span style="flex:0 0 auto;font-size:13px">만족도</span>
+        <div id="fbRating" class="filters" style="margin:0;flex:1 1 auto">
+          ${[1, 2, 3, 4, 5].map(n => `<button class="chip" data-rating="${n}" type="button">${n}</button>`).join('')}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+        <textarea class="search-input" id="fbGood" rows="2" placeholder="좋은 점" style="resize:vertical"></textarea>
+        <textarea class="search-input" id="fbBad" rows="2" placeholder="불편한 점" style="resize:vertical"></textarea>
+        <textarea class="search-input" id="fbWish" rows="2" placeholder="추가되면 좋을 기능" style="resize:vertical"></textarea>
+        <textarea class="search-input" id="fbBug" rows="2" placeholder="오류 제보" style="resize:vertical"></textarea>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer">
+          <input type="checkbox" id="fbContact" style="margin:0"> 추가 문의 시 연락받기를 원합니다
+        </label>
+        <p class="muted" id="fbResult" style="margin:0;font-size:12px;min-height:1em"></p>
+        <button class="btn primary" id="fbSubmit" type="button">의견 보내기</button>
+      </div>
     </section>
 
     <section class="card" id="accountSection">
@@ -246,6 +290,70 @@ function draw(screen) {
       : '음성 감지를 다시 시도했습니다';
     showToast(toast);
   });
+
+  // Android TTS 설정 안내 토글 (네이티브 설정을 자동 변경하지 않음 — 직접 확인 안내).
+  const ttsGuideBtn = screen.querySelector('#ttsGuideBtn');
+  const ttsGuideBox = screen.querySelector('#ttsGuideBox');
+  if (ttsGuideBtn && ttsGuideBox) {
+    ttsGuideBtn.addEventListener('click', () => {
+      const show = ttsGuideBox.style.display === 'none';
+      ttsGuideBox.style.display = show ? '' : 'none';
+    });
+  }
+
+  // 이스터에그 — 버전 줄 7회 탭 → #admin (숨김 진입일 뿐, 권한은 admin.js/rules 가 보호).
+  const versionLine = screen.querySelector('#appVersionLine');
+  if (versionLine) {
+    let taps = 0, timer = null;
+    versionLine.addEventListener('click', () => {
+      taps += 1;
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => { taps = 0; }, 1500);   // 연속 탭만 인정
+      if (taps >= 7) { taps = 0; navigate('admin'); }
+    });
+  }
+
+  // 피드백 — 별점 선택 + 전송. 실패는 사용자에게 안내(앱 비차단이되 조용히 삼키지 않음).
+  let fbRating = 0;
+  screen.querySelectorAll('#fbRating [data-rating]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      fbRating = parseInt(btn.dataset.rating, 10);
+      screen.querySelectorAll('#fbRating [data-rating]').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.rating, 10) <= fbRating);
+      });
+    });
+  });
+  const fbSubmit = screen.querySelector('#fbSubmit');
+  const fbResult = screen.querySelector('#fbResult');
+  if (fbSubmit) {
+    fbSubmit.addEventListener('click', async () => {
+      fbResult.style.color = '';
+      fbResult.textContent = '전송 중…';
+      fbSubmit.disabled = true;
+      const r = await submitFeedback({
+        rating: fbRating,
+        good: screen.querySelector('#fbGood')?.value || '',
+        bad: screen.querySelector('#fbBad')?.value || '',
+        wish: screen.querySelector('#fbWish')?.value || '',
+        bug: screen.querySelector('#fbBug')?.value || '',
+        contactOk: !!screen.querySelector('#fbContact')?.checked,
+      });
+      fbSubmit.disabled = false;
+      if (r.ok) {
+        fbResult.style.color = 'var(--good)';
+        fbResult.textContent = '소중한 의견 감사합니다. 전송되었습니다.';
+        ['#fbGood', '#fbBad', '#fbWish', '#fbBug'].forEach(s => { const el = screen.querySelector(s); if (el) el.value = ''; });
+        const c = screen.querySelector('#fbContact'); if (c) c.checked = false;
+        fbRating = 0;
+        screen.querySelectorAll('#fbRating [data-rating]').forEach(b => b.classList.remove('active'));
+        showToast('피드백 전송 완료');
+      } else {
+        fbResult.style.color = 'var(--bad)';
+        fbResult.textContent = r.error || '전송에 실패했습니다.';
+        showToast('피드백 전송 실패');
+      }
+    });
+  }
 
   screen.querySelector('#translationToggle').addEventListener('change', (e) => {
     const v = setStoryTranslationEnabled(e.target.checked);

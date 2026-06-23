@@ -8,7 +8,7 @@ const ROOT = new URL('../', import.meta.url);
 const WWW = new URL('../www/', import.meta.url);
 
 // 앱 실행에 필요한 정적 자산만 — GitHub Pages 와 동일 상대경로 구조 유지.
-const FILES = ['index.html', 'styles.css', 'manifest.json', 'service-worker.js'];
+const FILES = ['index.html', 'privacy.html', 'styles.css', 'manifest.json', 'service-worker.js'];
 const DIRS = ['js', 'data', 'assets'];
 
 // www 초기화(이전 산출물 제거 — 안전: www 는 빌드 산출물 전용, .gitignore 됨)

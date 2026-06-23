@@ -78,6 +78,7 @@ const TAB_FOR_ROUTE = {
   novels: 'novels',
   settings: '',              // 탭 외 화면 — 모든 탭 비활성
   conversation: '',          // 보조 라우트
+  admin: '',                 // 관리자(이스터에그) — 탭 미노출
 };
 
 function updateTabs(name) {
