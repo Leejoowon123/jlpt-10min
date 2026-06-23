@@ -5961,6 +5961,33 @@ console.log('\n[246] 개인정보처리방침 링크 — 로그인 전(authGate)
   authSvc._resetAuthImplForTest();
 }
 
+console.log('\n[247] 계정/데이터 삭제 요청 경로 — 설정 화면 mailto + uid 자동 포함');
+{
+  // (1) 로그인 상태 — 본인 uid 가 mailto 본문에 포함.
+  bootstrap();
+  authSvc._resetAuthImplForTest();
+  authSvc._setAuthImplForTest(mockAuthImpl());
+  await authSvc.signInWithEmail('deluser@example.com', 'correct123');   // uid_deluser
+  let screen = shell();
+  renderSettings({ screen });
+  const sec = screen.querySelector('#dataDeleteSection');
+  const link = screen.querySelector('#deleteRequestLink');
+  ok('247: 삭제 요청 섹션 존재', !!sec && /계정 및 데이터 삭제 요청/.test(sec.textContent));
+  const href = link?.getAttribute('href') || '';
+  ok('247: mailto 운영자 주소', href.startsWith('mailto:joowon582@gmail.com'));
+  ok('247: mailto 본문에 본인 uid 포함', decodeURIComponent(href).includes('uid_deluser'));
+  ok('247: uid 안내 줄 표시', /uid_deluser/.test(screen.querySelector('#deleteUidLine')?.textContent || ''));
+  ok('247: 미저장 정책 문구 유지', /저장하지 않습니다/.test(sec.textContent));
+  authSvc._resetAuthImplForTest();
+
+  // (2) 비로그인 — 섹션은 있으되 uid 자리표시(회귀: 크래시 없음).
+  bootstrap();
+  authSvc._resetAuthImplForTest();
+  screen = shell();
+  renderSettings({ screen });
+  ok('247: 비로그인에도 삭제 섹션 렌더', !!screen.querySelector('#dataDeleteSection') && !!screen.querySelector('#deleteRequestLink'));
+}
+
 if (errs.length) {
   console.log('\nQA ERRORS:');
   for (const e of errs) console.log(' -', e);
