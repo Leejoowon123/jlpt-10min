@@ -5840,10 +5840,10 @@ console.log('\n[244] 베타 피드백 + 관리자 페이지 — 권한(UID)·이
   {
     bootstrap();
     const screen = shell();
-    await signInAs('joowon582@gmail.com');                 // uid_joowon582
+    await signInAs('jlpt10m@gmail.com');                 // uid_jlpt10m
     const nowT = Date.now();
     fb._setDbForTest(memDb({
-      admins: { uid_joowon582: true },
+      admins: { uid_jlpt10m: true },
       userActivity: { uid_a: { lastSeenAt: nowT, firstSeenAt: nowT - 86400000, createdAt: nowT - 86400000, lastEventType: 'study_start', signedIn: true, sessionCount: 3, totalActiveMs: 720000, platform: 'app-android', appVersion: '1.0.0-beta' } },
       feedback: { f1: { rating: 5, good: '대시보드표시_DASHMARK', wish: '바람', bug: '', contactOk: true, createdAt: nowT, uid: 'uid_a', platform: 'web', appVersion: '1.0.0-beta' } },
     }));
@@ -5899,11 +5899,11 @@ console.log('\n[245] 관리자 대시보드 — 활동중 계산(5분/30분/그�
   const screen = shell();
   authSvc._resetAuthImplForTest();
   authSvc._setAuthImplForTest(mockAuthImpl());
-  await authSvc.signInWithEmail('joowon582@gmail.com', 'correct123');   // uid_joowon582
+  await authSvc.signInWithEmail('jlpt10m@gmail.com', 'correct123');   // uid_jlpt10m
   const now = Date.now();
   const MIN = 60000, HOUR = 3600000, DAY = 86400000;
   fb._setDbForTest(memDb({
-    admins: { uid_joowon582: true },
+    admins: { uid_jlpt10m: true },
     userActivity: {
       u_now:    { lastSeenAt: now - 1 * MIN,  firstSeenAt: now - 3 * DAY, createdAt: now - 3 * DAY, lastEventType: 'study_start', signedIn: true, sessionCount: 5, totalActiveMs: 30 * MIN, platform: 'app-android', appVersion: '1.0.0-beta' },
       u_recent: { lastSeenAt: now - 10 * MIN, firstSeenAt: now - 2 * DAY, createdAt: now - 2 * DAY, lastEventType: 'story_open',  signedIn: true, sessionCount: 2, totalActiveMs: 5 * MIN,  platform: 'web', appVersion: '1.0.0-beta' },
@@ -5974,7 +5974,7 @@ console.log('\n[247] 계정/데이터 삭제 요청 경로 — 설정 화면 mai
   const link = screen.querySelector('#deleteRequestLink');
   ok('247: 삭제 요청 섹션 존재', !!sec && /계정 및 데이터 삭제 요청/.test(sec.textContent));
   const href = link?.getAttribute('href') || '';
-  ok('247: mailto 운영자 주소', href.startsWith('mailto:joowon582@gmail.com'));
+  ok('247: mailto 운영자 주소', href.startsWith('mailto:jlpt10m@gmail.com'));
   ok('247: mailto 본문에 본인 uid 포함', decodeURIComponent(href).includes('uid_deluser'));
   ok('247: uid 안내 줄 표시', /uid_deluser/.test(screen.querySelector('#deleteUidLine')?.textContent || ''));
   ok('247: 미저장 정책 문구 유지', /저장하지 않습니다/.test(sec.textContent));

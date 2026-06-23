@@ -181,9 +181,9 @@ function draw(screen) {
         <b>비밀번호·학습 답변 원문·음성(STT) 원문은 원래 저장하지 않습니다.</b>
       </p>
       <p class="muted" style="margin:0 0 8px;font-size:11px">
-        요청에 포함되는 정보: 가입 이메일, 사용자 ID(uid). 처리: 운영자(joowon582@gmail.com) 확인 후 수동 삭제.
+        요청에 포함되는 정보: 가입 이메일, 사용자 ID(uid). 처리: 운영자(jlpt10m@gmail.com) 확인 후 수동 삭제.
       </p>
-      <a class="btn" id="deleteRequestLink" href="mailto:joowon582@gmail.com" target="_blank" rel="noopener noreferrer"
+      <a class="btn" id="deleteRequestLink" href="mailto:jlpt10m@gmail.com" target="_blank" rel="noopener noreferrer"
          style="font-size:12px;padding:4px 10px">삭제 요청 이메일 보내기</a>
       <p class="muted" id="deleteUidLine" style="margin:6px 0 0;font-size:10px;font-family:monospace"></p>
     </section>
@@ -380,7 +380,7 @@ function draw(screen) {
       `- 사용자 ID(uid): ${u?.uid || '(로그인 후 자동 표시)'}\n` +
       '- 가입 이메일: (가입 시 사용한 이메일을 적어주세요)\n\n' +
       '삭제 대상: 계정(로그인), 활동 요약(userActivity), 피드백(feedback).');
-    delLink.href = `mailto:joowon582@gmail.com?subject=${subject}&body=${body}`;
+    delLink.href = `mailto:jlpt10m@gmail.com?subject=${subject}&body=${body}`;
     if (delUid) delUid.textContent = u?.uid ? `내 사용자 ID(uid): ${u.uid}` : '로그인하면 본인 uid 가 요청에 자동 포함됩니다.';
   }
 

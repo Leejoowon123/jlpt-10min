@@ -10,25 +10,34 @@
 - 관리자 식별은 **Firebase UID 기준** — DB 의 `admins/{uid} === true` 로 판정(이메일 비교 아님).
 - `#admin` 진입은 설정 화면의 **버전 줄 7회 탭(이스터에그)** 으로만 노출 — 일반 메뉴/탭에 없음. 하지만 이는 보호 수단이 아니다.
 - 비관리자가 `#admin` 에 직접 접근해도: ① `isAdmin()` 이 false → "접근 권한이 없습니다", ② 설령 UI 를 우회해도 rules 가 `feedback`/`userActivity`/`actionLogs` 읽기를 admin 으로 차단.
-- 코드의 `ADMIN_EMAIL_HINT`(`joowon582@gmail.com`)는 **화면 표시용**일 뿐 권한 판정에 쓰지 않는다.
+- 코드의 `ADMIN_EMAIL_HINT`(`jlpt10m@gmail.com`)는 **화면 표시용**일 뿐 권한 판정에 쓰지 않는다.
+- 운영/문의/삭제 요청 이메일은 **`jlpt10m@gmail.com`** 으로 통일한다(앱 내 표시·문서 공통).
 
-## joowon582@gmail.com 을 관리자로 만들기 (사용자 수동 작업)
+## 관리자 등록 — 다중 관리자(admins/{uid}: true) 방식 (사용자 수동 작업)
 
-1. 앱에서 **`joowon582@gmail.com` 으로 회원가입/로그인** 한다(이메일 로그인 필수 앱).
-2. **Firebase Console → Authentication → Users** 에서 해당 계정의 **User UID** 를 복사한다.
-   - 이 프로젝트의 현재 관리자 UID: **`SifCVwklMhMX36YhaC9jke2kosr2`** (joowon582@gmail.com). Console 의 값과 일치하는지 반드시 확인 — 다르면 계정을 다시 만들었거나 다른 프로젝트일 수 있다.
-3. **Firebase Console → Build → Realtime Database → 데이터(Data) 탭** 에서 다음 노드를 추가한다:
+관리자는 **단일 UID 하드코딩이 아니라 `admins` 노드에 UID 를 추가하는 데이터 기반 다중 관리자** 방식으로 운영한다.
+**현재 관리자 UID 2개**:
+
+| 구분 | UID |
+| --- | --- |
+| 기존 관리자 | `SifCVwklMhMX36YhaC9jke2kosr2` |
+| 새 운영 계정(`jlpt10m@gmail.com`) | `QF4R89i3FQb0bMYe3uwXsxGddc72` |
+
+등록 절차:
+1. 각 관리자 계정으로 앱에 회원가입/로그인(이메일 로그인 필수 앱).
+2. **Firebase Console → Authentication → Users** 에서 각 계정의 **User UID** 를 확인(위 표와 대조).
+3. **Firebase Console → Build → Realtime Database → 데이터(Data) 탭** 에 아래 두 노드를 **데이터로** 추가:
    ```
    admins
-     └─ SifCVwklMhMX36YhaC9jke2kosr2 : true     ← Boolean true (문자열 "true" 아님)
+     ├─ SifCVwklMhMX36YhaC9jke2kosr2 : true     ← Boolean true (문자열 "true" 아님)
+     └─ QF4R89i3FQb0bMYe3uwXsxGddc72 : true     ← Boolean true (문자열 "true" 아님)
    ```
-   (또는 rules 에 임시로 `ADMIN_UID` 를 넣어 가져오는 방식도 가능하나, **데이터 노드 `admins/{uid}` 방식 권장** — 코드 수정/재배포 없이 관리자 추가/회수 가능.)
+   관리자를 추가/회수하려면 이 노드에서 UID 를 추가/삭제하면 된다(코드 수정·재배포 불필요).
 4. 아래 **운영 rules** 를 **Rules 탭** 에 붙여넣고 **Publish**.
-5. 앱에서 설정 화면 → **버전 줄을 7번 연속 탭** → 관리자 대시보드가 보이면 성공.
+5. 각 계정으로 설정 화면 → **버전 줄을 7번 연속 탭** → 관리자 대시보드가 보이면 성공.
 
 > **왜 이메일이 아니라 UID 인가**: 이메일은 변경/위장 가능하고 클라이언트가 자유롭게 보낼 수 있어 신뢰할 수 없다.
-> UID 는 Firebase Auth 가 발급/검증하는 식별자라 rules 의 `auth.uid` 와 직접 대조할 수 있다.
-> 코드의 `ADMIN_EMAIL_HINT`(`joowon582@gmail.com`)는 표시용 문구일 뿐, 권한 판정은 위 UID + rules 가 한다.
+> UID 는 Firebase Auth 가 발급/검증하는 식별자라 rules 의 `auth.uid` 와 직접 대조할 수 있다. 권한 로직은 **이메일 비교를 쓰지 않는다**.
 
 > ### ⚠ 꼭 확인 — 관리자가 안 될 때 1순위 원인
 > - 관리자 판정은 **Firebase UID 기준**이다(이메일 아님).

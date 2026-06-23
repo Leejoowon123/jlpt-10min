@@ -3789,7 +3789,7 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('Privacy — privacy.html 존재', exists('./privacy.html') && /개인정보처리방침/.test(priv));
   ok('Privacy — Firebase/Auth/UID 수집 고지', /Firebase/.test(priv) && /Authentication/.test(priv) && /UID/.test(priv));
   ok('Privacy — userActivity/feedback 수집 항목 명시', /userActivity/.test(priv) && /feedback/.test(priv) && /sessionCount/.test(priv) && /totalActiveMs/.test(priv));
-  ok('Privacy — 문의 이메일(joowon582@gmail.com)', /joowon582@gmail\.com/.test(priv));
+  ok('Privacy — 문의 이메일(jlpt10m@gmail.com)', /jlpt10m@gmail\.com/.test(priv));
   ok('Privacy — STT 원문/답변 원문 미저장 문구', /STT[\s\S]{0,40}저장하지/.test(priv) && /답변 원문[\s\S]{0,40}저장하지/.test(priv));
   ok('Privacy — 비밀번호 원문 미저장 문구', /비밀번호 원문[\s\S]{0,40}저장하지/.test(priv));
   ok('Privacy — 시행일 명시', /시행일/.test(priv));
@@ -3848,7 +3848,7 @@ ok('data/n4/stories.json — sourceType 모두 original',
 
   // 계정/데이터 삭제 요청 경로
   ok('R65 — settings 계정/데이터 삭제 요청 섹션', /id="dataDeleteSection"/.test(setSrc) && /계정 및 데이터 삭제 요청/.test(setSrc));
-  ok('R65 — settings 삭제요청 mailto + uid 포함', /id="deleteRequestLink"/.test(setSrc) && /mailto:joowon582@gmail\.com/.test(setSrc) && /uid/.test(setSrc));
+  ok('R65 — settings 삭제요청 mailto + uid 포함', /id="deleteRequestLink"/.test(setSrc) && /mailto:jlpt10m@gmail\.com/.test(setSrc) && /uid/.test(setSrc));
   ok('R65 — settings 답변/STT/비번 미저장 정책 유지 문구', /저장하지 않습니다/.test(setSrc));
   ok('R65 — privacy.html 삭제 절차(uid + 삭제 대상)', /삭제 요청/.test(priv) && /uid/.test(priv) && /userActivity/.test(priv) && /feedback/.test(priv));
 
@@ -3869,6 +3869,46 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('R66 — admin.md: Rules만으로 isAdmin true 아님 강조', /Rules[\s\S]{0,40}만으로는[\s\S]{0,40}true|true 가 되지 않/.test(adminDoc66));
   ok('R66 — admin.md: 데이터(Data) 탭 + Boolean true', /데이터\(Data\) 탭|데이터 탭/.test(adminDoc66) && /Boolean `?true`?/.test(adminDoc66) && /문자열 `?"true"`?/.test(adminDoc66));
   ok('R66 — admin.md: isAdmin 은 admins/{uid} 데이터 읽음', /admins\/\{uid\}|admins\/\{내 UID\}|admins\/\{내 uid\}/.test(adminDoc66) && /isAdmin\(\)/.test(adminDoc66));
+}
+
+// ── 라운드 67: 운영 이메일 jlpt10m@gmail.com 전환 + 다중 관리자 UID 문서화 ──────
+{
+  const fs67 = await import('node:fs');
+  const read = (p) => { try { return fs67.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const priv = read('./privacy.html');
+  const setSrc = read('./js/views/settings.js');
+  const fbSrc = read('./js/feedbackService.js');
+  const adminDoc = read('./docs/admin.md');
+  const fbLogDoc = read('./docs/firebase-logging.md');
+  const playDoc = read('./docs/play-console-checklist.md');
+  const relChk = read('./docs/release-checklist.md');
+  const readme = read('./README.md');
+
+  // 사용자-facing 문의 이메일 = jlpt10m@gmail.com
+  ok('R67 — privacy.html 문의 이메일 jlpt10m', /jlpt10m@gmail\.com/.test(priv) && /mailto:jlpt10m@gmail\.com/.test(priv));
+  ok('R67 — settings 삭제요청 mailto jlpt10m', /mailto:jlpt10m@gmail\.com/.test(setSrc));
+  ok('R67 — feedbackService ADMIN_EMAIL_HINT = jlpt10m', /ADMIN_EMAIL_HINT\s*=\s*'jlpt10m@gmail\.com'/.test(fbSrc));
+
+  // joowon582@gmail.com 이 사용자-facing 파일에 남아 있지 않음
+  const userFacing = { 'privacy.html': priv, 'settings.js': setSrc, 'feedbackService.js': fbSrc, 'README.md': readme };
+  for (const [name, src] of Object.entries(userFacing)) {
+    ok(`R67 — ${name} 에 joowon582 미잔존`, !/joowon582/.test(src));
+  }
+  // 문서에도 사용자-facing 문의 이메일로 joowon582 없음(UID 기록 외)
+  ok('R67 — play/checklist 문의 이메일 joowon582 미잔존', !/joowon582/.test(playDoc) && !/joowon582/.test(relChk));
+  ok('R67 — admin.md 문의/표시 이메일 joowon582 미잔존', !/joowon582/.test(adminDoc));
+
+  // 다중 관리자 UID 2개 문서화(admin.md 또는 firebase-logging.md)
+  const UID1 = 'SifCVwklMhMX36YhaC9jke2kosr2', UID2 = 'QF4R89i3FQb0bMYe3uwXsxGddc72';
+  const bothInAdmin = adminDoc.includes(UID1) && adminDoc.includes(UID2);
+  const bothInFbLog = fbLogDoc.includes(UID1) && fbLogDoc.includes(UID2);
+  ok('R67 — 다중 관리자 UID 2개 문서화(admin/firebase-logging)', bothInAdmin || bothInFbLog);
+  ok('R67 — admin.md 다중 관리자 + Boolean true + 데이터 탭', /다중 관리자/.test(adminDoc) && /Boolean true/.test(adminDoc) && /데이터\(Data\) 탭/.test(adminDoc));
+  // Rules 는 UID 하드코딩이 아니라 admins 노드 조회(다중 관리자)
+  ok('R67 — rules 가 admins 노드 조회(UID 하드코딩 아님)',
+     /root\.child\('admins'\)\.child\(auth\.uid\)\.val\(\) === true/.test(fbLogDoc) && !new RegExp(`auth\\.uid\\s*===\\s*['"]${UID1}`).test(fbLogDoc));
+  // 권한 로직은 이메일 비교 아님(회귀 가드)
+  ok('R67 — isAdmin 이메일 비교 아님(admins/{uid} 읽기)', /admins\/\$\{u\.uid\}/.test(fbSrc) && !/\.email\s*===/.test(fbSrc));
 }
 
 if (errs.length) {

@@ -95,7 +95,7 @@
 ## 4-f. 베타 피드백 / 관리자 (라운드 59 — 수동)
 
 - [ ] **rules Publish** — [docs/admin.md](admin.md) 의 admins/feedback 포함 운영 rules 를 Realtime Database → Rules 에 적용·Publish (Firestore 아님)
-- [ ] **관리자 UID 등록** — `joowon582@gmail.com` 로 가입/로그인 → Console → Authentication → Users 에서 UID 확인 → Realtime Database 에 `admins/{uid}: true`(Boolean) 추가
+- [ ] **관리자 UID 등록(다중)** — 관리자 계정(`jlpt10m@gmail.com` 등)으로 로그인 → Console → Authentication → Users 에서 UID 확인 → Realtime Database 데이터 탭에 `admins/{uid}: true`(**Boolean**) 추가. 현재 UID 2개: `SifCVwklMhMX36YhaC9jke2kosr2`, `QF4R89i3FQb0bMYe3uwXsxGddc72`
 - [ ] **피드백 전송** — 설정 → "의견 보내기" → 만족도/텍스트 입력 → 전송 성공 안내 / 빈 내용 시 오류 안내 / 5초 쿨다운 동작
 - [ ] **개인정보 안내** — 피드백 영역에 "비밀번호·개인정보 입력 금지" 문구 표시, 이메일이 저장되지 않음(`feedback/{id}` 에 uid 만)
 - [ ] **관리자 진입** — 설정 화면 버전 줄 **7회 탭** → `#admin` → 관리자 계정이면 대시보드(가입자/활동/피드백), 비관리자면 "접근 권한이 없습니다" + 홈 복귀
@@ -108,7 +108,7 @@
 순서대로 진행(상세: [docs/admin.md](admin.md)):
 
 - [ ] **Rules Publish** — [firebase-logging.md](firebase-logging.md) "라운드 60 현행" rules 를 Realtime Database → **Rules** 탭에 붙여넣고 Publish (Firestore 아님). `actionLogs`/`anonymousActivity` = `read/write false`, `userActivity`/`feedback` = 본인 write + admin read
-- [ ] **관리자 UID 확인** — `admins/SifCVwklMhMX36YhaC9jke2kosr2 = true`(joowon582@gmail.com) 가 데이터 탭에 있는지
+- [ ] **관리자 UID 확인(다중)** — 데이터 탭에 `admins/SifCVwklMhMX36YhaC9jke2kosr2 = true` + `admins/QF4R89i3FQb0bMYe3uwXsxGddc72 = true`(둘 다 Boolean) 가 있는지
 - [ ] **새 APK 빌드** — GitHub Actions "Android APK (debug)" 재실행 → artifact 다운로드(JS 변경 반영)
 - [ ] **설치 후 로그인** — 이메일 로그인 동작
 - [ ] **학습 1회 진행** — 단어/문법/스토리 중 하나 수행
@@ -146,7 +146,7 @@
 
 마감 점검 — 아래가 모두 OK 면 내부 테스트/배포 진행:
 
-- [ ] **관리자 접근** — `joowon582@gmail.com` 로그인 → 데이터 탭 `admins/{uid}=true`(Boolean) → 설정 버전 줄 7회 탭 → 대시보드 표시. (Rules만으로는 isAdmin 안 됨 — [admin.md](admin.md) 경고 참조)
+- [ ] **관리자 접근** — 관리자 계정(`jlpt10m@gmail.com` 등) 로그인 → 데이터 탭 `admins/{uid}=true`(Boolean) → 설정 버전 줄 7회 탭 → 대시보드 표시. (Rules만으로는 isAdmin 안 됨 — [admin.md](admin.md) 경고 참조)
 - [ ] **개인정보처리방침 URL** — `privacy.html` 게시 URL 이 열리고 **글자가 잘 보임**(라이트/다크 대비), 로그인 전에도 접근
 - [ ] **Android 런처 아이콘 정책** — **기본(Capacitor) 아이콘 유지**(강제 주입 제거 확인). PWA 아이콘은 기존 유지
 - [ ] **release APK 실기기 테스트** — `build_apk=true` 로 빌드한 release APK 설치 → 로그인/학습/TTS 테스트 재생/피드백/관리자/삭제 요청 경로 확인
