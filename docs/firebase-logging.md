@@ -168,7 +168,7 @@ anonymousActivity/{anonKey}     ← 비로그인 사용자 (분리 — rules 와
 ```
 
 설명:
-- `admins` — **Console 에서만 관리**(`.write:false`). 관리자 식별은 **UID 기준**(`admins/{uid}===true`). 각 사용자는 자기 노드만, 관리자는 전체를 읽는다. 설정 절차는 [admin.md](admin.md).
+- `admins` — **Console 에서만 관리**(`.write:false`). 관리자 식별은 **UID 기준**(`admins/{uid}===true`). 각 사용자는 자기 노드만, 관리자는 전체를 읽는다. **다중 관리자 지원** — `admins` 노드에 여러 UID 를 Boolean `true` 로 추가하면 모두 관리자가 된다(rules 가 `root.child('admins').child(auth.uid).val() === true` 로 판정하므로 UID 하드코딩 없음). 현재 관리자 UID 2개: `SifCVwklMhMX36YhaC9jke2kosr2`(기존), `QF4R89i3FQb0bMYe3uwXsxGddc72`(새 운영 계정 `jlpt10m@gmail.com`). 설정 절차는 [admin.md](admin.md).
 - `feedback` — 로그인 사용자가 **자기 uid 로 신규 작성만**(`!data.exists()` → 수정/삭제 불가). 읽기는 **admin only**. 저장 필드는 `rating, good, bad, wish, bug, contactOk, appVersion, platform, createdAt, uid` (필수 검증은 `createdAt`/`uid` 만 — 나머지는 선택값이라 강제하지 않아 쓰기 실패를 막는다). 이메일/비밀번호는 저장하지 않음.
 - `userActivity` — 로그인 **본인(uid 일치)만 쓰기/읽기** + **admin 전체 읽기**(대시보드 집계). 저장 필드는 `firstSeenAt, createdAt, lastSeenAt, lastEventType, signedIn, sessionCount, totalActiveMs, lastRoute, platform, appVersion`. `.validate` 는 `lastSeenAt/lastEventType/signedIn` 만 요구.
 - `actionLogs` — **폐지(read/write false)**. 상세 행동 로그를 저장/조회하지 않는다(Spark 절감 + 프라이버시). 관리자 페이지도 읽지 않는다.

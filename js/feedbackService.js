@@ -16,7 +16,7 @@ import { getCurrentUser } from './authService.js';
 import { APP_VERSION, getPlatformLabel } from './appMeta.js';
 
 // 화면 표시용 후보 이메일 — 보안 아님(실제 권한은 admins/{uid} + rules).
-export const ADMIN_EMAIL_HINT = 'joowon582@gmail.com';
+export const ADMIN_EMAIL_HINT = 'jlpt10m@gmail.com';
 
 // 중복 전송 가드(로컬) — 무료 범위 보호 + 오발송 방지.
 export const FEEDBACK_COOLDOWN_MS = 5000;      // 연속 전송 최소 간격
