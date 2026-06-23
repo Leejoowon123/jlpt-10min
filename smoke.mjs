@@ -3834,15 +3834,15 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('R65 — config 가 APP_VERSION 기본값 사용', /APP_VERSION/.test(cfg) && /from '\.\.\/js\/appMeta\.js'/.test(cfg));
   ok('R65 — config 가 최종값 로그 출력', /console\.log\([\s\S]{0,40}versionCode/.test(cfg) || /versionCode\s*=\s*\$\{versionCode\}/.test(cfg));
 
-  // 아이콘 주입 스크립트
-  ok('R65 — inject-android-icons.mjs 존재', exists('./tools/inject-android-icons.mjs'));
-  ok('R65 — icons 가 mipmap ic_launcher 교체', /mipmap-/.test(ico) && /ic_launcher/.test(ico) && /assets\/icons\/icon-512/.test(ico));
+  // (라운드 66) 아이콘 강제 주입 비활성화 — 기본(Capacitor) 런처 아이콘 유지.
+  ok('R66 — inject-android-icons.mjs 는 no-op(강제 교체 안 함)',
+     !/copyFileSync/.test(ico) && /no-op|비활성화/.test(ico));
 
   // 워크플로 연결
   ok('R65 — release wf Configure Android 단계', /Configure Android/.test(relWf) && /inject-android-config\.mjs/.test(relWf));
   ok('R65 — release wf versionCode = run_number 기본', /ANDROID_VERSION_CODE:\s*\$\{\{\s*github\.event\.inputs\.version_code\s*\|\|\s*github\.run_number/.test(relWf));
   ok('R65 — release wf targetSdk 35', /ANDROID_TARGET_SDK:\s*'?35'?/.test(relWf));
-  ok('R65 — release wf 아이콘 주입 단계', /inject-android-icons\.mjs/.test(relWf));
+  ok('R66 — release wf 가 아이콘 강제 주입 안 함(기본 아이콘 유지)', !/inject-android-icons\.mjs/.test(relWf));
   ok('R65 — release wf 최종 버전 로그 출력', /grep -E "versionCode\|versionName"/.test(relWf));
   ok('R65 — release wf version_name/version_code 입력', /version_name:/.test(relWf) && /version_code:/.test(relWf));
 
@@ -3858,6 +3858,17 @@ ok('data/n4/stories.json — sourceType 모두 original',
      /developer\.android\.com\/google\/play\/requirements\/target-sdk/.test(relDoc) || /developer\.android\.com\/google\/play\/requirements\/target-sdk/.test(playDoc));
   ok('R65 — docs Play 아이콘/512 후보', /icon-512\.png/.test(relDoc) && /@capacitor\/assets/.test(relDoc));
   ok('R65 — play-console 계정삭제 + targetSdk 항목', /계정\/데이터 삭제|계정 및 데이터 삭제/.test(playDoc) && /targetSdk/.test(playDoc));
+
+  // (라운드 66) privacy.html 가독성 — CSS 변수 + 다크모드 --muted 정의(이전 버그) + 본문 17/16px
+  const adminDoc66 = read('./docs/admin.md');
+  ok('R66 — privacy.html CSS 변수 기반 + 본문 폰트 키움', /var\(--fg\)/.test(priv) && /font-size:\s*17px/.test(priv));
+  ok('R66 — privacy.html 다크모드 --muted 정의(대비 개선)',
+     /@media \(prefers-color-scheme: dark\)[\s\S]*?--muted:/.test(priv));
+  ok('R66 — privacy.html 모바일 가독성(@media max-width)', /@media \(max-width:\s*480px\)/.test(priv));
+  // (라운드 66) admin 문서 — Rules만으로 isAdmin true 안 됨 + Boolean true + 데이터 탭
+  ok('R66 — admin.md: Rules만으로 isAdmin true 아님 강조', /Rules[\s\S]{0,40}만으로는[\s\S]{0,40}true|true 가 되지 않/.test(adminDoc66));
+  ok('R66 — admin.md: 데이터(Data) 탭 + Boolean true', /데이터\(Data\) 탭|데이터 탭/.test(adminDoc66) && /Boolean `?true`?/.test(adminDoc66) && /문자열 `?"true"`?/.test(adminDoc66));
+  ok('R66 — admin.md: isAdmin 은 admins/{uid} 데이터 읽음', /admins\/\{uid\}|admins\/\{내 UID\}|admins\/\{내 uid\}/.test(adminDoc66) && /isAdmin\(\)/.test(adminDoc66));
 }
 
 if (errs.length) {
