@@ -112,9 +112,9 @@ jobs:
           ANDROID_VERSION_NAME: ${{ github.event.inputs.version_name }}
         run: node tools/inject-android-config.mjs
 
-      # 런처/adaptive 아이콘을 JLPT10M 브랜드로 교체(기본 Capacitor 아이콘 대체).
-      - name: Inject launcher icons
-        run: node tools/inject-android-icons.mjs
+      # (라운드 66) 런처 아이콘 강제 주입 제거 — 기본(Capacitor 생성) 아이콘을 그대로 유지한다.
+      #   사용자 요청으로 브랜드 아이콘 강제 주입을 사용하지 않음. 추후 브랜딩이 필요하면
+      #   docs/android-release.md §3-B 의 @capacitor/assets 절차를 명시적으로 사용.
 
       # 진단 — 네이티브 TTS 플러그인 등록 확인(release 에도 포함되는지).
       - name: Diagnostics (plugins)

@@ -63,7 +63,7 @@ release 워크플로가 `tools/inject-android-config.mjs` 로 주입(상세: [an
 - **targetSdk / compileSdk = 35**(기본). Google Play target API 요구 — 공식: <https://developer.android.com/google/play/requirements/target-sdk> (연도별 최소 레벨 **공식 문서 재확인 필요**).
 - **versionCode = run number(단조 증가)** 또는 워크플로 입력 → **재업로드 충돌 방지**(같은 versionCode 금지).
 - **versionName = `APP_VERSION`(js/appMeta.js)** 또는 워크플로 입력.
-- **런처/adaptive 아이콘** = `assets/icons` 의 JLPT10M 아이콘(`tools/inject-android-icons.mjs`). Play 512 아이콘 후보 = `assets/icons/icon-512.png`.
+- **런처 아이콘** = **기본(Capacitor 생성) 아이콘 유지**(라운드 66 — 강제 주입 제거). 브랜드 적용은 추후 `@capacitor/assets` 선택. Play 등록정보용 512 아이콘 후보 = `assets/icons/icon-512.png`(런처와 무관).
 
 ## 9. 계정/데이터 삭제 (정책)
 
@@ -82,5 +82,5 @@ release 워크플로가 `tools/inject-android-config.mjs` 로 주입(상세: [an
 - [ ] keystore/AAB/APK 가 git 에 커밋되지 않음
 - [ ] **targetSdk 35** 빌드(워크플로 "Configure Android" 로그 확인)
 - [ ] **versionCode 가 이전 업로드보다 큼**(run number 단조 증가 또는 수동 입력)
-- [ ] **런처 아이콘이 JLPT10M 브랜드**(기본 Capacitor 아이콘 아님)
+- [ ] **런처 아이콘 = 기본(Capacitor) 아이콘 유지**(라운드 66 정책 — 강제 주입 없음)
 - [ ] **설정 → 계정 및 데이터 삭제 요청** 경로 노출 확인

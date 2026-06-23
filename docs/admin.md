@@ -30,6 +30,16 @@
 > UID 는 Firebase Auth 가 발급/검증하는 식별자라 rules 의 `auth.uid` 와 직접 대조할 수 있다.
 > 코드의 `ADMIN_EMAIL_HINT`(`joowon582@gmail.com`)는 표시용 문구일 뿐, 권한 판정은 위 UID + rules 가 한다.
 
+> ### ⚠ 꼭 확인 — 관리자가 안 될 때 1순위 원인
+> - 관리자 판정은 **Firebase UID 기준**이다(이메일 아님).
+> - **반드시 Realtime Database 의 "데이터(Data)" 탭**에 `admins/{내 UID} = true` 노드를 **데이터로** 추가해야 한다.
+>   앱의 `isAdmin()`([js/feedbackService.js](../js/feedbackService.js))은 **DB 의 `admins/{uid}` 값을 읽어** 판정한다.
+> - **Rules 텍스트에 UID 를 넣는 것만으로는 `isAdmin()` 이 true 가 되지 않는다.** Rules 는 "누가 무엇을 읽고 쓸 수 있는가"만
+>   강제할 뿐, 앱이 읽는 **데이터 노드 자체**(`admins/{uid}`)를 만들어 주지는 않는다. 데이터 노드가 없으면 `isAdmin()` 은 false →
+>   관리자 페이지는 "접근 권한이 없습니다".
+> - 값은 **Boolean `true`** 여야 한다. **문자열 `"true"` 는 안 된다**(`isAdmin()` 은 `=== true` 로 비교).
+> - 즉 **둘 다 필요**: ① 데이터 노드 `admins/{uid}=true`(앱의 isAdmin 통과용) + ② 운영 Rules Publish(서버 읽기 권한 enforcement용).
+
 ## Rules 적용 절차 (Firebase Console — 그대로 따라하기)
 
 1. **Firebase Console**(console.firebase.google.com) → 프로젝트 **jlpt-10min** 선택.

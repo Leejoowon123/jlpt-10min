@@ -138,9 +138,21 @@
 - [ ] **targetSdk/compileSdk = 35** — release 워크플로 "Configure Android" 로그 확인 (Play target API: <https://developer.android.com/google/play/requirements/target-sdk>, 연도별 최소 레벨 **공식 재확인**)
 - [ ] **versionCode 단조 증가** — run number 또는 입력값. 같은 versionCode 재업로드 금지 확인
 - [ ] **versionName = APP_VERSION**(또는 입력) — 로그에서 확인
-- [ ] **런처/adaptive 아이콘 = JLPT10M**(기본 Capacitor 아이콘 아님) — 설치 후 홈 화면 아이콘 확인
+- [ ] **런처 아이콘 = 기본(Capacitor 생성) 아이콘 유지**(라운드 66 — 강제 주입 제거) — 설치 후 홈 화면 아이콘 확인. (브랜드 아이콘은 추후 @capacitor/assets 로 선택 적용)
 - [ ] **계정/데이터 삭제 요청 경로** — 설정 화면에 노출 + privacy.html §6 동일 안내, uid 자동 포함
 - [ ] Play 512 등록 아이콘 = `assets/icons/icon-512.png` 사용
+
+## 4-j. Play 배포 직전 최종 게이트 (라운드 66)
+
+마감 점검 — 아래가 모두 OK 면 내부 테스트/배포 진행:
+
+- [ ] **관리자 접근** — `joowon582@gmail.com` 로그인 → 데이터 탭 `admins/{uid}=true`(Boolean) → 설정 버전 줄 7회 탭 → 대시보드 표시. (Rules만으로는 isAdmin 안 됨 — [admin.md](admin.md) 경고 참조)
+- [ ] **개인정보처리방침 URL** — `privacy.html` 게시 URL 이 열리고 **글자가 잘 보임**(라이트/다크 대비), 로그인 전에도 접근
+- [ ] **Android 런처 아이콘 정책** — **기본(Capacitor) 아이콘 유지**(강제 주입 제거 확인). PWA 아이콘은 기존 유지
+- [ ] **release APK 실기기 테스트** — `build_apk=true` 로 빌드한 release APK 설치 → 로그인/학습/TTS 테스트 재생/피드백/관리자/삭제 요청 경로 확인
+- [ ] **release AAB 내부 테스트 업로드** — Play Console 내부 테스트 트랙에 AAB 업로드(versionCode 단조 증가 확인)
+- [ ] **Firebase 확인** — 운영 Rules Publish / `admins/{uid}` 존재 / 로그인 후 `userActivity/{uid}` 갱신 / 피드백 `feedback/{id}` 생성
+- [ ] **actionLogs 미생성** — 학습·피드백 후 Console 에 `actionLogs` 신규 노드가 **생기지 않음**(폐지 유지), `anonymousActivity` 도 없음
 
 ## 5. 성능 (블로커 아님 — 모니터링)
 

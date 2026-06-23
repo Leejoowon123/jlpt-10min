@@ -77,14 +77,15 @@ Option B(android/ 미커밋)에서 `cap add android` 가 만드는 기본값은 
 - **최종값 확인 로그**: 워크플로 **"Configure Android (sdk + version)"** 단계가 4개 값을 출력하고, **"Collect artifacts"** 단계가 빌드된 `build.gradle`/`variables.gradle` 에서 다시 grep 해 출력한다.
 - **Google Play target API 요구(공식)**: https://developer.android.com/google/play/requirements/target-sdk · 정책 일반: https://support.google.com/googleplay/android-developer/answer/11926878 — **연도별 최소 레벨은 공식 문서 재확인 필요**(기본 35 로 설정).
 
-## 3-B. 런처/Adaptive 아이콘 브랜딩 (라운드 65)
+## 3-B. 런처/Adaptive 아이콘 정책 (라운드 66 — 기본 아이콘 유지)
 
-`cap add android` 는 **기본 Capacitor 아이콘**을 생성한다. release 워크플로가 **[tools/inject-android-icons.mjs](../tools/inject-android-icons.mjs)** 로
-`assets/icons/icon-512.png`(런처) + `icon-512-maskable.png`(adaptive foreground)를 생성된 `res/mipmap-*` 에 복사해 **JLPT10M 아이콘으로 교체**한다(Option B 에서도 매 빌드 반영).
+**현재 정책(라운드 66)**: 런처 아이콘을 **강제 주입하지 않는다** — `cap add android` 가 생성하는 **기본(Capacitor) 아이콘을 그대로 유지**한다.
+사용자 요청에 따라 라운드 65 의 강제 주입(`tools/inject-android-icons.mjs`)은 **워크플로에서 제거**되었고, 스크립트는 **no-op** 로 비활성화되어 있다.
 
-- **Play 512 아이콘**: 등록정보용 고해상도 아이콘 후보 = **`assets/icons/icon-512.png`**(512×512 32-bit PNG).
-- **더 정밀한 밀도별 아이콘이 필요하면**(다음 단계 권장): `@capacitor/assets` 도입 →
-  `npx @capacitor/assets generate --iconBackgroundColor '#1b1815'` 로 adaptive icon/스플래시 일괄 생성. 1024×1024 소스 권장.
+- **PWA 아이콘은 변경 없음** — 웹/PWA 는 기존 `assets/icons/*`(manifest 연결)를 계속 사용. 이번 변경은 **Android 런처 아이콘에만** 해당.
+- **Play 512 아이콘**(등록정보용 고해상도): 별도 제출 자산이며 `assets/icons/icon-512.png`(512×512 32-bit PNG)를 후보로 쓸 수 있다(런처 아이콘과 무관).
+- **추후 브랜드 아이콘을 적용하려면**(선택): 강제 복사 대신 **`@capacitor/assets`** 를 명시적으로 사용 →
+  `npx @capacitor/assets generate --iconBackgroundColor '#1b1815'`(1024×1024 소스 권장)로 adaptive icon/스플래시 일괄 생성. 이때 워크플로에 단계를 추가한다.
 
 ## 4. android/ 커밋 — Option A vs B (이번 라운드 판단)
 
