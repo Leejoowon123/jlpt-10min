@@ -3813,6 +3813,53 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('Privacy — 패키지명 com.jlpt10m.app 명시(Play 문서)', /com\.jlpt10m\.app/.test(playDoc));
 }
 
+// ── 라운드 65: targetSdk/versionCode 주입 + 아이콘 + 계정삭제 경로 정적 검증 ──────
+{
+  const fs65 = await import('node:fs');
+  const read = (p) => { try { return fs65.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const exists = (p) => { try { fs65.accessSync(new URL(p, import.meta.url)); return true; } catch { return false; } };
+
+  const cfg = read('./tools/inject-android-config.mjs');
+  const ico = read('./tools/inject-android-icons.mjs');
+  const relWf = read('./.github/workflows/android-release.yml');
+  const setSrc = read('./js/views/settings.js');
+  const priv = read('./privacy.html');
+  const relDoc = read('./docs/android-release.md');
+  const playDoc = read('./docs/play-console-checklist.md');
+
+  // SDK/버전 주입 스크립트
+  ok('R65 — inject-android-config.mjs 존재', exists('./tools/inject-android-config.mjs'));
+  ok('R65 — config 가 compile/targetSdk 주입', /compileSdkVersion/.test(cfg) && /targetSdkVersion/.test(cfg));
+  ok('R65 — config 가 versionCode/versionName 주입', /versionCode/.test(cfg) && /versionName/.test(cfg));
+  ok('R65 — config 가 APP_VERSION 기본값 사용', /APP_VERSION/.test(cfg) && /from '\.\.\/js\/appMeta\.js'/.test(cfg));
+  ok('R65 — config 가 최종값 로그 출력', /console\.log\([\s\S]{0,40}versionCode/.test(cfg) || /versionCode\s*=\s*\$\{versionCode\}/.test(cfg));
+
+  // 아이콘 주입 스크립트
+  ok('R65 — inject-android-icons.mjs 존재', exists('./tools/inject-android-icons.mjs'));
+  ok('R65 — icons 가 mipmap ic_launcher 교체', /mipmap-/.test(ico) && /ic_launcher/.test(ico) && /assets\/icons\/icon-512/.test(ico));
+
+  // 워크플로 연결
+  ok('R65 — release wf Configure Android 단계', /Configure Android/.test(relWf) && /inject-android-config\.mjs/.test(relWf));
+  ok('R65 — release wf versionCode = run_number 기본', /ANDROID_VERSION_CODE:\s*\$\{\{\s*github\.event\.inputs\.version_code\s*\|\|\s*github\.run_number/.test(relWf));
+  ok('R65 — release wf targetSdk 35', /ANDROID_TARGET_SDK:\s*'?35'?/.test(relWf));
+  ok('R65 — release wf 아이콘 주입 단계', /inject-android-icons\.mjs/.test(relWf));
+  ok('R65 — release wf 최종 버전 로그 출력', /grep -E "versionCode\|versionName"/.test(relWf));
+  ok('R65 — release wf version_name/version_code 입력', /version_name:/.test(relWf) && /version_code:/.test(relWf));
+
+  // 계정/데이터 삭제 요청 경로
+  ok('R65 — settings 계정/데이터 삭제 요청 섹션', /id="dataDeleteSection"/.test(setSrc) && /계정 및 데이터 삭제 요청/.test(setSrc));
+  ok('R65 — settings 삭제요청 mailto + uid 포함', /id="deleteRequestLink"/.test(setSrc) && /mailto:joowon582@gmail\.com/.test(setSrc) && /uid/.test(setSrc));
+  ok('R65 — settings 답변/STT/비번 미저장 정책 유지 문구', /저장하지 않습니다/.test(setSrc));
+  ok('R65 — privacy.html 삭제 절차(uid + 삭제 대상)', /삭제 요청/.test(priv) && /uid/.test(priv) && /userActivity/.test(priv) && /feedback/.test(priv));
+
+  // 문서 — targetSdk/versionCode + 공식 링크
+  ok('R65 — docs targetSdk 35 + versionCode 증가 설명', /targetSdk|targetSdkVersion/.test(relDoc) && /35/.test(relDoc) && /versionCode/.test(relDoc) && /run_number|단조 증가/.test(relDoc));
+  ok('R65 — docs Play target API 공식 링크',
+     /developer\.android\.com\/google\/play\/requirements\/target-sdk/.test(relDoc) || /developer\.android\.com\/google\/play\/requirements\/target-sdk/.test(playDoc));
+  ok('R65 — docs Play 아이콘/512 후보', /icon-512\.png/.test(relDoc) && /@capacitor\/assets/.test(relDoc));
+  ok('R65 — play-console 계정삭제 + targetSdk 항목', /계정\/데이터 삭제|계정 및 데이터 삭제/.test(playDoc) && /targetSdk/.test(playDoc));
+}
+
 if (errs.length) {
   console.log('\nERRORS:');
   for (const e of errs) console.log(' -', e);

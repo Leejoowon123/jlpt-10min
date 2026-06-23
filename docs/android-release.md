@@ -61,6 +61,31 @@ Actions 탭 → **"Android Release (AAB/APK)"** → Run workflow.
 
 내부 동작: checkout → setup-node 22 → setup-java 17 → `npm install` → `build-www` → (`android/` 없으면 `cap add android`) → `cap sync` → keystore 복원 + `key.properties` 생성 → `node tools/inject-signing.mjs`(signingConfigs 주입) → `./gradlew bundleRelease` → artifact 업로드.
 
+## 3-A. SDK 레벨 / 버전 코드 주입 (라운드 65 — Play 차단 방지)
+
+Option B(android/ 미커밋)에서 `cap add android` 가 만드는 기본값은 **targetSdk 34 / versionCode 1 / versionName "1.0"** 이라
+그대로 올리면 ① **target API 미달**, ② **versionCode 1 고정 → 재업로드 거부** 로 막힌다. 이를 막기 위해 release 워크플로가
+`cap sync` 직후 **[tools/inject-android-config.mjs](../tools/inject-android-config.mjs)** 로 값을 주입한다:
+
+| 값 | 결정 방식 | 기본 |
+| --- | --- | --- |
+| `compileSdkVersion` / `targetSdkVersion` | 워크플로 env `ANDROID_COMPILE_SDK` / `ANDROID_TARGET_SDK` | **35** |
+| `versionCode` | 워크플로 입력 `version_code` → 없으면 **`github.run_number`(단조 증가)** | run number |
+| `versionName` | 워크플로 입력 `version_name` → 없으면 **`js/appMeta.js` 의 `APP_VERSION`** | `1.0.0-beta` |
+
+- **재업로드 충돌 방지**: `run_number` 는 빌드마다 증가 → 같은 versionCode 로 AAB 가 재생성되지 않는다. 특정 값이 필요하면 Run workflow 시 `version_code` 입력.
+- **최종값 확인 로그**: 워크플로 **"Configure Android (sdk + version)"** 단계가 4개 값을 출력하고, **"Collect artifacts"** 단계가 빌드된 `build.gradle`/`variables.gradle` 에서 다시 grep 해 출력한다.
+- **Google Play target API 요구(공식)**: https://developer.android.com/google/play/requirements/target-sdk · 정책 일반: https://support.google.com/googleplay/android-developer/answer/11926878 — **연도별 최소 레벨은 공식 문서 재확인 필요**(기본 35 로 설정).
+
+## 3-B. 런처/Adaptive 아이콘 브랜딩 (라운드 65)
+
+`cap add android` 는 **기본 Capacitor 아이콘**을 생성한다. release 워크플로가 **[tools/inject-android-icons.mjs](../tools/inject-android-icons.mjs)** 로
+`assets/icons/icon-512.png`(런처) + `icon-512-maskable.png`(adaptive foreground)를 생성된 `res/mipmap-*` 에 복사해 **JLPT10M 아이콘으로 교체**한다(Option B 에서도 매 빌드 반영).
+
+- **Play 512 아이콘**: 등록정보용 고해상도 아이콘 후보 = **`assets/icons/icon-512.png`**(512×512 32-bit PNG).
+- **더 정밀한 밀도별 아이콘이 필요하면**(다음 단계 권장): `@capacitor/assets` 도입 →
+  `npx @capacitor/assets generate --iconBackgroundColor '#1b1815'` 로 adaptive icon/스플래시 일괄 생성. 1024×1024 소스 권장.
+
 ## 4. android/ 커밋 — Option A vs B (이번 라운드 판단)
 
 - **현재(Option B)**: `android/` 미커밋 → CI 가 매 실행 `cap add android` 로 생성하고, `tools/inject-signing.mjs` 가

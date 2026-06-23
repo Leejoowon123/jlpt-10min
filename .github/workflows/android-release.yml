@@ -24,6 +24,14 @@ on:
         type: boolean
         required: false
         default: false
+      version_name:
+        description: 'versionName (비우면 js/appMeta.js 의 APP_VERSION 사용)'
+        required: false
+        default: ''
+      version_code:
+        description: 'versionCode 정수 (비우면 이 워크플로 run number 사용 — 단조 증가)'
+        required: false
+        default: ''
 
 concurrency:
   group: apk-release-${{ github.ref }}
@@ -92,6 +100,22 @@ jobs:
       - name: Capacitor sync
         run: npx cap sync android
 
+      # compileSdk/targetSdk(35+) + versionCode/versionName 주입 — Play 요구/재업로드 충돌 방지.
+      # versionCode: 입력값이 없으면 이 워크플로의 run number(단조 증가)를 사용 → 매 빌드 고유.
+      # versionName: 입력값이 없으면 js/appMeta.js 의 APP_VERSION.
+      # Play target API 요구: https://developer.android.com/google/play/requirements/target-sdk
+      - name: Configure Android (sdk + version)
+        env:
+          ANDROID_COMPILE_SDK: '35'
+          ANDROID_TARGET_SDK: '35'
+          ANDROID_VERSION_CODE: ${{ github.event.inputs.version_code || github.run_number }}
+          ANDROID_VERSION_NAME: ${{ github.event.inputs.version_name }}
+        run: node tools/inject-android-config.mjs
+
+      # 런처/adaptive 아이콘을 JLPT10M 브랜드로 교체(기본 Capacitor 아이콘 대체).
+      - name: Inject launcher icons
+        run: node tools/inject-android-icons.mjs
+
       # 진단 — 네이티브 TTS 플러그인 등록 확인(release 에도 포함되는지).
       - name: Diagnostics (plugins)
         run: |
@@ -133,6 +157,9 @@ jobs:
 
       - name: Collect artifacts
         run: |
+          echo "== 최종 버전(빌드된 build.gradle 기준) =="
+          grep -E "versionCode|versionName" android/app/build.gradle || true
+          grep -E "targetSdkVersion|compileSdkVersion" android/variables.gradle || true
           AAB=android/app/build/outputs/bundle/release/app-release.aab
           if [ -f "$AAB" ]; then cp "$AAB" JLPT10M-release.aab; else echo "AAB 없음: $AAB"; find android/app/build/outputs -name "*.aab" || true; exit 1; fi
           APK=android/app/build/outputs/apk/release/app-release.apk

@@ -56,6 +56,22 @@ Play Console → **앱 콘텐츠 → 데이터 보안**. 아래 기준으로 신
 5. 앱 콘텐츠: 개인정보처리방침 URL, 데이터 보안, 콘텐츠 등급, 앱 액세스(테스트 계정), 타겟층 작성.
 6. 검토 제출 → 통과 후 내부 테스터에게 링크 공유.
 
+## 8. 빌드 설정 / 버전 (라운드 65 — 자동 주입)
+
+release 워크플로가 `tools/inject-android-config.mjs` 로 주입(상세: [android-release.md](android-release.md) §3-A):
+
+- **targetSdk / compileSdk = 35**(기본). Google Play target API 요구 — 공식: <https://developer.android.com/google/play/requirements/target-sdk> (연도별 최소 레벨 **공식 문서 재확인 필요**).
+- **versionCode = run number(단조 증가)** 또는 워크플로 입력 → **재업로드 충돌 방지**(같은 versionCode 금지).
+- **versionName = `APP_VERSION`(js/appMeta.js)** 또는 워크플로 입력.
+- **런처/adaptive 아이콘** = `assets/icons` 의 JLPT10M 아이콘(`tools/inject-android-icons.mjs`). Play 512 아이콘 후보 = `assets/icons/icon-512.png`.
+
+## 9. 계정/데이터 삭제 (정책)
+
+- **앱 내 경로**: 설정 화면 → **"계정 및 데이터 삭제 요청"** → 이메일 요청(uid 자동 포함). 자동 삭제가 아닌 **운영자 수동 처리**.
+- **개인정보처리방침**([privacy.html](../privacy.html) §6)에 동일 절차 명시. 웹 삭제 요청 경로 = 같은 이메일.
+- 삭제 대상: 계정(Auth), `userActivity`, `feedback`. 비밀번호/답변 원문/STT 원문은 미저장.
+- Play "데이터 삭제" 정책 — 공식: <https://support.google.com/googleplay/android-developer/answer/13316080> (요구 범위 **재확인 필요**).
+
 ## 7. 제출 전 최종 확인
 
 - [ ] `privacy.html` 이 게시 URL 로 열림(로그인 전에도 접근 가능)
@@ -64,3 +80,7 @@ Play Console → **앱 콘텐츠 → 데이터 보안**. 아래 기준으로 신
 - [ ] 데이터 보안 신고 = 위 표와 일치
 - [ ] 테스트 계정 비밀번호는 문서/저장소에 없음(안전 채널)
 - [ ] keystore/AAB/APK 가 git 에 커밋되지 않음
+- [ ] **targetSdk 35** 빌드(워크플로 "Configure Android" 로그 확인)
+- [ ] **versionCode 가 이전 업로드보다 큼**(run number 단조 증가 또는 수동 입력)
+- [ ] **런처 아이콘이 JLPT10M 브랜드**(기본 Capacitor 아이콘 아님)
+- [ ] **설정 → 계정 및 데이터 삭제 요청** 경로 노출 확인

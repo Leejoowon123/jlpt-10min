@@ -131,6 +131,17 @@
 - [ ] **테스트 계정 준비** — 이메일 등록(앱 액세스), 비밀번호는 문서/저장소에 적지 않고 안전 채널로 전달
 - [ ] 광고 없음 · 인앱결제 없음 · 아동 대상 아님 확인
 
+## 4-i. 빌드 설정 / 버전 / 아이콘 / 삭제경로 (라운드 65 — 자동 주입 + 수동 확인)
+
+상세: [docs/android-release.md](android-release.md) §3-A·3-B · [play-console-checklist.md](play-console-checklist.md)
+
+- [ ] **targetSdk/compileSdk = 35** — release 워크플로 "Configure Android" 로그 확인 (Play target API: <https://developer.android.com/google/play/requirements/target-sdk>, 연도별 최소 레벨 **공식 재확인**)
+- [ ] **versionCode 단조 증가** — run number 또는 입력값. 같은 versionCode 재업로드 금지 확인
+- [ ] **versionName = APP_VERSION**(또는 입력) — 로그에서 확인
+- [ ] **런처/adaptive 아이콘 = JLPT10M**(기본 Capacitor 아이콘 아님) — 설치 후 홈 화면 아이콘 확인
+- [ ] **계정/데이터 삭제 요청 경로** — 설정 화면에 노출 + privacy.html §6 동일 안내, uid 자동 포함
+- [ ] Play 512 등록 아이콘 = `assets/icons/icon-512.png` 사용
+
 ## 5. 성능 (블로커 아님 — 모니터링)
 
 - [ ] 첫 로딩: 정적 import JS ~3.3MB(gzip ~0.8MB) — 모바일 4G 체감 확인
