@@ -67,5 +67,9 @@ www/
 android/
 .gradle/
 *.apk
+*.aab
 *.keystore
 *.jks
+# release 서명 비밀값 — 절대 커밋 금지(GitHub Secrets 사용). docs/android-release.md
+key.properties
+**/key.properties

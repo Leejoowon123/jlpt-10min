@@ -58,6 +58,9 @@ npm run cap:sync && (cd android && ./gradlew assembleDebug)   # 디버그 APK
 `www/`·`android/` 는 빌드 산출물(.gitignore). debug APK 는 테스트용(release/Play 배포는 별도 서명 키 필요).
 빌드 절차·실기기 설치·Firebase/TTS/STT 확인·한계: [docs/apk-plan.md](docs/apk-plan.md).
 
+**Play 내부 테스트 준비**: 서명된 release AAB 빌드 워크플로(`android-release.yml`, GitHub Secrets 기반)와 제출 절차 준비 완료 —
+[android-release.md](docs/android-release.md) · [play-console-checklist.md](docs/play-console-checklist.md). 개인정보처리방침은 [privacy.html](privacy.html)(GitHub Pages 게시) 로 제공하며, 앱의 로그인/설정 화면에서도 링크로 접근 가능. (아직 Play 업로드 전 단계)
+
 ## 빠른 실행
 
 ES Module 사용으로 `file://` 직접 열기 불가 — 아무 정적 서버나 OK.
@@ -110,6 +113,8 @@ npm run content:report   # 최종 목표 대비 콘텐츠 현황
 
 상세 (연결 방법·DB 구조·운영 rules·main 병합 체크리스트): [docs/firebase-logging.md](docs/firebase-logging.md)
 
+**베타 피드백 / 관리자**: 설정 화면 하단 **"의견 보내기"** 로 사용자가 만족도·의견을 남길 수 있고(개인정보 입력 금지 안내), 관리자(UID 기반)는 숨겨진 `#admin` 대시보드에서 가입자/활동/피드백을 **읽기 전용**으로 확인한다. 권한은 이메일이 아니라 **Firebase UID + Realtime Database Rules** 로 보호한다. 상세: [docs/admin.md](docs/admin.md)
+
 ## 문서
 
 | 문서 | 내용 |
@@ -120,11 +125,15 @@ npm run content:report   # 최종 목표 대비 콘텐츠 현황
 | [docs/development-workflow.md](docs/development-workflow.md) | 브랜치 운영·CI·Pages 배포·public repo 보안 |
 | [docs/qa-and-review.md](docs/qa-and-review.md) | 테스트 체계·회귀 위험 영역·PR 체크리스트·리뷰 포인트 |
 | [docs/firebase-logging.md](docs/firebase-logging.md) | Firebase 로그인·행동 로그·운영 rules |
+| [docs/admin.md](docs/admin.md) | 베타 피드백 + 관리자 페이지(UID 기반 권한·rules·이스터에그 진입) |
 | [docs/data-loading-plan.md](docs/data-loading-plan.md) | JSON 분리·dataLoader 점진 이전 + 성능 병목 우선순위 |
 | [docs/pwa-plan.md](docs/pwa-plan.md) | PWA/오프라인 최소 구현 계획(캐시 전략·precache 도출) |
 | [docs/pwa-install.md](docs/pwa-install.md) | 사용자용 앱 설치 안내(Android/PC/iPhone) + 로그인·오프라인 한계 |
 | [docs/release-checklist.md](docs/release-checklist.md) | 공개 베타 배포 전 릴리스 체크리스트 |
 | [docs/apk-plan.md](docs/apk-plan.md) | APK 패키징 계획(Capacitor 추천·사전 점검) — **계획 중** |
+| [docs/android-release.md](docs/android-release.md) | release 서명 빌드(AAB/APK·GitHub Secrets)+Play 내부 테스트 배포 절차 |
+| [docs/play-console-checklist.md](docs/play-console-checklist.md) | Play 내부 테스트 제출 체크리스트(데이터 보안 신고·테스트 계정·콘텐츠 등급) |
+| [privacy.html](privacy.html) | 개인정보처리방침(정적 페이지 · GitHub Pages 게시) |
 | [docs/browser-qa-checklist.md](docs/browser-qa-checklist.md) | 실제 브라우저 수동 QA 체크리스트 |
 | [docs/asset-licenses.md](docs/asset-licenses.md) | 이미지 자산 라이선스 기록 |
 | [docs/content-authoring-guide.md](docs/content-authoring-guide.md) | 콘텐츠 작성 실무 가이드 |

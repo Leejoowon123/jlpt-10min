@@ -2074,12 +2074,13 @@ ok('actionLogger: ACTION_LOG_MIN_INTERVAL_MS === 3000',
 ok('actionLogger: APP_OPEN_LOG_ONCE_PER_DAY === true',
    logger.APP_OPEN_LOG_ONCE_PER_DAY === true);
 const loggerSrc = _fs.readFileSync(new URL('./js/actionLogger.js', import.meta.url), 'utf8');
-ok('actionLogger: actionLogs/ 경로 문자열', /actionLogs\//.test(loggerSrc));
+// 라운드 60 — actionLogs 폐지: 경로 문자열 빌드(write 대상)가 없어야 함
+ok('actionLogger: actionLogs write 경로 없음(폐지)', !/actionLogs\/\$\{/.test(loggerSrc) && !/write\(\s*[`'"]actionLogs/.test(loggerSrc));
 ok('actionLogger: userActivity/ 경로 문자열', /userActivity\//.test(loggerSrc));
 ok('actionLogger: logAction 전체 try/catch 격리',
    /export function logAction[\s\S]*?try \{[\s\S]*?\} catch \{/.test(loggerSrc));
-ok('actionLogger: write fire-and-forget (.catch)',
-   /write\([\s\S]*?\)\.catch\(\(\) => \{\}\)/.test(loggerSrc));
+ok('actionLogger: 활동 갱신 fire-and-forget (.catch)',
+   /updateActivity\([\s\S]*?\)\.catch\(\(\) => \{\}\)/.test(loggerSrc));
 // 금지 패턴 — 차단/동기화/Google 로그인 미구현 확인
 const fbAll = [loggerSrc,
   _fs.readFileSync(new URL('./js/authService.js', import.meta.url), 'utf8'),
@@ -2101,38 +2102,42 @@ logger.logAction('study_start', { itemType: 'vocab', method: 'image' });
 await new Promise(r => setTimeout(r, 10));
 ok('logAction: 비로그인 시 기록 안 함(noop)', _logWrites.length === 0,
    `writes=${_logWrites.map(w=>w.path).join(',')}`);
-// (2) 로그인(mock) 후 → actionLogs + userActivity (anonymousActivity 없음)
+// (2) 로그인(mock) 후 → userActivity 1건만 (actionLogs/anonymousActivity 없음) — 라운드 60
 authSvc._setAuthImplForTest({ signIn: async () => ({ uid: 'uTest1', email: 'qa@example.com' }), observe() {} });
 await authSvc.signInWithEmail('qa@example.com', 'pw123456');
 logger._resetThrottleForTest();
 logger.logAction('study_start', { itemType: 'vocab', method: 'image' });
 await new Promise(r => setTimeout(r, 10));
-ok('logAction: 로그인 시 actionLogs+userActivity 2건',
-   _logWrites.length === 2 &&
-   _logWrites.some(w => w.path.startsWith('actionLogs/')) &&
-   _logWrites.some(w => w.path.startsWith('userActivity/')),
+ok('logAction: 로그인 시 userActivity 1건만(actionLogs 없음)',
+   _logWrites.length === 1 && _logWrites[0].path.startsWith('userActivity/'),
    `writes=${_logWrites.map(w=>w.path).join(',')}`);
-ok('logAction: anonymousActivity 미기록 (정책: signed-in 전용)',
+ok('logAction: actionLogs 미기록 (폐지)',
+   !_logWrites.some(w => w.path.startsWith('actionLogs')));
+ok('logAction: anonymousActivity 미기록 (폐지)',
    !_logWrites.some(w => w.path.startsWith('anonymousActivity')));
-ok('logAction: userType signed-in',
-   _logWrites.find(w => w.path.startsWith('actionLogs/'))?.value.userType === 'signed-in');
-ok('logAction: userKey = uid (이메일 아님)',
-   _logWrites.find(w => w.path.startsWith('actionLogs/'))?.value.userKey === 'uTest1');
+ok('logAction: userActivity lastEventType=study_start',
+   _logWrites[0]?.value.lastEventType === 'study_start' && _logWrites[0]?.value.signedIn === true);
+ok('logAction: userActivity 경로 키 = uid (이메일 아님)',
+   _logWrites[0]?.path === 'userActivity/uTest1');
+// payload allowlist — 정의된 필드만 저장
+ok('logAction: userActivity payload allowlist 필드만',
+   _logWrites[0] && Object.keys(_logWrites[0].value).every(k => logger.USER_ACTIVITY_FIELDS.includes(k)),
+   `keys=${_logWrites[0] ? Object.keys(_logWrites[0].value).join(',') : ''}`);
 // 스로틀 — 같은 이벤트 즉시 재호출은 무시
 logger.logAction('study_start', { itemType: 'vocab', method: 'image' });
 await new Promise(r => setTimeout(r, 10));
-ok('logAction: 3초 내 중복 차단', _logWrites.length === 2);
+ok('logAction: 3초 내 중복 차단', _logWrites.length === 1);
 // 허용 외 타입 거부
 logger.logAction('click_everything', {});
 await new Promise(r => setTimeout(r, 10));
-ok('logAction: 화이트리스트 외 타입 거부', _logWrites.length === 2);
-// meta sanitize — 원문 텍스트 키 제거
+ok('logAction: 화이트리스트 외 타입 거부', _logWrites.length === 1);
+// meta 상세값은 저장하지 않음 — 원문 텍스트 키가 payload 에 없음
 logger._resetThrottleForTest();
 logger.logAction('story_open', { storyId: 'story_n5_001', answerText: '原文', sttText: 'x' });
 await new Promise(r => setTimeout(r, 10));
-const _storyEv = _logWrites.find(w => w.value?.type === 'story_open');
-ok('logAction: meta 화이트리스트 외 키 제거 (answerText/sttText)',
-   _storyEv && !('answerText' in _storyEv.value.meta) && !('sttText' in _storyEv.value.meta));
+const _storyEv = _logWrites.find(w => w.value?.lastEventType === 'story_open');
+ok('logAction: meta 상세 미저장 (answerText/sttText/storyId 없음)',
+   _storyEv && !('answerText' in _storyEv.value) && !('sttText' in _storyEv.value) && !('storyId' in _storyEv.value) && !('meta' in _storyEv.value));
 logger._resetWriterForTest();
 logger._resetThrottleForTest();
 authSvc._resetAuthImplForTest();
@@ -2161,10 +2166,12 @@ ok('보안: firebaseConfig 에 Admin SDK 필드 없음',
 ok('보안: password localStorage 저장 패턴 없음 (전체 재확인)',
    !/localStorage[\s\S]{0,60}(password|비밀번호)/i.test(
      _fs.readFileSync(new URL('./js/views/settings.js', import.meta.url), 'utf8')));
-// meta 화이트리스트에 email/password/text 키 없음
-ok('보안: sanitizeMeta 화이트리스트에 email/password/text 원문 키 없음',
-   !/['"](email|password|answerText|sttText|userText)['"]/.test(
-     loggerSrc.match(/function sanitizeMeta[\s\S]*?\n\}/)?.[0] || ''));
+// userActivity payload 에 원문/민감 키가 없음(라운드 60 — meta 상세 미저장)
+ok('보안: actionLogger 에 원문 키(answerText/sttText/userText/transcript) 없음',
+   !/answerText|sttText|userText|transcript/.test(loggerSrc));
+ok('보안: USER_ACTIVITY_FIELDS allowlist 에 민감 키 없음',
+   !/email|password|answer|stt|transcript/i.test(
+     loggerSrc.match(/USER_ACTIVITY_FIELDS = \[[\s\S]*?\]/)?.[0] || 'x'));
 // config 실제 값 입력 확인 + databaseURL 존재
 const fbCfg = await import('./js/firebaseConfig.js');
 ok('firebaseConfig: 실제 config 입력됨 (isFirebaseConfigured true)',
@@ -3213,20 +3220,25 @@ ok('data/n4/stories.json — sourceType 모두 original',
   }
   ok('릴리스 — jsonPathFor 전 조합 PWA 경로 도출', pathBad === 0, `bad=${pathBad}`);
   ok('릴리스 — PWA precache 후보 경로 수 = level×type', pwaPaths.length === dl.VALID_LEVELS.length * dl.VALID_TYPES.length);
-  // actionLogger sanitizeMeta 가 allowlist 외 키(민감정보)를 제거하는지 — 로그 payload 보안 가드
+  // 라운드 60 — 활동 갱신 payload 보안: meta 상세 미저장, userActivity allowlist 필드만, 민감정보 0
   const logger = await import('./js/actionLogger.js');
+  authSvc._setAuthImplForTest({ signIn: async () => ({ uid: 'uSec1', email: 'sec@x.com' }), observe() {} });
+  await authSvc.signInWithEmail('sec@x.com', 'pw123456');
   logger._resetThrottleForTest();
   let captured = null;
-  logger._setWriterForTest(async (path, value) => { if (path.startsWith('actionLogs/')) captured = value; });
+  logger._setWriterForTest(async (path, value) => { if (path.startsWith('userActivity/')) captured = value; });
   logger.logAction('vocab_card_answered', {
     itemType: 'vocab', itemId: 'v_n2_1', correct: true,
     email: 'user@example.com', password: 'secret123', userText: '원문답변', transcript: 'STT원문', name: '홍길동',
   });
+  await new Promise(r => setTimeout(r, 10));
   logger._resetWriterForTest();
-  const metaKeys = captured ? Object.keys(captured.meta) : [];
+  logger._resetThrottleForTest();
+  authSvc._resetAuthImplForTest();
+  const actKeys = captured ? Object.keys(captured) : [];
   const leak = captured ? JSON.stringify(captured).match(/user@example|secret123|원문답변|STT원문|홍길동/) : null;
-  ok('릴리스 — 로그 meta allowlist 외 키 제거', metaKeys.every(k => ['itemType', 'itemId', 'storyId', 'correct', 'method'].includes(k)), `keys=${metaKeys.join(',')}`);
-  ok('릴리스 — 로그 payload 민감정보(이메일/비번/답변/STT/이름) 0', !leak);
+  ok('릴리스 — userActivity allowlist 필드만(meta 상세 미저장)', captured && actKeys.every(k => logger.USER_ACTIVITY_FIELDS.includes(k)), `keys=${actKeys.join(',')}`);
+  ok('릴리스 — 활동 payload 민감정보(이메일/비번/답변/STT/이름) 0', captured && !leak);
 
   // 임시 생성기/중간 산출물이 런타임 코드에서 import/참조되지 않는지 (배포 코드 격리)
   const fs48 = await import('node:fs');
@@ -3599,6 +3611,206 @@ ok('data/n4/stories.json — sourceType 모두 original',
   ok('TTSfix — tts/settings 가 pluginSource 전달/표시', /pluginSource:/.test(ttsSrc) && /pluginSource/.test(setSrc));
   // (라운드 59) native-error 실패 시 Android 음성 데이터 안내
   ok('TTSfix — settings native-error → 음성 데이터 안내', /native-error[\s\S]{0,120}텍스트 음성 변환/.test(setSrc));
+}
+
+// ── 라운드 59: 베타 피드백 + 관리자 페이지 + TTS 설정 안내 정적 검증 ─────────────
+{
+  const fs59 = await import('node:fs');
+  const read = (p) => { try { return fs59.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const exists = (p) => { try { fs59.accessSync(new URL(p, import.meta.url)); return true; } catch { return false; } };
+
+  const appSrc = read('./js/app.js');
+  const idxSrc = read('./index.html');
+  const fbSrc = read('./js/feedbackService.js');
+  const adminSrc = read('./js/views/admin.js');
+  const setSrc = read('./js/views/settings.js');
+  const metaSrc = read('./js/appMeta.js');
+  const adminDoc = read('./docs/admin.md');
+  const fbLogDoc = read('./docs/firebase-logging.md');
+
+  // route 등록 + 탭 미노출
+  ok('FB/Admin — app.js 가 admin route 등록', /register\('admin'/.test(appSrc) && /renderAdmin/.test(appSrc));
+  ok('FB/Admin — 일반 탭바(index.html)에 admin 노출 없음', !/data-route="admin"/.test(idxSrc));
+
+  // 피드백 저장 함수 존재 + password 필드 없음 + 이메일 미저장
+  ok('FB/Admin — feedbackService submitFeedback export', /export async function submitFeedback/.test(fbSrc));
+  ok('FB/Admin — feedback payload 에 password 필드 없음', !/password/i.test(fbSrc));
+  ok('FB/Admin — feedback 에 userEmail 저장 안 함(uid 만)', /uid: u\.uid/.test(fbSrc) && !/userEmail\s*:/.test(fbSrc));
+  ok('FB/Admin — feedback 저장 경로 feedback/{id}', /feedback\/\$\{feedbackId\}/.test(fbSrc));
+
+  // 관리자 권한이 "이메일 하드코딩만"으로 처리되지 않음 — DB admins/{uid} 기준
+  ok('FB/Admin — isAdmin 은 admins/{uid} DB 판정(이메일 비교 아님)',
+     /export async function isAdmin/.test(fbSrc) && /admins\/\$\{u\.uid\}/.test(fbSrc));
+  ok('FB/Admin — ADMIN_EMAIL_HINT 는 표시용(권한 판정에 미사용)',
+     /ADMIN_EMAIL_HINT/.test(fbSrc) && !/===\s*ADMIN_EMAIL_HINT/.test(fbSrc) && !/email\s*===/.test(fbSrc));
+
+  // 관리자 뷰 — 권한 거부 메시지 + 읽기 전용(삭제/차단 없음)
+  ok('FB/Admin — admin.js 권한 확인 + 거부 안내', /isAdmin\(\)/.test(adminSrc) && /접근 권한이 없습니다/.test(adminSrc));
+  // 읽기 전용 — 실제 쓰기/삭제 호출이 없어야 함(주석의 '삭제/차단 기능 없음' 문구는 허용).
+  ok('FB/Admin — admin.js 읽기 전용(쓰기/삭제 호출 없음)',
+     !/deleteUser|removeUser|\.remove\(|\.set\(|\.update\(|ban\(|block\(/i.test(adminSrc));
+
+  // 설정 — 피드백 UI + 개인정보 안내 + 이스터에그 + TTS 안내
+  ok('FB/Admin — settings 피드백 섹션(#fbSubmit) + submitFeedback 호출', /id="fbSubmit"/.test(setSrc) && /submitFeedback\(/.test(setSrc));
+  ok('FB/Admin — settings 개인정보 입력 금지 안내', /개인정보/.test(setSrc));
+  ok('FB/Admin — settings 이스터에그(버전 줄 탭 → navigate admin)',
+     /id="appVersionLine"/.test(setSrc) && /navigate\('admin'\)/.test(setSrc));
+  ok('FB/Admin — settings Android TTS 설정 안내 버튼', /id="ttsGuideBtn"/.test(setSrc) && /음성 데이터/.test(setSrc));
+  ok('FB/Admin — appMeta APP_VERSION export', /export const APP_VERSION/.test(metaSrc));
+
+  // 문서 — admin uid 방식 설명 + rules(admins/feedback read admin only)
+  ok('FB/Admin — docs/admin.md 존재 + UID 기준 설명', exists('./docs/admin.md') && /UID/.test(adminDoc) && /admins\/\{uid\}/.test(adminDoc));
+  ok('FB/Admin — firebase-logging rules 에 admins + feedback(admin only read)',
+     /"admins"/.test(fbLogDoc) && /"feedback"/.test(fbLogDoc) &&
+     /root\.child\('admins'\)\.child\(auth\.uid\)\.val\(\) === true/.test(fbLogDoc));
+  ok('FB/Admin — feedback write 는 본인 uid 신규작성만(!data.exists())', /!data\.exists\(\)/.test(fbLogDoc));
+  // anonymousActivity 정책 회귀 없음(여전히 write 차단)
+  ok('FB/Admin — anonymousActivity 정책 회귀 없음(.write:false 유지)',
+     /"anonymousActivity"[\s\S]{0,80}"\.write":\s*false/.test(fbLogDoc));
+}
+
+// ── 라운드 60: actionLogs 폐지 + userActivity 단일화 정적 검증 ────────────────
+{
+  const fs60 = await import('node:fs');
+  const read = (p) => { try { return fs60.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const loggerSrc = read('./js/actionLogger.js');
+  const adminSrc = read('./js/views/admin.js');
+  const fbSrc = read('./js/feedbackService.js');
+  const fbLogDoc = read('./docs/firebase-logging.md');
+  const adminDoc = read('./docs/admin.md');
+
+  // (1) actionLogs write/read 코드 없음
+  ok('R60 — actionLogger 가 actionLogs 에 쓰지 않음', !/actionLogs\/\$\{/.test(loggerSrc) && !/write\(\s*[`'"]actionLogs/.test(loggerSrc));
+  // admin.js 가 actionLogs 데이터를 읽거나 표시하지 않음(UI 안내 문구 'actionLogs 미저장' 은 허용).
+  ok('R60 — admin.js actionLogs 조회/표시 없음', !/recentLogs|adminLogTable|read\(\s*['"]actionLogs/.test(adminSrc));
+  ok('R60 — getAdminSummary 가 actionLogs/recentLogs 미사용', !/'actionLogs'/.test(fbSrc) && !/recentLogs/.test(fbSrc));
+  // (2) anonymousActivity write 없음
+  ok('R60 — anonymousActivity write 없음', !/write\(\s*[`'"]anonymousActivity/.test(loggerSrc) && !/anonymousActivity\/\$\{/.test(loggerSrc));
+  // (3) userActivity allowlist 정의 + 신규 필드
+  ok('R60 — USER_ACTIVITY_FIELDS allowlist export(sessionCount/totalActiveMs 포함)',
+     /export const USER_ACTIVITY_FIELDS/.test(loggerSrc) && /sessionCount/.test(loggerSrc) && /totalActiveMs/.test(loggerSrc));
+  ok('R60 — logAction 이 userActivity 만 갱신(updateActivity)', /updateActivity\(/.test(loggerSrc) && /userActivity\/\$\{userKey\}/.test(loggerSrc));
+  ok('R60 — firstSeenAt/createdAt 보존(덮어쓰기 안 함)', /prev\.firstSeenAt \|\| now/.test(loggerSrc) && /prev\.createdAt \|\|/.test(loggerSrc));
+  // (4) 현행 rules: actionLogs/anonymousActivity read+write false
+  ok('R60 — rules actionLogs read/write false',
+     /"actionLogs":\s*\{\s*"\.read":\s*false,\s*"\.write":\s*false/.test(fbLogDoc));
+  ok('R60 — firebase-logging actionLogs 폐지 명시', /actionLogs[\s\S]{0,30}폐지|폐지[\s\S]{0,30}actionLogs/.test(fbLogDoc));
+  // (5) feedback payload 필드 ↔ docs rules 필드 일치(wish/bug/contactOk 포함)
+  const FB_FIELDS = ['rating', 'good', 'bad', 'wish', 'bug', 'contactOk', 'appVersion', 'platform', 'createdAt', 'uid'];
+  ok('R60 — feedback payload 에 전체 필드 존재', FB_FIELDS.every(f => new RegExp(`\\b${f}\\b`).test(fbSrc)), `missing in code`);
+  ok('R60 — docs rules 에 feedback 필드 문서화(wish/bug/contactOk 포함)',
+     FB_FIELDS.every(f => new RegExp(`\\b${f}\\b`).test(fbLogDoc)));
+  // (6) admin 대시보드 userActivity 중심(presence 계산)
+  ok('R60 — admin 대시보드 활동중/세션/이용시간 표시',
+     /활동중/.test(adminSrc) && /sessionCount/.test(adminSrc) && /totalActiveMs/.test(adminSrc));
+  ok('R60 — admin presence 는 lastSeenAt 기준 계산(DB 저장 아님)', /activityStatus/.test(adminSrc) && /ACTIVE_NOW_MS/.test(fbSrc));
+  ok('R60 — admin.md userActivity 중심 + presence 설명', /lastSeenAt/.test(adminDoc) && /활동중/.test(adminDoc));
+
+  // (7) 문서 — Rules Publish 절차 + actionLogs/anonymousActivity 삭제 안내 + 관리자 UID
+  ok('R60 — admin.md Rules 적용 절차(Publish + Firestore 아님)',
+     /Rules.*탭|Rules 적용 절차/.test(adminDoc) && /Publish|게시/.test(adminDoc) && /Firestore/.test(adminDoc));
+  ok('R60 — admin.md 기존 데이터 정리 안내(백업 + actionLogs/anonymousActivity 삭제)',
+     /백업|Export JSON|JSON 내보내기/.test(adminDoc) && /actionLogs[\s\S]{0,200}삭제/.test(adminDoc) && /anonymousActivity/.test(adminDoc));
+  ok('R60 — admin.md userActivity/feedback/admins 삭제 금지 경고',
+     /userActivity[\s\S]{0,40}feedback[\s\S]{0,40}admins[\s\S]{0,30}삭제하지/.test(adminDoc));
+  ok('R60 — admin.md 관리자 UID(SifCVwklMhMX36YhaC9jke2kosr2) 명시',
+     /SifCVwklMhMX36YhaC9jke2kosr2/.test(adminDoc));
+  // (8) 릴리스 체크리스트 — 라운드 60 재빌드/Rules Publish 항목
+  const relDoc = read('./docs/release-checklist.md');
+  ok('R60 — release-checklist 재빌드/Rules Publish 항목',
+     /Rules Publish/.test(relDoc) && /APK/.test(relDoc) && /userActivity 갱신/.test(relDoc) && /actionLogs 신규 데이터 없음/.test(relDoc));
+}
+
+// ── 라운드 62: Android release 서명 빌드 / Play 배포 준비 정적 검증 ──────────────
+{
+  const fs62 = await import('node:fs');
+  const read = (p) => { try { return fs62.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const exists = (p) => { try { fs62.accessSync(new URL(p, import.meta.url)); return true; } catch { return false; } };
+
+  const relWf = read('./.github/workflows/android-release.yml');
+  const dbgWf = read('./.github/workflows/android-apk.yml');
+  const relDoc = read('./docs/android-release.md');
+  const inject = read('./tools/inject-signing.mjs');
+  const gi = read('./.gitignore');
+
+  // release 워크플로 구조
+  ok('Release — android-release.yml 존재', !!relWf);
+  ok('Release — workflow_dispatch 수동 실행', /workflow_dispatch:/.test(relWf));
+  ok('Release — setup-java JDK 17', /setup-java/.test(relWf) && /java-version:\s*'?17'?/.test(relWf));
+  ok('Release — setup-node + npm install + build-www + cap sync',
+     /setup-node/.test(relWf) && /npm install/.test(relWf) && /tools\/build-www\.mjs/.test(relWf) && /cap sync android/.test(relWf));
+  ok('Release — bundleRelease(AAB) 명령', /gradlew bundleRelease/.test(relWf));
+  ok('Release — assembleRelease(APK, 선택) 명령', /gradlew assembleRelease/.test(relWf));
+  ok('Release — upload-artifact(AAB)', /upload-artifact/.test(relWf) && /JLPT10M-release\.aab/.test(relWf));
+  ok('Release — signing 주입 스크립트 호출', /tools\/inject-signing\.mjs/.test(relWf));
+  ok('Release — keystore base64 복원 단계', /base64 -d/.test(relWf) && /release\.keystore/.test(relWf));
+
+  // Secrets 이름이 워크플로와 문서에서 일치
+  const SECRETS = ['ANDROID_KEYSTORE_BASE64', 'ANDROID_KEYSTORE_PASSWORD', 'ANDROID_KEY_ALIAS', 'ANDROID_KEY_PASSWORD'];
+  ok('Release — Secrets 4종이 workflow 에 존재', SECRETS.every(s => relWf.includes(s)));
+  ok('Release — Secrets 4종이 문서에 명시', SECRETS.every(s => relDoc.includes(s)));
+  ok('Release — Secrets 누락 시 명확한 실패(가드)', /Verify signing secrets/.test(relWf) && /::error::/.test(relWf));
+
+  // 서명 주입 스크립트 — signingConfigs.release + 멱등
+  ok('Release — inject-signing.mjs 존재 + signingConfigs.release', exists('./tools/inject-signing.mjs') && /signingConfigs/.test(inject) && /signingConfigs\.release/.test(inject));
+  ok('Release — inject-signing 멱등(이미 주입 시 skip)', /already|이미 주입|signingConfigs\.release[\s\S]{0,80}skip/i.test(inject) || /includes\('signingConfigs\.release'\)/.test(inject));
+
+  // 비밀/산출물 git 미추적 — .gitignore 패턴
+  ok('Release — .gitignore 가 keystore/jks/apk/aab/key.properties 제외',
+     /\*\.keystore/.test(gi) && /\*\.jks/.test(gi) && /\*\.apk/.test(gi) && /\*\.aab/.test(gi) && /key\.properties/.test(gi));
+  // 실제로 비밀/산출물 파일이 작업트리에 없는지(루트)
+  ok('Release — 루트에 keystore/jks/aab 파일 없음',
+     !exists('./jlpt10m-release.jks') && !exists('./JLPT10M-release.aab') && !exists('./release.keystore'));
+
+  // debug 워크플로 유지(회귀 없음)
+  ok('Release — debug 워크플로(android-apk.yml) 유지', !!dbgWf && /assembleDebug/.test(dbgWf));
+
+  // 문서 — Play 내부 테스트 절차 + 보안 + Option A/B 판단 + 패키지명
+  ok('Release — docs Play 내부 테스트 절차', /내부 테스트/.test(relDoc) && /AAB/.test(relDoc) && /com\.jlpt10m\.app/.test(relDoc));
+  ok('Release — docs keystore 생성(keytool) + base64 Secrets', /keytool/.test(relDoc) && /base64/.test(relDoc));
+  ok('Release — docs android/ Option A/B 판단', /Option A/.test(relDoc) && /Option B/.test(relDoc));
+  ok('Release — docs 개인정보/데이터 수집/로그인 필요 고지', /개인정보처리방침/.test(relDoc) && /데이터 보안|데이터 수집/.test(relDoc) && /로그인/.test(relDoc));
+}
+
+// ── 라운드 63: 개인정보처리방침 페이지 + Play 제출 준비 정적 검증 ────────────────
+{
+  const fs63 = await import('node:fs');
+  const read = (p) => { try { return fs63.readFileSync(new URL(p, import.meta.url), 'utf8'); } catch { return ''; } };
+  const exists = (p) => { try { fs63.accessSync(new URL(p, import.meta.url)); return true; } catch { return false; } };
+
+  const priv = read('./privacy.html');
+  const authSrc = read('./js/views/authGate.js');
+  const setSrc = read('./js/views/settings.js');
+  const playDoc = read('./docs/play-console-checklist.md');
+  const relDoc = read('./docs/android-release.md');
+  const bw = read('./tools/build-www.mjs');
+
+  // privacy.html 존재 + 핵심 내용
+  ok('Privacy — privacy.html 존재', exists('./privacy.html') && /개인정보처리방침/.test(priv));
+  ok('Privacy — Firebase/Auth/UID 수집 고지', /Firebase/.test(priv) && /Authentication/.test(priv) && /UID/.test(priv));
+  ok('Privacy — userActivity/feedback 수집 항목 명시', /userActivity/.test(priv) && /feedback/.test(priv) && /sessionCount/.test(priv) && /totalActiveMs/.test(priv));
+  ok('Privacy — 문의 이메일(joowon582@gmail.com)', /joowon582@gmail\.com/.test(priv));
+  ok('Privacy — STT 원문/답변 원문 미저장 문구', /STT[\s\S]{0,40}저장하지/.test(priv) && /답변 원문[\s\S]{0,40}저장하지/.test(priv));
+  ok('Privacy — 비밀번호 원문 미저장 문구', /비밀번호 원문[\s\S]{0,40}저장하지/.test(priv));
+  ok('Privacy — 시행일 명시', /시행일/.test(priv));
+
+  // 앱 내 링크 — 로그인 화면 + 설정 화면(로그인 전 접근 가능)
+  ok('Privacy — 로그인 화면 privacy 링크(./privacy.html)', /href="\.\/privacy\.html"/.test(authSrc) && /개인정보처리방침/.test(authSrc));
+  ok('Privacy — 설정 화면 privacy 링크', /href="\.\/privacy\.html"/.test(setSrc) && /개인정보처리방침/.test(setSrc));
+
+  // build-www 가 privacy.html 번들(APK/PWA 접근)
+  ok('Privacy — build-www 가 privacy.html 포함', /privacy\.html/.test(bw));
+
+  // Play 제출 문서 — 데이터 보안 신고 항목
+  ok('Privacy — play-console-checklist.md 존재 + 데이터 보안 신고', exists('./docs/play-console-checklist.md') && /데이터 보안/.test(playDoc));
+  ok('Privacy — Play 문서 데이터 항목(이메일/UID/활동/피드백)',
+     /이메일 주소/.test(playDoc) && /사용자 ID|UID/.test(playDoc) && /앱 활동/.test(playDoc) && /피드백/.test(playDoc));
+  ok('Privacy — Play 문서 수집 안 함(위치/연락처/결제/STT)',
+     /위치/.test(playDoc) && /연락처/.test(playDoc) && /결제/.test(playDoc) && /STT/.test(playDoc));
+  ok('Privacy — Play 문서 광고/인앱결제 없음 + 테스트 계정(비번 비기재)',
+     /광고 없음/.test(playDoc) && /인앱 결제 없음/.test(playDoc) && /비밀번호[\s\S]{0,40}(적지|넣지)/.test(playDoc));
+  ok('Privacy — android-release 문서에 개인정보처리방침 URL 항목', /개인정보처리방침 URL|privacy\.html/.test(relDoc) && /데이터 보안/.test(relDoc));
+  ok('Privacy — 패키지명 com.jlpt10m.app 명시(Play 문서)', /com\.jlpt10m\.app/.test(playDoc));
 }
 
 if (errs.length) {

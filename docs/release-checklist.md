@@ -23,7 +23,7 @@
 ## 3. 보안 / 프라이버시 (배포 전 필수)
 
 - [ ] `js/firebaseConfig.js` 는 **web config 만** — service account JSON / Admin SDK 키 부재 (web apiKey 는 public 가능)
-- [ ] 행동 로그 payload: `sanitizeMeta` allowlist(itemType/itemId/storyId/correct/method)만 — 이메일/비밀번호/답변 원문/STT 원문/이름 0 (smoke·qa 가드)
+- [ ] 활동 요약 payload(`userActivity`): allowlist 필드(firstSeenAt/createdAt/lastSeenAt/lastEventType/signedIn/sessionCount/totalActiveMs/lastRoute/platform/appVersion)만 — 이메일/비밀번호/답변 원문/STT 원문/이름/meta 상세 0 (smoke·qa 가드). **actionLogs/anonymousActivity 는 폐지(read/write false)** — 상세 로그 미저장(라운드 60)
 - [ ] userKey = Firebase uid 또는 익명 visitorId — **이메일 아님**
 - [ ] 로그인 없이 전 학습 기능 동작 · 로그 실패가 학습 흐름을 막지 않음(fire-and-forget)
 - [ ] Realtime Database **운영 rules** 가 Console 에 Publish 됨 (테스트 모드 rules 로 배포 금지) — docs/firebase-logging.md
@@ -91,6 +91,45 @@
 - [ ] **STT** 인식 — 동작 여부(미지원 시 텍스트 폴백 동작 확인 → 다음 라운드 네이티브 검토)
 - [ ] **Firebase 로그** — 온라인 시 actionLogs/userActivity 기록(원문 미기록 유지)
 - [ ] **오프라인 실행** — 로그인 세션 있으면 앱 shell+학습 동작 / 로그 실패 비차단
+
+## 4-f. 베타 피드백 / 관리자 (라운드 59 — 수동)
+
+- [ ] **rules Publish** — [docs/admin.md](admin.md) 의 admins/feedback 포함 운영 rules 를 Realtime Database → Rules 에 적용·Publish (Firestore 아님)
+- [ ] **관리자 UID 등록** — `joowon582@gmail.com` 로 가입/로그인 → Console → Authentication → Users 에서 UID 확인 → Realtime Database 에 `admins/{uid}: true`(Boolean) 추가
+- [ ] **피드백 전송** — 설정 → "의견 보내기" → 만족도/텍스트 입력 → 전송 성공 안내 / 빈 내용 시 오류 안내 / 5초 쿨다운 동작
+- [ ] **개인정보 안내** — 피드백 영역에 "비밀번호·개인정보 입력 금지" 문구 표시, 이메일이 저장되지 않음(`feedback/{id}` 에 uid 만)
+- [ ] **관리자 진입** — 설정 화면 버전 줄 **7회 탭** → `#admin` → 관리자 계정이면 대시보드(가입자/활동/피드백), 비관리자면 "접근 권한이 없습니다" + 홈 복귀
+- [ ] **권한 보호(중요)** — 비관리자 계정으로 `#admin` 직접 접근 시 데이터가 보이지 않음(rules 가 feedback/userActivity/actionLogs 읽기 차단). 프론트 검사만이 아님을 확인
+- [ ] **읽기 전용** — 관리자 페이지에 삭제/차단 버튼이 없음(이번 라운드 정책)
+- [ ] **로그 분리** — `actionLogs` 에 피드백 본문이 섞이지 않음(피드백은 `feedback/` 노드에만 저장)
+
+## 4-g. 라운드 60 — Rules 적용 + APK 재빌드 (로그 단순화 후 필수)
+
+순서대로 진행(상세: [docs/admin.md](admin.md)):
+
+- [ ] **Rules Publish** — [firebase-logging.md](firebase-logging.md) "라운드 60 현행" rules 를 Realtime Database → **Rules** 탭에 붙여넣고 Publish (Firestore 아님). `actionLogs`/`anonymousActivity` = `read/write false`, `userActivity`/`feedback` = 본인 write + admin read
+- [ ] **관리자 UID 확인** — `admins/SifCVwklMhMX36YhaC9jke2kosr2 = true`(joowon582@gmail.com) 가 데이터 탭에 있는지
+- [ ] **새 APK 빌드** — GitHub Actions "Android APK (debug)" 재실행 → artifact 다운로드(JS 변경 반영)
+- [ ] **설치 후 로그인** — 이메일 로그인 동작
+- [ ] **학습 1회 진행** — 단어/문법/스토리 중 하나 수행
+- [ ] **userActivity 갱신 확인** — Console → 데이터 → `userActivity/{내 uid}` 에 lastSeenAt/lastEventType/sessionCount/totalActiveMs/platform/appVersion 갱신
+- [ ] **피드백 전송** — 설정 → "의견 보내기" → `feedback/{id}` 생성(이메일 미저장)
+- [ ] **관리자 페이지 확인** — 버전 줄 7회 탭 → userActivity 통계(활동중/24h/7d) + 피드백 목록 표시, **actionLogs 섹션 없음**
+- [ ] **actionLogs 신규 데이터 없음** — 학습/피드백 후 Console 에 `actionLogs` 신규 노드가 생기지 않는지(폐지 확인)
+- [ ] **(선택) 기존 데이터 정리** — 백업 후 `actionLogs`/`anonymousActivity` 노드 수동 삭제(앱 영향 없음). `userActivity`/`feedback`/`admins` 는 삭제 금지
+
+## 4-h. Play 내부 테스트 제출 (라운드 63 — 개인정보처리방침/데이터 보안)
+
+상세: [docs/play-console-checklist.md](play-console-checklist.md) · 방침 본문: [privacy.html](../privacy.html)
+
+- [ ] **privacy.html 접근 확인** — GitHub Pages URL(예 `https://leejoowon123.github.io/jlpt-10min/privacy.html`)이 열림
+- [ ] **로그인 전 privacy 링크** — 로그인 화면 하단 "개인정보처리방침" 링크가 보이고 열림(비로그인 접근 가능)
+- [ ] **설정 화면 privacy 링크** — 설정 하단에도 링크 노출
+- [ ] **APK/PWA 에서 동작** — WebView 에서도 `./privacy.html` 열림(번들 포함)
+- [ ] **Play Console 개인정보처리방침 URL 입력**
+- [ ] **Data safety 신고 작성** — 이메일(계정관리)/UID(앱기능)/앱 활동(앱기능·분석)/피드백(앱기능·고객지원), 위치·연락처·사진·결제·STT·답변원문 = 수집 안 함
+- [ ] **테스트 계정 준비** — 이메일 등록(앱 액세스), 비밀번호는 문서/저장소에 적지 않고 안전 채널로 전달
+- [ ] 광고 없음 · 인앱결제 없음 · 아동 대상 아님 확인
 
 ## 5. 성능 (블로커 아님 — 모니터링)
 

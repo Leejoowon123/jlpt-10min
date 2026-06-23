@@ -8,6 +8,7 @@ import { renderCompare } from './views/grammarCompare.js';
 import { renderConversation } from './views/conversation.js';
 import { renderStories, renderNovels, renderStoryDetail } from './views/storyView.js';
 import { renderSettings } from './views/settings.js';
+import { renderAdmin } from './views/admin.js';
 import { renderLevelPill } from './ui.js';
 import { initTheme } from './theme.js';
 import { logAction } from './actionLogger.js';
@@ -28,6 +29,7 @@ register('settings',     renderSettings);           // 톱니바퀴 진입
 register('story',        renderStoryDetail);        // #story/<id>
 register('compare',      renderCompare);            // #study/grammar/compare 가 navigate('compare') 함
 register('conversation', renderConversation);       // 직접 라우트만 (탭에서는 제거)
+register('admin',        renderAdmin);               // #admin — 이스터에그 진입(탭 미노출). 권한은 isAdmin()+rules
 
 initTheme();          // 테마 동적 전환 + system 모드 OS 변경 감지
 renderLevelPill();

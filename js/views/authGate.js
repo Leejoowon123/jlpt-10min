@@ -72,6 +72,9 @@ export function renderAuthGate({ screen }) {
       <p class="muted" style="margin:14px 0 0;font-size:11px;text-align:center">
         비밀번호는 저장하지 않습니다 · 학습 콘텐츠는 앱에 포함되어 있습니다
       </p>
+      <p style="margin:8px 0 0;text-align:center">
+        <a href="./privacy.html" id="privacyLink" class="muted" style="font-size:11px;text-decoration:underline">개인정보처리방침</a>
+      </p>
     </section>`;
 
   const emailEl = screen.querySelector('#authEmail');
